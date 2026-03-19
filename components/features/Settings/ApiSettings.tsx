@@ -475,8 +475,20 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
                             )}
 
                             {activeConfig.provider === 'worker' && (
-                                <div className="p-4 rounded border border-wuxia-gold/20 bg-wuxia-gold/5 text-xs text-wuxia-gold/80 italic">
-                                    Đây là cấu hình API hệ thống miễn phí. Bạn không cần điền API Key hay Base URL.
+                                <div className="space-y-4">
+                                    <div className="p-3 rounded border border-wuxia-gold/20 bg-wuxia-gold/5 text-[10px] text-wuxia-gold/80 italic leading-relaxed">
+                                        Đây là cấu hình API hệ thống (Nemotron). Mặc định sử dụng các worker dự phòng từ server.
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-wuxia-gold font-bold">Worker URL (Tùy chọn)</label>
+                                        <input
+                                            type="text"
+                                            value={activeConfig.baseUrl || ''}
+                                            onChange={(e) => updateActiveConfig({ baseUrl: e.target.value.trim() })}
+                                            placeholder="https://..."
+                                            className="w-full bg-transparent border border-wuxia-gold/20 focus:border-wuxia-gold/50 p-3 text-paper-white outline-none rounded-md transition-all placeholder:text-wuxia-gold/20 font-mono text-xs"
+                                        />
+                                    </div>
                                 </div>
                             )}
 

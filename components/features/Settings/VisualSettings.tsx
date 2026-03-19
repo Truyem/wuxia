@@ -427,13 +427,14 @@ const VisualSettings: React.FC<Props> = ({ settings, currentEnvironment, onSave 
 
                     <div className="bg-paper-white/5 border border-wuxia-gold/30 rounded-lg p-3 flex flex-col gap-2">
                         <div className="flex justify-between items-center mb-1">
-                            <label className="text-[10px] text-paper-white/40 font-bold uppercase tracking-widest">Worker URL</label>
+                            <label className="text-[10px] text-paper-white/40 font-bold uppercase tracking-widest text-shadow-gold">Image Worker URL</label>
                             <button
                                 onClick={handleTestImage}
                                 disabled={isTestingImage || !safeSettings.imageGenWorkerUrl}
+                                title="Kiểm tra worker ảnh"
                                 className={`text-[10px] px-2 py-0.5 rounded border transition-all ${isTestingImage
                                     ? 'bg-wuxia-gold/5 border-wuxia-gold/20 text-wuxia-gold/40 cursor-not-allowed'
-                                    : 'bg-wuxia-gold/10 border-wuxia-gold/30 text-wuxia-gold hover:bg-wuxia-gold/20'
+                                    : 'bg-wuxia-gold/10 border-wuxia-gold/30 text-wuxia-gold hover:bg-wuxia-gold/20 shadow-[0_0_5px_rgba(212,175,55,0.2)]'
                                     }`}
                             >
                                 {isTestingImage ? 'Đang test...' : 'Test Image'}
@@ -442,15 +443,9 @@ const VisualSettings: React.FC<Props> = ({ settings, currentEnvironment, onSave 
                         <input
                             type="text"
                             value={safeSettings.imageGenWorkerUrl || ''}
-                            onChange={(e) => {
-                                let val = e.target.value.trim();
-                                if (val && !val.startsWith('http://') && !val.startsWith('https://') && val.includes('.')) {
-                                    val = `https://${val}`;
-                                }
-                                onSave({ ...safeSettings, imageGenWorkerUrl: val });
-                            }}
-                            placeholder="https://your-worker.your-subdomain.workers.dev"
-                            className="bg-transparent border-none outline-none text-wuxia-gold font-mono w-full text-xs"
+                            onChange={(e) => onSave({ ...safeSettings, imageGenWorkerUrl: e.target.value.trim() })}
+                            placeholder="https://..."
+                            className="bg-transparent border-none outline-none text-wuxia-gold font-mono w-full text-[11px] placeholder:text-wuxia-gold/20"
                         />
                     </div>
 

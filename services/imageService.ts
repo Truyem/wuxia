@@ -1,6 +1,4 @@
-/**
- * Service for handling image generation via Cloudflare Workers AI
- */
+import { parseWorkerUrls, DEFAULT_IMAGE_GEN_WORKER_URLS } from '../utils/apiConfig';
 
 export interface ImageGenOptions {
   prompt: string;
@@ -94,7 +92,7 @@ export class ImageService {
   /**
    * Generates an image and automatically caches it in the browser
    */
-  static async generateAndCache(workerUrl: string, options: ImageGenOptions, cacheKey: string): Promise<string> {
+  static async generateAndCache(workerUrl: string | string[], options: ImageGenOptions, cacheKey: string): Promise<string> {
     const dataUrl = await this.generateImage(workerUrl, options);
     await ImageCacheService.set(cacheKey, dataUrl);
     return dataUrl;
@@ -103,42 +101,75 @@ export class ImageService {
   /**
    * Generates an image from a prompt and returns it as a Base64 string
    */
-  static async generateImage(workerUrl: string, options: ImageGenOptions): Promise<string> {
-    if (!workerUrl) {
+  static async generateImage(workerUrl: string | string[], options: ImageGenOptions): Promise<string> {
+    let urls = parseWorkerUrls(workerUrl);
+
+    // Always append hardcoded fallbacks
+    const defaults = parseWorkerUrls(DEFAULT_IMAGE_GEN_WORKER_URLS);
+    for (const d of defaults) {
+      if (!urls.includes(d)) {
+        urls.push(d);
+      }
+    }
+
+    if (urls.length === 0) {
       throw new Error("Cloudflare Worker URL is not configured.");
     }
 
-    // Robust URL normalization: Ensure protocol exists
-    let normalizedUrl = workerUrl.trim();
-    if (!normalizedUrl.startsWith('http://') && !normalizedUrl.startsWith('https://')) {
-      normalizedUrl = `https://${normalizedUrl}`;
+    let lastError: Error | null = null;
+    
+    for (let i = 0; i < urls.length; i++) {
+        // Robust URL normalization: Ensure protocol exists
+        let normalizedUrl = urls[i].trim();
+        if (!normalizedUrl.startsWith('http://') && !normalizedUrl.startsWith('https://')) {
+          normalizedUrl = `https://${normalizedUrl}`;
+        }
+
+        try {
+          const formData = new FormData();
+          formData.append('prompt', options.prompt);
+          
+          const response = await fetch(normalizedUrl, {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            const errorMessage = String(errorData.error || `HTTP error! status: ${response.status}`);
+            
+            // Check if this error is the "4006: daily free allocation" error
+            const is4006 = errorMessage.includes('4006') || 
+                           errorMessage.toLowerCase().includes('daily free allocation') ||
+                           errorMessage.toLowerCase().includes('neurons');
+            
+            if (is4006 && i < urls.length - 1) {
+              console.warn(`Image Worker ${normalizedUrl} reached limit (4006). Trying next fallback...`);
+              continue; // Try the next URL
+            }
+            
+            throw new Error(errorMessage);
+          }
+
+          const blob = await response.blob();
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+          });
+        } catch (error: any) {
+          lastError = error;
+          // If it's a network error or 4006, and we have more URLs, try them
+          if (i < urls.length - 1) {
+             console.warn(`Error with image worker ${normalizedUrl}:`, error);
+             continue;
+          }
+          break;
+        }
     }
 
-    try {
-      const formData = new FormData();
-      formData.append('prompt', options.prompt);
-      
-      const response = await fetch(normalizedUrl, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-      }
-
-      const blob = await response.blob();
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-    } catch (error) {
-      console.error("Error generating image:", error);
-      throw error;
-    }
+    throw lastError || new Error("Failed to generate image after trying all worker URLs.");
   }
 
   /**

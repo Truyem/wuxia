@@ -3,6 +3,8 @@ import { TextGenService } from './textGenService';
 import { PROMPT_TRANSFORMATION_SYSTEM } from '../prompts/runtime/transformationPrompt';
 import { ActiveApiConfig, PromptStructure } from '../types';
 import { parseJsonWithRepair } from '../utils/jsonRepair';
+import { DEFAULT_TEXT_GEN_WORKER_URLS } from '../utils/apiConfig';
+
 
 export class TransformationService {
     static async transformPrompts(
@@ -68,8 +70,8 @@ export class TransformationService {
             processedInput = input.slice(0, MAX_INPUT_CHARS) + "\n... (Dữ liệu bị cắt bỏ do quá lớn) ...";
         }
 
-        // Use the hardcoded worker URL if not provided in config
-        const workerUrl = 'https://wuxia-nemotron-worker.vudinhtrungv1010.workers.dev';
+        // Use the centralized worker URL(s)
+        const workerUrl = DEFAULT_TEXT_GEN_WORKER_URLS;
         
         return await TextGenService.generateText(workerUrl, {
             messages: [

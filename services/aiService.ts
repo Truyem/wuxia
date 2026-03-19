@@ -4,7 +4,8 @@ import { parseJsonWithRepair } from '../utils/jsonRepair';
 import { WORLD_GENERATION_SYSTEM_PROMPT, constructWorldviewUserPrompt } from '../prompts/runtime/worldGeneration';
 import { DEFAULT_COT_PROMPT } from '../prompts/runtime/defaults';
 import { TextGenService } from './textGenService';
-import { DEFAULT_TEXT_GEN_WORKER_URL } from '../utils/apiConfig';
+import { DEFAULT_TEXT_GEN_WORKER_URLS } from '../utils/apiConfig';
+
 
 type UniversalMessageRole = 'system' | 'user' | 'assistant';
 
@@ -84,7 +85,8 @@ class ProtocolRequestError extends Error {
 
 const cleanTrailingSlash = (baseUrl: string): string => baseUrl.replace(/\/+$/, '');
 
-const DEFAULT_NEMOTRON_WORKER_URL = 'https://wuxia-nemotron-worker.vudinhtrungv1010.workers.dev';
+const DEFAULT_NEMOTRON_WORKER_URL = DEFAULT_TEXT_GEN_WORKER_URLS;
+
 
 const isGeminiModel = (modelRaw: string): boolean => /\bgemini\b/i.test((modelRaw || '').trim());
 
@@ -1420,7 +1422,7 @@ const requestClaudeText = async (
  * This function does NOT require an API key—the worker handles AI access internally.
  */
 const requestWorkerText = async (
-    workerUrl: string,
+    workerUrl: string | string[],
     messages: GeneralMessage[],
     options: {
         temperature?: number;
@@ -1454,7 +1456,7 @@ const requestModelText = async (
     const resolvedTemperature = calculateRequestTemperature(apiConfig, protocol, options.temperature);
 
     if (apiConfig.provider === 'worker') {
-        const workerUrl = apiConfig.baseUrl || DEFAULT_TEXT_GEN_WORKER_URL;
+        const workerUrl = apiConfig.baseUrl || DEFAULT_TEXT_GEN_WORKER_URLS;
         const maxOutputTokens = calculateMaxOutputToken(apiConfig, protocol, messages);
         return requestWorkerText(
             workerUrl,

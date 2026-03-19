@@ -8,7 +8,20 @@ import {
     ActiveApiConfig
 } from '../models/system';
 
-export const DEFAULT_TEXT_GEN_WORKER_URL = 'https://wuxia-nemotron-worker.vudinhtrungv1010.workers.dev';
+export const DEFAULT_TEXT_GEN_WORKER_URLS = [
+    'https://wuxia-nemotron-worker.vudinhtrungv1010.workers.dev',
+    'https://wuxia-nemotron-worker.vdinhtrung0.workers.dev',
+    'https://wuxia-nemotron-worker.vdt0.workers.dev'
+];
+
+export const DEFAULT_TEXT_GEN_WORKER_URL = DEFAULT_TEXT_GEN_WORKER_URLS[0];
+
+export const DEFAULT_IMAGE_GEN_WORKER_URLS = [
+    'https://wuxia-flux-worker.vudinhtrungv1010.workers.dev',
+    'https://wuxia-image-gen.vdinhtrung0.workers.dev',
+    'https://wuxia-image-gen.vdt0.workers.dev'
+];
+
 
 export const PROVIDER_LABELS: Record<ApiProviderType, string> = {
     gemini: 'Google Gemini',
@@ -434,3 +447,11 @@ export const hasAnyAiBackend = (config: ActiveApiConfig | null, workerUrl?: stri
     return isApiConfigUsable(config) || isWorkerUrlAvailable(workerUrl);
 };
 
+/**
+ * Parses a comma-separated string of URLs or an array of URLs into a cleaned array of URLs.
+ */
+export const parseWorkerUrls = (urlInput: string | string[] | undefined | null): string[] => {
+    if (!urlInput) return [];
+    if (Array.isArray(urlInput)) return urlInput.map(u => String(u).trim()).filter(Boolean);
+    return String(urlInput).split(',').map(u => u.trim()).filter(Boolean);
+};
