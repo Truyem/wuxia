@@ -1,0 +1,102 @@
+{
+  "translation": {
+    "common": {
+      "confirm": "Xác nhận",
+      "cancel": "Hủy",
+      "close": "Đóng",
+      "save": "Lưu",
+      "saving": "Đang lưu...",
+      "saved": "Đã lưu",
+      "back": "Quay lại",
+      "loading": "Đang tải...",
+      "empty": "Trống",
+      "unknown": "Chưa rõ",
+      "tips": "Mách nhỏ"
+    },
+    "layout": {
+      "topbar": {
+        "title": "Vô Tận Võ Lâm"
+      },
+      "sidebar": {
+        "game": "Trò chơi",
+        "character": "Nhân vật",
+        "chat": "Trò chuyện",
+        "inventory": "Hành trang",
+        "equipment": "Trang bị",
+        "social": "Hào hiệp",
+        "team": "Đội ngũ",
+        "kungfu": "Võ học",
+        "sect": "Môn phái",
+        "task": "Nhiệm vụ",
+        "world": "Thế giới",
+        "map": "Bản đồ",
+        "story": "Cốt truyện",
+        "settings": "Cài đặt"
+      }
+    },
+    "settings": {
+      "title": "CÀI ĐẶT",
+      "tabs": {
+        "api": "Kết nối API",
+        "game": "Trò chơi",
+        "visual": "Thị giác & Hiển thị",
+        "article": "Tối ưu hóa nội dung",
+        "world": "Tiến hóa thế giới",
+        "realWorld": "Thế giới thực",
+        "core": "Lõi hệ thống",
+        "context": "Xem ngữ cảnh AI",
+        "history": "Lịch sử câu lệnh",
+        "theme": "Chủ đề"
+      },
+      "context": {
+        "title": "Bối cảnh AI hiện tại",
+        "mainStory": "Cốt truyện chính",
+        "recallApi": "API Hồi ức",
+        "allContent": "Tất cả nội dung",
+        "singleItem": "Xem từng mục",
+        "tokens": "Ước tính Tokens",
+        "order": "Thứ tự",
+        "category": "Loại",
+        "item": "Mục",
+        "policy": "Chiến lược ngữ cảnh",
+        "memoryN": "Số lượng ký ức quan trọng (N)",
+        "readOnly": "Phiên làm việc này không thể sửa đổi",
+        "content": "Nội dung ngữ cảnh"
+      }
+    },
+    "story": {
+      "title": "Thư viện Cốt truyện",
+      "archive": "Cuộn giấy Giang hồ",
+      "pastEvents": "Chuyện cũ như khói",
+      "currentChapter": "Hồi hiện tại",
+      "happening": "Đang diễn ra",
+      "prologue": "Hồi",
+      "mainConflict": "Mâu thuẫn chính",
+      "clues": "Manh mối ẩn giấu",
+      "objectives": "Điều kiện phá cục",
+      "met": "Đã đạt thành",
+      "inProgress": "Đang tiến hành",
+      "planning": "Quy hoạch cốt truyện",
+      "nearPlan": "Quy hoạch gần",
+      "midPlan": "Quy hoạch trung kỳ",
+      "longPlan": "Quy hoạch dài hạn",
+      "futureTeaser": "Dự báo hồi sau",
+      "secret": "Thiên cơ bất khả lộ",
+      "holdToReveal": "Nhấn giữ để xem nguyên văn",
+      "events": "Sự kiện sắp tới",
+      "trigger": "Kích hoạt",
+      "invalid": "Hết hiệu lực"
+    },
+    "memory": {
+      "title": "Cung điện Ký ức",
+      "tabs": {
+        "context": "Tức thời",
+        "short": "Ngắn hạn",
+        "medium": "Trung hạn",
+        "long": "Dài hạn"
+      },
+      "shortTermSummary": "Tóm tắt ngắn hạn (đang chờ chuyển)",
+      "emptyLayer": "Tầng ký ức này hiện đang trống."
+    }
+  }
+}

@@ -1,0 +1,132 @@
+import React, { useState } from 'react';
+import { ChatHistory, MemorySystem } from '../../../types';
+
+interface Props {
+    history: ChatHistory[];
+    memorySystem?: MemorySystem;
+    onClose: () => void;
+    currentTime?: string;
+}
+
+type TabType = 'context' | 'short' | 'medium' | 'long';
+const INSTANT_SHORT_TERM_SEPARATOR = '\n<<SHORT_TERM_SYNC>>\n';
+
+const parseRealTimeMemory = (raw: string) => {
+    const text = (raw || '').trim();
+    const splitAt = text.lastIndexOf(INSTANT_SHORT_TERM_SEPARATOR);
+    if (splitAt < 0) return { main: text, syncedShort: '' };
+    return {
+        main: text.slice(0, splitAt).trim(),
+        syncedShort: text.slice(splitAt + INSTANT_SHORT_TERM_SEPARATOR.length).trim()
+    };
+};
+
+const MobileMemory: React.FC<Props> = ({ history, memorySystem, onClose, currentTime }) => {
+    const [activeTab, setActiveTab] = useState<TabType>('context');
+
+    const fallbackImmediateData = history
+        .filter(msg => msg.role === 'assistant' && msg.structuredResponse?.shortTerm)
+        .map((msg, i) => ({
+            content: msg.structuredResponse?.shortTerm || "",
+            timestamp: msg.timestamp,
+            rawDate: msg.gameTime || currentTime || "Thời gian không xác định",
+            id: i
+        }))
+        .reverse();
+
+    const immediateData = (memorySystem?.instantMemory || []).map((m, i) => {
+        const parsed = parseRealTimeMemory(m);
+        return { content: parsed.main, syncedShort: parsed.syncedShort, id: i };
+    }).reverse();
+    const contextData = immediateData.length > 0 ? immediateData : fallbackImmediateData;
+    const shortData = (memorySystem?.shortTermMemory || []).map((m, i) => ({ content: m, id: i })).reverse();
+    const mediumData = (memorySystem?.midTermMemory || []).map((m, i) => ({ content: m, id: i })).reverse();
+    const longData = (memorySystem?.longTermMemory || []).map((m, i) => ({ content: m, id: i })).reverse();
+
+    const getTabContent = () => {
+        switch (activeTab) {
+            case 'context': return contextData;
+            case 'short': return shortData;
+            case 'medium': return mediumData;
+            case 'long': return longData;
+            default: return [];
+        }
+    };
+
+    const currentData = getTabContent();
+
+    return (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] flex items-center justify-center p-3 md:hidden animate-fadeIn">
+            <div className="bg-modal-gradient border border-wuxia-gold/30 w-full max-w-[600px] h-[86vh] flex flex-col shadow-[0_0_60px_rgba(0,0,0,0.8)] relative overflow-hidden rounded-2xl">
+                <div className="h-12 shrink-0 border-b border-gray-800/60 bg-ink-black/40 flex items-center justify-between px-4">
+                    <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full border border-wuxia-gold/50 bg-wuxia-gold/10 flex items-center justify-center text-wuxia-gold font-serif font-bold">
+                            Remember
+                        </div>
+                        <div className="text-wuxia-gold font-serif font-bold text-base tracking-[0.2em]">Memory Palace</div>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="w-8 h-8 flex items-center justify-center rounded-full bg-ink-black/50 border border-gray-700 text-gray-400 hover:text-wuxia-red hover:border-wuxia-red transition-all"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div className="border-b border-gray-800/60 /30 px-3 py-2 overflow-x-auto no-scrollbar">
+                    <div className="flex gap-2">
+                        {[
+                            { id: 'context', label: 'Tức thời' },
+                            { id: 'short', label: 'Ngắn hạn' },
+                            { id: 'medium', label: 'Trung hạn' },
+                            { id: 'long', label: 'Dài hạn' }
+                        ].map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id as TabType)}
+                                className={`px-3 py-1.5 text-[11px] rounded-full border transition-all ${activeTab === tab.id
+                                        ? 'bg-wuxia-gold/15 text-wuxia-gold border-wuxia-gold'
+                                        : 'border-gray-800 text-gray-500'
+                                    }`}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar p-4 space-y-3 /5">
+                    {currentData.length > 0 ? currentData.map((mem, idx) => (
+                        <div key={`${activeTab}-${(mem as any).id ?? idx}`} className="bg-ink-black/40 border border-gray-800 rounded-xl p-4">
+                            {activeTab === 'context' && (mem as any).rawDate && (
+                                <div className="text-[9px] text-gray-500 font-mono mb-2 border-b border-gray-800/50 pb-1">
+                                    {(mem as any).rawDate}
+                                </div>
+                            )}
+                            <p className="text-gray-300 font-serif leading-relaxed text-sm whitespace-pre-wrap">
+                                {mem.content}
+                            </p>
+                            {activeTab === 'context' && (mem as any).syncedShort && (
+                                <div className="mt-2 border-t border-gray-800/70 pt-2">
+                                    <div className="text-[10px] text-wuxia-cyan/80 mb-1">Short-term summary（Pending transfer）</div>
+                                    <p className="text-[11px] text-gray-400 leading-relaxed whitespace-pre-wrap">
+                                        {(mem as any).syncedShort}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    )) : (
+                        <div className="text-center py-16 text-gray-600 italic font-serif">
+                            No content in this memory layer。
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default MobileMemory;
+
