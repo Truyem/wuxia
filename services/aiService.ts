@@ -992,6 +992,18 @@ export const parseStoryRawText = (content: string): GameResponse => {
         return tagged;
     }
 
+    // Final fallback: if content has meaningful text (e.g. AI refusal, plain narrative),
+    // return it as a narrator log instead of throwing an error.
+    const plainText = content.replace(/<[^>]+>/g, '').trim();
+    if (plainText.length > 0) {
+        return {
+            logs: [{ sender: 'Narrator', text: plainText }],
+            tavern_commands: undefined,
+            shortTerm: undefined,
+            action_options: undefined
+        };
+    }
+
     const detail = parsed.error || 'Returned content structure is incomplete（Cannot parse as JSON or tag protocol）';
     throw new StoryResponseParseError(detail, content, detail);
 };
