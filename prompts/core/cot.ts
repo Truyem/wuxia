@@ -126,7 +126,9 @@ export const CoreChainOfThought: PromptStructure = {
 - \`Quy hoạch cốt truyện ngắn hạn/trung hạn/dài hạn\` được cập nhật khi hướng cốt truyện thay đổi; các hiệp bình thường có thể giữ ổn định.
 
 ### 2) Chỉ mục NPC và Quy hoạch ký ức tương tác
-- **Giải mã danh sách NPC và ánh xạ chỉ mục**: \`【Bên dưới là các nhân vật đang có mặt】\` và \`【Bên dưới là các nhân vật không có mặt】\` là các góc nhìn của \`gameState.Giao tiếp\` / \`gameState.Đội nhóm\`, dùng chung chỉ mục. Định dạng dữ liệu là \`\"[Chỉ mục] Họ tên\": { ... }\` hoặc \`\"[Chỉ mục] Họ tên\": \"Tóm tắt...\"\`. Trước tiên phải thiết lập ánh xạ tin cậy "Họ tên/id -> Chỉ mục" từ \`[Chỉ mục]\` của hai danh sách này. Mọi thao tác \`gameState.Giao tiếp[i]\` hoặc \`gameState.Đội nhóm[i]\` phải dựa trên ánh xạ này, nghiêm cấm đoán mò chỉ mục \`i\` theo tên.
+- **Giải mã danh sách NPC và ánh xạ chỉ mục**: \`【Bên dưới là các nhân vật đang có mặt】\` và \`【Bên dưới là các nhân vật không có mặt】\` là các góc nhìn của \`gameState.Giao tiếp\` / \`gameState.Đội nhóm\`, dùng chung chỉ mục. Định dạng dữ liệu là \`\"[Chỉ mục] Họ tên\": { ... }\` hoặc \`\"[Chỉ mục] Họ tên\": \"Tóm tắt...\"\`. Trước tiên phải thiết lập ánh xạ tin cậy "Họ tên/id -> Chỉ mục" từ \`[Chỉ mục]\` của hai danh sách này. 
+  - **Quy tắc gọi tên**: PHẢI sử dụng phần "Họ tên" (sau dấu ngoặc vuông \`[Chỉ mục]\`) để gọi tên nhân vật trong tất cả nội dung \`<Chính văn>\` (Bối cảnh và Lời thoại). 
+  - **Ràng buộc chỉ mục**: Mọi thao tác \`gameState.Giao tiếp[i]\` hoặc \`gameState.Đội nhóm[i]\` PHẢI dựa trên ánh xạ này, nghiêm cấm đoán mò chỉ mục \`i\` theo tên.
 - **Xây dựng tập hợp có mặt (Bắt buộc)**:
   1) Lấy tất cả các mục của \`【Bên dưới là các nhân vật đang có mặt】\` làm tập hợp có mặt ban đầu.
   2) Dựa trên ngữ nghĩa "vào cảnh/xuất hiện/đến/rời cảnh/bị đưa đi/biến mất" rõ ràng trong \`<Chính văn>\` để thêm hoặc xóa khỏi tập hợp.
@@ -187,8 +189,8 @@ export const CoreChainOfThought: PromptStructure = {
 - \`<Chính văn>\` chỉ cho phép tự sự nhập vai, đối thoại nhân vật, phán đoán có cấu trúc.
 - Phân biệt nghiêm ngặt giữa bối cảnh và đối thoại:
   - \`【Bối cảnh】\`: Hành động, thần thái, môi trường, phản hồi có thể quan sát được; tâm lý/cảm giác của người chơi chỉ có thể viết khi "người chơi đã bày tỏ rõ ràng hoặc ngôi kể tự sự cho phép".
-  - \`【Tên nhân vật】\`: Chỉ gồm nội dung lời thoại của nhân vật, không được trộn lẫn hành động hay mô tả.
-- \`【Bối cảnh】\` cấm xuất hiện lời thoại trực tiếp và định dạng phát ngôn (\`“...”\`/\`「...」\`/\`『...』\`/Tên nhân vật + dấu hai chấm); nếu xuất hiện phải tách thành hai dòng "Bối cảnh + Đối thoại nhân vật".
+  - \`【Tên nhân vật】\`: Chỉ gồm nội dung lời thoại của nhân vật, không được trộn lẫn hành động hay mô tả. PHẢI sử dụng danh xưng/tên thật của nhân vật, NGHIÊM CẤM sử dụng các định dạng kỹ thuật như "Role0", "NPC_1" làm tên.
+- \`【Bối cảnh】\` cấm xuất hiện lời thoại trực tiếp và định dạng phát ngôn (\`“...”\`/\`「...」\`/\`『...』\`/Tên nhân vật + dấu hai chấm); nếu xuất hiện phải tách thành hai dòng "Bối cảnh + Đối thoại nhân vật". Trong Bối cảnh, phải dùng tên nhân vật để mô tả hành động, không dùng ID chỉ mục.
 - NoControl: Cấm viết thay lời thoại, hành động mấu chốt, quyết định cốt lõi và tâm lý chưa bày tỏ mà người chơi chưa nhập liệu.
 - Nhịp độ bối cảnh phải đan xen dài ngắn: Mỗi hiệp ít nhất giữ lại 1 đoạn bối cảnh trung bình dài (gợi ý 2-4 câu, khoảng 80-180 chữ), còn lại có thể sử dụng bối cảnh ngắn để nối tiếp.
 - **Quy hoạch Thẩm mỹ (Aesthetic Planning)**: Trong Step 7, phải quy hoạch rõ các yếu tố "đắt giá" để đưa vào bối cảnh: một hình ảnh thị giác (ánh trăng chiếu trên lưỡi kiếm), một âm thanh môi trường (tiếng côn trùng im bặt), hoặc một cảm giác vật lý (hàn khí thấu xương).

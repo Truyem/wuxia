@@ -49,10 +49,17 @@ export const buildNpcContext = (socialData: any[], memoryConfig: MemoryConfig): 
                 }))
                 .filter((item: any) => item.targetName && item.relationship)
             : [];
+        
+        // Priority: fullName (legacy) -> name (standard) -> identity -> fallback ID
+        const displayName = (typeof npc?.fullName === 'string' && npc.fullName.trim()) || 
+                          (typeof npc?.name === 'string' && npc.name.trim()) || 
+                          (typeof npc?.identity === 'string' && npc.identity.trim()) || 
+                          `Role${index}`;
+
         return {
             index: index,
             id: typeof npc?.id === 'string' ? npc.id : `npc_${index}`,
-            fullName: typeof npc?.fullName === 'string' ? npc.fullName : `Role${index}`,
+            fullName: displayName,
             gender: typeof npc?.gender === 'string' ? npc.gender : 'Unknown',
             realm: typeof npc?.realm === 'string' ? npc.realm : 'Unknown realm',
             identity: typeof npc?.identity === 'string' ? npc.identity : 'Unknown identity',
