@@ -58,19 +58,23 @@ const normalizeEnvironment = (rawEnv?: any): EnvironmentData => {
     const originalGameDays = typeof source?.gameDays === 'number' && Number.isFinite(source.gameDays)
         ? source.gameDays
         : 1;
-    const rawWeather = source?.weather && typeof source.weather === 'object' ? source.weather : {};
-    const weather = {
-        type: typeof rawWeather?.type === 'string' ? rawWeather.type.trim() : '',
-        endDate: typeof rawWeather?.endDate === 'string' ? rawWeather.endDate.trim() : ''
-    };
-    const rawEnvVar = source?.envVariables;
-    const envVariables = rawEnvVar && typeof rawEnvVar === 'object'
-        ? {
-            name: typeof rawEnvVar?.name === 'string' ? rawEnvVar.name.trim() : '',
-            description: typeof rawEnvVar?.description === 'string' ? rawEnvVar.description.trim() : '',
-            effect: typeof rawEnvVar?.effect === 'string' ? rawEnvVar.effect.trim() : ''
-        }
-        : null;
+    const rawWeather = source?.weather;
+    const weather = typeof rawWeather === 'string'
+        ? { type: rawWeather.trim(), endDate: '' }
+        : {
+            type: typeof rawWeather?.type === 'string' ? rawWeather.type.trim() : '',
+            endDate: typeof rawWeather?.endDate === 'string' ? rawWeather.endDate.trim() : ''
+        };
+    const rawEnvVar = source?.envVariables || source?.env;
+    const envVariables = typeof rawEnvVar === 'string'
+        ? { name: rawEnvVar.trim(), description: '', effect: '' }
+        : (rawEnvVar && typeof rawEnvVar === 'object'
+            ? {
+                name: typeof rawEnvVar?.name === 'string' ? rawEnvVar.name.trim() : '',
+                description: typeof rawEnvVar?.description === 'string' ? rawEnvVar.description.trim() : '',
+                effect: typeof rawEnvVar?.effect === 'string' ? rawEnvVar.effect.trim() : ''
+            }
+            : null);
     return {
         ...source,
         majorLocation: major,
@@ -119,6 +123,7 @@ const DefaultCharacterTemplate: CharacterData = {
     maxFullness: 0,
     currentThirst: 0,
     maxThirst: 0,
+    meridianStatus: 'Bình thường',
     currentWeight: 0,
     maxWeight: 0,
     strength: 0,
@@ -208,21 +213,34 @@ const normalizeInventoryMapping = (rawRole: CharacterData): CharacterData => {
     const seenIds = new Set<string>();
     sourceList.forEach((item: any, idx: number) => {
         // Accept both uppercase ID (legacy) and lowercase id (model-aligned / AI-pushed)
-        const id = (typeof item?.ID === 'string' && item.ID.trim().length > 0)
+        const rawId = (typeof item?.ID === 'string' && item.ID.trim().length > 0)
             ? item.ID.trim()
             : (typeof item?.id === 'string' && item.id.trim().length > 0)
                 ? item.id.trim()
-                : `itm_auto_${idx}`;
+                : '';
+
+        // Avoid generic "Item00" style IDs if a name is available
+        const isGeneric = !rawId || /^(item|itm)_?\d+$/i.test(rawId);
+        let id = rawId;
+        
+        if (isGeneric && typeof item?.name === 'string' && item.name.trim().length > 0) {
+            // Slugify name roughly, but keep it readable for AI
+            const nameSlug = item.name.trim().toLowerCase().replace(/\s+/g, '_').slice(0, 20);
+            id = `itm_${nameSlug}_${idx}`;
+        } else if (!rawId) {
+            id = `itm_auto_${idx}`;
+        }
+
         if (seenIds.has(id)) return;
         seenIds.add(id);
-        deduped.push({ ...item, ID: id });
+        deduped.push({ ...item, ID: id, id: id }); // Ensure both uppercase and lowercase variants are consistent
     });
 
     const itemById = new Map<string, any>(deduped.map((item) => [item.ID, item]));
     // Recognize containers by containerProperties (model), containerAttributes (legacy),
     // or the untranslated Vietnamese key "Thuộc tính vật chứa" (from AI push before SUBKEY_MAP fix)
     const isContainerItem = (item: any) =>
-        item?.containerProperties || item?.containerAttributes || item?.['Thuộc tính vật chứa'];
+        item?.containerProperties || item?.containerAttributes || item?.['container_properties'] || item?.['Thuộc tính vật chứa'];
     const containerIds = new Set<string>(
         deduped
             .filter((item) => isContainerItem(item))
@@ -566,7 +584,7 @@ const mergeInternalEjaculationRecords = (a: any, b: any): any[] | undefined => {
     return out.length > 0 ? out : undefined;
 };
 
-const standardizeSingleNPC = (rawNpc: any, fallbackIndex: number): any => {
+export const standardizeSingleNPC = (rawNpc: any, fallbackIndex: number): any => {
     const npc = rawNpc && typeof rawNpc === 'object' ? rawNpc : {};
     const appearanceDescription = getFirstNonEmptyText(
         npc?.appearanceDescription,
@@ -589,8 +607,15 @@ const standardizeSingleNPC = (rawNpc: any, fallbackIndex: number): any => {
 
     return {
         ...npc,
-        id: getFirstNonEmptyText(npc?.id, `npc_${fallbackIndex}`) || `npc_${fallbackIndex}`,
-        name: getFirstNonEmptyText(npc?.name, npc?.fullName, `Role${fallbackIndex}`) || `Role${fallbackIndex}`,
+        id: getFirstNonEmptyText(npc?.id, npc?.ID, `npc_${fallbackIndex}`) || `npc_${fallbackIndex}`,
+        name: (() => {
+            const rawName = getFirstNonEmptyText(npc?.name, npc?.fullName, npc?.['Họ tên']);
+            const isGeneric = !rawName || /^(role|npc|char)_?\d+$/i.test(rawName);
+            if (isGeneric && typeof npc?.identity === 'string' && npc.identity.trim().length > 0) {
+                return npc.identity.trim();
+            }
+            return rawName || `Vô danh ${fallbackIndex}`;
+        })(),
         gender: typeof npc?.gender === 'string' ? npc.gender : 'Unknown',
         age: Number.isFinite(Number(npc?.age)) ? Number(npc.age) : undefined,
         realm: typeof npc?.realm === 'string' ? npc.realm : 'Unknown realm',
@@ -773,6 +798,72 @@ const mergeSameNamesNPCList = (list: any[]): any[] => {
     return merged;
 };
 
+const normalizeLocationAffiliation = (raw: any): any => {
+    const source = raw && typeof raw === 'object' ? raw : {};
+    const getTargetValue = (primary: any, ...fallbacks: any[]) => {
+        if (primary !== undefined && primary !== null) return primary;
+        for (const f of fallbacks) {
+            if (f !== undefined && f !== null) return f;
+        }
+        return '';
+    };
+
+    let medium = getTargetValue(source.mediumLocation, source.area, source['Địa điểm Vừa'], source['Trung địa điểm'], source['Địa điểm trung'], source['Thành thị'], source['Thành phố']);
+    if (typeof medium === 'string' && (medium.includes(',') || medium.includes(';') || medium.includes('，'))) {
+        medium = medium.split(/[,\r\n;，]+/).map(s => s.trim()).filter(Boolean);
+    } else if (Array.isArray(medium)) {
+        medium = medium.map(m => (typeof m === 'string' ? m.trim() : m)).filter(Boolean);
+    }
+
+    const major = getTargetValue(source.majorLocation, source.region, source['Địa điểm Lớn'], source['Đại địa điểm'], source['Địa điểm lớn'], source['Vùng'], source['Vùng lớn']);
+    
+    let minor = getTargetValue(source.minorLocation, source.subArea, source['Địa điểm Nhỏ'], source['Tiểu địa điểm'], source['Địa điểm nhỏ'], source['Khu vực'], source['Công trình'], source['Kiến trúc']);
+    if (typeof minor === 'string' && (minor.includes(',') || minor.includes(';') || minor.includes('，'))) {
+        minor = minor.split(/[,\r\n;，]+/).map(s => s.trim()).filter(Boolean);
+    }
+
+    return {
+        majorLocation: (typeof major === 'string' ? major.trim() : major) || '',
+        mediumLocation: medium || '',
+        minorLocation: minor || ''
+    };
+};
+
+const normalizeSingleMap = (raw: any): any => {
+    const m = raw && typeof raw === 'object' ? raw : {};
+    let buildingsRaw = m.internalBuildings || m['Kiến trúc nội khu'] || m['Danh sách kiến trúc'] || m['Kiến trúc nội bộ'] || m['Kiến trúc'] || [];
+    if (typeof buildingsRaw === 'string') {
+        buildingsRaw = buildingsRaw.split(/[,\r\n;]+/).map(s => s.trim()).filter(Boolean);
+    }
+    if (!Array.isArray(buildingsRaw)) {
+        buildingsRaw = [buildingsRaw];
+    }
+
+    const internalBuildings = buildingsRaw.map((b: any) => {
+        if (typeof b === 'string') return { name: b.trim(), description: '', affiliation: {} };
+        if (b && typeof b === 'object') return normalizeSingleBuilding(b);
+        return null;
+    }).filter(Boolean);
+
+    return {
+        name: getFirstNonEmptyText(m.name, m.Name, m['Tên'], m['Tên địa điểm'], m['Địa danh']) || 'Unnamed Location',
+        coordinate: getFirstNonEmptyText(m.coordinate, m.coordinates, m.Coordinate, m['Tọa độ'], m['Vị trí'], m['Vị trí bản đồ']) || 'Unknown',
+        description: getFirstNonEmptyText(m.description, m.Description, m['Mô tả'], m['Cảnh vật'], m['Chi tiết']) || '',
+        avatar: m.avatar || m.image || m['Ảnh'] || m['Hình ảnh'] || '',
+        affiliation: normalizeLocationAffiliation(m.affiliation || m.ownership || m['Sở hữu'] || m['Quy thuộc'] || m['Thuộc về'] || m['Nằm trong']),
+        internalBuildings
+    };
+};
+
+const normalizeSingleBuilding = (raw: any): any => {
+    const b = raw && typeof raw === 'object' ? raw : {};
+    return {
+        name: getFirstNonEmptyText(b.name, b.Name, b['Tên'], b['Tên kiến trúc']) || 'Unnamed Building',
+        description: getFirstNonEmptyText(b.description, b.Description, b['Mô tả'], b['Chi tiết kiến trúc']) || '',
+        affiliation: normalizeLocationAffiliation(b.affiliation || b.ownership || b['Sở hữu'] || b['Quy thuộc'] || b['Thuộc về'] || b['Nằm trong'])
+    };
+};
+
 const standardizeSocialList = (list: any[], options?: { mergeSameNames?: boolean }): any[] => {
     if (!Array.isArray(list)) return [];
     const normalized = list.map((npc, index) => standardizeSingleNPC(npc, index));
@@ -782,13 +873,25 @@ const standardizeSocialList = (list: any[], options?: { mergeSameNames?: boolean
 
 const normalizeWorldStatus = (raw?: any): any => {
     const world = raw && typeof raw === 'object' ? raw : {};
+    const rawMaps = Array.isArray(world.maps) ? world.maps 
+        : (Array.isArray(world.Maps) ? world.Maps 
+        : (Array.isArray(world['Bản đồ']) ? world['Bản đồ'] 
+        : (Array.isArray(world['Danh sách bản đồ']) ? world['Danh sách bản đồ'] : [])));
+    const rawBuildings = Array.isArray(world.buildings) ? world.buildings 
+        : (Array.isArray(world.Buildings) ? world.Buildings 
+        : (Array.isArray(world['Kiến trúc']) ? world['Kiến trúc'] : []));
+    const rawOngoing = Array.isArray(world.ongoingEvents) ? world.ongoingEvents 
+        : (Array.isArray(world['Sự kiện đang diễn ra']) ? world['Sự kiện đang diễn ra'] : []);
+    const rawSettled = Array.isArray(world.settledEvents) ? world.settledEvents 
+        : (Array.isArray(world['Sự kiện đã kết thúc']) ? world['Sự kiện đã kết thúc'] : []);
+    
     return {
         ...world,
         activeNpcList: Array.isArray(world.activeNpcList) ? world.activeNpcList : [],
-        maps: Array.isArray(world.maps) ? world.maps : [],
-        buildings: Array.isArray(world.buildings) ? world.buildings : [],
-        ongoingEvents: Array.isArray(world.ongoingEvents) ? world.ongoingEvents : [],
-        settledEvents: Array.isArray(world.settledEvents) ? world.settledEvents : [],
+        maps: rawMaps.map((m: any) => normalizeSingleMap(m)),
+        buildings: rawBuildings.map((b: any) => normalizeSingleBuilding(b)),
+        ongoingEvents: rawOngoing,
+        settledEvents: rawSettled,
         worldHistory: Array.isArray(world.worldHistory) ? world.worldHistory : []
     };
 };
@@ -837,6 +940,8 @@ const normalizeStoryStatus = (raw?: any, env?: any): any => {
         mediumTermPlanning: typeof story.mediumTermPlanning === 'string' ? story.mediumTermPlanning : '',
         longTermPlanning: typeof story.longTermPlanning === 'string' ? story.longTermPlanning : '',
         pendingEvents: Array.isArray(story.pendingEvents) ? story.pendingEvents : [],
+        worldQuestList: Array.isArray(story.worldQuestList) ? story.worldQuestList : (Array.isArray(story['Nhiệm vụ thế giới']) ? story['Nhiệm vụ thế giới'] : []),
+        promiseList: Array.isArray(story.promiseList) ? story.promiseList : (Array.isArray(story['Hứa hẹn']) ? story['Hứa hẹn'] : []),
         storyVariables: story.storyVariables && typeof story.storyVariables === 'object' ? story.storyVariables : {},
         actionCountSinceLastChapter: Number(story.actionCountSinceLastChapter) || 0
     };

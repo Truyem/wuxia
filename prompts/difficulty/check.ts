@@ -164,17 +164,17 @@ Giá trị phán định cuối cùng = (Năng lực cơ bản + Bù đắp cả
 ## 5. Định mức giá trị hiệu chỉnh
 - Hiệu chỉnh môi trường:
   - Chủ trường/Thông thạo địa hình: ${Config['Environmental correction'].Venue}
-  - Thời tiết/Địa hình khắc nghiệt: ${Config['Environmental correction'].Bad}
-  - Trận hình/Đồng đội chi viện: ${Config['Environmental correction'].Support}
-  - Phán đoán môi trường cần đọc \`Môi trường.Thời tiết.Thời tiết\` và \`Môi trường.Biến môi trường\`.
+    - Né tránh dịch chuyển: \`${Config['Environmental correction'].Bad}\`
+    - Trận hình/Đồng đội chi viện: \`${Config['Environmental correction'].Support}\`
+    - Phán đoán môi trường cần đọc \`Môi trường.Thời tiết.Thời tiết\` và \`Môi trường.Biến môi trường\`.
 - Hiệu chỉnh trạng thái:
-  - \`Tinh lực hiện tại <= 30%\`: ${Config['Status correction']['Light fatigue']}
-  - \`Tinh lực hiện tại <= 10%\`: ${Config['Status correction']['Heavy fatigue']}
-  - No bụng/Khát quá thấp: ${Config['Status correction']['Fullness and thirst']}
-  - Bộ phận then chốt trọng thương và mất khả năng vận động tứ chi: ${Config['Status correction']['Part severe injury']}
+    - \`Tinh lực hiện tại <= 30%\`: ${Config['Status correction']['Light fatigue']}
+    - \`Tinh lực hiện tại <= 10%\`: ${Config['Status correction']['Heavy fatigue']}
+    - No bụng/Khát quá thấp: ${Config['Status correction']['Fullness and thirst']}
+    - Bộ phận then chốt trọng thương và mất khả năng vận động tứ chi: ${Config['Status correction']['Part severe injury']}
 - Hiệu chỉnh trang bị:
-  - Khắc chế rõ rệt: \`+10 ~ +30\`
-  - Hư hỏng/Không phù hợp: \`-20 ~ -70\`
+    - Khắc chế rõ rệt: \`+10 ~ +30\`
+    - Hư hỏng/Không phù hợp: \`-20 ~ -70\`
 
 ## 6. Bảng ánh xạ kết quả
 | Chênh lệch (Giá trị phán định - Độ khó) | Kết quả | Hậu quả trực tiếp |
@@ -189,7 +189,7 @@ Giá trị phán định cuối cùng = (Năng lực cơ bản + Bù đắp cả
 - Thất bại không được bỏ qua không tổn thất, phải được thực thi trong \`tavern_commands\`.
 - ${Config['Force rules']}
 
-</Giao thức Phán định Độ khó>
+</Giao thức Phán đoán Độ khó>
 `;
 
 export const Difficulty_Judgment: PromptStructure[] = [

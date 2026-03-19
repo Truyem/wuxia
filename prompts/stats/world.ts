@@ -1,37 +1,41 @@
-import type { PromptStructure } from '../../types';
+import { PromptStructure } from '../../types';
 
 export const StatWorldEvolution: PromptStructure = {
-    id: 'stat_world_evolution',
-    title: 'Quy tắc tiến hóa thế giới',
-    type: 'system',
-    enabled: true,
-    role: 'system',
+    id: 'stat_world',
+    title: 'Giao thức Tiến hóa Thế giới và Vận hành',
     content: `
-【Quy tắc Tiến hóa và Vận hành Thế giới (Khớp chính xác với gameState.World của <Định nghĩa cấu trúc dữ liệu>)】
+<world_evolution_protocol>
+# 【Quy tắc Tiến hóa Thế giới (Ánh xạ vào gameState.World & Environment)】
 
-1. Cơ chế Thời gian (Time Mechanics)
-    - Mỗi hiệp (round) mặc định tiêu tốn một khoảng thời gian trong game (Ví dụ: 1 canh giờ/4 giờ).
-    - Cập nhật gameState.World.Time.current sau mỗi hành động quan trọng.
-    - Hệ thống "Lịch thế giới": Các ngày lễ, kỳ hạn của các giáo phái và thời gian nở hoa của linh dược phải được tuân thủ nghiêm ngặt.
+## 1. Cơ chế Thời gian (Tiếng Anh)
+- **Cấu trúc**: \`gameState.World.time\` bao gồm \`Year / Month / Day / Hour / Minute\`.
+- Mỗi lượt hành động thường tiêu tốn 15-30 phút tùy vào độ phức tạp của hành động.
+- Các sự kiện định kỳ (Phiên chợ, Lễ hội, Đấu giá) dựa trên các mốc thời gian này.
 
-2. Bộ lọc tác động (Impact Filtering)
-    - Chỉ các hành động của Player hoặc các NPC "Quan trọng" mới gây ra biến động lớn cho thế giới.
-    - Các biến động nhỏ (Small changes) được tóm tắt trong thẻ <World History>.
+## 2. Quy tắc Vận hành và Tác động
+- **Lọc thông tin**: Chỉ cập nhật những thay đổi có tác động trực tiếp hoặc gián tiếp đến Player hoặc khu vực hiện tại.
+- **Tiến hóa NPC**: Các NPC quan trọng không ở cùng Player vẫn có thể thăng cấp, đổi vị trí hoặc thay đổi trạng thái dựa trên sự kiện thế giới.
+- **Thay đổi Bản đồ**: Cơ sở hạ tầng, sự phá hủy của chiến tranh, hoặc thay đổi chủ quyền của các môn phái.
 
-3. Tiến trình của NPC (NPC Progression)
-    - Các NPC đặc thù sẽ tự tăng cường thực lực hoặc thay đổi phe phái theo thời gian thực (Real-time).
-    - Nếu Player không can thiệp, các "Sự kiện cố định" (Fixed Events) sẽ diễn ra theo quỹ đạo dự kiến.
+## 3. Quản lý Sự kiện Thế giới
+- \`worldEvents\`: Danh sách các sự kiện đang diễn ra (Chiến tranh, Thiên tai, Tin đồn).
+- Mỗi sự kiện phải có: \`id / type / description / duration / intensity\`.
 
-4. Tiến hóa bản đồ và kiến trúc (Map/Building Evolution)
-    - Các địa điểm có thể bị phá hủy, xây dựng lại hoặc thay đổi quyền sở hữu dựa trên kết quả chiến tranh hoặc kinh tế.
-    - Cập nhật Description của Map/Building trong gameState.World.Maps để phản ánh sự thay đổi.
+## 4. Hiệu ứng Môi trường (Tiếng Anh)
+- **Trường dữ liệu**: \`gameState.Environment.weather\` (Thời tiết), \`gameState.Environment.temperature\` (Nhiệt độ).
+- Ảnh hưởng trực tiếp đến HP/MP hoặc độ khó của các hành động (Ví dụ: Trời mưa giảm độ chính xác của ám khí).
 
-5. Quản lý Sự kiện thế giới (World Event Management)
-    - Tạo ra "Shadow Plot" (Cốt truyện ẩn): Những gì đang xảy ra ở nơi Player không nhìn thấy nhưng sẽ gây ảnh hưởng sau này.
-    - Sử dụng command tavern_commands.update_world_state để ghi đè hoặc bổ sung dữ liệu thế giới.
+## 5. Phán định Tầm nhìn và Thông tin
+- Player chỉ biết những gì xảy ra tại vị trí hiện tại hoặc thông qua tin đồn (\`rumors\`).
+- Hệ thống phải cập nhật \`shortTermMemory\` của thế giới để duy trì tính nhất quán của lịch sử.
 
-6. Mối liên kết hiển thị với Player (Player Visibility)
-    - Thông tin thế giới được truyền tải qua: Lời đồn trong quán trọ (Inn rumors), bảng cáo thị, tin tình báo hoặc quan sát trực tiếp.
-    - Đảm bảo tính nhất quán (Consistency): Nếu một danh môn chính phái bị tiêu diệt, họ không được xuất hiện trong các đoạn hội thoại sau đó.
-`
+## 6. Ví dụ Lệnh (Hợp lệ)
+- \`{"action": "SET", "key": "gameState.Environment.weather", "value": "Bão Tuyết"}\`
+- \`{"action": "ADD", "key": "gameState.World.time.Hour", "value": 2}\`
+- \`{"action": "PUSH", "key": "gameState.World.worldEvents", "value": {"id": "EV001", "description": "Ma giáo tấn công Thanh Vân Môn"}}\`
+
+</world_evolution_protocol>
+`,
+    type: 'num',
+    enabled: true
 };

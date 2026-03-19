@@ -125,6 +125,8 @@ type SendResult = {
     parseErrorDetail?: string;
     errorDetail?: string;
     errorTitle?: string;
+    rawContent?: string;
+    canShowRaw?: boolean;
 };
 
 type MemoryRetrievalProgress = {
@@ -543,6 +545,8 @@ export const useGame = () => {
         mediumTermPlanning: '',
         longTermPlanning: '',
         pendingEvents: [],
+        worldQuestList: [],
+        promiseList: [],
         storyVariables: {},
         actionCountSinceLastChapter: 0
     });
@@ -556,6 +560,8 @@ export const useGame = () => {
         const archivesRaw = storyRaw?.historicalArchives || [];
         const storyVarsRaw = storyRaw?.storyVariables || {};
         const pendingEventsRaw = storyRaw?.pendingEvents || [];
+        const worldQuestListRaw = storyRaw?.worldQuestList || storyRaw?.['Nhiệm vụ thế giới'] || [];
+        const promiseListRaw = storyRaw?.promiseList || storyRaw?.['Hứa hẹn'] || [];
 
         const archives = Array.isArray(archivesRaw) ? archivesRaw : [];
         const pendingEvents = Array.isArray(pendingEventsRaw)
@@ -608,6 +614,8 @@ export const useGame = () => {
             mediumTermPlanning: plainText(storyRaw?.mediumTermPlanning),
             longTermPlanning: plainText(storyRaw?.longTermPlanning),
             pendingEvents,
+            worldQuestList: Array.isArray(worldQuestListRaw) ? worldQuestListRaw : [],
+            promiseList: Array.isArray(promiseListRaw) ? promiseListRaw : [],
             storyVariables: (storyVarsRaw || {}) as Record<string, boolean | number | string>,
             actionCountSinceLastChapter: Number(storyRaw?.actionCountSinceLastChapter) || 0
         };
@@ -800,6 +808,7 @@ export const useGame = () => {
                     energy: { current: role.currentEnergy, max: role.maxEnergy },
                     fullness: { current: role.currentFullness, max: role.maxFullness },
                     thirst: { current: role.currentThirst, max: role.maxThirst },
+                    meridianStatus: role.meridianStatus || 'Bình thường',
                     weight: { current: role.currentWeight, max: role.maxWeight }
                 },
                 attributes: {
@@ -857,13 +866,13 @@ export const useGame = () => {
                     name: item.name || '',
                     coordinate: item.coordinate || '',
                     description: item.description || '',
-                    ownership: item.ownership || '',
+                    affiliation: item.affiliation || { majorLocation: '', mediumLocation: '', minorLocation: '' },
                     internalBuildings: item.internalBuildings || []
                 })),
                 buildings: (world.buildings || []).slice(0, 15).map((item: any) => ({
                     name: item.name || '',
                     description: item.description || '',
-                    ownership: item.ownership || ''
+                    affiliation: item.affiliation || { majorLocation: '', mediumLocation: '', minorLocation: '' }
                 })),
                 ongoingEvents: (world.ongoingEvents || []),
                 settledEvents: (world.settledEvents || []).slice(-15),
@@ -1799,8 +1808,24 @@ export const useGame = () => {
         let appointmentListBuffer = deepCopy(appointmentList);
         let playerSectBuffer = deepCopy(playerSect);
 
-        if (Array.isArray(response.tavern_commands)) {
-            response.tavern_commands.forEach(cmd => {
+        const allCommands: any[] = [
+            ...(Array.isArray(response.tavern_commands) ? response.tavern_commands : [])
+        ];
+
+        // Also process t_ fields if they contain command-like strings
+        const tFields: (keyof GameResponse)[] = ['t_npc', 't_state', 't_cmd', 't_var'];
+        tFields.forEach(field => {
+            const val = response[field];
+            if (typeof val === 'string' && val.trim().length > 0) {
+                const extracted = aiService.parseCommandBlock(val);
+                if (extracted.length > 0) {
+                    allCommands.push(...extracted);
+                }
+            }
+        });
+
+        if (allCommands.length > 0) {
+            allCommands.forEach(cmd => {
                 const res = applyStateCommand(charBuffer, envBuffer, socialBuffer, worldBuffer, battleBuffer, storyBuffer, taskListBuffer, appointmentListBuffer, playerSectBuffer, cmd.key, cmd.value, cmd.action);
                 charBuffer = res.char;
                 envBuffer = normalizeEnvironment(res.env);
@@ -2274,7 +2299,9 @@ export const useGame = () => {
                     cancelled: true,
                     needRerollConfirm: true,
                     parseErrorMessage: parseErrorRaw,
-                    parseErrorDetail: parseErrorRaw
+                    parseErrorDetail: parseErrorRaw,
+                    rawContent: (error as any).rawText || '',
+                    canShowRaw: true
                 };
             } else {
                 popRollSnapshot();

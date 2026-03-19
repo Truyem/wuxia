@@ -220,7 +220,7 @@ const inferOpenAIContextWindow = (modelRaw: string): number | null => {
     if (model.startsWith('gpt-4-turbo') || model.startsWith('gpt-4-0125') || model.startsWith('gpt-4-1106')) return 128_000;
     if (model.startsWith('gpt-4')) return 8_192;
     if (model.startsWith('gpt-3.5')) return 16_385;
-    if (model.includes('nemotron')) return 256_000;
+    if (model.includes('nemotron') || model.includes('oss')) return 128_000;
     if (model.includes('glm')) return 131_072;
     return null;
 };
@@ -267,7 +267,7 @@ const inferOpenAIDefaultMaxOutputToken = (modelRaw: string): number => {
     if (looksLikeOpenAIReasoningModel(model)) return 100_000;
     if (model.startsWith('gpt-4')) return 8_192;
     if (model.startsWith('gpt-3.5')) return 4_096;
-    if (model.includes('nemotron')) return 256_000;
+    if (model.includes('nemotron') || model.includes('oss')) return 128_000;
     if (model.includes('glm')) return 131_072;
     return 8_192;
 };
@@ -549,16 +549,46 @@ const extractTagContentList = (
 ): string[] => {
     if (!text || !tag) return [];
     const escapedTag = escapeRegexFragment(tag);
+
+    // Support standard </tag>, or broken tags <tag> if fixTagClosingErrors enabled, 
+    // or end of string / start of next tag as a boundary.
     const closeTag = options?.fixTagClosingErrors
-        ? `(?:</${escapedTag}>|<${escapedTag}>)`
+        ? `(?:</${escapedTag}>|<${escapedTag}>|$)` // Treat start tag or EOF as closing if needed
         : `</${escapedTag}>`;
-    const regex = new RegExp(`<${escapedTag}>\\s*([\\s\\S]*?)\\s*${closeTag}`, 'gi');
+
+    // Regex 1: Standard match with closing tag
+    // Requirement: Tag should ideally be at the start of string or after a newline to avoid matching mentions in text
+    const regexStandard = new RegExp(`(?:^|\\n)\\s*<${escapedTag}>\\s*([\\s\\S]*?)\\s*${closeTag}`, 'gi');
     const list: string[] = [];
     let match: RegExpExecArray | null = null;
-    while ((match = regex.exec(text)) !== null) {
+
+    while ((match = regexStandard.exec(text)) !== null) {
         const payload = (match[1] || '').trim();
         if (payload) list.push(payload);
     }
+
+    // Regex 2: Greedy match for unclosed tag at the end (useful for truncated responses)
+    if (list.length === 0) {
+        // Fallback for truncated/unclosed tags AT THE END of the response
+        // Only if it's the last thing in the text or followed by nothing but whitespace
+        // We use a lookahead to ensure we don't swallow a SUBSEQUENT tag start (any tag)
+        const unclosedTagRegex = new RegExp(`(?:^|\\n)\\s*<${escapedTag}>\\s*([\\s\\S]*?)(?=\\n\\s*<|$)`, 'i');
+        const unclosedMatch = text.match(unclosedTagRegex);
+        if (unclosedMatch) {
+            const payload = (unclosedMatch[1] || '').trim();
+            if (payload) list.push(payload);
+        }
+    }
+
+    // Fallback: If still nothing found, try a less strict match as a last resort (might match mentions, but better than nothing)
+    if (list.length === 0) {
+        const regexStrictLineOnly = new RegExp(`<${escapedTag}>\\s*([\\s\\S]*?)\\s*${closeTag}`, 'gi');
+        while ((match = regexStrictLineOnly.exec(text)) !== null) {
+            const payload = (match[1] || '').trim();
+            if (payload) list.push(payload);
+        }
+    }
+
     return list;
 };
 
@@ -637,7 +667,7 @@ const parseCommandValue = (rawValue: string | undefined): any => {
     return text;
 };
 
-const standardizedCommandObject = (raw: any): { action: 'add' | 'set' | 'push' | 'delete' | 'sub'; key: string; value: any } | null => {
+export const standardizedCommandObject = (raw: any): { action: 'add' | 'set' | 'push' | 'delete' | 'sub'; key: string; value: any } | null => {
     if (!raw || typeof raw !== 'object') return null;
     const actionRaw = typeof raw.action === 'string' ? raw.action.trim().toLowerCase() : '';
     if (actionRaw !== 'add' && actionRaw !== 'set' && actionRaw !== 'push' && actionRaw !== 'delete' && actionRaw !== 'sub') {
@@ -653,7 +683,7 @@ const standardizedCommandObject = (raw: any): { action: 'add' | 'set' | 'push' |
     };
 };
 
-const parseCommandBlock = (commandBlock: string): Array<{ action: 'add' | 'set' | 'push' | 'delete' | 'sub'; key: string; value: any }> => {
+export const parseCommandBlock = (commandBlock: string): Array<{ action: 'add' | 'set' | 'push' | 'delete' | 'sub'; key: string; value: any }> => {
     const text = (commandBlock || '').trim();
     if (!text) return [];
     if (text === 'None' || text.toLowerCase() === 'none') return [];
@@ -739,31 +769,69 @@ const parseTagProtocolResponse = (content: string): GameResponse | null => {
     const text = (content || '').trim();
     if (!text) return null;
 
-    const thinkingParts = extractTagContentList(text, 'thinking');
-    const bodyBlock = extractFirstTagContent(text, 'Main Body');
-    const shortTerm = extractFirstTagContent(text, 'Short-term memory', { fixTagClosingErrors: true });
-    const commandBlock = extractFirstTagContent(text, 'Command');
-    const actionOptionsBlock = extractFirstTagContent(text, 'Action options');
+    const thinkingParts = [
+        ...extractTagContentList(text, 'thinking'),
+        ...extractTagContentList(text, 'thinking_pre'),
+        ...extractTagContentList(text, 't_thinking'),
+        ...extractTagContentList(text, 'Suy nghĩ')
+    ];
+    const bodyBlock = extractFirstTagContent(text, 'Main Body')
+        || extractFirstTagContent(text, 'Nội dung chính')
+        || extractFirstTagContent(text, 'Narrative')
+        || extractFirstTagContent(text, 'Truyện')
+        || extractFirstTagContent(text, 'Lời dẫn');
+
+    const shortTerm = extractFirstTagContent(text, 'Short-term memory', { fixTagClosingErrors: true })
+        || extractFirstTagContent(text, 'Trí nhớ ngắn hạn', { fixTagClosingErrors: true })
+        || extractFirstTagContent(text, 'Ghi nhớ ngắn hạn', { fixTagClosingErrors: true })
+        || extractFirstTagContent(text, 'Memory', { fixTagClosingErrors: true });
+
+    const commandBlock = extractFirstTagContent(text, 'Command')
+        || extractFirstTagContent(text, 'Lệnh')
+        || extractFirstTagContent(text, 'Commands');
+
+    const actionOptionsBlock = extractFirstTagContent(text, 'Action options')
+        || extractFirstTagContent(text, 'Tùy chọn hành động')
+        || extractFirstTagContent(text, 'Options')
+        || extractFirstTagContent(text, 'Hành động');
 
     let logs = parsingBodyLog(bodyBlock || '');
+
+    // Fallback 1: If bodyBlock is empty but text looks like it has content markers
     if (logs.length === 0) {
-        const stripped = text.replace(/<[^>]+>/g, '\n');
+        const stripped = text
+            .replace(/<(thinking|Command|Action options|Lệnh|Tùy chọn hành động|Short-term memory|Trí nhớ ngắn hạn|Narrative|Truyện|t_[a-z]+)[\s\S]*?(?:<\/\1>|$)/gi, '') // Remove OTHER tags (including t_ tags)
+            .replace(/<[^>]+>/g, '\n'); // Remove residual tags
+
         if (/【[^】]+】/.test(stripped)) {
             logs = parsingBodyLog(stripped);
+        } else if (stripped.trim().length > 50) {
+            // Fallback 2: Raw text capture if it's long enough and not just noise
+            logs = [{ sender: 'Narrator', text: stripped.trim() }];
         }
     }
+
     const commands = parseCommandBlock(commandBlock);
     const actionOptions = parsingActionOptionsBlock(actionOptionsBlock);
     const thinking = thinkingParts.map(item => item.trim()).filter(Boolean).join('\n\n');
 
-    if (logs.length === 0) {
+    const thinkingFields: Partial<GameResponse> = {};
+    COT_THINKING_FIELD_KEYS.forEach(key => {
+        const content = extractFirstTagContent(text, key);
+        if (content) {
+            thinkingFields[key] = content;
+        }
+    });
+
+    if (logs.length === 0 && actionOptions.length === 0 && commands.length === 0 && Object.keys(thinkingFields).length === 0) {
         return null;
     }
 
     return {
         thinking_pre: thinking ? `<thinking>${thinking}</thinking>` : undefined,
-        logs,
+        logs: logs.length > 0 ? logs : (Object.keys(thinkingFields).length > 0 || commands.length > 0 ? [] : [{ sender: 'Narrator', text: '...' }]),
         tavern_commands: commands.length > 0 ? commands : undefined,
+        ...thinkingFields,
         shortTerm: shortTerm || undefined,
         action_options: actionOptions.length > 0 ? actionOptions : undefined
     };
@@ -789,22 +857,27 @@ const COT_THINKING_FIELD_KEYS = [
 ] as const;
 
 const normalizationJsonStructureResponse = (raw: any): GameResponse => {
-    const logs = Array.isArray(raw?.logs)
-        ? raw.logs
-            .map((item: any) => {
-                if (typeof item === 'string') {
-                    return { sender: 'Narrator', text: item };
-                }
-                if (item && typeof item === 'object') {
-                    return {
-                        sender: typeof item.sender === 'string' ? item.sender : 'Narrator',
-                        text: typeof item.text === 'string' ? item.text : String(item.text ?? '')
-                    };
-                }
-                return null;
-            })
-            .filter((item: any) => item && item.text.trim().length > 0)
-        : [];
+    // Handle logs as string (AI sometimes returns a plain string instead of array)
+    let rawLogs: any[] = [];
+    if (Array.isArray(raw?.logs)) {
+        rawLogs = raw.logs;
+    } else if (typeof raw?.logs === 'string' && raw.logs.trim().length > 0) {
+        rawLogs = [raw.logs];
+    }
+    const logs = rawLogs
+        .map((item: any) => {
+            if (typeof item === 'string') {
+                return { sender: 'Narrator', text: item };
+            }
+            if (item && typeof item === 'object') {
+                return {
+                    sender: typeof item.sender === 'string' ? item.sender : 'Narrator',
+                    text: typeof item.text === 'string' ? item.text : String(item.text ?? '')
+                };
+            }
+            return null;
+        })
+        .filter((item: any) => item && item.text.trim().length > 0);
 
     const thinkingFieldKeys = COT_THINKING_FIELD_KEYS;
     const normalizedThinkingFields = Object.fromEntries(
@@ -818,8 +891,12 @@ const normalizationJsonStructureResponse = (raw: any): GameResponse => {
         logs,
         ...normalizedThinkingFields,
         thinking_post: typeof raw?.thinking_post === 'string' ? raw.thinking_post : undefined,
-        tavern_commands: Array.isArray(raw?.tavern_commands) 
-            ? raw.tavern_commands.map(standardizedCommandObject).filter((item): item is { action: 'add' | 'set' | 'push' | 'delete' | 'sub'; key: string; value: any } => Boolean(item))
+        tavern_commands: Array.isArray(raw?.tavern_commands)
+            ? raw.tavern_commands.flatMap(item => {
+                if (typeof item === 'string') return parseCommandBlock(item);
+                const std = standardizedCommandObject(item);
+                return std ? [std] : [];
+            })
             : undefined,
         shortTerm: typeof raw?.shortTerm === 'string' ? raw.shortTerm : undefined,
         story: raw?.story && typeof raw.story === 'object' ? {
@@ -849,33 +926,64 @@ export const parseStoryRawText = (content: string): GameResponse => {
         const hasRenderableLogs = normalized.logs.some((log) => (
             typeof log?.text === 'string' && log.text.trim().length > 0
         ));
-        if (hasRenderableLogs) {
-            return normalized;
-        }
+
         const hasThinking = Object.keys(normalized).some((key) => {
             const isThinkingField = key.startsWith('t_') || key === 'thinking_pre' || key === 'thinking_post';
             return isThinkingField && typeof (normalized as any)[key] === 'string' && (normalized as any)[key].trim().length > 0;
-        });
-        const detail = hasThinking
-            ? 'JSON response missing valid logs content（Suspected response truncation）'
-            : parsed.error || 'Returned content structure is incomplete（Cannot parse as JSON or tag protocol）';
+        }) || (typeof parsed.value.thinking === 'string' && parsed.value.thinking.trim().length > 0);
 
-        // Enhanced truncation detection: even if logs are present, if the JSON ends abruptly
-        // or the content length is suspiciously close to the token limit, flag it.
-        const rawLength = content.trim().length;
-        const isLikelyCutoff = content.trim().endsWith('...') ||
-                               (!content.trim().endsWith('}') && !content.trim().endsWith(']>')) ||
-                               (hasRenderableLogs && rawLength > 4000); // Heuristic for partial content
+        const isLikelyValidJsonResponse = hasRenderableLogs || hasThinking;
 
-        if (isLikelyCutoff && !detail.includes('truncation')) {
-            throw new StoryResponseParseError(
-                'Nội dung có vẻ bị cắt ngang giữa chừng（Suspected response truncation）',
-                content,
-                'Response appears to be cut off mid-way.'
-            );
+        if (isLikelyValidJsonResponse) {
+            return normalized;
         }
 
-        throw new StoryResponseParseError(detail, content, detail);
+        // Handle wrapped response format: {"response": "..."} or {"response": {...}}
+        if (parsed.value.response) {
+            if (typeof parsed.value.response === 'string' && parsed.value.response.trim().length > 0) {
+                // If it looks like it contains tags, strip them or parse them
+                const innerResult = parseTagProtocolResponse(parsed.value.response);
+                if (innerResult) return innerResult;
+
+                // If tag parsing fails, return as a narrator log
+                return {
+                    ...normalized,
+                    logs: [{ sender: 'Narrator', text: parsed.value.response.replace(/<[^>]+>/g, '').trim() }]
+                };
+            }
+            if (typeof parsed.value.response === 'object') {
+                const innerNormalized = normalizationJsonStructureResponse(parsed.value.response);
+                if (innerNormalized.logs.length > 0 || Object.keys(innerNormalized).some(k => k.startsWith('t_'))) {
+                    return innerNormalized;
+                }
+            }
+        }
+
+        // ONLY throw truncation error if we are reasonably sure context was MEANT to be JSON
+        // but was cut off.
+        const trimmedContent = content.trim();
+        const isJsonIntent = trimmedContent.startsWith('{') || (trimmedContent.startsWith('```') && trimmedContent.includes('json'));
+
+        if (isJsonIntent) {
+            const strippedContent = trimmedContent.endsWith('```') ? trimmedContent.slice(0, -3).trim() : trimmedContent;
+            const isLikelyCutoff = strippedContent.endsWith('...') ||
+                (!strippedContent.endsWith('}') && !strippedContent.endsWith(']>'));
+
+            if (isLikelyCutoff) {
+                // If we have SOME content already, don't throw, just return it
+                if (hasRenderableLogs) return normalized;
+
+                const detail = hasThinking
+                    ? 'JSON response missing valid logs content（Suspected response truncation）'
+                    : parsed.error || 'Response appears to be cut off mid-way.';
+
+                throw new StoryResponseParseError(
+                    'Nội dung có vẻ bị cắt ngang giữa chừng（Suspected response truncation）',
+                    content,
+                    detail
+                );
+            }
+        }
     }
 
     // Fallback: try tag protocol for backward compatibility
@@ -1314,9 +1422,9 @@ const requestModelText = async (
 ): Promise<string> => {
     if (!apiConfig) throw new Error("API configuration is missing. Please check settings.");
     if (apiConfig.provider !== 'worker' && !apiConfig.apiKey) throw new Error("API Key is missing for the selected provider. Please check settings.");
-    
+
     // We force JSON mode globally as requested
-    const jsonMode = true; 
+    const jsonMode = true;
     const protocol = checkRequestProtocol(apiConfig);
     const resolvedTemperature = calculateRequestTemperature(apiConfig, protocol, options.temperature);
 
@@ -1394,12 +1502,12 @@ export const generateMemoryRecall = async (
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt }
     ];
-    
+
     // Use worker fallback when no API config is available
     if ((!apiConfig || !apiConfig.apiKey) && workerUrl) {
         return requestWorkerText(workerUrl, messages, { temperature: 0.2 });
     }
-    
+
     return requestModelText(apiConfig!, messages, {
         temperature: 0.2,
         signal,
@@ -1416,7 +1524,7 @@ export const generateWorldData = async (
     workerUrl?: string,
     extraPrompt?: string
 ): Promise<string> => {
-    const genSystemPrompt = extraPrompt 
+    const genSystemPrompt = extraPrompt
         ? `${WORLD_GENERATION_SYSTEM_PROMPT}\n\n【Prompt bổ sung tùy chỉnh】\n${extraPrompt}`
         : WORLD_GENERATION_SYSTEM_PROMPT;
     const genUserPrompt = constructWorldviewUserPrompt(worldContext, charData);
@@ -1463,7 +1571,7 @@ export const generateWorldData = async (
         const rawText = await requestWorkerText(effectiveWorkerUrl, messages, { temperature: 0.8 });
         return parseWorldPrompt(rawText);
     }
-    
+
     if (!apiConfig || !apiConfig.apiKey) throw new Error("API configuration or API Key is missing. Please check settings.");
 
     const responseFormatJsonObject = true;
@@ -1583,7 +1691,7 @@ export const generateStoryResponse = async (
     // Force JSON mode for all story requests to ensure reliable structured output.
     const responseFormatJsonObject = true;
     let rawText: string;
-    
+
     if (useWorker) {
         // Use Cloudflare Worker (Nemotron) for text generation
         rawText = await requestWorkerText(effectiveWorkerUrl!, apiMessages, { temperature: 0.7 });
@@ -1642,10 +1750,20 @@ export const generateStoryResponse = async (
             // Helpers shared across both continuation attempts
             const mergeAndCheck = (contParsed: ReturnType<typeof parseJsonWithRepair<any>>, contRawText: string) => {
                 if (!contParsed.value || typeof contParsed.value !== 'object') return null;
-                const merged = {
-                    ...(originalParsed.value && typeof originalParsed.value === 'object' ? originalParsed.value : {}),
-                    ...contParsed.value
-                };
+
+                const prev = (originalParsed.value && typeof originalParsed.value === 'object' ? originalParsed.value : {}) as any;
+                const next = contParsed.value as any;
+
+                // Create a merged object that appends arrays for logs and tavern_commands
+                const merged = { ...prev, ...next };
+
+                if (Array.isArray(prev.logs) && Array.isArray(next.logs)) {
+                    merged.logs = [...prev.logs, ...next.logs];
+                }
+                if (Array.isArray(prev.tavern_commands) && Array.isArray(next.tavern_commands)) {
+                    merged.tavern_commands = [...prev.tavern_commands, ...next.tavern_commands];
+                }
+
                 const mergedResponse = normalizationJsonStructureResponse(merged);
                 const hasLogs = mergedResponse.logs.some(
                     (log) => typeof log?.text === 'string' && log.text.trim().length > 0
@@ -1715,7 +1833,10 @@ export const generateStoryResponse = async (
                 });
             const cont2Result = mergeAndCheck(parseJsonWithRepair<any>(fallbackRawText), fallbackRawText);
             if (cont2Result) return cont2Result;
-        } catch {
+            console.error("Auto-continue failed. Attempt 1 rawText:", continuationRawText);
+            console.error("Auto-continue failed. Attempt 2 rawText:", fallbackRawText);
+        } catch (e) {
+            console.error("Auto-continue threw an error:", e);
             // Continuation attempts failed — fall through to rethrow original error
         }
 

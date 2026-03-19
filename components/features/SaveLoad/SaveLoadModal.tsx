@@ -176,7 +176,7 @@ const SaveLoadModal: React.FC<Props> = ({ onClose, onLoadGame, onSaveGame, mode,
 
     return (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-3xl z-[300] flex items-center justify-center p-4 font-sans">
-            <div className="glass-panel-square border border-white/10 w-full max-w-4xl h-[600px] flex flex-col shadow-[0_0_80px_rgba(0,0,0,0.95)] rounded-none relative overflow-hidden">
+            <div className="w-full max-w-2xl max-h-[90vh] flex flex-col glass-panel shadow-[0_0_80px_rgba(0,0,0,0.95)] relative overflow-hidden group">
                 <div className="h-16 shrink-0 border-b border-white/10 bg-white/5 flex items-center justify-between px-6 relative z-50">
                     <h3 className="text-wuxia-gold font-serif font-bold text-2xl tracking-[0.3em] drop-shadow-md">
                         {mode === 'save' ? 'Khắc Thời Gian' : 'Hồi Quy Thời Gian'}

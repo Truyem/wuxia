@@ -18,7 +18,7 @@ const CharacterModal: React.FC<Props> = ({ character, onClose }) => {
             </div>
 
             {/* Premium Container: Square Glassmorphism */}
-            <div className="w-full max-w-[500px] h-[90vh] flex flex-col shadow-[0_0_100px_rgba(0,0,0,0.8)] relative overflow-hidden rounded-none glass-panel-square border border-white/10 group">
+            <div className="w-full max-w-[500px] h-[90vh] flex flex-col shadow-[0_0_100px_rgba(0,0,0,0.8)] relative overflow-hidden rounded-none glass-panel border border-white/10 group">
                 {/* Global Texture Overlays */}
                 <div className="absolute inset-0 opacity-[0.02] bg-[url('https://www.transparenttextures.com/patterns/pinstriped-suit.png')] pointer-events-none z-0"></div>
                 

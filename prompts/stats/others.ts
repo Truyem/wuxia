@@ -1,58 +1,38 @@
 import { PromptStructure } from '../../types';
 
 export const StatOtherSettings: PromptStructure = {
-  id: 'stat_other',
-  title: 'Thiết lập Liên kết Liên hệ thống',
-  content: `
-<giao_thuc_lien_ket_lien_he_thong>
-【Liên kết liên hệ thống (Nhân vật/Xã giao/Môi trường/Thế giới/Cốt truyện)】
-Mục tiêu: Ánh xạ hậu quả của một hành động tới nhiều hệ thống cùng một lúc và tất cả đều có thể truy xuất được.
+    id: 'stat_others',
+    title: 'Giao thức Thiết lập Liên kết Hệ thống',
+    content: `
+<stat_interlink_protocol>
+# 【Thiết lập Liên kết Chéo các Hệ thống (Cross-System Interlink)】
 
-1. Ranh giới vùng có thể ghi
-- Có thể ghi: \`gameState.Nhân vật / gameState.Môi trường / gameState.Giao tiếp / gameState.Thế giới / gameState.Chiến đấu / gameState.Cốt truyện / gameState.Túi đồ / gameState.Võ công / gameState.Trang bị / gameState.Bản đồ / gameState.Danh sách nhiệm vụ / gameState.Danh sách hẹn ước / gameState.Môn phái người chơi\`.
-- Cấm các đường dẫn không tồn tại: \`gameState.Hành lý / gameState.Vàng\`, v.v.
-- Việc thực hiện lệnh phải phù hợp với <Giao thức đồng bộ dữ liệu> và <Định nghĩa cấu trúc dữ liệu>.
+## 1. Liên kết Kinh tế và Xã hội
+- \`currency\` tỷ lệ thuận với \`title\` và \`favorability\` của các thương hội.
+- Chi tiêu lớn trong khu vực có thể kích hoạt \`worldEvents\` (Ví dụ: Trở thành mục tiêu của cướp).
 
-2. Liên kết kinh tế
-- Tiền mặt người chơi chỉ được ghi vào \`gameState.Nhân vật.Tiền tệ\` (Vàng thỏi/Bạc/Đồng).
-- Mua = Khấu trừ tiền + Nhận vật phẩm; Bán = Mất vật phẩm + Nhận tiền, không được cập nhật đơn phương.
-- Giao dịch giá trị cao nên chịu ảnh hưởng của thân phận, địa điểm, tình hình thị trường, quan hệ.
+## 2. Liên kết Môi trường và Sinh tồn
+- Thời tiết khắc nghiệt (\`weather\`) làm tăng tốc độ tiêu hao \`hungerCurrent\` và \`thirstCurrent\`.
+- Địa hình hiểm trở yêu cầu kiểm tra \`agility\` để tránh chấn thương bộ phận (\`status\`).
 
-3. Liên kết xã giao
-- \`Affinity/Favorability\` (Độ hảo cảm) và \`Relationship status\` (Trạng thái quan hệ) cần được đồng bộ:
-  - <=-40 Thù địch
-  - -39~9 Lạnh nhạt
-  - 10~39 Đi lại bình thường
-  - 40~69 Thân thiện
-  - 70~89 Tin tưởng
-  - >=90 Giao tình sinh tử
-- Phải viết \`Memory[]\` (Ký ức[]) sau các tương tác then chốt.
-- Trạng thái tại chỗ cần được điều chỉnh theo thời gian thực (rời cảnh là false, vào cảnh mới là true).
+## 3. Liên kết Thế giới và Cốt truyện
+- Hành động của Player (Giết NPC quan trọng) sẽ làm thay đổi \`worldEvents\` và quan hệ của các môn phái.
+- Thời gian trôi qua (\`time\`) ảnh hưởng đến độ bền (\`currentDurability\`) của vật phẩm dự trữ.
 
-4. Liên kết môi trường (Cấu trúc mới)
-- Ảnh hưởng môi trường nên được ghi vào:
-  - \`gameState.Môi trường.Thời tiết.Thời tiết\`
-  - \`gameState.Môi trường.Thời tiết.Ngày kết thúc\`
-  - \`gameState.Môi trường.Biến môi trường{Tên (4 chữ), Mô tả, Hiệu ứng}\`
-- Ví dụ: Mưa bão lầy lội -> Chính xác/Khinh công giảm; Nóng lạnh cực đoan -> Tiêu hao tinh lực tăng.
+## 4. Quy tắc Ghi đè và Nhất quán
+- Các giá trị được cập nhật qua lệnh \`SET/ADD/PUSH\` phải luôn phản ánh đúng trạng thái được mô tả trong dẫn truyện.
+- **Vùng ghi đè hợp lệ**: Chỉ được phép ghi vào các trường đã định nghĩa trong \`gameState\`.
 
-5. Liên kết Thế giới và Cốt truyện
-- Các lựa chọn trọng đại nên ghi vào \`gameState.Cốt truyện.Biến số cốt truyện\`.
-- Việc tiến triển các sự kiện thế giới và hành động của NPC đang hoạt động cần đọc các biến này và phản ánh hậu quả.
-- Cấm "thay đổi thế giới chỉ xuất hiện trong tự sự mà không hiện thực hóa vào biến".
+## 5. Cơ chế Ngăn chặn Exploit
+- Giới hạn các chỉ số cực đoan trong giai đoạn đầu game.
+- Các kỳ ngộ tăng mạnh thuộc tính phải đi kèm với rủi ro tử vong tương xứng.
 
-6. Liên kết tiến triển thời gian
-- Sau khi tiến triển \`gameState.Môi trường.Thời gian\` (Thời gian môi trường), hãy đồng bộ kiểm tra:
-  - Thay đổi tự nhiên của no bụng/khát nước
-  - Kết toán các sự kiện thế giới đến hạn
-  - Làm mới hành động của các NPC đang hoạt động đến hạn
-- Cập nhật \`gameState.Môi trường.Ngày chơi\` khi sang ngày mới.
+## 6. Ví dụ Lệnh (Hợp lệ)
+- \`{"action": "SET", "key": "gameState.Environment.temperature", "value": -10}\`
+- \`{"action": "ADD", "key": "gameState.NPCs.Master.favorability", "value": -5}\`
 
-7. Giới hạn cuối cùng về sự nhất quán
-- Cấm "logs đã xảy ra nhưng không có lệnh" hoặc "lệnh đã thực hiện nhưng logs không xảy ra".
-- Mọi sự tăng giảm đều phải có nguồn gốc, cái giá và kết quả khép kín.
-</giao_thuc_lien_ket_lien_he_thong>
+</stat_interlink_protocol>
 `,
-  type: 'num',
-  enabled: true
+    type: 'num',
+    enabled: true
 };

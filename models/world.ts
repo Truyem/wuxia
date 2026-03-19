@@ -49,17 +49,19 @@ export interface WorldEventStructure {
 // --- Bản đồ và Kiến trúc (Cấu trúc đơn giản hóa) ---
 
 export interface LocationAffiliation {
-    region: string; // Đại địa điểm
-    area: string;   // Trung địa điểm
-    subArea: string; // Tiểu địa điểm
+    majorLocation: string; // Đại địa điểm (e.g., Tỉnh, Bang)
+    mediumLocation: string | string[]; // Trung địa điểm (e.g., Thành phố, Phái) - Support array for world map
+    minorLocation: string; // Tiểu địa điểm (e.g., Khu vực, Phố)
 }
 
 export interface MapStructure {
+    id: string;
     name: string;
-    coordinates: string;
+    coordinate: string;
     description: string;
+    avatar?: string;
     affiliation: LocationAffiliation;
-    internalBuildings: string[];
+    internalBuildings: BuildingStructure[]; // Changed from string[] to BuildingStructure[] for inline data
 }
 
 export interface BuildingStructure {

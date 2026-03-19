@@ -155,6 +155,8 @@ export const useGameState = () => {
         mediumTermPlanning: '',
         longTermPlanning: '',
         pendingEvents: [],
+        worldQuestList: [],
+        promiseList: [],
         storyVariables: {},
         actionCountSinceLastChapter: 0
     });

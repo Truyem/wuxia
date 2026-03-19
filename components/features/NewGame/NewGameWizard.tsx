@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import GameButton from '../../ui/GameButton';
-import { WorldGenConfig, CharacterData, Talent, Background, GameDifficulty, StoryStyleType, NTLHaremTier } from '../../../types';
+import { WorldGenConfig, CharacterData, Talent, Background, GameDifficulty, StoryStyleType, NTLHaremTier, TalentRank } from '../../../types';
 import { PresetTalent, PresetBackground } from '../../../data/presets';
 import { OrnateBorder } from '../../ui/decorations/OrnateBorder';
 import InlineSelect from '../../ui/InlineSelect';
 import ToggleSwitch from '../../ui/ToggleSwitch';
 import * as dbService from '../../../services/dbService';
-import { Dices } from 'lucide-react';
+import { Dices, Save, Download, LogOut, X } from 'lucide-react';
 
 interface Props {
     onComplete: (
@@ -53,6 +53,21 @@ const PERSONALITY_PRESETS = [
 ];
 const CUSTOM_TALENT_STORAGE_KEY = 'new_game_custom_talents';
 const CUSTOM_BACKGROUND_STORAGE_KEY = 'new_game_custom_backgrounds';
+const WIZARD_SAVE_KEY = 'wuxia_wizard_autosave';
+
+// === Talent Point System Constants ===
+const BASE_TALENT_POINTS = 4;
+const RANK_COLORS: Record<TalentRank, { border: string; bg: string; text: string; badge: string; glow: string }> = {
+    'Huyền thoại': { border: 'border-yellow-400', bg: 'bg-yellow-400/10', text: 'text-yellow-400', badge: 'bg-yellow-400/20 text-yellow-300 border-yellow-400/50', glow: 'shadow-yellow-400/20' },
+    'Sử Thi': { border: 'border-purple-400', bg: 'bg-purple-400/10', text: 'text-purple-400', badge: 'bg-purple-400/20 text-purple-300 border-purple-400/50', glow: 'shadow-purple-400/20' },
+    'Hiếm': { border: 'border-blue-400', bg: 'bg-blue-400/10', text: 'text-blue-400', badge: 'bg-blue-400/20 text-blue-300 border-blue-400/50', glow: 'shadow-blue-400/20' },
+    'Thường': { border: 'border-green-400', bg: 'bg-green-400/10', text: 'text-green-400', badge: 'bg-green-400/20 text-green-300 border-green-400/50', glow: 'shadow-green-400/20' },
+    'Cực Hạn': { border: 'border-red-600', bg: 'bg-red-600/10', text: 'text-red-400', badge: 'bg-red-600/20 text-red-300 border-red-600/50', glow: 'shadow-red-600/20' },
+    'Khắc nghiệt': { border: 'border-orange-500', bg: 'bg-orange-500/10', text: 'text-orange-400', badge: 'bg-orange-500/20 text-orange-300 border-orange-500/50', glow: 'shadow-orange-500/20' },
+    'Khó': { border: 'border-amber-400', bg: 'bg-amber-400/10', text: 'text-amber-400', badge: 'bg-amber-400/20 text-amber-300 border-amber-400/50', glow: 'shadow-amber-400/20' },
+};
+const DEBUFF_RANKS: TalentRank[] = ['Cực Hạn', 'Khắc nghiệt', 'Khó'];
+const BUFF_RANKS: TalentRank[] = ['Huyền thoại', 'Sử Thi', 'Hiếm', 'Thường'];
 const DIFFICULTY_OPTIONS: Array<{ value: GameDifficulty; label: string }> = [
     { value: 'relaxed', label: 'Thư giãn (Chế độ truyện)' },
     { value: 'easy', label: 'Dễ (Tân thủ giang hồ)' },
@@ -224,18 +239,71 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
         setSelectedBackground(allBackgroundOptions[idx]);
     };
     const gachaTalent = () => {
-        const unselected = allTalentOptions.filter(t => !selectedTalents.find(x => x.name === t.name));
-        if (unselected.length === 0 || selectedTalents.length >= 3) return;
+        const totalPoints = BASE_TALENT_POINTS + selectedTalents.filter(t => t.cost < 0).reduce((sum, t) => sum + Math.abs(t.cost), 0);
+        const spentPoints = selectedTalents.filter(t => t.cost > 0).reduce((sum, t) => sum + t.cost, 0);
+        const available = totalPoints - spentPoints;
+        const unselected = allTalentOptions.filter(t => !selectedTalents.find(x => x.name === t.name) && t.cost > 0 && t.cost <= available);
+        if (unselected.length === 0) return;
         const pick = randomFrom(unselected);
         setSelectedTalents(prev => [...prev, pick]);
     };
 
     // Custom Inputs
-    const [customTalent, setCustomTalent] = useState<Talent>({ name: '', description: '', effect: '' });
+    const [customTalent, setCustomTalent] = useState<Talent>({ name: '', description: '', effect: '', rank: 'Thường', cost: 2 });
+    const [talentFilter, setTalentFilter] = useState<'all' | TalentRank>('all');
     const [showCustomTalent, setShowCustomTalent] = useState(false);
     const [customBackground, setCustomBackground] = useState<Background>({ name: '', description: '', effect: '' });
     const [showCustomBackground, setShowCustomBackground] = useState(false);
     const [openingStreaming, setOpeningStreaming] = useState(true);
+    const [saveMsg, setSaveMsg] = useState('');
+
+    const showSaveLoadMsg = (msg: string) => {
+        setSaveMsg(msg);
+        setTimeout(() => setSaveMsg(''), 3000);
+    };
+
+    const saveWizardConfig = async () => {
+        const config = {
+            step, worldConfig, charName, charGender, charAge, charAppearance, charPersonality,
+            birthMonth, birthDay, stats, selectedBackground, selectedTalents, openingStreaming
+        };
+        try {
+            await dbService.saveSetting(WIZARD_SAVE_KEY, config);
+            showSaveLoadMsg('Đã lưu bản nháp!');
+        } catch (e) {
+            console.error(e);
+            showSaveLoadMsg('Lưu thất bại!');
+        }
+    };
+
+    const loadWizardConfig = async () => {
+        try {
+            const saved = await dbService.getSetting(WIZARD_SAVE_KEY);
+            if (!saved || typeof saved !== 'object') {
+                showSaveLoadMsg('Không thấy bản lưu!');
+                return;
+            }
+            // Use logical updates for each piece of state
+            if (typeof saved.step === 'number') setStep(saved.step);
+            if (saved.worldConfig) setWorldConfig({ ...worldConfig, ...saved.worldConfig });
+            if (typeof saved.charName === 'string') setCharName(saved.charName);
+            if (saved.charGender) setCharGender(saved.charGender);
+            if (typeof saved.charAge === 'number') setCharAge(saved.charAge);
+            if (typeof saved.charAppearance === 'string') setCharAppearance(saved.charAppearance);
+            if (typeof saved.charPersonality === 'string') setCharPersonality(saved.charPersonality);
+            if (typeof saved.birthMonth === 'number') setBirthMonth(saved.birthMonth);
+            if (typeof saved.birthDay === 'number') setBirthDay(saved.birthDay);
+            if (saved.stats) setStats({ ...stats, ...saved.stats });
+            if (saved.selectedBackground) setSelectedBackground(saved.selectedBackground);
+            if (Array.isArray(saved.selectedTalents)) setSelectedTalents(saved.selectedTalents);
+            if (typeof saved.openingStreaming === 'boolean') setOpeningStreaming(saved.openingStreaming);
+
+            showSaveLoadMsg('Tải thành công!');
+        } catch (e) {
+            console.error(e);
+            showSaveLoadMsg('Lỗi khi tải!');
+        }
+    };
 
     // --- Logic ---
     const monthOptions = useMemo(() => Array.from({ length: 12 }, (_, i) => i + 1), []);
@@ -245,7 +313,7 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
         const description = raw?.description?.trim() || '';
         const effect = raw?.effect?.trim() || '';
         if (!name || !description || !effect) return null;
-        return { name, description, effect };
+        return { name, description, effect, rank: raw.rank || 'Thường', cost: raw.cost ?? 2 };
     };
     const standardizeBackground = (raw: Background): Background | null => {
         const name = raw?.name?.trim() || '';
@@ -323,12 +391,21 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
         setStats({ ...stats, [key]: current + delta });
     };
 
+    // Talent point calculations
+    const selectedDebuffs = selectedTalents.filter(t => t.cost < 0);
+    const selectedBuffs = selectedTalents.filter(t => t.cost > 0);
+    const debuffPoints = selectedDebuffs.reduce((sum, t) => sum + Math.abs(t.cost), 0);
+    const totalTalentPoints = BASE_TALENT_POINTS + debuffPoints;
+    const spentTalentPoints = selectedBuffs.reduce((sum, t) => sum + t.cost, 0);
+    const remainingTalentPoints = totalTalentPoints - spentTalentPoints;
+    const hasDebuff = selectedDebuffs.length > 0;
+
     const toggleTalent = (t: Talent) => {
         if (selectedTalents.find(x => x.name === t.name)) {
             setSelectedTalents(selectedTalents.filter(x => x.name !== t.name));
         } else {
-            if (selectedTalents.length >= 3) {
-                alert("Tối đa 3 thiên bẩm");
+            if (t.cost > 0 && t.cost > remainingTalentPoints) {
+                alert(`Không đủ điểm! Cần ${t.cost} điểm, còn ${remainingTalentPoints} điểm.`);
                 return;
             }
             setSelectedTalents([...selectedTalents, t]);
@@ -342,8 +419,8 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
             return;
         }
         const isAlreadySelected = selectedTalents.some(x => x.name === normalized.name);
-        if (!isAlreadySelected && selectedTalents.length >= 3) {
-            alert("Tối đa 3 thiên bẩm");
+        if (!isAlreadySelected && normalized.cost > 0 && normalized.cost > remainingTalentPoints) {
+            alert(`Không đủ điểm! Cần ${normalized.cost} điểm, còn ${remainingTalentPoints} điểm.`);
             return;
         }
 
@@ -354,7 +431,7 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
                 ? selectedTalents.map(item => (item.name === normalized.name ? normalized : item))
                 : [...selectedTalents, normalized]
         );
-        setCustomTalent({ name: '', description: '', effect: '' });
+        setCustomTalent({ name: '', description: '', effect: '', rank: 'Thường', cost: 2 });
         setShowCustomTalent(false);
         try {
             await dbService.saveSetting(CUSTOM_TALENT_STORAGE_KEY, nextCustomTalentList);
@@ -449,19 +526,36 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
             {/* Main Container */}
             <div className="w-full max-w-5xl h-full border border-wuxia-gold/30 rounded-lg md:rounded-xl bg-black/50 shadow-2xl flex flex-col overflow-hidden relative backdrop-blur-sm">
 
-                {/* Header Steps */}
                 <div className="hidden md:flex h-16 border-b border-wuxia-gold/10 items-center justify-between px-8 bg-black/40">
-                    <h2 className="text-2xl font-serif font-bold text-wuxia-gold tracking-widest">Biên niên sử sáng tác</h2>
-                    <div className="flex gap-2">
-                        {STEPS.map((s, idx) => (
-                            <div key={idx} className={`flex items-center gap-2 ${idx === step ? 'text-wuxia-gold' : 'text-wuxia-gold/30'}`}>
-                                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold border transition-all ${idx === step ? 'border-wuxia-gold bg-wuxia-gold/20 shadow-[0_0_10px_rgba(230,200,110,0.3)]' : 'border-wuxia-gold/20'}`}>
-                                    {idx + 1}
-                                </div>
-                                <span className="text-xs font-bold hidden md:block">{s}</span>
-                                {idx < STEPS.length - 1 && <div className="w-8 h-px bg-wuxia-gold/10 hidden md:block"></div>}
+                    <div className="flex items-center gap-6">
+                        <h2 className="text-2xl font-serif font-bold text-wuxia-gold tracking-widest">Biên niên sử sáng tác</h2>
+                        {saveMsg && (
+                            <div className="text-[10px] font-mono text-wuxia-gold/80 bg-wuxia-gold/10 px-2 py-1 rounded border border-wuxia-gold/20 animate-fade-in">
+                                {saveMsg}
                             </div>
-                        ))}
+                        )}
+                    </div>
+                    
+                    <div className="flex items-center gap-8">
+                        <div className="flex gap-2">
+                            {STEPS.map((s, idx) => (
+                                <div key={idx} className={`flex items-center gap-2 ${idx === step ? 'text-wuxia-gold' : 'text-wuxia-gold/30'}`}>
+                                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold border transition-all ${idx === step ? 'border-wuxia-gold bg-wuxia-gold/20 shadow-[0_0_10px_rgba(230,200,110,0.3)]' : 'border-wuxia-gold/20'}`}>
+                                        {idx + 1}
+                                    </div>
+                                    <span className="text-xs font-bold hidden md:block">{s}</span>
+                                    {idx < STEPS.length - 1 && <div className="w-8 h-px bg-wuxia-gold/10 hidden md:block"></div>}
+                                </div>
+                            ))}
+                        </div>
+                        <button
+                            onClick={onCancel}
+                            className="p-1 px-2 rounded hover:bg-white/5 text-wuxia-gold/40 hover:text-red-500 transition-all flex items-center gap-1 group border border-transparent hover:border-red-500/20"
+                            title="Đóng"
+                        >
+                            <span className="text-[11px] font-mono opacity-0 group-hover:opacity-100 transition-opacity">THOÁT</span>
+                            <X className="w-5 h-5" />
+                        </button>
                     </div>
                 </div>
                 <div className="md:hidden border-b border-wuxia-gold/10 bg-black/50 px-4 py-3">
@@ -844,22 +938,94 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
                         </div>
                     )}
 
-                    {/* STEP 4: TALENTS */}
-                    {step === 3 && (
-                        <div className="space-y-8 animate-slide-in max-w-5xl mx-auto">
-                            <OrnateBorder className="p-6">
+                    {/* STEP 4: TALENTS (Point-based system) */}
+                    {step === 3 && (() => {
+                        const debuffTalents = allTalentOptions.filter(t => DEBUFF_RANKS.includes(t.rank));
+                        const buffTalents = allTalentOptions.filter(t => BUFF_RANKS.includes(t.rank));
+                        const filteredBuffs = talentFilter === 'all' ? buffTalents : buffTalents.filter(t => t.rank === talentFilter);
+                        return (
+                        <div className="space-y-6 animate-slide-in max-w-5xl mx-auto">
+                            {/* Point Counter */}
+                            <div className="flex items-center justify-center gap-6 py-3 px-6 bg-black/60 border border-wuxia-gold/30 rounded-xl">
+                                <div className="text-center">
+                                    <div className="text-[10px] text-wuxia-gold/50 uppercase tracking-widest">Điểm cơ bản</div>
+                                    <div className="text-xl font-bold text-wuxia-gold font-mono">{BASE_TALENT_POINTS}</div>
+                                </div>
+                                <div className="text-wuxia-gold/30 text-lg">+</div>
+                                <div className="text-center">
+                                    <div className="text-[10px] text-red-400/70 uppercase tracking-widest">Từ debuff</div>
+                                    <div className="text-xl font-bold text-red-400 font-mono">+{debuffPoints}</div>
+                                </div>
+                                <div className="text-wuxia-gold/30 text-lg">=</div>
+                                <div className="text-center">
+                                    <div className="text-[10px] text-wuxia-gold/50 uppercase tracking-widest">Tổng</div>
+                                    <div className="text-xl font-bold text-wuxia-gold font-mono">{totalTalentPoints}</div>
+                                </div>
+                                <div className="text-wuxia-gold/30 text-lg">−</div>
+                                <div className="text-center">
+                                    <div className="text-[10px] text-blue-400/70 uppercase tracking-widest">Đã dùng</div>
+                                    <div className="text-xl font-bold text-blue-400 font-mono">{spentTalentPoints}</div>
+                                </div>
+                                <div className="text-wuxia-gold/30 text-lg">=</div>
+                                <div className="text-center">
+                                    <div className="text-[10px] text-emerald-400/70 uppercase tracking-widest">Còn lại</div>
+                                    <div className={`text-2xl font-bold font-mono ${remainingTalentPoints > 0 ? 'text-emerald-400' : remainingTalentPoints === 0 ? 'text-wuxia-gold' : 'text-red-500'}`}>{remainingTalentPoints}</div>
+                                </div>
+                            </div>
+
+                            {/* Debuff Section (Mandatory) */}
+                            <OrnateBorder className="p-5">
+                                <div className="flex justify-between items-center border-b border-red-500/30 pb-3 mb-4">
+                                    <h3 className="text-lg font-serif font-bold text-red-400 flex items-center gap-2">
+                                        <span>☠</span> Debuff bắt buộc <span className="text-[10px] font-normal text-red-400/60">(chọn ít nhất 1)</span>
+                                    </h3>
+                                    {!hasDebuff && <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-600/20 border border-red-600/40 text-red-400 animate-pulse">⚠ Chưa chọn debuff</span>}
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                    {debuffTalents.map((t, idx) => {
+                                        const isSelected = !!selectedTalents.find(x => x.name === t.name);
+                                        const rc = RANK_COLORS[t.rank];
+                                        return (
+                                            <div
+                                                key={`debuff-${idx}`}
+                                                onClick={() => toggleTalent(t)}
+                                                className={`p-3 border rounded-lg cursor-pointer transition-all duration-300 transform hover:-translate-y-0.5 ${isSelected
+                                                    ? `${rc.border} ${rc.bg} shadow-lg ${rc.glow}`
+                                                    : 'border-white/10 bg-transparent hover:border-white/20'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <span className={`font-bold text-sm font-serif ${isSelected ? rc.text : 'text-gray-400'}`}>{t.name}</span>
+                                                    <div className="flex items-center gap-1.5">
+                                                        <span className={`text-[9px] px-1.5 py-0.5 rounded border font-mono ${rc.badge}`}>{t.rank}</span>
+                                                        <span className="text-[10px] font-mono font-bold text-emerald-400">+{Math.abs(t.cost)}đ</span>
+                                                    </div>
+                                                </div>
+                                                <div className="text-[11px] text-gray-500 mt-1 line-clamp-1 italic">{t.description}</div>
+                                                <div className={`text-[11px] mt-1.5 pt-1.5 border-t border-white/5 font-mono ${isSelected ? rc.text : 'text-gray-500'}`}>{t.effect}</div>
+                                                {isSelected && <div className="text-[9px] text-emerald-400 mt-1 font-mono">✓ Đã chọn</div>}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </OrnateBorder>
+
+                            {/* Buff Talents Section */}
+                            <OrnateBorder className="p-5">
                                 <div className="flex justify-between items-center border-b border-wuxia-gold/30 pb-3 mb-4">
-                                    <h3 className="text-xl font-serif font-bold text-wuxia-gold">Lựa chọn thiên bẩm (Tối đa 3 mục)</h3>
+                                    <h3 className="text-lg font-serif font-bold text-wuxia-gold flex items-center gap-2">
+                                        <span>✦</span> Thiên bẩm
+                                    </h3>
                                     <div className="flex items-center gap-2">
                                         <button
                                             onClick={() => triggerGacha('talent', gachaTalent)}
-                                            disabled={selectedTalents.length >= 3}
-                                            title={selectedTalents.length >= 3 ? 'Mọ 3 thiên bẩm rồi' : 'Gacha ngẫu nhiên thiên bẩm'}
-                                            className={`flex items-center gap-1.5 text-[11px] px-3 py-1 rounded-full border transition-all duration-200 active:scale-90 ${selectedTalents.length >= 3 ? 'border-gray-600 text-gray-600 cursor-not-allowed opacity-50' : gachaFlash === 'talent' ? 'border-wuxia-gold bg-wuxia-gold/20 text-wuxia-gold animate-gacha-spin' : 'hover:scale-105 border-wuxia-gold/30 hover:border-wuxia-gold/70 bg-wuxia-gold/5 hover:bg-wuxia-gold/15 text-wuxia-gold/70 hover:text-wuxia-gold'}`}
+                                            disabled={remainingTalentPoints <= 0}
+                                            title={remainingTalentPoints <= 0 ? 'Hết điểm' : 'Gacha ngẫu nhiên thiên bẩm'}
+                                            className={`flex items-center gap-1.5 text-[11px] px-3 py-1 rounded-full border transition-all duration-200 active:scale-90 ${remainingTalentPoints <= 0 ? 'border-gray-600 text-gray-600 cursor-not-allowed opacity-50' : gachaFlash === 'talent' ? 'border-wuxia-gold bg-wuxia-gold/20 text-wuxia-gold animate-gacha-spin' : 'hover:scale-105 border-wuxia-gold/30 hover:border-wuxia-gold/70 bg-wuxia-gold/5 hover:bg-wuxia-gold/15 text-wuxia-gold/70 hover:text-wuxia-gold'}`}
                                         >
                                             <span><Dices className="w-3.5 h-3.5" /></span><span>Gacha</span>
                                         </button>
-                                        <button onClick={() => setShowCustomTalent(!showCustomTalent)} className="text-xs text-wuxia-gold hover:underline font-medium">+ Thêm thiên bẩm</button>
+                                        <button onClick={() => setShowCustomTalent(!showCustomTalent)} className="text-xs text-wuxia-gold hover:underline font-medium">+ Tùy chỉnh</button>
                                     </div>
                                 </div>
 
@@ -867,38 +1033,72 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
                                     <div className="bg-black/40 border border-wuxia-gold/30 p-4 mb-4 rounded-lg space-y-3 shadow-inner shadow-black/40">
                                         <div className="flex gap-2">
                                             <input placeholder="Tên thiên bẩm" value={customTalent.name} onChange={e => setCustomTalent({ ...customTalent, name: e.target.value })} className="w-full bg-transparent border border-wuxia-gold/20 focus:border-wuxia-gold p-2 text-xs text-wuxia-gold outline-none rounded-md transition-all flex-1 font-serif" />
-                                            <input placeholder="Hiệu ứng (VD: Tấn công +10)" value={customTalent.effect} onChange={e => setCustomTalent({ ...customTalent, effect: e.target.value })} className="w-full bg-transparent border border-wuxia-gold/20 focus:border-wuxia-gold p-2 text-xs text-wuxia-gold outline-none rounded-md transition-all flex-1 font-serif italic" />
+                                            <input placeholder="Hiệu ứng" value={customTalent.effect} onChange={e => setCustomTalent({ ...customTalent, effect: e.target.value })} className="w-full bg-transparent border border-wuxia-gold/20 focus:border-wuxia-gold p-2 text-xs text-wuxia-gold outline-none rounded-md transition-all flex-1 font-serif italic" />
                                         </div>
                                         <input placeholder="Mô tả" value={customTalent.description} onChange={e => setCustomTalent({ ...customTalent, description: e.target.value })} className="w-full bg-transparent border border-wuxia-gold/20 focus:border-wuxia-gold p-2 text-xs text-wuxia-gold/80 outline-none rounded-md transition-all font-serif" />
-                                        <GameButton onClick={addCustomTalent} variant="secondary" className="w-full py-1 text-xs">Thêm</GameButton>
+                                        <div className="flex gap-2 items-center">
+                                            <select value={customTalent.rank} onChange={e => { const r = e.target.value as TalentRank; setCustomTalent({ ...customTalent, rank: r, cost: r === 'Huyền thoại' ? 5 : r === 'Sử Thi' ? 4 : r === 'Hiếm' ? 3 : 2 }); }} className="bg-black border border-wuxia-gold/20 text-wuxia-gold text-xs p-2 rounded-md outline-none">
+                                                <option value="Huyền thoại">Huyền thoại (5đ)</option>
+                                                <option value="Sử Thi">Sử Thi (4đ)</option>
+                                                <option value="Hiếm">Hiếm (3đ)</option>
+                                                <option value="Thường">Thường (2đ)</option>
+                                            </select>
+                                            <GameButton onClick={addCustomTalent} variant="secondary" className="flex-1 py-1 text-xs">Thêm</GameButton>
+                                        </div>
                                     </div>
                                 )}
 
+                                {/* Filter tabs */}
+                                <div className="flex gap-1.5 mb-4 flex-wrap">
+                                    <button onClick={() => setTalentFilter('all')} className={`text-[11px] px-3 py-1 rounded-full border transition-all ${talentFilter === 'all' ? 'border-wuxia-gold bg-wuxia-gold/15 text-wuxia-gold' : 'border-white/10 text-gray-500 hover:text-gray-300'}`}>Tất cả</button>
+                                    {BUFF_RANKS.map(rank => {
+                                        const rc = RANK_COLORS[rank];
+                                        const count = buffTalents.filter(t => t.rank === rank).length;
+                                        return (
+                                            <button key={rank} onClick={() => setTalentFilter(rank)} className={`text-[11px] px-3 py-1 rounded-full border transition-all ${talentFilter === rank ? `${rc.border} ${rc.bg} ${rc.text}` : 'border-white/10 text-gray-500 hover:text-gray-300'}`}>
+                                                {rank} ({count})
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                    {allTalentOptions.map((t, idx) => {
+                                    {filteredBuffs.map((t, idx) => {
                                         const isSelected = !!selectedTalents.find(x => x.name === t.name);
+                                        const canAfford = t.cost <= remainingTalentPoints;
+                                        const rc = RANK_COLORS[t.rank];
                                         return (
                                             <div
-                                                key={idx}
+                                                key={`buff-${idx}`}
                                                 onClick={() => toggleTalent(t)}
-                                                className={`p-4 border rounded-lg cursor-pointer transition-all duration-300 transform hover:-translate-y-1 ${isSelected
-                                                    ? 'border-wuxia-gold bg-wuxia-gold/10 shadow-lg shadow-wuxia-gold/10'
-                                                    : 'border-wuxia-gold/10 bg-transparent hover:border-wuxia-gold/30'
+                                                className={`p-3 border rounded-lg cursor-pointer transition-all duration-300 transform hover:-translate-y-0.5 ${isSelected
+                                                    ? `${rc.border} ${rc.bg} shadow-lg ${rc.glow}`
+                                                    : canAfford
+                                                        ? 'border-white/10 bg-transparent hover:border-white/20'
+                                                        : 'border-white/5 bg-transparent opacity-40 cursor-not-allowed'
                                                     }`}
                                             >
-                                                <div className={`font-bold text-sm font-serif flex items-center justify-between ${isSelected ? 'text-wuxia-gold' : 'text-wuxia-gold/50'}`}>
-                                                    <span>{t.name}{!PresetTalent.some(p => p.name === t.name) ? ' (Tùy chỉnh)' : ''}</span>
-                                                    {isSelected && <span className="text-[9px] bg-wuxia-gold/20 border border-wuxia-gold/40 text-wuxia-gold px-1.5 py-0.5 rounded font-mono tracking-wide">✓ Đã chọn</span>}
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <span className={`font-bold text-sm font-serif truncate ${isSelected ? rc.text : 'text-gray-300'}`}>
+                                                        {t.name}
+                                                        {!PresetTalent.some(p => p.name === t.name) ? ' ✎' : ''}
+                                                    </span>
+                                                    <div className="flex items-center gap-1.5 shrink-0">
+                                                        <span className={`text-[9px] px-1.5 py-0.5 rounded border font-mono ${rc.badge}`}>{t.rank}</span>
+                                                        <span className={`text-[10px] font-mono font-bold ${isSelected ? 'text-wuxia-gold' : 'text-gray-500'}`}>{t.cost}đ</span>
+                                                    </div>
                                                 </div>
-                                                <div className="text-xs text-wuxia-gold/50 mt-1 line-clamp-2 italic" title={t.description}>{t.description}</div>
-                                                <div className="text-xs text-wuxia-gold/80 mt-2 pt-2 border-t border-wuxia-gold/10 font-mono">{t.effect}</div>
+                                                <div className="text-[11px] text-gray-500 mt-1 line-clamp-1 italic">{t.description}</div>
+                                                <div className={`text-[11px] mt-1.5 pt-1.5 border-t border-white/5 font-mono ${isSelected ? rc.text : 'text-gray-500'}`}>{t.effect}</div>
+                                                {isSelected && <div className="text-[9px] text-emerald-400 mt-1 font-mono">✓ Đã chọn (−{t.cost}đ)</div>}
                                             </div>
                                         );
                                     })}
                                 </div>
                             </OrnateBorder>
                         </div>
-                    )}
+                        );
+                    })()}
 
                     {/* STEP 5: CONFIRMATION */}
                     {step === 4 && (
@@ -950,10 +1150,11 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
                             &larr; Bước trước
                         </GameButton>
                     ) : (
-                        <GameButton onClick={onCancel} variant="secondary" className="px-6 py-2 !border-red-500/50 !text-red-500/80 hover:!bg-red-500/10 hover:!text-red-500">
-                            Hủy
+                        <GameButton onClick={onCancel} variant="secondary" className="px-6 py-2 !border-red-500/50 !text-red-500/80 hover:!bg-red-500/10 hover:!text-red-500 flex items-center gap-2">
+                            <LogOut className="w-4 h-4" /> Thoát
                         </GameButton>
                     )}
+
 
                     {step < STEPS.length - 1 ? (
                         <GameButton onClick={() => setStep(step + 1)} variant="primary" className="px-6 py-2">

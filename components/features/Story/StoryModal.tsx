@@ -67,7 +67,7 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
             </div>
 
             {/* Modal Container */}
-            <div className="w-full max-w-6xl h-[850px] flex flex-col shadow-[0_0_150px_rgba(0,0,0,1)] relative overflow-hidden bg-black/40 backdrop-blur-md border border-white/10">
+            <div className="w-full max-w-6xl h-[850px] flex flex-col shadow-[0_0_150px_rgba(0,0,0,1)] relative overflow-hidden glass-panel border border-white/10">
                 
                 {/* Global Texture Overlays */}
                 <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/pinstriped-suit.png')] pointer-events-none z-0"></div>
@@ -198,6 +198,12 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
                                 <span className="text-xs font-bold text-wuxia-cyan tracking-[0.3em] font-serif uppercase">
                                     CHƯƠNG {displayChapter.index}
                                 </span>
+                                {viewMode === 'current' && (
+                                    <div className="flex items-center gap-2 border-l border-gray-800/50 pl-6 ml-2">
+                                        <span className="text-[10px] text-gray-500 uppercase tracking-widest font-serif">Số lượt đã qua:</span>
+                                        <span className="text-xs font-mono font-bold text-wuxia-gold">{story.actionCountSinceLastChapter || 0}</span>
+                                    </div>
+                                )}
                                 <div className="flex items-center gap-4 text-gray-500 border-l border-gray-800/50 pl-6 ml-2">
                                     <button 
                                         onClick={onSaveChapter}

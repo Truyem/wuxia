@@ -66,6 +66,7 @@ export interface CharacterData extends CoreStats {
     maxFullness: number;
     currentThirst: number;
     maxThirst: number;
+    meridianStatus: string; // Trạng thái kinh mạch (Bình thường, Tổn thương, v.v.)
 
     currentWeight: number;
     maxWeight: number;

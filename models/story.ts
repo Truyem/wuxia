@@ -39,6 +39,8 @@ export interface StorySystemStructure {
     mediumTermPlanning: string;
     longTermPlanning: string;
     pendingEvents: PendingEventStructure[];
+    worldQuestList: any[];
+    promiseList: any[];
     storyVariables: Record<string, boolean | number | string>;
     actionCountSinceLastChapter: number;
 }

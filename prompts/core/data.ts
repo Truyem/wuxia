@@ -2,87 +2,104 @@ import { PromptStructure } from '../../types';
 
 export const coreDataFormat: PromptStructure = {
   id: 'core_data',
-  title: 'Định dạng Dữ liệu',
+  title: 'Data Format Definition',
   content: `
 <Data structure definition>
-# 【Định nghĩa cấu trúc dữ liệu】WuXia SaveData (V2.0 Tiếng Việt Chuẩn hóa)
+# 【Data Structure Definition】WuXia SaveData (V3.0 English Structural)
 
-> Mục tiêu: Định nghĩa cây trạng thái "có thể thực thi và hoàn chỉnh" của dự án này. AI khi tạo \`tavern_commands\` phải tuân thủ nghiêm ngặt định nghĩa này.
-> Nguyên tắc: Kiểm tra đường dẫn trước, sau đó khớp trường dữ liệu, cuối cùng kiểm tra loại và giới hạn.
-> Quy tắc thời gian sắt đá: Tất cả các trường "chuỗi thời gian cấu trúc" được thống nhất định dạng là \`YYYY:MM:DD:HH:MM\` (ví dụ: \`317:03:16:09:45\`).
-> Trường hợp bắt buộc: \`gameState.Môi trường.Thời gian\` phải là dấu thời gian chuẩn; \`gameState.Môi trường.Ngày chơi\` chỉ biểu thị "ngày thứ mấy" (1, 2, 3...).
+> Objective: Define the "executable and complete" state tree of this project. AI MUST strictly follow this definition when creating \`tavern_commands\`.
+> Principle: Check path first, then match fields, finally check type and constraints.
+> Iron Rule of Time: All "structural time strings" are unified to \`YYYY:MM:DD:HH:MM\` (e.g., \`317:03:16:09:45\`).
+> Mandatory Case: \`gameState.Environment.time\` must be a standard timestamp; \`gameState.Environment.dayCount\` only represents "which day" (1, 2, 3...).
 
-## 0. Quy tắc đường dẫn Bạch kim (QUAN TRỌNG)
-1. Chỉ sử dụng các đường dẫn tắt (Convenience Paths) sau để đạt hiệu quả UI tốt nhất:
-   - \`gameState.Nhân vật\` (Hồ sơ chính, thuộc tính, sinh tồn)
-   - \`gameState.Túi đồ\` (Toàn bộ hành lý, vật phẩm, trang bị trong túi)
-   - \`gameState.Võ công\` (Toàn bộ bí tịch, chiêu thức, nội công)
-   - \`gameState.Trang bị\` (Các ô trang bị đang mặc)
-   - \`gameState.Chiến đấu\` (Trạng thái và kẻ địch hiện tại)
-   - \`gameState.Môi trường\` (Thời gian, địa điểm, thời tiết)
-   - \`gameState.Giao tiếp\` (Danh sách NPC xã hội, hảo cảm, ký ức)
-   - \`gameState.Đội nhóm\` (Danh sách đồng đội, chỉ số chiến đấu đồng đội)
-   - \`gameState.Thế giới\` (Sự kiện lớn, tin đồn, NPC hoạt động toàn cầu)
-   - \`gameState.Bản đồ\` (Thông tin tọa độ, kiến trúc, khu vực)
-   - \`gameState.Cốt truyện\` (Chương hồi, phục bút, biến số story)
+## 0. Platinum Path Rules (CRITICAL)
+1. Use ONLY the following Convenience Paths for optimal UI/Performance:
+   - \`gameState.Character\` (Main profile, attributes, survival)
+   - \`gameState.Inventory\` (All baggage, items, equipment in bag)
+   - \`gameState.Kungfu\` (All manuals, moves, internal kungfu)
+   - \`gameState.Equipment\` (Currently equipped slots)
+   - \`gameState.Battle\` (Current battle status and enemies)
+   - \`gameState.Environment\` (Time, location, weather)
+   - \`gameState.Social\` (Social NPC list, favorability, memories)
+   - \`gameState.World\` (Major events, rumors, global NPCs)
+   - \`gameState.Map\` (Coordinate info, buildings, areas)
+   - \`gameState.Story\` (Chapters, foreshadowing, story variables)
+   - \`gameState.Tasks\` (Active mission list)
+   - \`gameState.Appointments\` (Scheduled meetings/promises)
 
-## 1. Cấu trúc Nhân vật (gameState.Nhân vật)
-- \`Họ tên\`, \`Giới tính\`, \`Tuổi\`, \`Ngày sinh\`, \`Ngoại hình\`, \`Tính cách\`, \`Danh hiệu\`, \`Cảnh giới\`
-- \`avatar\`: String (Đường dẫn ảnh nhân vật, ví dụ: \`\`)
-- \`Kinh nghiệm hiện tại\`, \`Kinh nghiệm thăng cấp\`
-- \`Tinh lực hiện tại\`, \`Tinh lực tối đa\`
-- \`No bụng hiện tại\`, \`No bụng tối đa\`, \`Khát nước hiện tại\`, \`Khát nước tối đa\`
-- \`Tải trọng hiện tại\`, \`Tải trọng tối đa\`
-- \`Tiền tệ\`: { \`Vàng thỏi\`, \`Bạc\`, \`Đồng\` }
-- \`Sức mạnh\`, \`Mẫn tiệp\`, \`Thể chất\`, \`Căn cốt\`, \`Ngộ tính\`, \`Phúc duyên\`
-- \`Máu bộ phận\`: { \`Đầu\`, \`Ngực\`, \`Bụng\`, \`Tay trái\`, \`Tay phải\`, \`Chân trái\`, \`Chân phải\` }
-  - Mỗi bộ phận gồm: \`Máu hiện tại\`, \`Máu tối đa\`, \`Trạng thái\`
+## 1. Character Structure (gameState.Character)
+- \`name\`, \`gender\`, \`age\`, \`birthday\`, \`appearance\`, \`personality\`, \`title\`, \`realm\`
+- \`avatar\`: String (Path to character image, e.g.: \`\`)
+- \`currentExp\`, \`nextLevelExp\`
+- \`currentEnergy\`, \`maxEnergy\`
+- \`currentFullness\`, \`maxFullness\`, \`currentThirst\`, \`maxThirst\`
+- \`currentWeight\`, \`maxWeight\`
+- \`currency\`: { \`gold\`, \`silver\`, \`copper\` }
+- \`strength\`, \`agility\`, \`constitution\`, \`rootBone\`, \`intelligence\`, \`luck\`
+- \`bodyHp\`: { \`head\`, \`chest\`, \`abdomen\`, \`leftArm\`, \`rightArm\`, \`leftLeg\`, \`rightLeg\` }
+  - Each part contains: \`currentHp\`, \`maxHp\`, \`status\`
 
-## 2. Cấu trúc Túi đồ (gameState.Túi đồ) - Mảng các Vật phẩm
-- Mỗi vật phẩm gồm: \`ID\`, \`Tên\`, \`Mô tả\`, \`Loại\`, \`Phẩm chất\`, \`Trọng lượng\`, \`Không gian chiếm dụng\`, \`Giá trị\`, \`Độ bền hiện tại\`, \`Độ bền tối đa\`
-- Mở rộng Vũ khí: \`Tấn công tối thiểu\`, \`Tấn công tối đa\`, \`Tỷ lệ đỡ đòn\`
-- Mở rộng Phòng ngự: \`Phòng ngự vật lý\`, \`Phòng ngự nội công\`
-- \`ID vật chứa hiện tại\`: ID của túi/rương chứa vật phẩm này.
-- Vật chứa (Loại=\`Vật chứa\` hoặc \`Phòng cụ\`): chứa trường \`Thuộc tính vật chứa\` (= \`containerProperties\` trong JSON) với cấu trúc \`{Dung lượng tối đa, Không gian hiện tại đã dùng, Kích thước tối đa vật phẩm đơn lẻ, Tỷ lệ giảm trọng lượng}\`.
+## 2. Inventory Structure (gameState.Inventory) - Array of Items
+- Each item: \`id\`, \`name\`, \`description\`, \`type\`, \`quality\`, \`weight\`, \`spaceOccupied\`, \`value\`, \`currentDurability\`, \`maxDurability\`
+- Weapon Extension: \`minAttack\`, \`maxAttack\`, \`parryRate\`
+- Defense Extension: \`physicalDefense\`, \`internalDefense\`
+- \`containerId\`: ID of the bag/chest containing this item.
+- Containers (Type=\`Container\` or \`Armor\` with storage): use \`containerProperties\` field with structure \`{maxCapacity, currentUsedSpace, maxSingleItemSize, weightReductionRate}\`.
 
-## 3. Cấu trúc Võ công (gameState.Võ công) - Mảng các Công pháp
-- \`ID\`, \`Tên\`, \`Mô tả\`, \`Loại\`, \`Phẩm chất\`, \`Nguồn gốc\`
-- \`Tầng hiện tại\`, \`Tầng tối đa\`, \`Độ thuần thục hiện tại\`, \`Kinh nghiệm thăng cấp\`
-- \`Loại tiêu hao\`, \`Giá trị tiêu hao\`, \`Sát thương cơ bản\`
+## 3. Kungfu Structure (gameState.Kungfu) - Array of Techniques
+- \`id\`, \`name\`, \`description\`, \`type\`, \`quality\`, \`origin\`
+- \`currentLevel\`, \`maxLevel\`, \`currentMastery\`, \`expToNextLevel\`
+- \`consumeType\`, \`consumeValue\`, \`baseDamage\`
 
-## 4. Cấu trúc Trang bị (gameState.Trang bị)
-- \`Vũ khí chính\`, \`Vũ khí phụ\`, \`Đầu\`, \`Ngực\`, \`Tay\`, \`Chân\`, \`Thắt lưng\`, \`Lưng\`, \`Tọa kỵ\`
-- Giá trị là String (Tên vật phẩm) hoặc ID.
+## 4. Equipment Structure (gameState.Equipment)
+- \`mainWeapon\`, \`subWeapon\`, \`head\`, \`chest\`, \`hand\`, \`leg\`, \`waist\`, \`back\`, \`mount\`
+- Value is String (Item Name) or ID.
 
-## 5. Cấu trúc Giao tiếp & Đội nhóm (gameState.Giao tiếp / gameState.Đội nhóm)
-- \`id\`, \`Họ tên\`, \`Giới tính\`, \`Tuổi\`, \`Cảnh giới\`, \`Thân phận\`
-- \`Độ hảo cảm\`, \`Trạng thái quan hệ\`, \`Giới thiệu\`, \`Ký ức\` (Mảng {Nội dung, Thời gian})
-- \`Có mặt hay không\`: Boolean
-- \`Có phải đồng đội không\`: Boolean
-- Chỉ dành cho \`Đội nhóm\`: \`Máu hiện tại\`, \`Máu tối đa\`, \`Tinh lực hiện tại\`, \`Lực tấn công\`, \`Lực phòng ngự\`
+## 5. Social & Party Structure (gameState.Social)
+- \`id\`, \`name\`, \`gender\`, \`age\`, \`realm\`, \`identity\`
+- \`favorability\`, \`relationStatus\`, \`introduction\`, \`memories\` (Array of {content, time})
+- \`isPresent\`: Boolean
+- \`isTeammate\`: Boolean
+- Party only: \`currentHp\`, \`maxHp\`, \`currentEnergy\`, \`attack\`, \`defense\`
 
-## 6. Cấu trúc Môi trường & Bản đồ (gameState.Môi trường / gameState.Bản đồ)
-- \`Thời gian\`: \`YYYY:MM:DD:HH:MM\`
-- \`Ngày chơi\`: Number
-- \`Địa điểm lớn\`, \`Địa điểm trung\`, \`Địa điểm nhỏ\`, \`Địa điểm cụ thể\`
-- \`Thời tiết\`: { \`Thời tiết\`, \`Ngày kết thúc\` }
+## 6. Environment Structure (gameState.Environment)
+- \`time\`: \`YYYY:MM:DD:HH:MM\`
+- \`gameDays\`: Number
+- \`majorLocation\`, \`mediumLocation\`, \`minorLocation\`, \`specificLocation\`
+- \`weather\`: { \`type\`, \`intensity\`, \`description\`, \`endDate\` }
 
-## 7. Cấu trúc Chiến đấu (gameState.Chiến đấu)
-- \`Đang chiến đấu\`: Boolean
-- \`Kẻ địch\`: { \`Tên\`, \`Cảnh giới\`, \`Máu hiện tại\`, \`Máu tối đa\`, \`Lực tấn công\`, \`Lực phòng ngự\` } | null
+## 7. Map & World Structure (gameState.Map / gameState.World)
+- \`gameState.Map\` (Convenience for current coordinate/areas): \`coordinate\`, \`name\`, \`description\`
+- \`gameState.World.maps\`: Array of { \`id\`, \`name\`, \`coordinate\`, \`description\`, \`avatar\`, \`affiliation\`, \`internalBuildings\` }
+- \`activeNpcList\`: Array of global NPCs status.
+- \`ongoingEvents\`: Array of { \`id\`, \`type\`, \`title\`, \`content\`, \`location\`, \`startTime\`, \`estimatedEndTime\`, \`currentStatus\` }
+- \`settledEvents\`, \`worldHistory\`: Arrays of past events.
 
-## 8. Cấu trúc Cốt truyện (gameState.Cốt truyện)
-- \`Chương hiện tại\`: { \`ID\`, \`Tiêu đề\`, \`Câu chuyện nền\`, \`Mâu thuẫn chính\` }
-- \`Biến số cốt truyện\`: Map các biến (Boolean/Number/String)
-- \`Sử sách giang hồ\`: Mảng các sự kiện quan trọng.
+## 8. Battle Structure (gameState.Battle)
+- \`isInBattle\`: Boolean
+- \`enemy\`: { \`name\`, \`currentHp\`, \`maxHp\`, \`attack\`, \`defense\` } | null
 
+## 9. Story Structure (gameState.Story)
+- \`currentChapter\`: { \`id\`, \`index\`, \`title\`, \`outline\`, \`backgroundStory\`, \`mainConflict\`, \`endConditions\`, \`foreshadowingList\` }
+- \`nextChapterPreview\`: { \`title\`, \`outline\` }
+- \`historicalArchives\`: Array of past chapters.
+- \`shortTermPlanning\`, \`mediumTermPlanning\`, \`longTermPlanning\`: Thinking/Planning fields.
+- \`pendingEvents\`: Future events to trigger.
+- \`storyVariables\`: Map of variables.
 
+## 10. Tasks Structure (gameState.Tasks) - Array of Active Missions
+- Each task: { \`title\`, \`description\`, \`type\`, \`issuer\`, \`location\`, \`recommendedRealm\`, \`deadline\`, \`currentStatus\`, \`goalList\`, \`rewardDescription\` }
+- \`goalList\`: Array of { \`description\`, \`currentProgress\`, \`totalRequired\`, \`isCompleted\` }
 
-# 【Ràng buộc Thao tác】
-1. **Lệnh tạo**: \`push path = {object}\` (Dùng cho Xã hội, Túi đồ, Võ công).
-2. **Lệnh sửa**: \`set path = value\` hoặc \`add path = value\`.
-3. **Lệnh xóa**: \`delete path\`.
-4. **Consistency**: Mọi thay đổi trong \`logs\` (Main Body) PHẢI được phản ánh qua \`<Command>\`.
+## 11. Appointments Structure (gameState.Appointments) - Array of Scheduled Promises
+- Each appointment: { \`target\`, \`nature\`, \`title\`, \`oathContent\`, \`location\`, \`time\`, \`validDuration\`, \`currentStatus\`, \`fulfillmentConsequence\`, \`failureConsequence\` }
+- \`nature\`: 'Tình cảm' | 'Giao dịch' | 'Cá cược' | 'Báo thù' | 'Cam kết'
+
+# 【Command Constraints】
+1. **Creation**: \`PUSH path = {object}\` (Used for Social, Inventory, Kungfu).
+2. **Modification**: \`SET path = value\` or \`ADD path = value\`.
+3. **Deletion**: \`DEL path\`.
+4. **Consistency**: Any changes in \`logs\` (Main Body) MUST be reflected via \`<Command>\`.
 
 </Data structure definition>
 `,

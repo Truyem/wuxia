@@ -281,27 +281,27 @@ const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, raw
             {/* Main Logs Rendering */}
             <div className="space-y-2">
                 {displayLogs.map((log, idx) => {
-                    if (log.sender === 'Narrator' || log.sender === 'Bối cảnh') {
+                    if (log.sender === 'Narrator' || log.sender === 'Background' || log.sender === 'Bối cảnh') {
                         return <NarratorRenderer key={idx} text={log.text} />;
-                    } else if (log.sender === '【Judgment】' || log.sender === 'Phán định') {
+                    } else if (log.sender === '【Judgment】' || log.sender === 'Judgment' || log.sender === 'Phán định') {
                         return <JudgmentRenderer key={idx} text={log.text} />;
                     } else if (log.sender === '【NSFWJudgment】') {
                         return <JudgmentRenderer key={idx} text={log.text} isNsfw={true} />;
-                    } else if (log.sender === 'Nội tâm') {
+                    } else if (log.sender === 'InnerThought' || log.sender === 'Nội tâm') {
                         // Find the nearest previous character speaker for context
                         const prevSpeaker = idx > 0
                             ? displayLogs.slice(0, idx).reverse().find(l =>
-                                l.sender && l.sender !== 'Nội tâm' && l.sender !== 'Narrator'
-                                && l.sender !== 'Bối cảnh' && l.sender !== 'Hệ thống'
-                                && l.sender !== 'Cảnh vật' && l.sender !== 'Hồi tưởng'
+                                l.sender && l.sender !== 'InnerThought' && l.sender !== 'Nội tâm' && l.sender !== 'Narrator'
+                                && l.sender !== 'Background' && l.sender !== 'Bối cảnh' && l.sender !== 'System' && l.sender !== 'Hệ thống'
+                                && l.sender !== 'Scenery' && l.sender !== 'Cảnh vật' && l.sender !== 'Flashback' && l.sender !== 'Hồi tưởng'
                               )?.sender
                             : undefined;
                         return <InnerThoughtRenderer key={idx} text={log.text} speaker={prevSpeaker} />;
-                    } else if (log.sender === 'Hồi tưởng') {
+                    } else if (log.sender === 'Flashback' || log.sender === 'Hồi tưởng') {
                         return <FlashbackRenderer key={idx} text={log.text} />;
-                    } else if (log.sender === 'Hệ thống') {
+                    } else if (log.sender === 'System' || log.sender === 'Hệ thống') {
                         return <SystemRenderer key={idx} text={log.text} />;
-                    } else if (log.sender === 'Cảnh vật') {
+                    } else if (log.sender === 'Scenery' || log.sender === 'Cảnh vật') {
                         return <SceneryRenderer key={idx} text={log.text} />;
                     } else {
                         const senderName = log.sender || 'Unknown';

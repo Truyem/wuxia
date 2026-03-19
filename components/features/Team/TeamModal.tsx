@@ -52,7 +52,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
     return (
         <div className="fixed inset-0 bg-black/85 backdrop-blur-2xl z-[200] flex items-center justify-center p-4 md:p-8">
             {/* Main fellowship scroll container */}
-            <div className="glass-panel-square border border-wuxia-gold/20 w-full max-w-7xl h-[85vh] flex flex-col shadow-[0_0_150px_rgba(0,0,0,1)] relative overflow-hidden rounded-none">
+            <div className="w-full max-w-4xl h-[80vh] flex flex-col relative overflow-hidden glass-panel border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.8)] rounded-none">
                 {/* Wuxia Decorative Corners */}
                 <div className="wuxia-corner wuxia-corner-tl"></div>
                 <div className="wuxia-corner wuxia-corner-tr"></div>

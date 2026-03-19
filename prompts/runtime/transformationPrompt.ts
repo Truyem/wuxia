@@ -19,7 +19,7 @@ For each input item, return a JSON object with:
 }
 
 ### CRITICAL RULES:
-1. Every character description MUST be mapped to \`gameState.Giao tiếp\` or \`gameState.Nhân vật\`.
+1. Every character description MUST be mapped to \`gameState.SocialNet\` or \`gameState.Character\`.
 2. Use \`push\` for lists (Social, Items, Skills) and \`set\` for single attributes.
 3. If age is mentioned, calculate birth year based on current game time (default year 317) or just use \`age\`.
 4. Ensure all keys and paths strictly match the [Data structure definition].
@@ -32,6 +32,6 @@ Output:
   "title": "Nobi Nobita",
   "type": "custom",
   "enabled": true,
-  "content": "[18 tuổi] Nobita là một thiện xạ.\\n\\n<Command>\\npush gameState.Giao tiếp = { \\"Họ tên\\": \\"Nobi Nobita\\", \\"Tuổi\\": 18, \\"Giới tính\\": \\"Nam\\", \\"Giới thiệu\\": \\"Sở hữu kỹ năng thiện xạ đỉnh cao.\\" }\\n</Command>"
+  "content": "[18 tuổi] Nobita là một thiện xạ.\\n\\n<Command>\\npush gameState.SocialNet = { \\"name\\": \\"Nobi Nobita\\", \\"age\\": 18, \\"gender\\": \\"Nam\\", \\"introduction\\": \\"Sở hữu kỹ năng thiện xạ đỉnh cao.\\" }\\n</Command>"
 }
 `;

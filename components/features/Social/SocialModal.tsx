@@ -86,7 +86,7 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
 
     return (
         <div className="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[200] flex items-center justify-center p-4">
-            <div className="w-full max-w-7xl h-[90vh] flex flex-col relative overflow-hidden rounded-none glass-panel-square border border-white/10 shadow-[0_0_150px_rgba(0,0,0,1)]">
+            <div className="w-full max-w-7xl h-[90vh] flex flex-col relative overflow-hidden rounded-none glass-panel border border-white/10 shadow-[0_0_150px_rgba(0,0,0,1)]">
                 {/* Wuxia Decorative Corners */}
                 <div className="wuxia-corner wuxia-corner-tl"></div>
                 <div className="wuxia-corner wuxia-corner-tr"></div>

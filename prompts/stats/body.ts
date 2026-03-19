@@ -2,47 +2,43 @@ import { PromptStructure } from '../../types';
 
 export const StatBodyHealth: PromptStructure = {
     id: 'stat_body',
-    title: 'Máu bộ phận và Hình phạt thương thế',
+    title: 'Giao thức HP Bộ phận Cơ thể',
     content: `
-<giao_thuc_mau_bo_phan>
-【Hệ thống máu bảy bộ phận (Ràng buộc mạnh với các trường)】
-Chỉ sử dụng các trường thực tế sau:
-\`Head/Chest/Abdomen/Left Hand/Right Hand/Left Leg/Right Leg\` (Đầu/Ngực/Bụng/Tay trái/Tay phải/Chân trái/Chân phải) và các trường tương ứng \`Current HP/Max HP/Status\`.
+<body_part_hp_protocol>
+# 【Hệ thống HP 7 Bộ phận (Ánh xạ vào từng bộ phận trong gameState.Character)】
 
-1. Tổng máu và Định nghĩa phân phối
-- Gợi ý tổng máu tối đa: \`Tổng máu = 400 + Thể chất*28 + Căn cốt*18 + Sức mạnh*8 + Cấp độ cảnh giới*50\`
-- Nếu \`Cấp độ cảnh giới\` chưa được khởi tạo, hãy tính là 1.
-- Gợi ý phân phối:
-  - Đầu 15%, Ngực 22%, Bụng 20%, Tay trái 11%, Tay phải 11%, Chân trái 10.5%, Chân phải 10.5%
-- Cho phép làm tròn, nhưng tổng của bảy bộ phận phải quay lại mức tổng máu.
+## 1. Định danh Bộ phận (BẮT BUỘC sử dụng các khóa Tiếng Anh này)
+Mỗi bộ phận có: \`currentHp / maxHp / status\`
+- \`head\` (Đầu)
+- \`chest\` (Ngực)
+- \`abdomen\` (Bụng)
+- \`leftArm\` (Tay trái)
+- \`rightArm\` (Tay phải)
+- \`leftLeg\` (Chân trái)
+- \`rightLeg\` (Chân phải)
 
-2. Ngưỡng trạng thái (Thống nhất)
-- \`>=85%\`: Bình thường
-- \`60~84%\`: Khinh thương (Thương nhẹ)
-- \`35~59%\`: Trung thương (Thương vừa)
-- \`1~34%\`: Trọng thương (Thương nặng)
-- \`=0\`: Mất khả năng/Lâm nguy (Quyết định theo bộ phận)
+## 2. Ngưỡng Trạng thái và Hình phạt
+- **Khỏe mạnh (>90% HP)**: Không có hình phạt.
+- **Tổn thương nhẹ (60%-90% HP)**: Đau nhức, giảm nhẹ tinh thần.
+- **Trung thương (30%-60% HP)**: Giảm 20% Thân pháp (\`agility\`) hoặc Sức mạnh (\`strength\`).
+- **Trọng thương (10%-30% HP)**: Giảm 50% chỉ số liên quan, nguy cơ ngất xỉu.
+- **Tàn phế/Chết (<=0% HP)**: Mất chức năng bộ phận. Nếu là Đầu/Ngực/Bụng, nhân vật tử vong.
 
-3. Hậu quả theo bộ phận (Phải có thể quan sát được)
-- Đầu thương thế Trung thương+: Độ chính xác và ổn định giảm, Trọng thương có thể gây choáng váng.
-- Ngực thương thế Trung thương+: Tiêu hao tinh lực tăng, bạo phát bị hạn chế rõ rệt.
-- Bụng thương thế Trung thương+: Phát lực động tác bị hạn chế, tồn tại rủi ro mất máu liên tục.
-- Tay thương thế Trung thương+: Khả năng cầm vũ khí, đỡ đòn, liên chiêu giảm.
-- Chân thương thế Trung thương+: Dịch chuyển, né tránh, khinh công suy giảm rõ rệt.
+## 3. Hệ quả Đặc thù theo Bộ phận
+- **Tay (Arm)**: Không thể cầm vũ khí hoặc sử dụng chiêu thức ngoại công.
+- **Chân (Leg)**: Giảm mạnh khả năng né tránh và không thể trốn chạy.
+- **Đầu (Head)**: Ảnh hưởng đến \`comprehension\` và gây trạng thái choáng váng.
 
-4. Ý nghĩa khi máu về không (0)
-- Đầu = 0: Xác suất cao lâm nguy hoặc tử vong trực tiếp (chỉnh sửa theo độ khó).
-- Ngực = 0: Xác suất cao lâm nguy và tình trạng tiếp tục xấu đi.
-- Bụng = 0: Rủi ro sốc/nội thương mất kiểm soát cực cao.
-- Tứ chi = 0: Chi tương ứng mất khả năng hoạt động, không được tiếp tục tự sự như chi còn lành lặn.
+## 4. Kỷ luật Thực thi
+- Mọi sát thương trong chiến đấu PHẢI được phân bổ vào các bộ phận cụ thể.
+- Kiểm tra \`currentHp\` sau mỗi lượt để cập nhật \`status\`.
 
-5. Kỷ luật thực hiện
-- Sau mỗi lần chịu đòn hoặc điều trị, phải đồng bộ:
-  - \`add/set ...Current HP\`
-  - \`set ...Status\`
-- \`Current HP\` phải được cắt biên trong khoảng \`0~Max HP\`.
-- Cấm tình trạng "máu đã đổi nhưng trạng thái chưa cập nhật" hoặc "trạng thái thay đổi nhưng không có căn cứ thay đổi máu".
-</giao_thuc_mau_bo_phan>
+## 5. Ví dụ Lệnh (Hợp lệ)
+- \`{"action": "ADD", "key": "gameState.Character.leftArm.currentHp", "value": -30}\`
+- \`{"action": "SET", "key": "gameState.Character.leftArm.status", "value": "Trọng thương"}\`
+- \`{"action": "SET", "key": "gameState.Character.head.status", "value": "Phê vật"}\`
+
+</body_part_hp_protocol>
 `,
     type: 'num',
     enabled: true

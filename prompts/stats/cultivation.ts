@@ -1,54 +1,42 @@
 import { PromptStructure } from '../../types';
 
 export const StatCultivation: PromptStructure = {
-    id: 'stat_cultivation',
-    title: 'Hệ thống Tu luyện Chín tầng',
+    id: 'stat_cult',
+    title: 'Giao thức Hệ thống Tu vi',
     content: `
-<giao_thuc_he_thong_tu_luyen>
-【Hệ thống tu luyện (Chín tầng đồng trục + Ràng buộc chi phí)】
-Mô-đun này ràng buộc thu nhập tu luyện, rủi ro đột phá và cập nhật cảnh giới trong các trường hiện có.
+<cultivation_system_protocol>
+# 【Hệ thống Tu vi 9 Đại Cảnh giới (Ánh xạ vào gameState.Character.realmTier & realm)】
 
-1. Trường cốt lõi
-- Trục giá trị: \`gameState.Nhân vật.Cấp độ cảnh giới\` (Trường mở rộng tùy chọn, gợi ý khởi tạo)
-- Trục văn bản: \`gameState.Nhân vật.Cảnh giới\`
-- Tài nguyên và giá phải trả: \`Tinh lực hiện tại\` (Tinh lực hiện tại), Trạng thái máu bảy bộ phận, \`Buff người chơi\`.
+## 1. Các trường Dữ liệu Cốt lõi (BẮT BUỘC sử dụng các khóa Tiếng Anh này)
+- \`realmTier\`: Cấp độ cảnh giới (1-9).
+- \`realm\`: Tên cảnh giới (Tiếng Việt).
+- \`cultivationProgress\`: Tiến độ tu vi hiện tại (0-100%).
+- \`breakthroughSuccess\`: Tỷ lệ thành công đột phá.
 
-2. Khung tầng thứ (1~9)
-- 1 Phàm thể/Luyện thể sơ thành
-- 2 Hậu thiên/Thông mạch
-- 3 Tiên thiên/Ngưng tức
-- 4 Tông sư/Hóa kình
-- 5 Đại tông sư/Cương khí
-- 6 Thiên nhân/Ngự khí
-- 7 Ngưỡng địa tiên/Tiểu thần thông
-- 8 Ngưỡng chân quân/Ngự phong phi lược
-- 9 Lục địa thần tiên/Lăng không ngắn hạn
-- Các thế giới quan khác nhau có thể thay đổi danh xưng, nhưng bậc thang giá trị phải giữ nguyên nhất quán.
+## 2. Khung Cảnh giới (Tham chiếu)
+1. Phàm Nhân (Mortality)
+2. Luyện Khí (Qi Refining)
+3. Trúc Cơ (Foundation Establishment)
+... (và các cảnh giới cao hơn)
 
-3. Công thức gợi ý thu nhập tu luyện
-- \`Giá trị tu luyện = floor((Căn cốt*2.4 + Ngộ tính*2.1 + Tầng số công pháp hiện tại*6) * Hệ số môi trường * Hệ số trạng thái)\`
-- Hệ số môi trường nên được đưa ra hợp lý dựa trên môi trường hiện tại (Địa điểm/Thời tiết/Biến môi trường).
-- Hệ số trạng thái phải chịu ảnh hưởng của no bụng, khát nước, thương thế, mệt mỏi.
+## 3. Công thức Tăng trưởng Tu vi
+- Tăng trưởng dựa trên: \`comprehension\`, môi trường linh khí, dược quán, và võ công tâm pháp.
+- Mỗi lượt tu luyện sử dụng lệnh \`ADD\` vào \`cultivationProgress\`.
 
-4. Công thức gợi ý tỷ lệ thành công đột phá
-- \`P = clamp(40 + Căn cốt*1.2 + Ngộ tính*1.4 + Cộng thêm cơ duyên + Cộng thêm đan dược - Hình phạt thất bại, 5, 95)\`
-- Cấm đột phá bảo đảm 100%.
+## 4. Đột phá Cảnh giới (Breakthrough)
+- Khi \`cultivationProgress >= 100\`, Player có thể thực hiện đột phá.
+- Thất bại đột phá gây phản phệ: Trừ mạnh \`currentHp\` hoặc giảm \`realmTier\`.
 
-5. Phản phệ khi thất bại (Bắt buộc có giá phải trả)
-- Ít nhất phải thực hiện một mục:
-  - Trừ \`gameState.Nhân vật.Tinh lực hiện tại\`
-  - Ngực/Bụng bị thương và cập nhật trạng thái bộ phận
-  - Ghi vào \`PlayerBUFF\` tiêu cực (Vd: Kinh mạch hỗn loạn)
-- Cấm "thất bại không mất gì" để thử sai liên tục.
+## 5. Ranh giới Năng lực
+- Chênh lệch 1 \`realmTier\` tạo ra sự áp đảo về sức mạnh và thân pháp.
+- Người ở cảnh giới cao có thể "nhìn thấu" chiêu thức của người cảnh giới thấp.
 
-6. Ranh giới năng lực cao giai
-- Từ giai 7 trở lên có thể xuất hiện thuật pháp cấp thấp, nhưng cần tiêu hao và có giới hạn cảnh nền.
-- Giai 8~9 có thể ngự phong/lăng không thời gian ngắn, cấm bay lượn lâu dài không tiêu hao.
+## 6. Ví dụ Lệnh (Hợp lệ)
+- \`{"action": "ADD", "key": "gameState.Character.cultivationProgress", "value": 5}\`
+- \`{"action": "SET", "key": "gameState.Character.realmTier", "value": 2}\`
+- \`{"action": "SET", "key": "gameState.Character.realm", "value": "Luyện Khí Kỳ"}\`
 
-7. Kỷ luật thực hiện
-- Khi \`gameState.Nhân vật.Cấp độ cảnh giới\` chưa khởi tạo, hãy \`set\` trước khi trích dẫn.
-- Sau khi phá cảnh cần đồng bộ: \`gameState.Nhân vật.Cấp độ cảnh giới\`, \`gameState.Nhân vật.Cảnh giới\`, các giá trị \`Kinh nghiệm thăng cấp\` cần thiết và tính toán lại trạng thái.
-</giao_thuc_he_thong_tu_luyen>
+</cultivation_system_protocol>
 `,
     type: 'num',
     enabled: true

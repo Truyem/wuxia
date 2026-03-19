@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { CharacterData } from '../../../types';
 import { GameItem, Weapon, Armor } from '../../../models/item';
 import { 
@@ -15,7 +15,8 @@ import {
     X,
     User,
     Shield,
-    Zap
+    Zap,
+    ChevronLeft
 } from 'lucide-react';
 
 interface Props {
@@ -24,6 +25,16 @@ interface Props {
 }
 
 const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
+    const [isMobile, setIsMobile] = useState(false);
+    const [activeTab, setActiveTab] = useState<'status' | 'armor' | 'weapons'>('status');
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const getItem = (idOrName: string): GameItem | null => {
         if (!idOrName || idOrName === 'None') return null;
         return character.itemList.find(i => i.id === idOrName || i.name === idOrName) || null;
@@ -126,31 +137,153 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
         );
     };
 
-    return (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-3xl z-[220] flex items-center justify-center p-4 md:p-8 font-sans">
-            {/* Main Container with Wuxia Corners */}
-            <div className="relative w-full max-w-4xl">
-                {/* Wuxia Corners */}
-                <div className="wuxia-corner wuxia-corner-tl"></div>
-                <div className="wuxia-corner wuxia-corner-tr"></div>
-                <div className="wuxia-corner wuxia-corner-bl"></div>
-                <div className="wuxia-corner wuxia-corner-br"></div>
+    const StatusView = () => (
+        <div className="flex flex-col items-center py-6 md:py-10">
+            {/* Central Silhouette */}
+            <div className={`relative w-full ${isMobile ? 'aspect-[1/1.5] max-h-[300px]' : 'aspect-[1/3] max-h-[400px]'} flex items-center justify-center`}>
+                {/* Silhouette Glow */}
+                <div className="absolute w-32 h-64 bg-wuxia-cyan/5 blur-[40px]"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-80 bg-wuxia-cyan/[0.02] border border-wuxia-cyan/5 rotate-12"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-80 bg-wuxia-cyan/[0.02] border border-wuxia-cyan/5 -rotate-12"></div>
+                
+                {/* Scanline for silhouette only */}
+                <div className="absolute inset-0 pointer-events-none opacity-[0.1] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] bg-[size:100%_4px]"></div>
 
-                <div className="glass-panel-square border border-white/10 w-full max-h-[90vh] flex flex-col shadow-[0_0_100px_rgba(0,0,0,1)] relative overflow-hidden rounded-none">
+                <div className="relative flex flex-col items-center gap-2 z-10">
+                    {/* Head Circle */}
+                    <div className="w-14 h-14 border border-wuxia-cyan/20 bg-black/40 flex items-center justify-center shadow-[inset_0_0_15px_rgba(68,170,170,0.15)] relative overflow-hidden group rounded-none">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-wuxia-cyan/10 to-transparent"></div>
+                        <User className="w-7 h-7 text-wuxia-cyan/40" strokeWidth={1} />
+                    </div>
+                    
+                    {/* Body Bar */}
+                    <div className="w-16 h-48 border border-wuxia-cyan/10 bg-gradient-to-b from-wuxia-cyan/[0.05] to-transparent relative flex flex-col items-center justify-center overflow-hidden">
+                        <div className="absolute top-0 w-full h-1/2 bg-gradient-to-b from-wuxia-cyan/10 to-transparent"></div>
+                        <div className="text-[10px] text-wuxia-cyan/40 text-center leading-relaxed font-serif tracking-[0.5em] vertical-text select-none">
+                            身法如風
+                        </div>
+                        {/* Circuit-like decorations */}
+                        <div className="absolute bottom-4 left-0 w-full h-px bg-wuxia-cyan/20"></div>
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-px h-8 bg-wuxia-cyan/20"></div>
+                    </div>
+
+                    {/* Legs - Dual Bars */}
+                    <div className="flex gap-3">
+                        <div className="w-6 h-20 border border-wuxia-cyan/10 bg-gradient-to-b from-black/40 to-black/20 relative overflow-hidden">
+                            <div className="absolute top-0 inset-x-0 h-4 bg-wuxia-cyan/5"></div>
+                        </div>
+                        <div className="w-6 h-20 border border-wuxia-cyan/10 bg-gradient-to-b from-black/40 to-black/20 relative overflow-hidden">
+                            <div className="absolute top-0 inset-x-0 h-4 bg-wuxia-cyan/5"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Weight / Payload Bar */}
+            <div className="mt-8 md:mt-12 w-full max-w-sm px-4">
+                <div className="flex justify-between items-center mb-2 px-1">
+                    <div className="flex items-center gap-1.5">
+                        <Zap className="w-2.5 h-2.5 text-wuxia-cyan opacity-60" />
+                        <span className="text-[9px] text-gray-600 font-bold uppercase tracking-widest">Tải trọng</span>
+                    </div>
+                    <span className={`text-[10px] font-mono font-bold ${character.currentWeight > character.maxWeight ? 'text-wuxia-red' : 'text-wuxia-cyan'}`}>
+                        {character.currentWeight} / {character.maxWeight}
+                    </span>
+                </div>
+                <div className="h-1.5 bg-white/[0.03] overflow-hidden border border-white/5 p-[1px] relative shadow-inner">
+                    <div
+                        className={`h-full shadow-[0_0_10px_rgba(68,170,170,0.3)] ${
+                            character.currentWeight > character.maxWeight ? 'bg-wuxia-red' : 'bg-wuxia-cyan/60'
+                        }`}
+                        style={{ width: `${Math.min(((character.currentWeight || 0) / (character.maxWeight || 1)) * 100, 100)}%` }}
+                    />
+                    {/* Glass reflection */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent pointer-events-none"></div>
+                </div>
+            </div>
+        </div>
+    );
+
+    const ArmorView = () => (
+        <div className="space-y-6">
+            <div className="flex items-center gap-4 px-2">
+                <span className="text-[10px] text-wuxia-cyan font-black uppercase tracking-[0.4em]">🛡 PHÒNG CỤ</span>
+                <div className="flex-1 h-[1px] bg-wuxia-cyan/20"></div>
+            </div>
+            
+            <div className="grid gap-3">
+                <SlotCard slotKey="head" label="Đầu" Icon={Crown} colorClass="text-wuxia-cyan" />
+                <SlotCard slotKey="chest" label="Thân" Icon={Shirt} colorClass="text-wuxia-cyan" />
+                <SlotCard slotKey="back" label="Lưng" Icon={Backpack} colorClass="text-wuxia-cyan" />
+                <SlotCard slotKey="waist" label="Eo" Icon={LinkIcon} colorClass="text-wuxia-cyan" />
+                <SlotCard slotKey="hands" label="Hộ Thủ" Icon={Hand} colorClass="text-wuxia-cyan" />
+                <SlotCard slotKey="legs" label="Chân" Icon={Layers} colorClass="text-wuxia-cyan" />
+                <SlotCard slotKey="feet" label="Hài" Icon={Footprints} colorClass="text-wuxia-cyan" />
+            </div>
+        </div>
+    );
+
+    const WeaponsView = () => (
+        <div className="space-y-8">
+            <div className="space-y-6">
+                <div className="flex items-center gap-4 px-2">
+                    <span className="text-[10px] text-wuxia-red font-black uppercase tracking-[0.4em]">⚔ VŨ KHÍ</span>
+                    <div className="flex-1 h-[1px] bg-wuxia-red/20"></div>
+                </div>
+                
+                <div className="grid gap-3">
+                    <SlotCard slotKey="mainWeapon" label="Vũ Khí Chính" Icon={Sword} colorClass="text-wuxia-red" />
+                    <SlotCard slotKey="subWeapon" label="Vũ Khí Phụ" Icon={Sword} colorClass="text-wuxia-red" />
+                    <SlotCard slotKey="hiddenWeapon" label="Ám Khí" Icon={Crosshair} colorClass="text-wuxia-red" />
+                </div>
+            </div>
+
+            <div className="space-y-6">
+                <div className="flex items-center gap-4 px-2">
+                    <span className="text-[10px] text-purple-400 font-black uppercase tracking-[0.4em]">🐴 KHÁC</span>
+                    <div className="flex-1 h-[1px] bg-purple-400/20"></div>
+                </div>
+                
+                <div className="grid gap-3">
+                    <SlotCard slotKey="mount" label="Tọa Kỵ" Icon={Wind} colorClass="text-purple-400" />
+                </div>
+            </div>
+        </div>
+    );
+
+    return (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-3xl z-[220] flex items-center justify-center p-0 md:p-8 font-sans">
+            <div className="relative w-full h-full md:h-auto md:max-w-4xl">
+                {/* Wuxia Corners - Only on Desktop */}
+                {!isMobile && (
+                    <>
+                        <div className="wuxia-corner wuxia-corner-tl"></div>
+                        <div className="wuxia-corner wuxia-corner-tr"></div>
+                        <div className="wuxia-corner wuxia-corner-bl"></div>
+                        <div className="wuxia-corner wuxia-corner-br"></div>
+                    </>
+                )}
+
+                <div className="glass-panel-square border border-white/10 w-full h-full md:h-auto md:max-h-[90vh] flex flex-col shadow-[0_0_100px_rgba(0,0,0,1)] relative overflow-hidden rounded-none">
                 
                 {/* Decorative Accents */}
                 <div className="absolute top-0 left-0 w-full h-px bg-white/10"></div>
                 <div className="absolute bottom-0 left-0 w-full h-[1px] bg-white/10"></div>
 
                 {/* Header */}
-                <div className="h-20 shrink-0 flex items-center justify-between px-8 z-10 border-b border-white/10 glass-panel-square">
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-white/[0.02] border border-white/10 flex items-center justify-center">
-                            <Sword className="w-6 h-6 text-wuxia-gold opacity-80" />
+                <div className="h-16 md:h-20 shrink-0 flex items-center justify-between px-4 md:px-8 z-10 border-b border-white/10 glass-panel-square">
+                    <div className="flex items-center gap-3 md:gap-4">
+                        {isMobile && (
+                            <button onClick={onClose} className="p-2 -ml-2 text-gray-400">
+                                <ChevronLeft className="w-6 h-6" />
+                            </button>
+                        )}
+                        <div className="w-10 h-10 md:w-12 md:h-12 bg-white/[0.02] border border-white/10 flex items-center justify-center">
+                            <Sword className="w-5 h-5 md:w-6 md:h-6 text-wuxia-gold opacity-80" />
                         </div>
                         <div>
-                            <h3 className="text-wuxia-gold font-serif font-bold text-2xl tracking-[0.2em] uppercase">Trang Bị</h3>
-                            <div className="flex items-center gap-3 mt-1">
+                            <h3 className="text-wuxia-gold font-serif font-bold text-lg md:text-2xl tracking-[0.2em] uppercase">Trang Bị</h3>
+                            <div className="hidden md:flex items-center gap-3 mt-1">
                                 <div className="flex items-center gap-1.5 bg-white/[0.03] px-2 py-0.5 border border-white/5">
                                     <div className="w-1.5 h-1.5 bg-wuxia-cyan shadow-[0_0_8px_#44aaaa]"></div>
                                     <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Active Status</span>
@@ -158,153 +291,92 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                             </div>
                         </div>
                     </div>
-                    <button 
-                        onClick={onClose} 
-                        className="group w-10 h-10 flex items-center justify-center hover:bg-white/5 border border-white/10 text-gray-500 hover:text-white transition-colors"
-                    >
-                        <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-                    </button>
+                    {!isMobile && (
+                        <button 
+                            onClick={onClose} 
+                            className="group w-10 h-10 flex items-center justify-center hover:bg-white/5 border border-white/10 text-gray-500 hover:text-white transition-colors"
+                        >
+                            <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+                        </button>
+                    )}
                 </div>
 
-                {/* Body - 3 Column Layout */}
-                <div className="flex-1 overflow-y-auto no-scrollbar p-6 md:p-10 z-10">
-                    <div className="grid grid-cols-1 md:grid-cols-[1fr_200px_1fr] gap-8 max-w-5xl mx-auto items-start">
-                        
-                        {/* Column 1: Armor / Body Parts */}
-                        <div className="space-y-6">
-                            <div className="flex items-center gap-4 px-2">
-                                <span className="text-[10px] text-wuxia-cyan font-black uppercase tracking-[0.4em]">🛡 PHÒNG CỤ</span>
-                                <div className="flex-1 h-[1px] bg-wuxia-cyan/20"></div>
-                            </div>
-                            
-                            <div className="grid gap-3">
-                                <SlotCard slotKey="head" label="Đầu" Icon={Crown} colorClass="text-wuxia-cyan" />
-                                <SlotCard slotKey="chest" label="Thân" Icon={Shirt} colorClass="text-wuxia-cyan" />
-                                <SlotCard slotKey="back" label="Lưng" Icon={Backpack} colorClass="text-wuxia-cyan" />
-                                <SlotCard slotKey="waist" label="Eo" Icon={LinkIcon} colorClass="text-wuxia-cyan" />
-                                <SlotCard slotKey="hands" label="Hộ Thủ" Icon={Hand} colorClass="text-wuxia-cyan" />
-                                <SlotCard slotKey="legs" label="Chân" Icon={Layers} colorClass="text-wuxia-cyan" />
-                                <SlotCard slotKey="feet" label="Hài" Icon={Footprints} colorClass="text-wuxia-cyan" />
-                            </div>
-                        </div>
-
-                        {/* Column 2: Character Visual / Center */}
-                        <div className="flex flex-col items-center pt-10">
-                            {/* Central Silhouette */}
-                            <div className="relative w-full aspect-[1/3] max-h-[400px] flex items-center justify-center">
-                                {/* Silhouette Glow */}
-                                <div className="absolute w-32 h-64 bg-wuxia-cyan/5 blur-[40px]"></div>
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-80 bg-wuxia-cyan/[0.02] border border-wuxia-cyan/5 rotate-12"></div>
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-80 bg-wuxia-cyan/[0.02] border border-wuxia-cyan/5 -rotate-12"></div>
-                                
-                                {/* Scanline for silhouette only */}
-                                <div className="absolute inset-0 pointer-events-none opacity-[0.1] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] bg-[size:100%_4px]"></div>
-
-                                <div className="relative flex flex-col items-center gap-2 z-10">
-                                    {/* Head Circle */}
-                                    <div className="w-14 h-14 border border-wuxia-cyan/20 bg-black/40 flex items-center justify-center shadow-[inset_0_0_15px_rgba(68,170,170,0.15)] relative overflow-hidden group rounded-none">
-                                        <div className="absolute inset-0 bg-gradient-to-tr from-wuxia-cyan/10 to-transparent"></div>
-                                        <User className="w-7 h-7 text-wuxia-cyan/40" strokeWidth={1} />
-                                    </div>
-                                    
-                                    {/* Body Bar */}
-                                    <div className="w-16 h-48 border border-wuxia-cyan/10 bg-gradient-to-b from-wuxia-cyan/[0.05] to-transparent relative flex flex-col items-center justify-center overflow-hidden">
-                                        <div className="absolute top-0 w-full h-1/2 bg-gradient-to-b from-wuxia-cyan/10 to-transparent"></div>
-                                        <div className="text-[10px] text-wuxia-cyan/40 text-center leading-relaxed font-serif tracking-[0.5em] vertical-text select-none">
-                                            身法如風
-                                        </div>
-                                        {/* Circuit-like decorations */}
-                                        <div className="absolute bottom-4 left-0 w-full h-px bg-wuxia-cyan/20"></div>
-                                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-px h-8 bg-wuxia-cyan/20"></div>
-                                    </div>
-
-                                    {/* Legs - Dual Bars */}
-                                    <div className="flex gap-3">
-                                        <div className="w-6 h-20 border border-wuxia-cyan/10 bg-gradient-to-b from-black/40 to-black/20 relative overflow-hidden">
-                                            <div className="absolute top-0 inset-x-0 h-4 bg-wuxia-cyan/5"></div>
-                                        </div>
-                                        <div className="w-6 h-20 border border-wuxia-cyan/10 bg-gradient-to-b from-black/40 to-black/20 relative overflow-hidden">
-                                            <div className="absolute top-0 inset-x-0 h-4 bg-wuxia-cyan/5"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Weight / Payload Bar */}
-                            <div className="mt-12 w-full px-4">
-                                <div className="flex justify-between items-center mb-2 px-1">
-                                    <div className="flex items-center gap-1.5">
-                                        <Zap className="w-2.5 h-2.5 text-wuxia-cyan opacity-60" />
-                                        <span className="text-[9px] text-gray-600 font-bold uppercase tracking-widest">Tải trọng</span>
-                                    </div>
-                                    <span className={`text-[10px] font-mono font-bold ${character.currentWeight > character.maxWeight ? 'text-wuxia-red' : 'text-wuxia-cyan'}`}>
-                                        {character.currentWeight} / {character.maxWeight}
-                                    </span>
-                                </div>
-                                <div className="h-1.5 bg-white/[0.03] overflow-hidden border border-white/5 p-[1px] relative shadow-inner">
-                                    <div
-                                        className={`h-full shadow-[0_0_10px_rgba(68,170,170,0.3)] ${
-                                            character.currentWeight > character.maxWeight ? 'bg-wuxia-red' : 'bg-wuxia-cyan/60'
-                                        }`}
-                                        style={{ width: `${Math.min(((character.currentWeight || 0) / (character.maxWeight || 1)) * 100, 100)}%` }}
-                                    />
-                                    {/* Glass reflection */}
-                                    <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent pointer-events-none"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Column 3: Weapons & Misc */}
-                        <div className="space-y-8">
-                            {/* Weapons Section */}
-                            <div className="space-y-6">
-                                <div className="flex items-center gap-4 px-2">
-                                    <span className="text-[10px] text-wuxia-red font-black uppercase tracking-[0.4em]">⚔ VŨ KHÍ</span>
-                                    <div className="flex-1 h-[1px] bg-wuxia-red/20"></div>
-                                </div>
-                                
-                                <div className="grid gap-3">
-                                    <SlotCard slotKey="mainWeapon" label="Vũ Khí Chính" Icon={Sword} colorClass="text-wuxia-red" />
-                                    <SlotCard slotKey="subWeapon" label="Vũ Khí Phụ" Icon={Sword} colorClass="text-wuxia-red" />
-                                    <SlotCard slotKey="hiddenWeapon" label="Ám Khí" Icon={Crosshair} colorClass="text-wuxia-red" />
-                                </div>
-                            </div>
-
-                            {/* Other Section */}
-                            <div className="space-y-6">
-                                <div className="flex items-center gap-4 px-2">
-                                    <span className="text-[10px] text-purple-400 font-black uppercase tracking-[0.4em]">🐴 KHÁC</span>
-                                    <div className="flex-1 h-[1px] bg-purple-400/20"></div>
-                                </div>
-                                
-                                <div className="grid gap-3">
-                                    <SlotCard slotKey="mount" label="Tọa Kỵ" Icon={Wind} colorClass="text-purple-400" />
-                                </div>
-                            </div>
-
-                            {/* Decorative Text */}
-                            <div className="pt-10 flex flex-col items-center opacity-20">
-                                <div className="text-[10px] text-wuxia-gold font-serif tracking-[1em] mb-2 uppercase">Nhân kiếm hợp nhất</div>
-                                <div className="w-16 h-px bg-wuxia-gold/30"></div>
-                            </div>
-                        </div>
-
+                {/* Mobile Tabs */}
+                {isMobile && (
+                    <div className="grid grid-cols-3 border-b border-white/10">
+                        <button 
+                            onClick={() => setActiveTab('status')}
+                            className={`py-3 text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === 'status' ? 'text-wuxia-gold bg-wuxia-gold/10' : 'text-gray-500 hover:text-gray-300'}`}
+                        >
+                            Trạng Thái
+                        </button>
+                        <button 
+                            onClick={() => setActiveTab('armor')}
+                            className={`py-3 text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === 'armor' ? 'text-wuxia-cyan bg-wuxia-cyan/10' : 'text-gray-500 hover:text-gray-300'}`}
+                        >
+                            Phòng Cụ
+                        </button>
+                        <button 
+                            onClick={() => setActiveTab('weapons')}
+                            className={`py-3 text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === 'weapons' ? 'text-wuxia-red bg-wuxia-red/10' : 'text-gray-500 hover:text-gray-300'}`}
+                        >
+                            Vũ Khí
+                        </button>
                     </div>
+                )}
+
+                {/* Body */}
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-10 z-10">
+                    <div className={`${isMobile ? 'max-w-md mx-auto' : 'grid grid-cols-[1fr_200px_1fr] gap-8 max-w-5xl mx-auto items-start'}`}>
+                        {isMobile ? (
+                            <>
+                                {activeTab === 'status' && <StatusView />}
+                                {activeTab === 'armor' && <ArmorView />}
+                                {activeTab === 'weapons' && <WeaponsView />}
+                            </>
+                        ) : (
+                            <>
+                                <ArmorView />
+                                <StatusView />
+                                <WeaponsView />
+                            </>
+                        )}
+                    </div>
+
+                    {!isMobile && (
+                        <div className="pt-10 flex flex-col items-center opacity-20">
+                            <div className="text-[10px] text-wuxia-gold font-serif tracking-[1em] mb-2 uppercase">Nhân kiếm hợp nhất</div>
+                            <div className="w-16 h-px bg-wuxia-gold/30"></div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Footer Quote */}
-                <div className="h-12 shrink-0 bg-white/[0.01] border-t border-white/10 flex items-center justify-center px-8 relative overflow-hidden">
-                    <span className="text-[9px] text-gray-700 font-mono tracking-[0.5em] uppercase z-10">Forged in Shadow • Tempered in Blood</span>
+                <div className="h-10 md:h-12 shrink-0 bg-white/[0.01] border-t border-white/10 flex items-center justify-center px-8 relative overflow-hidden">
+                    <span className="text-[8px] md:text-[9px] text-gray-700 font-mono tracking-[0.5em] uppercase z-10">Forged in Shadow • Tempered in Blood</span>
                 </div>
             </div>
         </div>
-            
-            <style dangerouslySetInnerHTML={{ __html: `
-                .vertical-text {
-                    writing-mode: vertical-rl;
-                    text-orientation: upright;
-                }
-            `}} />
+
+        <style dangerouslySetInnerHTML={{ __html: `
+            .vertical-text {
+                writing-mode: vertical-rl;
+                text-orientation: upright;
+            }
+            .custom-scrollbar::-webkit-scrollbar {
+                width: 4px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: rgba(0, 0, 0, 0.2);
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: rgba(212, 175, 55, 0.2);
+                border-radius: 2px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: rgba(212, 175, 55, 0.4);
+            }
+        `}} />
         </div>
     );
 };

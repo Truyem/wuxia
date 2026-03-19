@@ -102,10 +102,11 @@ const TopBar: React.FC<Props> = ({ Environment, timeFormat, festivals = [] }) =>
         ? Environment.festival.name.trim()
         : (currentFestival ? currentFestival.name : 'Ngày bình thường');
     const weatherDisplay = useMemo(() => {
-        const rawWeather = Environment?.weather;
-        if (rawWeather && typeof rawWeather === 'object') {
-            const current = typeof rawWeather?.type === 'string' ? rawWeather.type.trim() : '';
-            return current || 'Không rõ';
+        const weather = Environment?.weather;
+        if (weather && typeof weather === 'object') {
+            const type = typeof weather?.type === 'string' ? weather.type.trim() : '';
+            const title = typeof (weather as any)?.title === 'string' ? (weather as any).title.trim() : '';
+            return type || title || 'Không rõ';
         }
         return 'Không rõ';
     }, [Environment]);

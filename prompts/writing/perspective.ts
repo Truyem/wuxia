@@ -9,8 +9,8 @@ export const WritingPerspectiveFirst: PromptStructure = {
     content: `
 【Nguyên tắc tự sự: Ngôi thứ nhất】
 - Sử dụng đại từ nhân xưng phù hợp với tính cách và bối cảnh của nhân vật chính (Tôi, Ta, Lão phu, Mỗ...).
-- Toàn bộ nội dung <Main Body> phải được diễn đạt thông qua lăng kính chủ quan của nhân vật chính.
-- Chỉ mô tả những gì nhân vật chính "nghe, thấy, cảm nhận hoặc suy nghĩ". Không được sử dụng "Góc nhìn thượng đế".
+- Toàn bộ nội dung Main Body phải được diễn đạt thông qua lăng kính chủ quan của nhân vật chính.
+- Chỉ mô tả những gì nhân vật chính "nghe, thấy, cảm nhận hoặc suy nghĩ". KHÔNG sử dụng "Góc nhìn thượng đế".
 - Biện pháp tu từ: Tập trung vào dòng suy nghĩ nội tâm (Monologue) và cảm xúc trực tiếp.
 `,
     type: 'writing',

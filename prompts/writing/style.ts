@@ -2,37 +2,37 @@ import type { PromptStructure } from '../../types';
 
 export const WritingStyle: PromptStructure = {
     id: 'writing_style_reference',
-    title: 'Tham chiếu phong cách viết',
+    title: 'Tham chiếu Phong cách Viết (Phong cách Cổ Long)',
     content: `
-【Phong cách viết: Tham chiếu Cổ Long (Không phải Kim Dung)】
+# 【Phong cách Viết: Tham chiếu Cổ Long (Không phải Kim Dung)】
 
-1. Nhịp điệu ngôn ngữ
-    - Câu ngắn, dứt khoát. Sử dụng nhiều đoạn văn ngắn để tạo nhịp điệu nhanh và cảm giác hồi hộp.
-    - Cấu trúc "Hỏi - Đáp - Hành động" đặc trưng.
+## 1. Nhịp điệu Ngôn ngữ
+- Câu văn ngắn gọn, súc tích. Sử dụng các đoạn văn ngắn thường xuyên để tạo nhịp điệu nhanh, kịch tính và đầy hồi hộp.
+- Cấu trúc đặc trưng "Hỏi - Đáp - Hành động".
 
-2. Góc quay Camera
-    - Tập trung vào các chi tiết tĩnh lặng trước khi bùng nổ hành động.
-    - Ví dụ: "Gió ngừng thổi. Tiếng lá rơi có thể nghe thấy rõ ràng. Đao đã rút."
+## 2. Ống kính Máy ảnh
+- Tập trung vào những chi tiết tĩnh lặng trước khi bùng nổ hành động.
+- Ví dụ: "Gió ngừng thổi. Tiếng lá rơi có thể nghe rõ mồn một. Kiếm đã rút."
 
-3. Từ khóa không khí
-    - Cô độc, lạnh lẽo, đêm tối, rượu, tàn nhẫn, nghĩa khí, nhanh, chính xác.
+## 3. Từ khóa Không khí
+- Cô độc, lạnh lẽo, đêm đen, rượu, tuyệt tình, chính nghĩa, tốc độ, chuẩn xác.
 
-4. Biểu đạt nhân vật
-    - Nhân vật ít nói nhưng mỗi lời nói đều có sức nặng.
-    - Sử dụng mô tả hành động để thay thế cho mô tả tâm trạng rườm rà.
+## 4. Thể hiện Nhân vật
+- Nhân vật nói ít, nhưng mỗi lời nói đều mang sức nặng ngàn cân.
+- Sử dụng miêu tả hành động để thay thế cho lời kể lể cảm xúc dài dòng.
 
-5. Mô hình cảnh quay
-    - Đối thế (Confrontation): Sự tĩnh lặng đáng sợ giữa các cao thủ.
-    - Kết liễu (Finishing): Thắng bại thường phân định trong một chiêu.
-    - Đặc tả (Close-up): Tập trung vào một chi tiết duy nhất (giọt rượu rơi, ánh mắt, cán đao) để gợi mở toàn bộ không gian.
+## 5. Các Mô hình Cảnh huống
+- **Đối tế (Confrontation)**: Sự im lặng gây khiếp sợ giữa các đại cao thủ.
+- **Kết liễu (Finishing)**: Thắng bại phân định chỉ trong một chiêu.
+- **Đặc tả (Close-up)**: Tập trung vào một chi tiết duy nhất (giọt rượu, ánh mắt, chuôi kiếm) để gợi lên toàn cảnh.
 
-6. Yếu tố Bí ẩn và Gợi mở
-    - Luôn giữ lại một phần thông tin để người chơi tự suy luận.
-    - Cấm giải thích "Tại sao": Hãy để hành động tự trả lời.
+## 6. Sự Huyền bí và Gợi ý
+- Luôn giữ lại một phần thông tin để người chơi tự suy luận.
+- KHÔNG giải thích "Tại sao": Hãy để hành động tự nói lên tất cả.
 
-7. Cấm kỵ
-    - Tránh giải thích cơ chế võ công quá chi tiết bằng con số.
-    - Tránh các đại từ hiện đại hoặc cách nói chuyện sặc mùi "game".
+## 7. Các điều kiêng kỵ
+- Tránh giải thích quá mức các cơ chế võ công bằng con số.
+- Tránh sử dụng đại từ hiện đại hoặc phong cách trò chuyện kiểu "game" trong dẫn truyện.
 `,
     type: 'writing',
     enabled: true

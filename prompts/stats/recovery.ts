@@ -1,33 +1,32 @@
-import type { PromptStructure } from '../../types';
+import { PromptStructure } from '../../types';
 
 export const StatRecovery: PromptStructure = {
     id: 'stat_recovery',
-    title: 'Quy tắc hồi phục chỉ số',
-    type: 'system',
-    enabled: true,
-    role: 'system',
+    title: 'Giao thức Hồi phục và Trị thương',
     content: `
-【Quy tắc hóa giải và hồi phục (Khớp chính xác với gameState.Role của <Định nghĩa cấu trúc dữ liệu>)】
+<rest_recovery_protocol>
+# 【Quy tắc Hồi phục Thuộc tính và Vết thương】
 
-1. Các đường dẫn hồi phục (Recovery Paths)
-    - Nghỉ ngơi (Rest): Hồi phục Mana/Stamina cơ bản, hiệu quả phụ thuộc vào Chất lượng môi trường (Environment Quality).
-    - Trị thương (Healing): Sử dụng dược phẩm hoặc kỹ năng y thuật để xóa bỏ Trạng thái tiêu cực (Negative States) và hồi phục HP.
-    - Thiền định (Meditation): Tăng tốc hồi phục Mana, có thể kích hoạt các sự kiện ngộ đạo (Epiphany).
+## 1. Lối thoát Hồi phục (Recovery Paths)
+- **Nghỉ ngơi/Ngủ**: Hồi phục \`spiritCurrent\`, \`hungerCurrent\`, \`thirstCurrent\`.
+- **Dược phẩm**: Hồi phục tức thì \`currentHp\` hoặc xóa bỏ trạng thái \`status\` tiêu cực.
+- **Vận công**: Sử dụng nội lực để đẩy nhanh quá trình hồi phục kinh mạch.
 
-2. Mối liên kết với Giá trị sinh tồn (Survival Linkage)
-    - Đói bụng (Hunger) > 80: Tốc độ hồi phục Stamina/HP giảm 50%.
-    - Cực hạn (Sanity) < 20: Không thể vào trạng thái nghỉ ngơi hiệu quả, dễ gặp ác mộng hoặc tẩu hỏa nhập ma.
+## 2. Liên kết Sinh tồn
+- Nếu \`hungerCurrent\` hoặc \`thirstCurrent\` bằng 0, nhân vật không thể hồi phục tự nhiên và sẽ mất HP dần theo thời gian.
+- Môi trường (Thời tiết lạnh/nóng) ảnh hưởng đến tốc độ tiêu hao và hồi phục.
 
-3. Tác động của môi trường (Environmental Impact)
-    - Thời tiết khắc nghiệt (Bão tuyết/Nắng gắt): Tăng tiêu hao thể lực khi di chuyển, làm gián đoạn quá trình hồi phục tự nhiên.
-    - Linh khí dồi dào (Spirit-rich): Tăng 200% tốc độ hồi phục Mana và hiệu quả luyện công.
+## 3. Hồi phục Chấn thương
+- Chấn thương nặng (\`Heavy\`) cần thời gian nghỉ ngơi dài ngày và thuốc đặc trị để chuyển về nhẹ (\`Light\`) hoặc khỏe mạnh.
+- Phải cập nhật \`status\` của bộ phận cơ thể tương ứng khi được điều trị.
 
-4. Hồi phục thương thế (Injury Recovery)
-    - Vết thương nhẹ (Minor): Tự hồi phục sau 3 hiệp nếu không tham chiến.
-    - Trọng thương (Crippled/Severe): Cần can thiệp y tế/linh dược, giảm 50% chỉ số chiến đấu cho đến khi hồi phục.
+## 4. Ví dụ Lệnh (Hợp lệ)
+- \`{"action": "ADD", "key": "gameState.Character.spiritCurrent", "value": 20}\`
+- \`{"action": "SET", "key": "gameState.Character.chest.status", "value": "Khỏe mạnh"}\`
+- \`{"action": "ADD", "key": "gameState.Character.hungerCurrent", "value": 30}\`
 
-5. Thực thi lệnh (Command Implementation)
-    - Luôn sử dụng tavern_commands.update_role_stats để cập nhật giá trị sau khi hồi phục.
-    - Ghi lại nhật ký hồi phục: [Kênh hồi phục] + [Giá trị thay đổi] + [Trạng thái hiện tại].
-`
+</rest_recovery_protocol>
+`,
+    type: 'num',
+    enabled: true
 };

@@ -69,7 +69,7 @@ const MobileTask: React.FC<Props> = ({ tasks, onClose }) => {
 
                 <div className="border-b border-gray-800/60 px-3 py-2 overflow-x-auto no-scrollbar">
                     <div className="flex gap-2">
-                        {(['Tất cả', 'Chính tuyến', 'Nhánh', 'Môn phái', 'Kỳ ngộ'] as const).map(f => (
+                        {(['Tất cả', 'Chính tuyến', 'Nhánh', 'Môn phái', 'Kỳ ngộ', 'Treo thưởng', 'Tin đồn'] as const).map(f => (
                             <button
                                 key={f}
                                 onClick={() => { setFilter(f as any); setSelectedIdx(0); }}

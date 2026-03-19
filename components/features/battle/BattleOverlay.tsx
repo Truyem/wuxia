@@ -297,7 +297,7 @@ const BattleOverlay: React.FC<Props> = ({ state, onAction, onClose }) => {
                 </div>
             </div>
 
-            <style jsx>{`
+            <style>{`
                 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
                 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
                 .custom-scrollbar::-webkit-scrollbar-thumb { background: #292524; border-radius: 10px; }

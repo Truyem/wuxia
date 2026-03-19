@@ -56,10 +56,14 @@ export interface ChatHistory {
     gameTime?: string; // Added gameTime
 }
 
+export type TalentRank = 'Huyền thoại' | 'Sử Thi' | 'Hiếm' | 'Thường' | 'Cực Hạn' | 'Khắc nghiệt' | 'Khó';
+
 export interface Talent {
     name: string;
     description: string;
     effect: string; // Tác động cụ thể hoặc mô tả logic
+    rank: TalentRank;
+    cost: number; // 5, 4, 3, 2 for buffs; -3, -2, -1 for debuffs
 }
 
 export interface Background {

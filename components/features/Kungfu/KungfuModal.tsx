@@ -35,6 +35,23 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
         safeSkills.length > 0 ? safeSkills[0]['ID'] : null
     );
     const [searchTerm, setSearchTerm] = useState('');
+    const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
+    const [viewMode, setViewMode] = useState<'list' | 'detail'>(isMobile ? 'list' : 'detail');
+
+    React.useEffect(() => {
+        const handleResize = () => {
+            const mobile = window.innerWidth < 768;
+            setIsMobile(mobile);
+            if (!mobile) setViewMode('detail');
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const handleSelectSkill = (id: string) => {
+        setSelectedId(id);
+        if (isMobile) setViewMode('detail');
+    };
 
     const filteredSkills = useMemo(() => {
         return safeSkills.filter(skill => 
@@ -130,9 +147,9 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
     );
 
     return (
-        <div className="fixed inset-0 bg-black/95 backdrop-blur-3xl z-[220] flex items-center justify-center p-4 md:p-8 font-sans">
+        <div className={`fixed inset-0 bg-black/95 backdrop-blur-3xl z-[220] flex items-center justify-center ${isMobile ? 'p-0' : 'p-4 md:p-8'} font-sans`}>
             {/* Main Modal Container */}
-            <div className="glass-panel-square border border-white/10 w-full max-w-7xl h-full max-h-[850px] flex flex-col shadow-2xl rounded-none overflow-hidden relative text-stone-300">
+            <div className={`glass-panel-square border border-white/10 w-full ${isMobile ? 'h-full' : 'max-w-7xl h-full max-h-[850px]'} flex flex-col shadow-2xl rounded-none overflow-hidden relative text-stone-300`}>
                 {/* Wuxia Decorative Corners */}
                 <div className="wuxia-corner wuxia-corner-tl"></div>
                 <div className="wuxia-corner wuxia-corner-tr"></div>
@@ -150,161 +167,181 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                 </div>
 
                 {/* Header */}
-                <header className="h-20 shrink-0 border-b border-stone-800 bg-stone-900/50 backdrop-blur-md flex items-center justify-between px-8 z-10 relative">
-                    <div className="flex items-center gap-6">
-                        <div className="relative">
-                            <div className="w-12 h-12 rounded-none bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-                                <Trophy className="w-6 h-6" />
+                <header className={`${isMobile ? 'h-auto py-4 px-4 flex-col gap-4' : 'h-20 px-8'} shrink-0 border-b border-stone-800 bg-stone-900/50 backdrop-blur-md flex items-center justify-between z-10 relative`}>
+                    <div className={`flex items-center ${isMobile ? 'w-full justify-between' : 'gap-6'}`}>
+                        <div className="flex items-center gap-4">
+                            {!isMobile && (
+                                <div className="relative">
+                                    <div className="w-10 h-10 rounded-none bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                                        <Trophy className="w-5 h-5" />
+                                    </div>
+                                </div>
+                            )}
+                            <div>
+                                <h2 className={`${isMobile ? 'text-lg' : 'text-2xl'} font-black uppercase tracking-[0.2em] text-stone-100 bg-gradient-to-r from-stone-100 to-stone-400 bg-clip-text text-transparent`}>
+                                    Võ Học
+                                </h2>
+                                {!isMobile && (
+                                    <div className="flex items-center gap-2 mt-0.5">
+                                        <div className="h-[1px] w-6 bg-amber-500/50" />
+                                        <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-stone-500">Kỹ năng & Tuyệt kỹ</span>
+                                    </div>
+                                )}
                             </div>
-                            <div className="absolute -top-1 -left-1 w-2 h-2 bg-amber-500 rounded-none shadow-[0_0_8px_rgba(245,158,11,1)]" />
                         </div>
-                        <div>
-                            <h2 className="text-2xl font-black uppercase tracking-[0.3em] text-stone-100 bg-gradient-to-r from-stone-100 to-stone-400 bg-clip-text text-transparent">
-                                Võ Học Tâm Pháp
-                            </h2>
-                            <div className="flex items-center gap-2 mt-0.5">
-                                <div className="h-[1px] w-6 bg-amber-500/50" />
-                                <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-stone-500">Kỹ năng & Tuyệt kỹ</span>
-                            </div>
-                        </div>
+
+                        {isMobile && viewMode === 'detail' && (
+                            <button 
+                                onClick={() => setViewMode('list')}
+                                className="flex items-center gap-2 text-amber-500 text-[10px] font-black uppercase tracking-widest bg-amber-500/10 px-3 py-1.5 border border-amber-500/20"
+                            >
+                                <ChevronRight className="w-4 h-4 rotate-180" />
+                                QUAY LẠI
+                            </button>
+                        )}
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <div className="relative group">
+                    <div className={`flex items-center gap-4 ${isMobile ? 'w-full' : ''}`}>
+                        <div className="relative group flex-1">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500 group-focus-within:text-amber-500 transition-colors" />
                             <input 
                                 type="text"
                                 placeholder="Tìm kiếm công pháp..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="bg-white/5 border border-white/10 rounded-none pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/20 w-64 transition-all"
+                                className={`bg-white/5 border border-white/10 rounded-none pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/20 ${isMobile ? 'w-full' : 'w-64'} transition-all`}
                             />
                         </div>
-                        <button
-                            onClick={onClose}
-                            className="p-2.5 rounded-none bg-white/5 border border-white/10 hover:border-amber-500/50 text-stone-500 hover:text-amber-500 transition-all duration-300 group"
-                        >
-                            <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-                        </button>
+                        {!isMobile && (
+                            <button
+                                onClick={onClose}
+                                className="p-2.5 rounded-none bg-white/5 border border-white/10 hover:border-amber-500/50 text-stone-500 hover:text-amber-500 transition-all duration-300 group"
+                            >
+                                <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+                            </button>
+                        )}
                     </div>
                 </header>
 
                 <div className="flex-1 flex overflow-hidden z-10 relative">
                     {/* Left Panel: Skill List */}
-                    <aside className="w-[380px] border-r border-stone-800 bg-black/20 flex flex-col">
-                        <div className="p-4 border-b border-stone-800/50 bg-stone-900/20">
-                            <h3 className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-500 flex items-center gap-2">
-                                <Activity className="w-3 h-3" />
-                                Danh Sách Công Pháp ({filteredSkills.length})
-                            </h3>
-                        </div>
-                        <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-                            {filteredSkills.map(skill => {
-                                const isSelected = selectedId === skill['ID'];
-                                const style = getQualityStyles(skill['Quality'] || 'Phàm phẩm' as KungfuQuality);
-                                
-                                return (
-                                    <button
-                                        key={skill['ID']}
-                                        onClick={() => setSelectedId(skill['ID'])}
-                                        className={`w-full text-left rounded-none border p-4 transition-all duration-300 relative group overflow-hidden ${
-                                            isSelected 
-                                                ? `${style.border} ${style.bg} shadow-lg ring-1 ring-inset ${style.accent}/20` 
-                                                : "border-white/5 bg-white/[0.02] hover:border-white/10 hover:bg-white/[0.05]"
-                                        }`}
-                                    >
-                                        <div className="flex justify-between items-start mb-2 relative z-10">
-                                            <span className={`font-bold tracking-wide transition-colors ${isSelected ? 'text-stone-100' : 'text-stone-400 group-hover:text-stone-300'}`}>
-                                                {skill['Name']}
-                                            </span>
-                                            <span className={`text-[9px] px-2 py-0.5 rounded-none uppercase font-black tracking-tighter border ${style.text} ${style.border}`}>
-                                                {skill['Quality']}
-                                            </span>
-                                        </div>
-
-                                        <div className="flex items-center gap-4 text-[10px] text-stone-500 font-bold mb-3 relative z-10">
-                                            <div className="flex items-center gap-1.5">
-                                                {getTypeIcon(skill['Type'])}
-                                                <span className="uppercase tracking-widest">{skill['Type']}</span>
+                    {(!isMobile || viewMode === 'list') && (
+                        <aside className={`${isMobile ? 'w-full' : 'w-[380px] border-r'} border-stone-800 bg-black/20 flex flex-col`}>
+                            <div className="p-4 border-b border-stone-800/50 bg-stone-900/20">
+                                <h3 className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-500 flex items-center gap-2">
+                                    <Activity className="w-3 h-3" />
+                                    Danh Sách ({filteredSkills.length})
+                                </h3>
+                            </div>
+                            <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+                                {filteredSkills.map(skill => {
+                                    const isSelected = selectedId === skill['ID'];
+                                    const style = getQualityStyles(skill['Quality'] || 'Phàm phẩm' as KungfuQuality);
+                                    
+                                    return (
+                                        <button
+                                            key={skill['ID']}
+                                            onClick={() => handleSelectSkill(skill['ID'])}
+                                            className={`w-full text-left rounded-none border p-4 transition-all duration-300 relative group overflow-hidden ${
+                                                isSelected 
+                                                    ? `${style.border} ${style.bg} shadow-lg ring-1 ring-inset ${style.accent}/20` 
+                                                    : "border-white/5 bg-white/[0.02] hover:border-white/10 hover:bg-white/[0.05]"
+                                            }`}
+                                        >
+                                            <div className="flex justify-between items-start mb-2 relative z-10">
+                                                <span className={`font-bold tracking-wide transition-colors ${isSelected ? 'text-stone-100' : 'text-stone-400 group-hover:text-stone-300'}`}>
+                                                    {skill['Name']}
+                                                </span>
+                                                <span className={`text-[9px] px-2 py-0.5 rounded-none uppercase font-black tracking-tighter border ${style.text} ${style.border}`}>
+                                                    {skill['Quality']}
+                                                </span>
                                             </div>
-                                            <div className="flex items-center gap-1.5 font-mono">
-                                                <ChevronRight className="w-3 h-3 text-amber-500" />
-                                                <span>TẦNG {skill['Current level/tier']}</span>
-                                            </div>
-                                        </div>
 
-                                        {/* Progress Bar */}
-                                        <div className="space-y-1 relative z-10">
-                                            <div className="flex justify-between text-[8px] text-stone-600 font-black uppercase tracking-widest">
-                                                <span>TIẾN ĐỘ</span>
-                                                <span>{Math.round((skill['Current proficiency'] / skill['Level-up experience']) * 100)}%</span>
+                                            <div className="flex items-center gap-4 text-[10px] text-stone-500 font-bold mb-3 relative z-10">
+                                                <div className="flex items-center gap-1.5 text-[8px]">
+                                                    {getTypeIcon(skill['Type'])}
+                                                    <span className="uppercase tracking-widest">{skill['Type']}</span>
+                                                </div>
+                                                <div className="flex items-center gap-1.5 font-mono text-[8px]">
+                                                    <ChevronRight className="w-3 h-3 text-amber-500" />
+                                                    <span>TẦNG {skill['Current level/tier']}</span>
+                                                </div>
                                             </div>
-                                            <div className="h-1 bg-black/40 rounded-none overflow-hidden border border-stone-800">
-                                                <div 
-                                                    className={`h-full transition-all duration-700 ease-out ${isSelected ? style.accent : 'bg-stone-700'}`}
-                                                    style={{ width: `${Math.min((skill['Current proficiency'] / skill['Level-up experience']) * 100, 100)}%` }}
-                                                />
+
+                                            {/* Progress Bar */}
+                                            <div className="space-y-1 relative z-10">
+                                                <div className="flex justify-between text-[8px] text-stone-600 font-black uppercase tracking-widest">
+                                                    <span>TIẾN ĐỘ</span>
+                                                    <span>{Math.round((skill['Current proficiency'] / skill['Level-up experience']) * 100)}%</span>
+                                                </div>
+                                                <div className="h-1 bg-black/40 rounded-none overflow-hidden border border-stone-800">
+                                                    <div 
+                                                        className={`h-full transition-all duration-700 ease-out ${isSelected ? style.accent : 'bg-stone-700'}`}
+                                                        style={{ width: `${Math.min((skill['Current proficiency'] / skill['Level-up experience']) * 100, 100)}%` }}
+                                                    />
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        {/* Selected Indicator Glow */}
-                                        {isSelected && (
-                                            <div className={`absolute top-0 right-0 w-24 h-24 blur-3xl opacity-20 pointer-events-none -translate-y-1/2 translate-x-1/2 ${style.accent}`} />
-                                        )}
-                                    </button>
-                                );
-                            })}
+                                            {/* Selected Indicator Glow */}
+                                            {isSelected && (
+                                                <div className={`absolute top-0 right-0 w-24 h-24 blur-3xl opacity-20 pointer-events-none -translate-y-1/2 translate-x-1/2 ${style.accent}`} />
+                                            )}
+                                        </button>
+                                    );
+                                })}
 
-                            {filteredSkills.length === 0 && (
-                                <div className="flex flex-col items-center justify-center py-12 text-stone-600 opacity-50">
-                                    <ZapOff className="w-12 h-12 mb-3 stroke-1" />
-                                    <p className="text-xs uppercase tracking-[0.2em] font-bold">Không tìm thấy công pháp</p>
-                                </div>
-                            )}
-                        </div>
-                    </aside>
+                                {filteredSkills.length === 0 && (
+                                    <div className="flex flex-col items-center justify-center py-12 text-stone-600 opacity-50">
+                                        <ZapOff className="w-12 h-12 mb-3 stroke-1" />
+                                        <p className="text-xs uppercase tracking-[0.2em] font-bold">Không tìm thấy</p>
+                                    </div>
+                                )}
+                            </div>
+                        </aside>
+                    )}
 
                     {/* Right Panel: Detail View */}
-                    <main className="flex-1 flex flex-col bg-stone-950/20 overflow-y-auto custom-scrollbar relative">
-                        {currentSkill ? (
-                            <div className="p-8 space-y-8">
-                                {/* Header Section */}
-                                <section className="relative">
-                                    <div className="flex justify-between items-start gap-8">
-                                        <div className="space-y-4 flex-1">
-                                            <div className="flex items-center gap-4">
-                                                <h1 className="text-4xl font-black uppercase tracking-tighter text-stone-100">
-                                                    {currentSkill['Name']}
-                                                </h1>
-                                                <div className={`px-3 py-1 rounded-none text-[10px] font-black uppercase tracking-[0.2em] border ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).text} ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).border} ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).bg}`}>
-                                                    {currentSkill['Quality']}
+                    {(!isMobile || viewMode === 'detail') && (
+                        <main className="flex-1 flex flex-col bg-stone-950/20 overflow-y-auto custom-scrollbar relative">
+                            {currentSkill ? (
+                                <div className={`${isMobile ? 'p-4' : 'p-8'} space-y-8 pb-20`}>
+                                    {/* Header Section */}
+                                    <section className="relative">
+                                        <div className="flex justify-between items-start gap-8">
+                                            <div className="space-y-4 flex-1">
+                                                <div className="flex flex-col md:flex-row md:items-center gap-3">
+                                                    <h1 className={`${isMobile ? 'text-2xl' : 'text-4xl'} font-black uppercase tracking-tighter text-stone-100`}>
+                                                        {currentSkill['Name']}
+                                                    </h1>
+                                                    <div className={`w-fit px-3 py-1 rounded-none text-[10px] font-black uppercase tracking-[0.2em] border ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).text} ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).border} ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).bg}`}>
+                                                        {currentSkill['Quality']}
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div className="flex flex-wrap gap-4">
-                                                <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded text-stone-400 text-[10px] font-bold uppercase tracking-[0.2em]">
-                                                    {getTypeIcon(currentSkill['Type'])}
-                                                    <span>{currentSkill['Type']}</span>
+                                                <div className="flex flex-wrap gap-2 md:gap-4">
+                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded text-stone-400 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em]">
+                                                        {getTypeIcon(currentSkill['Type'])}
+                                                        <span>{currentSkill['Type']}</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded text-stone-100 text-[9px] md:text-[10px] font-mono font-bold tracking-[0.1em]">
+                                                        <span className="text-amber-500 text-[8px]">LV.</span>
+                                                        {currentSkill['Current level/tier']}
+                                                    </div>
+                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded text-stone-400 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em]">
+                                                        <BookOpen className="w-3 h-3 text-stone-500" />
+                                                        <span>Nguồn: {currentSkill['Source'] || 'Vô Danh'}</span>
+                                                    </div>
                                                 </div>
-                                                <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded text-stone-100 text-[10px] font-mono font-bold tracking-[0.1em]">
-                                                    <span className="text-amber-500 text-[8px]">LV.</span>
-                                                    {currentSkill['Current level/tier']}
-                                                </div>
-                                                <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded text-stone-400 text-[10px] font-bold uppercase tracking-[0.2em]">
-                                                    <BookOpen className="w-3 h-3 text-stone-500" />
-                                                    <span>Nguồn: {currentSkill['Source'] || 'Vô Danh'}</span>
-                                                </div>
-                                            </div>
 
-                                            <div className="relative group">
-                                                <div className="absolute -left-4 top-0 bottom-0 w-[2px] bg-amber-500/30" />
-                                                <p className="text-stone-400 text-sm leading-relaxed font-medium italic pl-4 py-2 border-l border-amber-500/10 bg-amber-500/5 rounded-none">
-                                                    "{currentSkill['Description']}"
-                                                </p>
+                                                <div className="relative group">
+                                                    <div className="absolute -left-2 md:-left-4 top-0 bottom-0 w-[2px] bg-amber-500/30" />
+                                                    <p className="text-stone-400 text-xs md:text-sm leading-relaxed font-medium italic pl-4 py-2 border-l border-amber-500/10 bg-amber-500/5 rounded-none">
+                                                        "{currentSkill['Description']}"
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </section>
+                                    </section>
 
                                 {/* Combat Stats Divider */}
                                 {currentSkill['Type'] !== 'Passive' && currentSkill['Type'] !== 'Inner Kungfu' && (
@@ -519,31 +556,50 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                             </div>
                         )}
                     </main>
+                )}
                 </div>
 
                 {/* Footer / HUD Info */}
-                <footer className="h-10 shrink-0 border-t border-stone-800 bg-stone-900/80 backdrop-blur-sm flex items-center justify-between px-8 z-10 relative">
+                <footer className={`${isMobile ? 'h-auto py-4 flex-col gap-4' : 'h-10 px-8 flex-row'} shrink-0 border-t border-stone-800 bg-stone-900/80 backdrop-blur-sm flex items-center justify-between z-10 relative px-8`}>
                     <div className="flex items-center gap-6 text-[9px] font-black uppercase tracking-[0.2em] text-stone-500">
+
                         <div className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 rounded-none bg-amber-500" />
-                            <span>Trạng thái tủy luyện: Ổn định</span>
+                            <span>Trạng thái: Ổn định</span>
                         </div>
-                        <div className="h-3 w-[1px] bg-stone-800" />
-                        <div className="flex items-center gap-2">
-                            <Activity className="w-3 h-3 text-blue-500" />
-                            <span>Chân khí vận hành bình thường</span>
+                        {!isMobile && (
+                            <>
+                                <div className="h-3 w-[1px] bg-stone-800" />
+                                <div className="flex items-center gap-2">
+                                    <Activity className="w-3 h-3 text-blue-500" />
+                                    <span>Chân khí bình thường</span>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                    
+                    {!isMobile ? (
+                        <div className="text-[9px] font-mono text-stone-600 flex items-center gap-2">
+                            <span className="text-amber-500/50">WUXIA_OS_V2.0</span>
+                            <span className="opacity-30">|</span>
+                            <span>SESSION_ACTIVE</span>
                         </div>
-                    </div>
-                    <div className="text-[9px] font-mono text-stone-600 flex items-center gap-2">
-                        <span className="text-amber-500/50">WUXIA_OS_V2.0</span>
-                        <span className="opacity-30">|</span>
-                        <span>SESSION_ACTIVE</span>
-                    </div>
+                    ) : (
+                        <div className="w-full pt-2 border-t border-stone-800">
+                            <button 
+                                onClick={onClose}
+                                className="w-full bg-amber-500/10 hover:bg-amber-500 hover:text-black text-amber-500 py-3 text-xs font-black uppercase tracking-[0.3em] border border-amber-500/20 flex items-center justify-center gap-2 transition-all"
+                            >
+                                <X className="w-4 h-4" />
+                                ĐÓNG VÕ HỌC
+                            </button>
+                        </div>
+                    )}
                 </footer>
             </div>
             
             {/* Global Shimmer Animation */}
-            <style jsx global>{`
+            <style>{`
                 .custom-scrollbar::-webkit-scrollbar {
                     width: 4px;
                 }

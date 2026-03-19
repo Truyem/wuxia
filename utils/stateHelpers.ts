@@ -1,5 +1,6 @@
 import { CharacterData, EnvironmentData, NpcStructure, WorldDataStructure, BattleStatus, StorySystemStructure } from '../types';
 import { DetailedSectStructure } from '../models/sect';
+import { standardizeSingleNPC, standardizeSocialList } from '../hooks/useGame/stateTransforms';
 
 export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     // Character / Role
@@ -15,6 +16,7 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     "Bạc": "silver",
     "Đồng": "copper",
     "Đồng tiền": "copper",
+    "Ngân lượng tàng trữ": "money",
     "Phụ trọng": "currentWeight",
     "Cân nặng hiện tại": "currentWeight",
     "Tải trọng hiện tại": "currentWeight",
@@ -69,6 +71,7 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     "Khát nước": "currentThirst",
     "Khát nước hiện tại": "currentThirst",
     "Khát nước tối đa": "maxThirst",
+    "Trạng thái kinh mạch": "playerBuffs",
 
     // Attributes
     "Sức mạnh": "strength",
@@ -79,6 +82,7 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     "con": "constitution",
     "Căn cốt": "rootBone",
     "root": "rootBone",
+    "Thiên bẩm cốt cách": "rootBone",
     "Ngộ tính": "intelligence",
     "int": "intelligence",
     "Phúc duyên": "luck",
@@ -128,6 +132,7 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     "Trạng thái quan hệ": "relationStatus",
     "Quan hệ hiện tại": "relationStatus",
     "Giới thiệu": "description",
+    "Miêu tả": "description",
     "Ký ức": "memories",
     "Ký ức xã hội": "memories",
     "Social memory": "memories",
@@ -143,6 +148,22 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     "Miêu tả dáng người": "bodyDescription",
     "Phong cách ăn mặc": "clothingStyle",
     "Kích thước ngực": "breastSize",
+    "Ảnh": "avatar",
+    "Hình ảnh": "avatar",
+    "Avatar": "avatar",
+    "Portrait": "avatar",
+    "Họa ảnh": "avatar",
+    
+    
+    // Generic Subkeys (for nested AI updates)
+    "hiện tại": "current",
+    "hiện có": "current",
+    "hiện nay": "current",
+    "tối đa": "max",
+    "cực đại": "max",
+    "trần": "max",
+    "đầy": "max",
+    "giới hạn": "max",
     "Màu đầu vú": "nippleColor",
     "Màu âm hộ": "vaginaColor",
     "Màu hậu môn": "anusColor",
@@ -200,13 +221,36 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     "Ngày": "day",
     "Giờ": "hour",
     "Mùa": "season",
-    "Bản đồ": "mediumLocation",
+    "Bản đồ": "maps",
+    "Danh sách bản đồ": "maps",
     "Địa điểm": "mediumLocation",
+    "Địa điểm lớn": "majorLocation",
+    "Địa điểm trung": "mediumLocation",
+    "Địa điểm nhỏ": "minorLocation",
+    "Địa điểm cụ thể": "specificLocation",
+    "Thuộc về": "affiliation",
     "Môi trường": "env",
-    "Biến môi trường": "environmentVariables",
+    "Biến môi trường": "envVariables",
     "Thế giới": "world",
     "Sự kiện": "event",
     "Sự kiện hiện tại": "currentEvent",
+    "Sự kiện đang diễn ra": "ongoingEvents",
+    "Sự kiện đã kết thúc": "settledEvents",
+    "Lịch sử thế giới": "worldHistory",
+    "Giang hồ sử sách": "worldHistory",
+    "Kiến trúc nội khu": "internalBuildings",
+    "Kiến trúc nội bộ": "internalBuildings",
+    "Danh sách kiến trúc": "internalBuildings",
+    "Kiến trúc": "internalBuildings",
+    "Tọa độ": "coordinate",
+    "Thời tiết": "weather",
+    "Tiêu đề": "title",
+    "Kiểu thời tiết": "type",
+    "Loại thời tiết": "type",
+    "Cường độ": "intensity",
+    "Mô tả thời tiết": "description",
+    "Ngày kết thúc": "endDate",
+    "Ngày chơi": "gameDays",
 
     // Battle
     "Chiến đấu": "battle",
@@ -220,6 +264,13 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     // Story
     "Cốt truyện": "story",
     "Biến cốt truyện": "storyVariables",
+    "Chương hiện tại": "currentChapter",
+    "Số thứ tự": "index",
+    "Câu chuyện nền": "backgroundStory",
+    "Mâu thuẫn chính": "mainConflict",
+    "Dùng sách giang hồ": "historicalArchives",
+    "Lời kết": "summary",
+    "Có đang chiến đấu không": "isInBattle",
 
     // Story chapter fields
     "Current chapter": "currentChapter",
@@ -230,6 +281,16 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     "Long-term story planning": "longTermPlanning",
     "Pending events": "pendingEvents",
     "Story variables": "storyVariables",
+    "Nhiệm vụ thế giới": "worldQuestList",
+    "World quests": "worldQuestList",
+    "Hứa hẹn": "promiseList",
+    "Promises": "promiseList",
+    "Truyện": "story",
+    "Truyện hiện tại": "currentChapter",
+    "Xem trước chương tới": "nextChapterPreview",
+    "Lịch sử giang hồ": "historicalArchives",
+    "Dấu mốc lịch sử": "historicalArchives",
+    "Ghi chép giang hồ": "historicalArchives",
 
     // Story chapter sub-fields
     "Title": "title",
@@ -258,11 +319,9 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     "Chi tiết": "",
     "Môn phái": "sect",
     "Nhiệm vụ": "tasks",
-    "Hứa hẹn": "promises",
     "Đội nhóm": "",
     "Nhân vật": "character",
     "Thời gian sự kiện": "time",
-    "Tiêu đề": "title",
     "Người giao": "issuer",
     "Phát hành bởi": "issuer",
     "Cảnh giới yêu cầu": "recommendedRealm",
@@ -281,9 +340,22 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     "Đối tượng": "target",
     "Tính chất": "nature",
     "Nội dung hẹn ước": "oathContent",
-    "Nội dung": "oathContent",
+    "Nội dung": "content", // Changed to generic content
     "Hậu quả giữ lời": "fulfillmentConsequence",
     "Hậu quả thất hứa": "failureConsequence",
+
+    // NPC status & Action
+    "Vị trí hiện tại": "currentLocation",
+    "Mô tả hành động": "currentActionDescription",
+    "Hành động hiện tại": "currentActionDescription",
+    "Chi tiết hành động": "currentActionDescription",
+    "Hành động": "currentActionDescription",
+    "Kết quả": "eventResult",
+    "Kết quả sự kiện": "eventResult",
+    "Diễn biến": "eventResult",
+    "Thời gian bắt đầu": "startTime",
+    "Thời gian dự kiến kết thúc": "estimatedEndTime",
+    "Thời gian kết thúc": "endDate", // consistent with others
 };
 
 export const translateObjectKeys = (obj: any): any => {
@@ -342,7 +414,7 @@ export const applyStateCommand = (
     rootPlayerSect: DetailedSectStructure,
     key: string, 
     value: any, 
-    action: 'set' | 'add' | 'push' | 'delete' | 'sub'
+    action: 'SET' | 'ADD' | 'PUSH' | 'DEL' | 'SUB' | 'set' | 'add' | 'push' | 'delete' | 'sub'
 ): { char: CharacterData, env: EnvironmentData, social: NpcStructure[], world: WorldDataStructure, battle: BattleStatus, story: StorySystemStructure, taskList: any[], appointmentList: any[], playerSect: DetailedSectStructure } => {
     let newChar = JSON.parse(JSON.stringify(rootCharacter));
     let newEnv = JSON.parse(JSON.stringify(rootEnv));
@@ -353,6 +425,9 @@ export const applyStateCommand = (
     let newTaskList: any[] = JSON.parse(JSON.stringify(rootTaskList));
     let newAppointmentList: any[] = JSON.parse(JSON.stringify(rootAppointmentList));
     let newPlayerSect: DetailedSectStructure = JSON.parse(JSON.stringify(rootPlayerSect));
+
+    // Standardize action
+    const normalizedAction = (action.toUpperCase() === 'DEL' || action.toUpperCase() === 'DELETE') ? 'delete' : action.toLowerCase();
 
     const mergeStoryObjects = (baseStory: any, incoming: any): any => {
         if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) return JSON.parse(JSON.stringify(baseStory));
@@ -412,114 +487,123 @@ export const applyStateCommand = (
 
     if (!key || typeof key !== 'string') return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
 
-    if (key.startsWith("gameState.Role") || key.startsWith("gameState.Nhân vật") || key.startsWith("gameState.character") || key.startsWith("gameState.Võ công") || key.startsWith("gameState.Túi đồ") || key.startsWith("gameState.Trang bị") || key.startsWith("gameState.Hành trang") || key.startsWith("gameState.itemList") || key.startsWith("gameState.equipment") || key.startsWith("gameState.kungfuList")) {
+    if (key.startsWith("gameState.Character") || key.startsWith("gameState.Kungfu") || key.startsWith("gameState.Inventory") || key.startsWith("gameState.Equipment")) {
         targetObj = newChar;
-        // Extract bracket index from prefix segment if present (e.g. "gameState.Túi đồ[0].Tên")
-        const charPrefixMatch = key.match(/^gameState\.(Role|Nhân vật|character|Võ công|Túi đồ|Trang bị|Hành trang|itemList|equipment|kungfuList)(\[\d+\])?\.?(.*)/);
+        const charPrefixMatch = key.match(/^gameState\.(Character|Kungfu|Inventory|Equipment)(\[\d+\])?\.?(.*)/);
         const charBracket = charPrefixMatch?.[2] || '';
         path = charPrefixMatch?.[3] || '';
-        if (key.startsWith("gameState.Võ công") || key.startsWith("gameState.kungfuList")) path = "kungfuList" + charBracket + (path ? "." + path : "");
-        else if (key.startsWith("gameState.Túi đồ") || key.startsWith("gameState.Hành trang") || key.startsWith("gameState.itemList")) path = "itemList" + charBracket + (path ? "." + path : "");
-        else if (key.startsWith("gameState.Trang bị") || key.startsWith("gameState.equipment")) path = "equipment" + (path ? "." + path : "");
         
-        if (key === "gameState.Role" || key === "gameState.Nhân vật" || key === "gameState.character") {
-            if (action === 'set') {
+        if (key.startsWith("gameState.Kungfu")) path = "kungfuList" + charBracket + (path ? "." + path : "");
+        else if (key.startsWith("gameState.Inventory")) path = "itemList" + charBracket + (path ? "." + path : "");
+        else if (key.startsWith("gameState.Equipment")) path = "equipment" + (path ? "." + path : "");
+        
+        if (key === "gameState.Character") {
+            if (normalizedAction === 'set') {
                 newChar = translateObjectKeys(value);
                 return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
             }
         }
 
-    } else if (key.startsWith("gameState.Environment") || key.startsWith("gameState.environment") || key.startsWith("gameState.Môi trường") || key.startsWith("gameState.Bản đồ")) {
+    } else if (key.startsWith("gameState.Environment")) {
         targetObj = newEnv;
-        path = key.replace(/^gameState\.(Environment|environment|Môi trường)\.?/, "");
-        if (key.startsWith("gameState.Bản đồ")) {
-            const mapSubPath = key.replace(/^gameState\.Bản đồ\.?/, "");
-            path = mapSubPath || "mediumLocation";
-        }
-        if (!path && action === 'set') {
+        path = key.replace(/^gameState\.Environment\.?/, "");
+        if (!path && normalizedAction === 'set') {
             newEnv = translateObjectKeys(value);
             return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
         }
-    } else if (key.startsWith("gameState.Social") || key.startsWith("gameState.social") || key.startsWith("gameState.Xã hội") || key.startsWith("gameState.Đội nhóm") || key.startsWith("gameState.Giao tiếp")) {
-        if (key === "gameState.Social" || key === "gameState.social" || key === "gameState.Xã hội" || key === "gameState.Đội nhóm" || key === "gameState.Giao tiếp") {
-            if (action === 'set') {
-                newSocial = Array.isArray(value) ? translateObjectKeys(value) : [];
+    } else if (key.startsWith("gameState.Map") || (key.startsWith("gameState.World") && key.includes("Map"))) {
+        const isPushOrArray = Array.isArray(value) || normalizedAction === 'push' || normalizedAction === 'add';
+        if (isPushOrArray) {
+            targetObj = newWorld;
+            const subPath = key.replace(/^gameState\.(World\.|)Map\.?/, "");
+            path = subPath ? "maps." + subPath : "maps";
+        } else {
+            targetObj = newEnv;
+            const subPath = key.replace(/^gameState\.(Environment\.|)Map\.?/, "");
+            path = subPath || "mediumLocation";
+        }
+    } else if (key.startsWith("gameState.Social")) {
+        if (key === "gameState.Social") {
+            const translatedValue = translateObjectKeys(value);
+            if (normalizedAction === 'set') {
+                newSocial = standardizeSocialList(translatedValue);
                 return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
             }
-            if (action === 'push') {
-                newSocial.push(translateObjectKeys(value));
+            if (normalizedAction === 'push') {
+                const standardized = standardizeSingleNPC(translatedValue, newSocial.length);
+                newSocial.push(standardized);
                 return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
             }
         }
         targetObj = { Social: newSocial };
-        path = key.replace(/^gameState\.(Social|social|Xã hội|Đội nhóm|Giao tiếp)\.?/, "");
-        if (key.startsWith("gameState.Social") || key.startsWith("gameState.social")) {
-             path = key.replace(/^gameState\./, "");
-        } else {
-             path = key.replace(/^gameState\.(Xã hội|Đội nhóm|Giao tiếp)\.?/, "Social");
-        }
-    } else if (key.startsWith("gameState.World") || key.startsWith("gameState.world") || key.startsWith("gameState.Thế giới")) {
+        path = key.replace(/^gameState\./, "");
+    } else if (key.startsWith("gameState.World")) {
         targetObj = newWorld;
-        path = key.replace(/^gameState\.(World|world|Thế giới)\.?/, "");
-        if (!path && action === 'set') {
+        path = key.replace(/^gameState\.World\.?/, "");
+        if (!path && normalizedAction === 'set') {
             newWorld = translateObjectKeys(value);
+            if (newWorld.mediumLocation && !newWorld.maps) {
+                newWorld.maps = newWorld.mediumLocation;
+                delete newWorld.mediumLocation;
+            }
             return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
         }
-    } else if (key.startsWith("gameState.Combat") || key.startsWith("gameState.battle") || key.startsWith("gameState.Chiến đấu")) {
+    } else if (key.startsWith("gameState.Battle")) {
         targetObj = newBattle;
-        path = key.replace(/^gameState\.(Combat|battle|Chiến đấu)\.?/, "");
-        if (!path && action === 'set') {
+        path = key.replace(/^gameState\.Battle\.?/, "");
+        if (!path && normalizedAction === 'set') {
             newBattle = translateObjectKeys(value);
             return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
         }
-    } else if (key.startsWith("gameState.Story") || key.startsWith("gameState.story") || key.startsWith("gameState.Cốt truyện")) {
+    } else if (key.startsWith("gameState.Story")) {
         targetObj = newStory;
-        path = key.replace(/^gameState\.(Story|story|Cốt truyện)\.?/, "");
-        if (!path && action === 'set') {
-            newStory = mergeStoryObjects(newStory, value);
+        path = key.replace(/^gameState\.Story\.?/, "");
+        if (!path && normalizedAction === 'set') {
+            const translatedValue = translateObjectKeys(value);
+            newStory = mergeStoryObjects(newStory, translatedValue);
             return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
         }
-    } else if (key.startsWith("gameState.Danh sách nhiệm vụ") || key.startsWith("gameState.Nhiệm vụ") || key.startsWith("gameState.taskList")) {
-        const isRootKey = key === "gameState.Danh sách nhiệm vụ" || key === "gameState.Nhiệm vụ" || key === "gameState.taskList";
+    } else if (key.startsWith("gameState.Tasks")) {
+        const isRootKey = key === "gameState.Tasks";
         if (isRootKey) {
-            if (action === 'set') {
+            if (normalizedAction === 'set') {
                 newTaskList = Array.isArray(value) ? translateObjectKeys(value) : newTaskList;
                 return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
             }
-            if (action === 'push') {
+            if (normalizedAction === 'push') {
                 newTaskList.push(translateObjectKeys(value));
                 return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
             }
         }
-        const taskSubPath = key.replace(/^gameState\.(Danh sách nhiệm vụ|Nhiệm vụ|taskList)\.?/, "");
+        const taskSubPath = key.replace(/^gameState\.Tasks\.?/, "");
         targetObj = { taskList: newTaskList };
         path = "taskList" + (taskSubPath ? "." + taskSubPath : "");
-    } else if (key.startsWith("gameState.Danh sách hẹn ước") || key.startsWith("gameState.Hẹn ước") || key.startsWith("gameState.Hứa hẹn") || key.startsWith("gameState.appointmentList")) {
-        const isRootKey = key === "gameState.Danh sách hẹn ước" || key === "gameState.Hẹn ước" || key === "gameState.Hứa hẹn" || key === "gameState.appointmentList";
+    } else if (key.startsWith("gameState.Appointments")) {
+        const isRootKey = key === "gameState.Appointments";
         if (isRootKey) {
-            if (action === 'set') {
+            if (normalizedAction === 'set') {
                 newAppointmentList = Array.isArray(value) ? translateObjectKeys(value) : newAppointmentList;
                 return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
             }
-            if (action === 'push') {
+            if (normalizedAction === 'push') {
                 newAppointmentList.push(translateObjectKeys(value));
                 return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
             }
         }
-        const apptSubPath = key.replace(/^gameState\.(Danh sách hẹn ước|Hẹn ước|Hứa hẹn|appointmentList)\.?/, "");
+        const apptSubPath = key.replace(/^gameState\.Appointments\.?/, "");
         targetObj = { appointmentList: newAppointmentList };
         path = "appointmentList" + (apptSubPath ? "." + apptSubPath : "");
-    } else if (key.startsWith("gameState.Môn phái người chơi") || key.startsWith("gameState.playerSect")) {
-        const isRootKey = key === "gameState.Môn phái người chơi" || key === "gameState.playerSect";
-        if (isRootKey && action === 'set') {
+    } else if (key.startsWith("gameState.PlayerSect")) {
+        const isRootKey = key === "gameState.PlayerSect";
+        if (isRootKey && normalizedAction === 'set') {
             newPlayerSect = typeof value === 'object' && !Array.isArray(value) ? { ...newPlayerSect, ...translateObjectKeys(value) } : newPlayerSect;
             return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
         }
         targetObj = newPlayerSect;
-        path = key.replace(/^gameState\.(Môn phái người chơi|playerSect)\.?/, "");
+        path = key.replace(/^gameState\.PlayerSect\.?/, "");
     }
 
-    if (!targetObj || (!path && action !== 'set')) return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
+    if (!targetObj || (!path && normalizedAction !== 'set')) return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
 
     const parts = path.split('.').filter(p => p !== "").map(p => {
         let partName = p;
@@ -531,7 +615,13 @@ export const applyStateCommand = (
         
         // Translate Vietnamese key if mapped
         if (VIETNAMESE_SUBKEY_MAP[partName] !== undefined) {
-            partName = VIETNAMESE_SUBKEY_MAP[partName];
+            // Context-aware mapping for "Bản đồ"
+            const isWorldContext = key.startsWith("gameState.World");
+            if (partName === "Bản đồ" && isWorldContext) {
+                partName = "maps";
+            } else {
+                partName = VIETNAMESE_SUBKEY_MAP[partName];
+            }
         }
         
         return { name: partName, index };
@@ -542,12 +632,33 @@ export const applyStateCommand = (
     if (parts.length >= 2 && BODY_PARTS.includes(parts[0].name)) {
         const part = parts[0].name;
         const sub = parts[1].name;
-        if (sub === 'CurrentHp' || sub === 'currentHp') {
+        if (sub === 'CurrentHp' || sub === 'currentHp' || sub === 'current') {
             parts.splice(0, 2, { name: part + 'CurrentHp', index: undefined });
-        } else if (sub === 'MaxHp' || sub === 'maxHp') {
+        } else if (sub === 'MaxHp' || sub === 'maxHp' || sub === 'max') {
             parts.splice(0, 2, { name: part + 'MaxHp', index: undefined });
         } else if (sub === 'Status' || sub === 'status') {
             parts.splice(0, 2, { name: part + 'Status', index: undefined });
+        }
+    }
+
+    // Attribute flattening: combine energy/fullness + current/max -> currentEnergy/maxEnergy
+    const SURVIVAL_MAP: Record<string, string> = {
+        'energy': 'Energy',
+        'currentEnergy': 'Energy',
+        'fullness': 'Fullness',
+        'currentFullness': 'Fullness',
+        'thirst': 'Thirst',
+        'currentThirst': 'Thirst',
+        'exp': 'Exp',
+        'currentExp': 'Exp'
+    };
+    if (parts.length >= 2 && SURVIVAL_MAP[parts[0].name]) {
+        const base = SURVIVAL_MAP[parts[0].name];
+        const sub = parts[1].name;
+        if (sub === 'current') {
+            parts.splice(0, 2, { name: 'current' + base, index: undefined });
+        } else if (sub === 'max') {
+            parts.splice(0, 2, { name: 'max' + base, index: undefined });
         }
     }
 
@@ -584,17 +695,17 @@ export const applyStateCommand = (
 
     const effectiveKey = (finalObj === newChar && finalKey === 'weight') ? 'currentWeight' : finalKey;
 
-    if (action === 'set') {
+    if (normalizedAction === 'set') {
         const translatedValue = translateObjectKeys(value);
         if (lastPart.index !== undefined) finalObj[lastPart.index] = translatedValue;
         else finalObj[effectiveKey] = translatedValue;
-    } else if (action === 'add') {
+    } else if (normalizedAction === 'add') {
         if (lastPart.index !== undefined) finalObj[lastPart.index] = (finalObj[lastPart.index] || 0) + Number(value);
         else finalObj[effectiveKey] = (finalObj[effectiveKey] || 0) + Number(value);
-    } else if (action === 'sub') {
+    } else if (normalizedAction === 'sub') {
          if (lastPart.index !== undefined) finalObj[lastPart.index] = (finalObj[lastPart.index] || 0) - Number(value);
          else finalObj[effectiveKey] = (finalObj[effectiveKey] || 0) - Number(value);
-    } else if (action === 'push') {
+    } else if (normalizedAction === 'push') {
         let arrayToPush = (lastPart.index !== undefined) ? finalObj[lastPart.index] : finalObj[effectiveKey];
         if (!Array.isArray(arrayToPush)) {
             arrayToPush = [];
@@ -603,12 +714,12 @@ export const applyStateCommand = (
         }
         
         const translatedValue = translateObjectKeys(value);
-        if ((key.endsWith('.memories') || key.endsWith('.Ký ức') || finalKey === 'memories') && typeof translatedValue === 'object' && !translatedValue.time) {
+        if ((key.endsWith('.memories') || finalKey === 'memories') && typeof translatedValue === 'object' && !translatedValue.time) {
              translatedValue.time = newEnv.time || `${newEnv.year || ''}:${String(newEnv.month || 0).padStart(2,'0')}:${String(newEnv.day || 0).padStart(2,'0')}:${String(newEnv.hour || 0).padStart(2,'0')}:00`; 
         }
         
         arrayToPush.push(translatedValue);
-    } else if (action === 'delete') {
+    } else if (normalizedAction === 'delete') {
         if (lastPart.index !== undefined) {
             if (Array.isArray(finalObj) && lastPart.index >= 0 && lastPart.index < finalObj.length) {
                 finalObj.splice(lastPart.index, 1);

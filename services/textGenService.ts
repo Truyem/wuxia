@@ -46,8 +46,8 @@ export class TextGenService {
         },
         body: JSON.stringify({
           messages: options.messages,
-          max_tokens: options.max_tokens || 131072,
-          temperature: options.temperature || 0.7,
+          max_tokens: options.max_tokens || 131000,
+          temperature: options.temperature || 0.8,
         }),
       });
 
@@ -58,15 +58,15 @@ export class TextGenService {
       }
 
       const data = await response.json() as TextGenResponse;
-      
+
       // Handle both direct response format and nested result format
       const text = data.response || data.result?.response || '';
-      
+
       if (!text) {
         if (data.error) {
           throw new Error(`Worker API Error: ${data.error}`);
         }
-        
+
         // Check for OpenAI-style response format just in case the worker shifted formats
         const openaiText = (data as any).choices?.[0]?.message?.content;
         if (openaiText) return openaiText.trim();
@@ -74,7 +74,7 @@ export class TextGenService {
         console.error("Cloudflare Worker Unexpected Response Structure:", data);
         throw new Error("Cloudflare Worker trả về phản hồi trống. Có thể do giới hạn nội dung hoặc model gặp lỗi.");
       }
-      
+
       return text;
     } catch (error) {
       console.error("Error generating text via worker:", error);

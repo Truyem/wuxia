@@ -304,7 +304,7 @@ const App: React.FC = () => {
                                 if (dataUrl) {
                                     state.setWorld(prev => ({
                                         ...prev,
-                                        maps: prev.maps.map(m => (m.Name || m.name) === mapName ? { ...m, image: dataUrl } : m)
+                                        maps: prev.maps.map(m => (m.Name || m.name) === mapName ? { ...m, avatar: dataUrl } : m)
                                     }));
                                 }
                             } catch (error) {

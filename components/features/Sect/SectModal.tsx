@@ -54,7 +54,7 @@ const SectModal: React.FC<Props> = ({ sectData, currentTime, onClose, onAcceptTa
 
     return (
         <div className="fixed inset-0 bg-black/95 backdrop-blur-3xl z-[220] flex items-center justify-center p-4 md:p-8 font-sans">
-            <div className="glass-panel-square border border-white/10 w-full max-w-6xl h-full max-h-[820px] flex flex-col shadow-[0_0_100px_rgba(0,0,0,0.95)] rounded-none overflow-hidden relative">
+            <div className="w-full max-w-4xl h-[80vh] flex flex-col relative overflow-hidden glass-panel border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.8)] rounded-none overflow-hidden relative">
                 {/* Wuxia Decorative Corners */}
                 <div className="wuxia-corner wuxia-corner-tl"></div>
                 <div className="wuxia-corner wuxia-corner-tr"></div>

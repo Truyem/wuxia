@@ -58,7 +58,7 @@ const TaskModal: React.FC<Props> = ({ tasks, onClose }) => {
 
     return (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] hidden md:flex items-center justify-center p-4">
-            <div className="glass-panel-square border border-wuxia-gold/30 w-full max-w-5xl h-[650px] flex flex-col shadow-[0_0_80px_rgba(0,0,0,0.9)] relative overflow-hidden rounded-none">
+            <div className="glass-panel border border-wuxia-gold/30 w-full max-w-5xl h-[650px] flex flex-col shadow-[0_0_80px_rgba(0,0,0,0.9)] relative overflow-hidden rounded-none">
                 {/* Wuxia Decorative Corners */}
                 <div className="wuxia-corner wuxia-corner-tl"></div>
                 <div className="wuxia-corner wuxia-corner-tr"></div>
@@ -84,7 +84,7 @@ const TaskModal: React.FC<Props> = ({ tasks, onClose }) => {
 
                         {/* Filter Tabs */}
                         <div className="flex p-2 gap-1 border-b border-gray-800/50 overflow-x-auto no-scrollbar">
-                            {(['Tất cả', 'Chính tuyến', 'Nhánh', 'Môn phái', 'Kỳ ngộ'] as const).map(f => (
+                            {(['Tất cả', 'Chính tuyến', 'Nhánh', 'Môn phái', 'Kỳ ngộ', 'Treo thưởng', 'Tin đồn'] as const).map(f => (
                                 <button
                                     key={f}
                                     onClick={() => { setFilter(f as any); setSelectedIdx(0); }}
