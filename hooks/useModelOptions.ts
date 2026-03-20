@@ -33,6 +33,18 @@ export const useModelOptions = (apiSettings: ApiSettings) => {
         : undefined;
 
     const fetchModels = useCallback(async () => {
+        if (activeConfig?.provider === 'worker') {
+            const workerModels = ['nvidia/Llama-3.1-Nemotron-70B-Instruct-HF'];
+            const newOptions: ModelOptions = {
+                ...DEFAULT_OPTIONS,
+                all: workerModels,
+                other: workerModels
+            };
+            setOptions(newOptions);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(newOptions));
+            return workerModels;
+        }
+
         if (!activeConfig?.apiKey || !activeConfig?.baseUrl) {
             // If activeConfig is undefined or lacks necessary properties, return null
             return null;

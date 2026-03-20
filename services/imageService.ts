@@ -102,28 +102,21 @@ export class ImageService {
    * Generates an image from a prompt and returns it as a Base64 string
    */
   static async generateImage(workerUrl: string | string[], options: ImageGenOptions): Promise<string> {
-    let urls = parseWorkerUrls(workerUrl);
-
-    // Always append hardcoded fallbacks
-    const defaults = parseWorkerUrls(DEFAULT_IMAGE_GEN_WORKER_URLS);
-    for (const d of defaults) {
-      if (!urls.includes(d)) {
-        urls.push(d);
-      }
-    }
+    const inputUrls = parseWorkerUrls(workerUrl);
+    const defaultUrls = parseWorkerUrls(DEFAULT_IMAGE_GEN_WORKER_URLS);
+    
+    // Combine and remove duplicates while preserving order
+    const urls = [...new Set([...inputUrls, ...defaultUrls])];
 
     if (urls.length === 0) {
-      throw new Error("Cloudflare Worker URL is not configured.");
+      throw new Error("Chưa cấu hình URL cho Worker tạo ảnh.");
     }
 
-    let lastError: Error | null = null;
+    let lastErrorMessage = "";
     
     for (let i = 0; i < urls.length; i++) {
-        // Robust URL normalization: Ensure protocol exists
-        let normalizedUrl = urls[i].trim();
-        if (!normalizedUrl.startsWith('http://') && !normalizedUrl.startsWith('https://')) {
-          normalizedUrl = `https://${normalizedUrl}`;
-        }
+        const normalizedUrl = urls[i];
+        console.log(`[ImageService] Đang thử kết nối tới Worker tạo ảnh: ${normalizedUrl} (${i + 1}/${urls.length})`);
 
         try {
           const formData = new FormData();
@@ -138,14 +131,15 @@ export class ImageService {
             const errorData = await response.json().catch(() => ({}));
             const errorMessage = String(errorData.error || `HTTP error! status: ${response.status}`);
             
-            // Check if this error is the "4006: daily free allocation" error
+            // Check if this error is the "4006: daily free allocation" error or rate limit
             const is4006 = errorMessage.includes('4006') || 
                            errorMessage.toLowerCase().includes('daily free allocation') ||
-                           errorMessage.toLowerCase().includes('neurons');
+                           errorMessage.toLowerCase().includes('neurons') ||
+                           response.status === 429;
             
             if (is4006 && i < urls.length - 1) {
-              console.warn(`Image Worker ${normalizedUrl} reached limit (4006). Trying next fallback...`);
-              continue; // Try the next URL
+              console.warn(`[ImageService] Worker ${normalizedUrl} đã hết hạn mức (4006/429). Đang chuyển sang URL dự phòng...`);
+              continue;
             }
             
             throw new Error(errorMessage);
@@ -159,17 +153,18 @@ export class ImageService {
             reader.readAsDataURL(blob);
           });
         } catch (error: any) {
-          lastError = error;
-          // If it's a network error or 4006, and we have more URLs, try them
+          lastErrorMessage = error?.message || String(error);
+          
+          // Retry on connection errors or 4006/429
           if (i < urls.length - 1) {
-             console.warn(`Error with image worker ${normalizedUrl}:`, error);
+             console.warn(`[ImageService] Lỗi khi kết nối tới ${normalizedUrl}: ${lastErrorMessage}. Thử URL tiếp theo...`);
              continue;
           }
           break;
         }
     }
 
-    throw lastError || new Error("Failed to generate image after trying all worker URLs.");
+    throw new Error(lastErrorMessage || "Không thể tạo ảnh sau khi đã thử tất cả các Worker URLs.");
   }
 
   /**

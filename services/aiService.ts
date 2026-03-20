@@ -1156,7 +1156,7 @@ const requestOpenAIFamilyText = async (
     responseFormatJsonObject: boolean = false,
     errorDetailLimit?: number
 ): Promise<string> => {
-    if (!apiConfig || !apiConfig.apiKey) throw new Error("API configuration or API Key is missing. Please check settings.");
+    if (apiConfig.provider !== 'worker' && !apiConfig.apiKey) throw new Error("API configuration or API Key is missing. Please check settings.");
     const endpointCandidates = buildOpenAICandidateEndpoints(apiConfig.baseUrl);
     if (endpointCandidates.length === 0) throw new Error('Missing API Base URL');
     const enableStream = !!streamOptions?.stream;
@@ -1258,7 +1258,7 @@ const requestGeminiText = async (
     responseFormatJsonObject: boolean = false,
     errorDetailLimit?: number
 ): Promise<string> => {
-    if (!apiConfig || !apiConfig.apiKey) throw new Error("API configuration or API Key is missing. Please check settings.");
+    if (apiConfig.provider !== 'worker' && !apiConfig.apiKey) throw new Error("API configuration or API Key is missing. Please check settings.");
     const model = standardizeGeminiModelName(apiConfig.model);
     if (!model) throw new Error('Gemini model is required');
 
@@ -1347,7 +1347,7 @@ const requestClaudeText = async (
     responseFormatJsonObject: boolean = false,
     errorDetailLimit?: number
 ): Promise<string> => {
-    if (!apiConfig || !apiConfig.apiKey) throw new Error("API configuration or API Key is missing. Please check settings.");
+    if (apiConfig.provider !== 'worker' && !apiConfig.apiKey) throw new Error("API configuration or API Key is missing. Please check settings.");
     const baseUrl = standardizeClaudeBaseAddress(apiConfig.baseUrl);
     const endpoint = `${baseUrl}/v1/messages`;
     const enableStream = !!streamOptions?.stream;
@@ -1599,7 +1599,7 @@ export const generateWorldData = async (
         return parseWorldPrompt(rawText);
     }
 
-    if (!apiConfig || !apiConfig.apiKey) throw new Error("API configuration or API Key is missing. Please check settings.");
+    if (!apiConfig || (apiConfig.provider !== 'worker' && !apiConfig.apiKey)) throw new Error("API configuration or API Key is missing. Please check settings.");
 
     const responseFormatJsonObject = true;
     const rawText = await requestModelText(apiConfig, messages, {
@@ -1874,13 +1874,13 @@ export const generateStoryResponse = async (
 export const testConnection = async (
     apiConfig: ActiveApiConfig
 ): Promise<ConnectionTestResult> => {
-    if (!apiConfig || !apiConfig.apiKey) {
+    if (!apiConfig || (apiConfig.provider !== 'worker' && !apiConfig.apiKey)) {
         return { ok: false, detail: 'Missing API Key' };
     }
-    if (!apiConfig.baseUrl) {
+    if (apiConfig.provider !== 'worker' && !apiConfig.baseUrl) {
         return { ok: false, detail: 'Missing Base URL' };
     }
-    if (!apiConfig.model) {
+    if (apiConfig.provider !== 'worker' && !apiConfig.model) {
         return { ok: false, detail: 'Missing model name' };
     }
 

@@ -17,7 +17,7 @@ export const DEFAULT_TEXT_GEN_WORKER_URLS = [
 export const DEFAULT_TEXT_GEN_WORKER_URL = DEFAULT_TEXT_GEN_WORKER_URLS[0];
 
 export const DEFAULT_IMAGE_GEN_WORKER_URLS = [
-    'https://wuxia-flux-worker.vudinhtrungv1010.workers.dev',
+    'https://wuxia-image-gen.vudinhtrungv1010.workers.dev',
     'https://wuxia-image-gen.vdinhtrung0.workers.dev',
     'https://wuxia-image-gen.vdt0.workers.dev'
 ];
@@ -260,14 +260,14 @@ export const API_PRESET_TEMPLATES: Array<{
     model: string;
     compatibilitySolution?: OpenAICompatibilitySolution;
 }> = [
-    { label: 'Gemini', provider: 'gemini', baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai', model: 'gemini-2.0-flash' },
-    { label: 'OpenAI', provider: 'openai', baseUrl: 'https://api.openai.com/v1', model: 'gpt-4o-mini' },
-    { label: 'Claude', provider: 'claude', baseUrl: '', model: 'claude-3-5-sonnet-latest' },
-    { label: 'DeepSeek', provider: 'deepseek', baseUrl: 'https://api.deepseek.com/v1', model: 'deepseek-chat' },
-    { label: 'OpenRouter', provider: 'openai_compatible', baseUrl: 'https://openrouter.ai/api/v1', model: 'google/gemini-2.0-flash-exp:free', compatibilitySolution: 'openrouter' },
-    { label: 'SiliconFlow - DeepSeek-V3', provider: 'openai_compatible', baseUrl: 'https://api.siliconflow.cn/v1', model: 'deepseek-ai/DeepSeek-V3', compatibilitySolution: 'siliconflow' },
-    { label: 'Hệ thống (Nemotron-Free)', provider: 'worker', baseUrl: DEFAULT_TEXT_GEN_WORKER_URL, model: '@cf/zai-org/glm-4.7-flash' }
-];
+        { label: 'Gemini', provider: 'gemini', baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai', model: 'gemini-2.0-flash' },
+        { label: 'OpenAI', provider: 'openai', baseUrl: 'https://api.openai.com/v1', model: 'gpt-4o-mini' },
+        { label: 'Claude', provider: 'claude', baseUrl: '', model: 'claude-3-5-sonnet-latest' },
+        { label: 'DeepSeek', provider: 'deepseek', baseUrl: 'https://api.deepseek.com/v1', model: 'deepseek-chat' },
+        { label: 'OpenRouter', provider: 'openai_compatible', baseUrl: 'https://openrouter.ai/api/v1', model: 'google/gemini-2.0-flash-exp:free', compatibilitySolution: 'openrouter' },
+        { label: 'SiliconFlow - DeepSeek-V3', provider: 'openai_compatible', baseUrl: 'https://api.siliconflow.cn/v1', model: 'deepseek-ai/DeepSeek-V3', compatibilitySolution: 'siliconflow' },
+        { label: 'Hệ thống (Nemotron-Free)', provider: 'worker', baseUrl: DEFAULT_TEXT_GEN_WORKER_URL, model: '@cf/zai-org/glm-4.7-flash' }
+    ];
 
 export const createApiConfigFromPreset = (preset: typeof API_PRESET_TEMPLATES[number]): ApiConfig => {
     const now = Date.now();
@@ -452,6 +452,11 @@ export const hasAnyAiBackend = (config: ActiveApiConfig | null, workerUrl?: stri
  */
 export const parseWorkerUrls = (urlInput: string | string[] | undefined | null): string[] => {
     if (!urlInput) return [];
-    if (Array.isArray(urlInput)) return urlInput.map(u => String(u).trim()).filter(Boolean);
-    return String(urlInput).split(',').map(u => u.trim()).filter(Boolean);
+    const urls = Array.isArray(urlInput)
+        ? urlInput.map(u => String(u).trim())
+        : String(urlInput).split(',').map(u => u.trim());
+
+    return urls
+        .filter(Boolean)
+        .map(u => u.endsWith('/') ? u.slice(0, -1) : u);
 };
