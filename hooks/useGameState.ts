@@ -448,18 +448,6 @@ export const useGameState = () => {
         init();
     }, []);
 
-    // Remote Prompts Background Update Listener
-    useEffect(() => {
-        const handleRemoteUpdate = (event: any) => {
-            if (event.detail) {
-                console.log('[useGameState] Applying remote prompt updates...');
-                setPrompts(event.detail);
-            }
-        };
-        window.addEventListener('prompts-updated-remotely', handleRemoteUpdate);
-        return () => window.removeEventListener('prompts-updated-remotely', handleRemoteUpdate);
-    }, []);
-
     // Theme Application
     useEffect(() => {
         const themeVars = THEMES[currentTheme] || THEMES['ink'];
