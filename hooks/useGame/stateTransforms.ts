@@ -222,7 +222,7 @@ const normalizeInventoryMapping = (rawRole: CharacterData): CharacterData => {
         // Avoid generic "Item00" style IDs if a name is available
         const isGeneric = !rawId || /^(item|itm)_?\d+$/i.test(rawId);
         let id = rawId;
-        
+
         if (isGeneric && typeof item?.name === 'string' && item.name.trim().length > 0) {
             // Slugify name roughly, but keep it readable for AI
             const nameSlug = item.name.trim().toLowerCase().replace(/\s+/g, '_').slice(0, 20);
@@ -816,7 +816,7 @@ const normalizeLocationAffiliation = (raw: any): any => {
     }
 
     const major = getTargetValue(source.majorLocation, source.region, source['Địa điểm Lớn'], source['Đại địa điểm'], source['Địa điểm lớn'], source['Vùng'], source['Vùng lớn']);
-    
+
     let minor = getTargetValue(source.minorLocation, source.subArea, source['Địa điểm Nhỏ'], source['Tiểu địa điểm'], source['Địa điểm nhỏ'], source['Khu vực'], source['Công trình'], source['Kiến trúc']);
     if (typeof minor === 'string' && (minor.includes(',') || minor.includes(';') || minor.includes('，'))) {
         minor = minor.split(/[,\r\n;，]+/).map(s => s.trim()).filter(Boolean);
@@ -873,18 +873,18 @@ const standardizeSocialList = (list: any[], options?: { mergeSameNames?: boolean
 
 const normalizeWorldStatus = (raw?: any): any => {
     const world = raw && typeof raw === 'object' ? raw : {};
-    const rawMaps = Array.isArray(world.maps) ? world.maps 
-        : (Array.isArray(world.Maps) ? world.Maps 
-        : (Array.isArray(world['Bản đồ']) ? world['Bản đồ'] 
-        : (Array.isArray(world['Danh sách bản đồ']) ? world['Danh sách bản đồ'] : [])));
-    const rawBuildings = Array.isArray(world.buildings) ? world.buildings 
-        : (Array.isArray(world.Buildings) ? world.Buildings 
-        : (Array.isArray(world['Kiến trúc']) ? world['Kiến trúc'] : []));
-    const rawOngoing = Array.isArray(world.ongoingEvents) ? world.ongoingEvents 
+    const rawMaps = Array.isArray(world.maps) ? world.maps
+        : (Array.isArray(world.Maps) ? world.Maps
+            : (Array.isArray(world['Bản đồ']) ? world['Bản đồ']
+                : (Array.isArray(world['Danh sách bản đồ']) ? world['Danh sách bản đồ'] : [])));
+    const rawBuildings = Array.isArray(world.buildings) ? world.buildings
+        : (Array.isArray(world.Buildings) ? world.Buildings
+            : (Array.isArray(world['Kiến trúc']) ? world['Kiến trúc'] : []));
+    const rawOngoing = Array.isArray(world.ongoingEvents) ? world.ongoingEvents
         : (Array.isArray(world['Sự kiện đang diễn ra']) ? world['Sự kiện đang diễn ra'] : []);
-    const rawSettled = Array.isArray(world.settledEvents) ? world.settledEvents 
+    const rawSettled = Array.isArray(world.settledEvents) ? world.settledEvents
         : (Array.isArray(world['Sự kiện đã kết thúc']) ? world['Sự kiện đã kết thúc'] : []);
-    
+
     return {
         ...world,
         activeNpcList: Array.isArray(world.activeNpcList) ? world.activeNpcList : [],
@@ -954,7 +954,7 @@ const normalizeGameSettings = (raw?: any): any => {
     const result: any = {
         ...settings,
         // 450 tokens ≈ a balanced turn length for wuxia narrative
-        bodyLengthRequirement: Number(settings.bodyLengthRequirement) || 1000,
+        bodyLengthRequirement: Number(settings.bodyLengthRequirement) || 1500,
         // Default to 2nd-person (Ngôi thứ hai) — most immersive for interactive fiction
         narrativePerspective: typeof settings.narrativePerspective === 'string' ? settings.narrativePerspective : 'Ngôi thứ hai',
         jsonMode: typeof settings.jsonMode === 'string' ? settings.jsonMode : 'auto',
