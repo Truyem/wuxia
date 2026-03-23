@@ -1,0 +1,39 @@
+// Thông tin môi trường: Thời gian, Thời tiết, Lễ hội
+export interface EnvironmentFestivalInfo {
+    name: string;
+    description: string;
+    isToday: boolean;
+}
+
+export interface WeatherInfo {
+    type: string;
+    intensity: number; // 0-100
+    description: string;
+}
+
+export interface EnvironmentData {
+    gameDays: number;
+    year: number;
+    month: number;
+    day: number;
+    hour: number;
+    
+    timeProgressEnabled: boolean;
+    weather: WeatherInfo;
+    festival: EnvironmentFestivalInfo | null;
+    
+    currentRegionId: string;
+    currentAreaId: string;
+    season: string;
+    
+    majorLocation?: string;
+    mediumLocation?: string;
+    minorLocation?: string;
+    specificLocation?: string;
+    envVariables: {
+        name: string;
+        description: string;
+        effect: string;
+    } | null;
+    time: string;
+}

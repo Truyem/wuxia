@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mặc Sắc Giang Hồ — Vô Tận Võ Lâm</title>
+    <!-- Noto Serif TC + Noto Sans TC for traditional Chinese + Vietnamese support -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        /* RGB Values for opacity support */
+        --c-ink-black: 5 5 5;
+        --c-ink-gray: 26 26 26;
+        --c-wuxia-gold: 230 200 110;
+        --c-wuxia-gold-dark: 138 114 54;
+        --c-wuxia-cyan: 68 170 170;
+        --c-wuxia-red: 163 24 24;
+        --c-paper-white: 230 230 230;
+        
+        /* Glassmorphism Presets */
+        --glass-bg: rgba(15, 15, 15, 0.7);
+        --glass-border: rgba(230, 200, 110, 0.2);
+        --glass-blur: 15px;
+      }
+    </style>
+    <script>
+      function withOpacity(variableName) {
+        return ({ opacityValue }) => {
+          if (opacityValue !== undefined) {
+            return `rgb(var(${variableName}) / ${opacityValue})`
+          }
+          return `rgb(var(${variableName}))`
+        }
+      }
+
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'ink-black': withOpacity('--c-ink-black'),
+              'ink-gray': withOpacity('--c-ink-gray'),
+              'wuxia-gold': withOpacity('--c-wuxia-gold'),
+              'wuxia-gold-dark': withOpacity('--c-wuxia-gold-dark'),
+              'wuxia-cyan': withOpacity('--c-wuxia-cyan'),
+              'wuxia-red': withOpacity('--c-wuxia-red'),
+              'paper-white': withOpacity('--c-paper-white'),
+            },
+            fontFamily: {
+              serif: ['"Noto Serif TC"', '"Noto Serif SC"', 'SimSun', 'Songti SC', 'serif'],
+              sans: ['"Noto Sans TC"', '"Noto Sans SC"', 'Microsoft YaHei', 'sans-serif'],
+              mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', "Liberation Mono", "Courier New", 'monospace'],
+            },
+            backgroundImage: {
+              'noise': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
+              'ink-wash': "linear-gradient(135deg, rgb(var(--c-ink-black)) 0%, rgb(var(--c-ink-gray)) 100%)",
+              'liquid-glass': "linear-gradient(165deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)",
+            },
+            animation: {
+              'glitch': 'glitch 1s linear infinite',
+              'slide-in': 'slideIn 0.3s ease-out forwards',
+              'fadeIn': 'fadeIn 0.4s ease-out forwards',
+              'fadeInUp': 'fadeInUp 0.5s ease-out forwards',
+              'marquee': 'marquee 60s linear infinite',
+              'marquee-linear': 'marqueeLinear var(--marquee-duration, 36s) linear infinite',
+              'ink-expand': 'inkExpand 1s ease-out forwards',
+              'thought-float': 'thoughtFloat 0.45s cubic-bezier(0.22,1,0.36,1) forwards',
+              'glow-pulse': 'glowPulse 2.5s ease-in-out infinite',
+              'pulse-subtle': 'pulseSubtle 2s ease-in-out infinite',
+              'ink-drop': 'inkDrop 0.5s ease-out forwards',
+              'gacha-spin': 'gachaSpin 0.4s cubic-bezier(0.22,1,0.36,1) forwards',
+              'outcome-success': 'outcomeSuccess 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+              'outcome-failure': 'outcomeFailure 0.4s ease-in-out forwards',
+            },
+            keyframes: {
+              slideIn: {
+                '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                '100%': { transform: 'translateX(0)', opacity: '1' },
+              },
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(16px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              marquee: {
+                '0%': { transform: 'translateX(100%)' },
+                '100%': { transform: 'translateX(-100%)' },
+              },
+              marqueeLinear: {
+                '0%': { transform: 'translateX(0)' },
+                '100%': { transform: 'translateX(-50%)' },
+              },
+              shimmer: {
+                '0%, 100%': { opacity: '0.4', backgroundPosition: '-200% 0' },
+                '50%': { opacity: '0.8', backgroundPosition: '200% 0' },
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0px)' },
+                '50%': { transform: 'translateY(-8px)' },
+              },
+              inkExpand: {
+                '0%': { transform: 'scale(0.8)', opacity: '0', filter: 'blur(20px)' },
+                '100%': { transform: 'scale(1)', opacity: '1', filter: 'blur(0)' },
+              },
+              thoughtFloat: {
+                '0%': { opacity: '0', transform: 'translateY(10px) scale(0.97)' },
+                '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+              },
+              glowPulse: {
+                '0%, 100%': { boxShadow: '0 0 8px rgba(68,170,170,0.12), 0 0 0px rgba(68,170,170,0)' },
+                '50%': { boxShadow: '0 0 18px rgba(68,170,170,0.28), 0 0 6px rgba(68,170,170,0.1)' },
+              },
+              pulseSubtle: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0.65' },
+              },
+              inkDrop: {
+                '0%': { transform: 'scale(0)', opacity: '0', borderRadius: '50%' },
+                '60%': { transform: 'scale(1.15)', opacity: '0.8' },
+                '100%': { transform: 'scale(1)', opacity: '1', borderRadius: '6px' },
+              },
+              gachaSpin: {
+                '0%': { transform: 'rotateY(0deg) scale(1)' },
+                '40%': { transform: 'rotateY(180deg) scale(0.9)' },
+                '100%': { transform: 'rotateY(360deg) scale(1)' },
+              },
+              outcomeSuccess: {
+                '0%': { transform: 'scale(0.5)', opacity: '0' },
+                '100%': { transform: 'scale(1)', opacity: '1' },
+              },
+              outcomeFailure: {
+                '0%, 100%': { transform: 'translateX(0)' },
+                '20%, 60%': { transform: 'translateX(-4px)' },
+                '40%, 80%': { transform: 'translateX(4px)' },
+              },
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.1);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgb(var(--c-wuxia-gold) / 0.2);
+        border-radius: 10px;
+        transition: all 0.3s;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgb(var(--c-wuxia-gold) / 0.5);
+      }
+      
+      /* Glassmorphism */
+      .glass-panel {
+        background: var(--glass-bg);
+        backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+        -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+        border: 1px solid var(--glass-border);
+        box-shadow: 
+          0 8px 32px 0 rgba(0, 0, 0, 0.4),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+      }
+
+      .glass-jade {
+        background: rgba(40, 70, 60, 0.6);
+        backdrop-filter: blur(20px) contrast(110%) saturate(120%);
+        -webkit-backdrop-filter: blur(20px) contrast(110%) saturate(120%);
+        border: 1px solid rgba(100, 200, 160, 0.2);
+        box-shadow: 
+          0 15px 35px rgba(0,0,0,0.5),
+          inset 0 0 20px rgba(100, 255, 180, 0.05);
+      }
+
+      .glass-ink {
+        background: rgba(10, 10, 15, 0.85);
+        backdrop-filter: blur(25px) brightness(80%);
+        -webkit-backdrop-filter: blur(25px) brightness(80%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 
+          0 20px 40px rgba(0,0,0,0.7),
+          inset 0 0 40px rgba(255,255,255,0.02);
+      }
+
+      .glass-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.3s ease;
+      }
+      .glass-card:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(230, 200, 110, 0.3);
+      }
+
+      /* Wuxia Decorative Elements */
+      
+      .bg-modal-gradient {
+        background: linear-gradient(165deg, rgba(15, 15, 15, 0.95) 0%, rgba(30, 30, 35, 0.9) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+
+      .wuxia-scroll-shadow {
+        box-shadow: 
+          0 10px 30px -10px rgba(0,0,0,0.9),
+          0 0 20px rgba(var(--c-wuxia-gold), 0.1);
+      }
+
+      /* Ink Wash Effects */
+      .ink-wash-text {
+        background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+      }
+
+      /* Removed ink-border */
+
+      /* Hover Effects */
+      .hover-gold {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .hover-gold:hover {
+        color: rgb(var(--c-wuxia-gold));
+        text-shadow: 0 0 10px rgb(var(--c-wuxia-gold) / 0.5);
+        transform: translateY(-1px);
+      }
+
+      /* Utils */
+      .vertical-text {
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        letter-spacing: 0.2em;
+      }
+
+      .text-glow-gold {
+        text-shadow: 0 0 12px rgb(var(--c-wuxia-gold) / 0.5), 0 0 24px rgb(var(--c-wuxia-gold) / 0.2);
+      }
+      
+      .text-glow-cyan {
+        text-shadow: 0 0 12px rgb(var(--c-wuxia-cyan) / 0.5), 0 0 24px rgb(var(--c-wuxia-cyan) / 0.2);
+      }
+      
+      /* P5 Style Clip Paths */
+      .clip-trapezoid { clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%); }
+      .clip-shard { clip-path: polygon(0 0, 100% 5%, 95% 100%, 5% 95%); }
+      
+      /* NSFW Blur */
+      .nsfw-blur {
+        filter: blur(35px) grayscale(20%);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+        user-select: none;
+      }
+      .nsfw-blur.revealed {
+        filter: blur(0) grayscale(0);
+        pointer-events: auto;
+        user-select: auto;
+      }
+
+      /* Animations */
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+      .animate-float {
+        animation: float 5s ease-in-out infinite;
+      }
+
+      /* Wuxia Decorative Corners */
+      .wuxia-corner {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        pointer-events: none;
+        z-index: 50;
+      }
+      .wuxia-corner::before, .wuxia-corner::after {
+        content: '';
+        position: absolute;
+        background: rgb(var(--c-wuxia-gold) / 0.6);
+        box-shadow: 0 0 8px rgb(var(--c-wuxia-gold) / 0.3);
+      }
+      .wuxia-corner-tl { top: 0; left: 0; }
+      .wuxia-corner-tl::before { top: 0; left: 0; width: 100%; height: 2px; }
+      .wuxia-corner-tl::after { top: 0; left: 0; width: 2px; height: 100%; }
+
+      .wuxia-corner-tr { top: 0; right: 0; }
+      .wuxia-corner-tr::before { top: 0; right: 0; width: 100%; height: 2px; }
+      .wuxia-corner-tr::after { top: 0; right: 0; width: 2px; height: 100%; }
+
+      .wuxia-corner-bl { bottom: 0; left: 0; }
+      .wuxia-corner-bl::before { bottom: 0; left: 0; width: 100%; height: 2px; }
+      .wuxia-corner-bl::after { bottom: 0; left: 0; width: 2px; height: 100%; }
+
+      .wuxia-corner-br { bottom: 0; right: 0; }
+      .wuxia-corner-br::before { bottom: 0; right: 0; width: 100%; height: 2px; }
+      .wuxia-corner-br::after { bottom: 0; right: 0; width: 2px; height: 100%; }
+
+      /* Pure Glass Refinement */
+      .glass-panel-square {
+        background: rgba(10, 10, 15, 0.4);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Custom Font Pairings */
+      body {
+        font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      }
+      h1, h2, h3, .heading-font {
+        font-family: 'Playfair Display', 'Noto Serif TC', serif;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
+  }
+}
+</script>
+</head>
+  <body class=" text-paper-white font-sans overflow-hidden h-screen w-screen selection:bg-wuxia-red selection:text-white transition-colors duration-500">
+    <div id="root" class="relative z-10 h-full"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
