@@ -22,7 +22,11 @@ const getDynamicAvatar = (role: CharacterData) => {
     // If explicitly set, use it
     if (role.avatar && !role.avatar.includes('default')) {
         if (role.avatar.startsWith('data:image/')) return role.avatar;
-        return role.avatar.startsWith('/') ? role.avatar : `/images/${role.avatar}`;
+        let url = role.avatar.startsWith('/') ? role.avatar : `/images/${role.avatar}`;
+        if (!url.match(/\.(png|jpe?g|webp|gif)$/i)) {
+            url += '.png';
+        }
+        return url;
     }
     
     // No longer returning static default assets.

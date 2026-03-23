@@ -14,11 +14,14 @@ interface Props {
     onRetry?: () => void;
     onReroll?: () => void;
     allAvatars?: Record<string, string>;
+    playerName?: string;
+    playerId?: string;
     isPlayerGenerating?: boolean;
     generatingNames?: Set<string>;
+    npcs?: any[];
 }
 
-const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, rawJson, onSaveEdit, onRetry, onReroll, allAvatars, isPlayerGenerating, generatingNames }) => {
+const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, rawJson, onSaveEdit, onRetry, onReroll, allAvatars, isPlayerGenerating, generatingNames, npcs, playerName, playerId }) => {
     const formatRawJson = (raw?: string) => {
 
         if (!raw) return '（Văn bản gốc của vòng này chưa được lưu.）';
@@ -331,7 +334,21 @@ const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, raw
                         return <SceneryRenderer key={idx} text={log.text} />;
                     } else {
                         const senderName = log.sender || 'Unknown';
-                        const providedAvatar = allAvatars?.[senderName];
+                        let matchedId = senderName; // Default to name
+                        if (npcs) {
+                            let match = npcs.find(n => n.name === senderName);
+                            if (!match) {
+                                match = npcs.find(n => senderName.includes(n.name) || n.name.includes(senderName));
+                            }
+                            if (match) {
+                                matchedId = match.id;
+                            } else if (playerName && (senderName === playerName || senderName.includes(playerName) || playerName.includes(senderName))) {
+                                matchedId = playerId || senderName;
+                            }
+                        } else if (playerName && (senderName === playerName || senderName.includes(playerName) || playerName.includes(senderName))) {
+                            matchedId = playerId || senderName;
+                        }
+                        const providedAvatar = allAvatars?.[matchedId] || allAvatars?.[senderName];
                         const isGenerating = generatingNames?.has(senderName);
                         return <CharacterRenderer key={idx} sender={senderName} text={log.text} providedAvatar={providedAvatar} isGenerating={isGenerating} />;
                     }

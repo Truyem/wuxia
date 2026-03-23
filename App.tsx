@@ -145,7 +145,11 @@ const App: React.FC = () => {
     const getValidAvatarUrl = (avatarStr?: string) => {
         if (!avatarStr || avatarStr.includes('default')) return undefined;
         if (avatarStr.startsWith('data:image/')) return avatarStr;
-        return avatarStr.startsWith('/') ? avatarStr : `/images/${avatarStr}`;
+        let url = avatarStr.startsWith('/') ? avatarStr : `/images/${avatarStr}`;
+        if (!url.match(/\.(png|jpe?g|webp|gif)$/i)) {
+            url += '.png';
+        }
+        return url;
     };
 
     // Global Avatar Mapping
@@ -154,13 +158,22 @@ const App: React.FC = () => {
         // 1. Protagonist
         const pAvatar = state.character.avatar;
         if (pAvatar && !pAvatar.includes('default')) {
-             map[state.character.name] = pAvatar.startsWith('data:image/') || pAvatar.startsWith('/') ? pAvatar : `/images/${pAvatar}`;
+             const url = getValidAvatarUrl(pAvatar);
+             if (url) {
+                 map[state.character.id] = url;
+                 map[state.character.name] = url;
+                 map['Người chơi'] = url;
+             }
         }
         // 2. NPCs
         if (Array.isArray(state.social)) {
             state.social.forEach(npc => {
                 if (npc.avatar && !npc.avatar.includes('default')) {
-                    map[npc.name] = npc.avatar.startsWith('data:image/') || npc.avatar.startsWith('/') ? npc.avatar : `/images/${npc.avatar}`;
+                    const avatarUrl = getValidAvatarUrl(npc.avatar);
+                    if (avatarUrl) {
+                        map[npc.id] = avatarUrl;
+                        map[npc.name] = avatarUrl;
+                    }
                 }
             });
         }
@@ -517,7 +530,9 @@ const App: React.FC = () => {
                                 generationMetadata={state.generationMetadata}
                                 modelName={state.apiConfig?.model}
                                 allAvatars={allAvatars}
+                                npcs={state.social as any[]}
                                 playerName={state.character.name}
+                                playerId={state.character.id}
                                 generatingNames={generatingNpcs}
                                 isPlayerGenerating={isGeneratingProtagonist}
                                 onClearHistory={actions.handleClearHistory}

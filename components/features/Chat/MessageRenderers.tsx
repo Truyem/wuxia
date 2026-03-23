@@ -243,12 +243,12 @@ export const CharacterRenderer: React.FC<{ sender: string; text: string; provide
     let avatarUrl = providedAvatar;
     
     return (
-        <div className={`flex w-full my-7 items-start group pl-2 animate-fade-in relative ${isUser ? 'flex-row-reverse pr-2 pl-0' : ''}`}>
+        <div className={`flex w-full my-7 items-start group pl-0 sm:pl-2 animate-fade-in relative ${isUser ? 'flex-col sm:flex-row-reverse pr-0 sm:pr-2' : 'flex-col sm:flex-row'}`}>
             {/* Hover backdrop */}
             <div className="absolute -inset-x-4 -inset-y-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none rounded-xl" style={{background: isUser ? 'rgba(230,200,110,0.02)' : 'rgba(255,255,255,0.01)'}} />
 
-            {/* Avatar column */}
-            <div className={`flex flex-col items-center relative z-20 shrink-0 ${isUser ? 'ml-5 mr-0' : 'mr-5 ml-0'}`}>
+            {/* Avatar and Name column - Row layout on mobile, Column on desktop */}
+            <div className={`flex flex-row sm:flex-col items-center relative z-20 shrink-0 w-full sm:w-auto mb-3 sm:mb-0 ${isUser ? 'sm:ml-5 sm:mr-0 justify-end' : 'sm:mr-5 sm:ml-0 justify-start'}`}>
                 <div className="relative">
                     {/* Glow ring */}
                     <div className={`absolute -inset-[3px] rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none ${isUser ? 'bg-wuxia-gold/10' : 'bg-paper-white/5'}`} style={{filter:'blur(4px)'}} />
@@ -290,33 +290,33 @@ export const CharacterRenderer: React.FC<{ sender: string; text: string; provide
                 </div>
 
                 {/* Name tag */}
-                <div className="mt-2.5 relative">
+                <div className={`mt-0 sm:mt-2.5 ml-3 sm:ml-0 relative order-2 sm:order-none`}>
                     <div className={`px-2.5 py-1 rounded-md shadow-lg min-w-[60px] text-center ${isUser ? 'border border-wuxia-gold/40' : 'border border-paper-white/10'}`} style={{background: isUser ? 'rgba(20,15,5,0.9)' : 'rgba(10,10,10,0.85)', backdropFilter:'blur(8px)'}}>
                         <span className={`font-serif font-black text-[10px] tracking-[0.12em] uppercase block truncate max-w-[120px] ${isUser ? 'text-wuxia-gold' : 'text-paper-white/70'}`} title={sender}>
                             {sender}
                         </span>
                     </div>
                     {isUser && (
-                        <>
+                        <div className="hidden sm:block">
                             <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-1 h-1 bg-wuxia-gold rounded-full" style={{boxShadow:'0 0 4px rgba(230,200,110,0.7)'}} />
                             <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-1 h-1 bg-wuxia-gold rounded-full" style={{boxShadow:'0 0 4px rgba(230,200,110,0.7)'}} />
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
 
             {/* Speech bubble */}
-            <div className={`flex-1 relative ${isUser ? 'text-right' : ''}`}>
+            <div className={`w-full sm:flex-1 relative ${isUser ? 'text-right' : ''}`}>
                 <div
-                    className={`relative rounded-2xl p-5 shadow-2xl group-hover:shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-500 ${isUser ? 'border border-wuxia-gold/25' : 'border border-paper-white/8'}`}
+                    className={`relative rounded-2xl p-4 sm:p-5 shadow-2xl group-hover:shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-500 ${isUser ? 'border border-wuxia-gold/25' : 'border border-paper-white/8'}`}
                     style={{
                         background: isUser ? 'rgba(18,12,4,0.55)' : 'rgba(12,12,12,0.45)',
                         backdropFilter: 'blur(10px)',
                         WebkitBackdropFilter: 'blur(10px)',
                     }}
                 >
-                    {/* Bubble tail */}
-                    <div className={`absolute top-5 ${isUser ? '-right-[7px] border-r border-t border-wuxia-gold/25' : '-left-[7px] border-l border-b border-paper-white/8'} w-3.5 h-3.5 rotate-45`} style={{background: isUser ? 'rgba(18,12,4,0.55)' : 'rgba(12,12,12,0.45)'}} />
+                    {/* Bubble tail - hidden on mobile for cleaner look */}
+                    <div className={`hidden sm:block absolute top-5 ${isUser ? '-right-[7px] border-r border-t border-wuxia-gold/25' : '-left-[7px] border-l border-b border-paper-white/8'} w-3.5 h-3.5 rotate-45`} style={{background: isUser ? 'rgba(18,12,4,0.55)' : 'rgba(12,12,12,0.45)'}} />
 
                     <p className="font-sans text-[16px] leading-[1.85] text-paper-white/88 tracking-wide selection:bg-wuxia-gold/30 first-letter:text-xl first-letter:font-serif first-letter:text-wuxia-gold first-letter:mr-0.5">
                         {highlightText(text)}

@@ -62,6 +62,7 @@ import { constructStorylineStyleAssistantPrompt } from '../prompts/runtime/story
 import { CoreChainOfThoughtMulti as Core_ChainOfThought_MultiThought } from '../prompts/core/cotMulti';
 import { Core_OutputFormat_MultiThought } from '../prompts/core/formatMulti';
 import { WritingNoControl as Writing_PreventSpeaking } from '../prompts/writing/noControl';
+import { detailedNsfwRules } from '../prompts/runtime/nsfwEngine';
 import {
     normalizeEnvironment,
     buildFullLocation,
@@ -1272,6 +1273,7 @@ export const useGame = () => {
             `Xuất lời cảnh báo: ${normalizedGameConfig.enableDisclaimerOutput ? 'Mở' : 'Đóng'}`,
             `Tiêm giả COT: ${normalizedGameConfig.enablePseudoCotInjection ? 'Mở' : 'Đóng'}`,
             `Chế độ đa suy nghĩ: ${normalizedGameConfig.enableMultiThinking ? 'Mở' : 'Đóng'}`,
+            `Chế độ NSFW: ${normalizedGameConfig.enableNsfwMode ? 'Mở' : 'Đóng'}`,
 
             `Chế độ thế giới thực: ${normalizedGameConfig.enableRealWorldMode ? 'Mở' : 'Đóng'}`,
             ntlTierLine,
@@ -1287,6 +1289,12 @@ export const useGame = () => {
                     '',
                     '【Quy tắc thế giới thực - Thiên Đạo Vận Hành】',
                     normalizedGameConfig.customRealWorldRules?.trim() || 'Thế giới vận hành theo các luật Nhân Quả, Vận Động, Thời Gian và Tương Quan Thực Tế. Mọi diễn biến phải đảm bảo tính chân thực và logic tối cao của một thế giới võ hiệp thực thụ. Mọi cuộc chiến dựa trên thực lực, tu vi, pháp bảo và thiên thời. Sinh linh tuân thủ các quy luật sinh học, lão hóa và giới hạn của bản chất. Tuyệt đối cấm các bước nhảy vọt logic hoặc buff sức mạnh vô căn cứ.'
+                ]
+                : []),
+            ...(normalizedGameConfig.enableNsfwMode
+                ? [
+                    '',
+                    detailedNsfwRules
                 ]
                 : []),
             '',
@@ -1505,7 +1513,7 @@ export const useGame = () => {
             }
 
             const worldGameConfig = normalizeGameSettings(gameConfig);
-            const generatedWorldPrompt = await aiService.generateWorldData(
+            const worldResponse = await aiService.generateWorldData(
                 worldGenerationContext,
                 charData,
                 currentApi,
@@ -1535,7 +1543,8 @@ export const useGame = () => {
             );
             if (worldStreamHeartbeat) clearInterval(worldStreamHeartbeat);
 
-            const worldPromptContent = generatedWorldPrompt?.trim() || worldPromptSeed;
+            const worldPromptContent = worldResponse.world_prompt?.trim() || worldPromptSeed;
+            const worldSkeleton = worldResponse.world_skeleton;
             const finalPrompts = updatedPrompts.map(p => (
                 p.id === 'core_world' ? { ...p, content: worldPromptContent } : p
             ));
@@ -1550,7 +1559,7 @@ export const useGame = () => {
                 alert("Worldview prompt written. Please input commands in the chat box to start initialization.");
             } else {
                 // We pass genData explicitly because state updates might be async/batched
-                await generateOpeningStory(openingBase, finalPrompts, openingStreaming, currentApi);
+                await generateOpeningStory(openingBase, finalPrompts, openingStreaming, currentApi, worldSkeleton);
                 // Trigger Visual Summary review step
                 setShowVisualSummary(true);
             }
@@ -1595,7 +1604,8 @@ export const useGame = () => {
         contextData: any,
         promptSnapshot: PromptStructure[],
         useStreaming: boolean,
-        apiForOpening: ApiConfig
+        apiForOpening: ApiConfig,
+        worldSkeleton?: any
     ) => {
         const initialHistory: ChatHistory[] = [
             {
@@ -1668,6 +1678,9 @@ export const useGame = () => {
             const openingLengthRequirementPrompt = constructWordCountRequirementPrompt(10000);
             const openingDisclaimerRequirementPrompt = openingContext.contextPieces.disclaimerOutputPrompt || undefined;
             const openingOutputProtocolPrompt = openingContext.contextPieces.outputProtocolPrompt;
+            const skeletonPrompt = worldSkeleton ? `\n\n【Bản đồ thế giới dự kiến - BẮT BUỘC SỬ DỤNG】\n${JSON.stringify(worldSkeleton)}` : '';
+            const combinedExtraPrompt = (openingGameConfig.extraPrompt || '') + skeletonPrompt;
+
             const aiResult = await aiService.generateStoryResponse(
                 openingContext.systemPrompt,
                 openingScriptContext,
@@ -1692,7 +1705,7 @@ export const useGame = () => {
                         }
                     }
                     : undefined,
-                openingGameConfig.extraPrompt,
+                combinedExtraPrompt,
                 {
                     enableCotInjection: openingGameConfig.enablePseudoCotInjection !== false,
                     leadingSystemPrompt: openingContext.contextPieces.aiCharacterDeclaration,

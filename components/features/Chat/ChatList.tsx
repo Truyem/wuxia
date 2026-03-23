@@ -16,8 +16,10 @@ interface Props {
     modelName?: string;
     allAvatars?: Record<string, string>;
     playerName?: string;
+    playerId?: string;
     isPlayerGenerating?: boolean;
     generatingNames?: Set<string>;
+    npcs?: any[];
     onClearHistory?: () => void;
     onRetry?: () => void;
     onReroll?: () => void;
@@ -34,8 +36,10 @@ const ChatList: React.FC<Props> = ({
     modelName,
     allAvatars,
     playerName,
+    playerId,
     isPlayerGenerating,
     generatingNames,
+    npcs,
     onClearHistory,
     onRetry,
     onReroll
@@ -135,6 +139,9 @@ const ChatList: React.FC<Props> = ({
                             onRetry={absoluteIdx === latestTurnAnchorIndex ? onRetry : undefined}
                             onReroll={absoluteIdx === latestTurnAnchorIndex ? onReroll : undefined}
                             allAvatars={allAvatars}
+                            npcs={npcs}
+                            playerName={playerName}
+                            playerId={playerId}
                             isPlayerGenerating={isPlayerGenerating}
                             generatingNames={generatingNames}
                         />
@@ -145,7 +152,7 @@ const ChatList: React.FC<Props> = ({
                 // 2. User Input (Right aligned)
                 if (msg.role === 'user') {
                     const sender = playerName || 'Người chơi';
-                    const playerAvatar = allAvatars?.[sender];
+                    const playerAvatar = (playerId && allAvatars?.[playerId]) || allAvatars?.[sender] || allAvatars?.[playerName || ''];
                     return (
                         <CharacterRenderer
                             key={absoluteIdx}

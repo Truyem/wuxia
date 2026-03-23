@@ -74,7 +74,7 @@ export class TextGenService {
           },
           body: JSON.stringify({
             messages: options.messages,
-            max_tokens: options.max_tokens || 4096,
+            max_tokens: options.max_tokens || 131000,
             temperature: options.temperature || 0.8,
             stream: false,
           }),
@@ -162,24 +162,49 @@ export class TextGenService {
 
           // OpenAI format check
           const openaiText = (data as any).choices?.[0]?.message?.content;
-          if (openaiText) return openaiText.trim();
+          if (openaiText) text = openaiText.trim();
+        }
 
-          // If no text found, try fallback before giving up
+        // Check for refusal phrases or empty text
+        const refusalPhrases = [
+          "i'm sorry",
+          "i can't comply",
+          "i cannot comply",
+          "i apologize",
+          "i am unable to",
+          "không thể thực hiện",
+          "xin lỗi, tôi không thể"
+        ];
+
+        const isRefusal = text.length > 0 && text.length < 200 && refusalPhrases.some(p => text.toLowerCase().includes(p));
+        const isEmpty = !text || text.trim() === "";
+
+        if (isEmpty || isRefusal) {
           if (i < urls.length - 1) {
-            console.warn(`[TextGenService] Worker ${normalizedUrl} trả về phản hồi trống. Đang tìm link dự phòng...`);
+            const reason = isEmpty ? "phản hồi trống" : `phát hiện từ chối ("${text.slice(0, 30)}...")`;
+            console.warn(`[TextGenService] Worker ${normalizedUrl} ${reason}. Đang tìm link dự phòng...`);
+
             let foundHealthy = false;
             for (let nextIdx = i + 1; nextIdx < urls.length; nextIdx++) {
               if (await this.verifyWorkerHealth(urls[nextIdx])) {
-                console.log(`[TextGenService] Tìm thấy link dự phòng hoạt động sau khi nhận phản hồi trống: ${urls[nextIdx]}`);
+                console.log(`[TextGenService] Tìm thấy link dự phòng hoạt động: ${urls[nextIdx]}`);
                 i = nextIdx;
                 foundHealthy = true;
                 break;
               }
             }
-            if (foundHealthy) continue;
+            if (foundHealthy) {
+              await new Promise(r => setTimeout(r, 100));
+              continue;
+            }
           }
 
-          throw new Error("Worker trả về phản hồi trống hoặc không đúng định dạng.");
+          if (isEmpty) {
+            throw new Error("Worker trả về phản hồi trống hoặc không đúng định dạng.");
+          }
+          // If it was a refusal but no more workers, we'll return it anyway or throw?
+          // The user said "skip and next", so if no next, we might as well throw so the UI knows it failed.
+          throw new Error(`Worker từ chối thực hiện và không còn link dự phòng: ${text}`);
         }
 
         return text;

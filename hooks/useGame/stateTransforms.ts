@@ -103,6 +103,7 @@ const buildFullLocation = (env: any): string => {
     return unique.length > 0 ? unique.join(' > ') : 'Unknown location';
 };
 const DefaultCharacterTemplate: CharacterData = {
+    id: 'player',
     name: '',
     gender: 'Nam',
     age: 16,

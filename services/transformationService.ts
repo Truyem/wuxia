@@ -41,7 +41,7 @@ export class TransformationService {
             // Clean up possible markdown code blocks
             const jsonText = rawResponse.replace(/```json/g, '').replace(/```/g, '').trim();
             const parsed = parseJsonWithRepair<any[]>(jsonText);
-            
+
             if (parsed.value && Array.isArray(parsed.value)) {
                 return parsed.value.map((item, index) => ({
                     id: `transformed-${Date.now()}-${index}`,
@@ -64,7 +64,7 @@ export class TransformationService {
         // We truncate or warn if it's too large (~30k characters is a safe limit for a context window).
         const MAX_INPUT_CHARS = 40000;
         let processedInput = input;
-        
+
         if (input.length > MAX_INPUT_CHARS) {
             console.warn(`Input too large (${input.length} chars). Truncating to ${MAX_INPUT_CHARS} for fallback worker.`);
             processedInput = input.slice(0, MAX_INPUT_CHARS) + "\n... (Dữ liệu bị cắt bỏ do quá lớn) ...";
@@ -72,13 +72,13 @@ export class TransformationService {
 
         // Use the centralized worker URL(s)
         const workerUrl = DEFAULT_TEXT_GEN_WORKER_URLS;
-        
+
         return await TextGenService.generateText(workerUrl, {
             messages: [
                 { role: 'system', content: system },
                 { role: 'user', content: `Transform these items (Dữ liệu nhập):\n${processedInput}` }
             ],
-            max_tokens: 4096,
+            max_tokens: 131000,
             temperature: 0.3
         });
     }

@@ -9,7 +9,13 @@ interface Props {
     onClose: () => void;
 }
 
-const normalizedText = (value: string | undefined | null) => (value || '').trim().replace(/\s+/g, '').toLowerCase();
+const normalizedText = (value: any) => {
+    if (value === null || value === undefined) return '';
+    // If it's an array, join it first, otherwise convert to string
+    const stringValue = Array.isArray(value) ? value.join(', ') : String(value);
+    return stringValue.trim().replace(/\s+/g, '').toLowerCase();
+};
+
 
 const MapModal: React.FC<Props> = ({ world, env, onClose }) => {
     const maps = Array.isArray(world?.maps) ? world.maps : [];

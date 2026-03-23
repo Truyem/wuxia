@@ -1,5 +1,3 @@
-import { legacyDefaultAdditionalSystemPrompt } from "./defaults";
-
 /**
  * Detailed NSFW/Adult content generation rules.
  * This object contains strictly enforced protocols for handling sensitive content,
@@ -63,5 +61,5 @@ export const detailedNsfwRules = `
 
 export const nsfwEngine = {
     rules: detailedNsfwRules,
-    legacyFallback: legacyDefaultAdditionalSystemPrompt
+    legacyFallback: detailedNsfwRules
 };

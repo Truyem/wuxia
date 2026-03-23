@@ -39,6 +39,7 @@ export interface CoreStats {
 }
 
 export interface CharacterData extends CoreStats {
+    id: string;
     name: string;
     gender: 'Nam' | 'Nữ';
     age: number;

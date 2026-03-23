@@ -369,7 +369,7 @@ const InputArea: React.FC<Props> = ({
                                 <div className="h-px flex-1 bg-gradient-to-r from-transparent via-wuxia-gold/20 to-transparent"></div>
                             </div>
                             
-                            {showActionOptions && (
+                             {showActionOptions && (
                                 <div className="grid grid-cols-1 gap-1.5 animate-in slide-in-from-top-2 duration-300">
                                     {normalizedOptions.map((opt, idx) => (
                                         <button
@@ -377,7 +377,7 @@ const InputArea: React.FC<Props> = ({
                                             onClick={() => handleOptionClick(opt)}
                                             disabled={loading}
                                             aria-label={`Lựa chọn ${idx + 1}: ${opt}`}
-                                            className="group relative w-full text-left px-4 py-2.5 rounded-lg border border-wuxia-gold/15 bg-gradient-to-r from-wuxia-gold/[0.04] to-transparent hover:from-wuxia-gold/[0.12] hover:border-wuxia-gold/40 transition-all active:scale-[0.98] disabled:opacity-40"
+                                            className="group relative w-full text-left px-4 py-2.5 rounded-lg border border-wuxia-gold/15 bg-gradient-to-r from-wuxia-gold/[0.04] to-transparent hover:from-wuxia-gold/[0.12] hover:border-wuxia-gold/40 transition-all active:scale-[0.98] disabled:opacity-40 shrink-0"
                                         >
                                             <div className="flex items-center gap-2.5">
                                                 <span className="shrink-0 w-5 h-5 rounded-full border border-wuxia-gold/30 bg-wuxia-gold/10 flex items-center justify-center text-[10px] font-bold text-wuxia-gold/70 group-hover:bg-wuxia-gold/20 group-hover:text-wuxia-gold transition-colors">{idx + 1}</span>
@@ -391,18 +391,18 @@ const InputArea: React.FC<Props> = ({
                         </div>
                     )}
 
-                    {/* Default quick actions (compact when AI options exist) */}
+                    {/* Default quick actions (horizontal scroll on mobile) */}
                     <div className={`grid grid-cols-3 gap-1.5 ${normalizedOptions.length > 0 ? 'pt-1' : ''}`}>
                         {[
                             { text: 'Tiếp tục diễn biến', icon: '▶', color: 'border-wuxia-gold/20 hover:border-wuxia-gold/50' },
                             { text: 'Chuyển cảnh nhanh', icon: '⟳', color: 'border-wuxia-cyan/20 hover:border-wuxia-cyan/50' },
                             { text: 'Hành động bất ngờ', icon: '✦', color: 'border-wuxia-red/20 hover:border-wuxia-red/50' }
                         ].map((btn, i) => (
-                            <button
+                             <button
                                 key={i}
                                 onClick={() => handleQuickAction(btn.text)}
                                 aria-label={btn.text}
-                                className={`relative rounded-lg border bg-black/30 overflow-hidden group transition-all active:scale-95 ${btn.color} ${normalizedOptions.length > 0 ? 'h-8' : 'h-10'}`}
+                                 className={`relative w-full flex-1 rounded-lg border bg-black/30 overflow-hidden group transition-all active:scale-95 shrink-0 ${btn.color} ${normalizedOptions.length > 0 ? 'h-8' : 'h-10'}`}
                             >
                                 <span className="relative z-10 flex items-center justify-center gap-1.5">
                                     <span className="text-[10px] opacity-50 group-hover:opacity-80 transition-opacity">{btn.icon}</span>

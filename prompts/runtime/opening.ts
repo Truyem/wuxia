@@ -50,9 +50,23 @@ Vui lòng dựa trên GameState hiện tại (các biến mẫu đã dọn dẹp
        Cấm chỉ viết tên hoặc chỉ viết cảnh giới for một đối tượng nửa vời.
      - \`id\` của \`dynamicNPCList / eventsInProgress / settledEvents / worldRecords\` chỉ cho phép "Tiền tố ngắn + 3 chữ số" (ví dụ: \`NPC001\` / \`Event001\`), cấm tên tiếng Anh đầy đủ, phiên âm pinyin hoặc chuỗi ngữ nghĩa dài.
       - **Yêu cầu về Bản đồ**: Trường \`maps\` **BẮT BUỘC** phải có và thực hiện theo schema nội bộ: \`name / coordinate / description / affiliation = { majorLocation, mediumLocation, minorLocation } / internalBuildings[]\`.
-      - **Ràng buộc số lượng Bản đồ**: Mỗi lần tạo thế giới khai cuộc, AI **BẮT BUỘC** tạo chính xác 3 Bản đồ (maps cấp lớn) khác nhau. Trong mỗi Bản đồ, phải có chính xác 3 Thành phố (mediumLocation), nhánh tổng cộng là 9 Thành phố. Tại mỗi Thành phố, phải có chính xác 9 Địa điểm quan trọng (kiến trúc/internalBuildings), nhánh tổng cộng là 81 kiến trúc. NGHÊM CẤM TẠO THIẾU HOẶC THỪA. Mọi kiến trúc PHẢI trực thuộc 1 thành phố cụ thể, và thành phố đó PHẢI trực thuộc 1 bản đồ cụ thể.
-      - **TỐI ƯU HÓA TOKEN (CỰC KỲ QUAN TRỌNG)**: Để tránh phản hồi JSON bị cắt ngang, **TẤT CẢ** các trường \`description\` của bản đồ, thành phố, địa điểm, NPC, vật phẩm... **PHẢI** cực kỳ ngắn gọn. 
-       - Mỗi mô tả chỉ được phép từ **20-24 từ**. Không viết hoa văn, không kể lể dông dài.
+      - **Ràng buộc số lượng Bản đồ (BẮT BUỘC)**: Bạn PHẢI sử dụng lại chính xác danh sách Đại Địa, Thành Phố và Kiến Trúc từ 【Bản đồ thế giới dự kiến】 được cung cấp.
+      - **Cấu trúc JSON tối ưu (CỰC KỲ QUAN TRỌNG)**: Để tránh vượt quá giới hạn token, hãy viết mô tả kiến trúc CỰC NGẮN (tối đa 15 từ).
+        \`\`\`json
+        "maps": [
+          {
+            "name": "Đại Địa A", "coordinate": "0,0", "description": "...",
+            "affiliation": { "majorLocation": "Đại Địa A", "mediumLocation": ["Thành A1", "Thành A2", "Thành A3"], "minorLocation": "" },
+            "internalBuildings": [
+               { "name": "Kiến Trúc 1", "description": "Mô tả <10 từ", "affiliation": { "majorLocation": "Đại Địa A", "mediumLocation": "Thành A1", "minorLocation": "Kiến Trúc 1" } },
+               ... (tổng 27 kiến trúc cho map này)
+            ]
+          }
+        ]
+        \`\`\`
+      - Mọi kiến trúc PHẢI trực thuộc 1 thành phố cụ thể, và thành phố đó PHẢI trực thuộc 1 bản đồ cụ thể. Tổng cộng phải có đủ 3 bản đồ, 9 thành phố, 81 kiến trúc.
+      - **TỐI ƯU HÓA TOKEN (CỰC KỲ QUAN TRỌNG)**: Để tránh phản hồi JSON bị cắt ngang, **TẤT CẢ** các trường \`description\` của bản đồ, thành phố, địa điểm, NPC, vật phẩm... **PHẢI** cực kỳ ngắn gọn.
+        - Mỗi mô tả kiến trúc/địa điểm chỉ được phép tối đa **15 từ**. Miêu tả súc tích.
        - Tuyệt đối tiết kiệm token cho phần \`logs\` (nội dung chính) và \`tavern_commands\`).
      - Trường \`buildings\` bao gồm: \`name / description / affiliation = { majorLocation, mediumLocation, minorLocation }\`.
      Trong đó "Các sự kiện đang xảy ra trong đại thế thiên hạ" (\`gameState.World.eventsInProgress\`) khai cuộc phải tạo **>= 3 mục** (khuyến nghị 5 mục), và mỗi mục đều phải có thế lực hoặc nhân vật liên quan thực tế, cấm các sự kiện rỗng để bù số lượng.

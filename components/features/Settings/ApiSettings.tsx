@@ -502,7 +502,7 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
                             <div className="space-y-3">
                                 <label className="text-sm text-wuxia-gold font-bold">Max Output Token (Tùy chọn)</label>
                                 <div className="grid grid-cols-4 gap-2">
-                                    {[8192, 32768, 65536].map(val => (
+                                    {[8192, 32768, 65536, 131000].map(val => (
                                         <button
                                             key={val}
                                             onClick={() => updateActiveConfig({ maxTokens: val })}
@@ -516,7 +516,7 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
                                     ))}
                                     <button
                                         onClick={() => updateActiveConfig({ maxTokens: 0 })}
-                                        className={`py-2 px-1 rounded border text-xs transition-colors ${activeConfig.maxTokens !== 8192 && activeConfig.maxTokens !== 32768 && activeConfig.maxTokens !== 65536
+                                        className={`py-2 px-1 rounded border text-xs transition-colors ${activeConfig.maxTokens !== 8192 && activeConfig.maxTokens !== 32768 && activeConfig.maxTokens !== 65536 && activeConfig.maxTokens !== 131000
                                                 ? 'border-wuxia-gold bg-wuxia-gold/20 text-wuxia-gold shadow-[0_0_10px_rgba(255,215,0,0.1)]'
                                                 : 'border-wuxia-gold/20 bg-transparent text-paper-white/40 hover:border-wuxia-gold/50 hover:bg-ink-black/40'
                                             }`}
@@ -524,7 +524,7 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
                                         Tùy chỉnh
                                     </button>
                                 </div>
-                                {activeConfig.maxTokens !== 8192 && activeConfig.maxTokens !== 32768 && activeConfig.maxTokens !== 65536 && (
+                                {activeConfig.maxTokens !== 8192 && activeConfig.maxTokens !== 32768 && activeConfig.maxTokens !== 65536 && activeConfig.maxTokens !== 131000 && (
                                     <input
                                         type="number"
                                         value={activeConfig.maxTokens || ''}
@@ -533,7 +533,7 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
                                         className="w-full bg-transparent border border-wuxia-gold/20 focus:border-wuxia-gold/50 p-2 text-paper-white text-sm rounded-md placeholder:text-wuxia-gold/20"
                                     />
                                 )}
-                                <div className="text-[10px] text-paper-white/30">Để trống sẽ gửi mặc định là 8192 và tự động giới hạn tùy theo ngữ cảnh của mô hình.</div>
+                                <div className="text-[10px] text-paper-white/30">Để trống sẽ gửi mặc định là 8192 (hoặc 131.000 cho Worker) và tự động giới hạn tùy theo ngữ cảnh của mô hình.</div>
                             </div>
 
                             <div className="space-y-3">
