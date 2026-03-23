@@ -515,6 +515,7 @@ const App: React.FC = () => {
                                 onUpdateCharacter={state.setCharacter}
                                 isGenerating={isGeneratingProtagonist}
                                 generatingNames={generatingNpcs}
+                                allAvatars={allAvatars}
                             />
                         </div>
 

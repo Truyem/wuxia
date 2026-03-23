@@ -15,11 +15,22 @@ interface Props {
     isProfile?: boolean;
     isGenerating?: boolean;
     generatingNames?: Set<string>;
+    allAvatars?: Record<string, string>;
 }
 
 // Utility for specific avatars
-const getDynamicAvatar = (role: CharacterData) => {
-    // If explicitly set, use it
+const getDynamicAvatar = (role: CharacterData, allAvatars?: Record<string, string>) => {
+    // 1. Check central mapping by ID
+    if (allAvatars && allAvatars[role.id]) {
+        return allAvatars[role.id];
+    }
+    
+    // 2. Check central mapping by Name
+    if (allAvatars && allAvatars[role.name]) {
+        return allAvatars[role.name];
+    }
+
+    // 3. Fallback to existing logic if not in map (though it should be)
     if (role.avatar && !role.avatar.includes('default')) {
         if (role.avatar.startsWith('data:image/')) return role.avatar;
         let url = role.avatar.startsWith('/') ? role.avatar : `/images/${role.avatar}`;
@@ -90,7 +101,7 @@ const MiniBodyPart: React.FC<{ name: string; current: number; max: number }> = (
 
 
 // NPC Slot Miniature
-const NpcSlot: React.FC<{ npc: NpcStructure; visualConfig: VisualSettings; isGenerating?: boolean }> = ({ npc, visualConfig, isGenerating }) => {
+const NpcSlot: React.FC<{ npc: NpcStructure; visualConfig: VisualSettings; isGenerating?: boolean; allAvatars?: Record<string, string> }> = ({ npc, visualConfig, isGenerating, allAvatars }) => {
     const isNSFW = npc.socialNetworkVariables?.some(v => v.tags?.includes('NSFW')) || false;
     const [showTooltip, setShowTooltip] = useState(false);
     const [coords, setCoords] = useState({ top: 0, left: 0 });
@@ -116,8 +127,8 @@ const NpcSlot: React.FC<{ npc: NpcStructure; visualConfig: VisualSettings; isGen
         setShowTooltip(false);
     };
 
-    // Reliance on npc.avatar which is updated globally by App.tsx
-    const displayAvatar = npc.avatar;
+    // Central Avatar Mapping resolution
+    const displayAvatar = (allAvatars && (allAvatars[npc.id] || allAvatars[npc.name])) || npc.avatar;
     const isGeneratingNow = isGenerating;
 
     return (
@@ -201,7 +212,7 @@ const NpcSlot: React.FC<{ npc: NpcStructure; visualConfig: VisualSettings; isGen
     );
 };
 
-const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visualConfig, onUpdateCharacter, isProfile = false, isGenerating = false, generatingNames }) => {
+const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visualConfig, onUpdateCharacter, isProfile = false, isGenerating = false, generatingNames, allAvatars }) => {
 
     const Money = Role.money || { gold: 0, silver: 0, copper: 0 };
     const presentNpcs = Social.filter(n => n.isPresent);
@@ -210,7 +221,7 @@ const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visual
             return localStorage.getItem('customAvatar') || null;
         } catch { return null; }
     });
-    const avatarUrl = useMemo(() => localAvatar || getDynamicAvatar(Role), [Role, localAvatar]);
+    const avatarUrl = useMemo(() => localAvatar || getDynamicAvatar(Role, allAvatars), [Role, localAvatar, allAvatars]);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const MAX_AVATAR_SIZE = 5 * 1024 * 1024; // 5MB
 
@@ -460,7 +471,7 @@ const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visual
                     </div>
                     <div className="flex flex-wrap gap-4 p-4 rounded-xl bg-transparent border border-white/[0.03]">
                         {presentNpcs.length > 0 ? (
-                            presentNpcs.map(npc => <NpcSlot key={npc.id} npc={npc} visualConfig={visualConfig} isGenerating={generatingNames?.has(npc.name)} />)
+                            presentNpcs.map(npc => <NpcSlot key={npc.id} npc={npc} visualConfig={visualConfig} isGenerating={generatingNames?.has(npc.name)} allAvatars={allAvatars} />)
                         ) : (
                             <div className="w-full flex flex-col items-center justify-center py-5 border border-dashed border-white/5 rounded-xl bg-transparent">
                                 <span className="text-[9px] text-paper-white/30 tracking-[0.2em] uppercase font-serif italic text-center w-full">Cô độc giữa nhân gian</span>

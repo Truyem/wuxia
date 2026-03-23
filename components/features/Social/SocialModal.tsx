@@ -7,15 +7,20 @@ interface Props {
     onClose: () => void;
     playerName?: string;
     onToggleMajorRole?: (npcId: string, nextIsMajor: boolean) => void;
+    allAvatars: Record<string, string>;
 }
 
-const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ nhập giang hồ", onToggleMajorRole }) => {
+const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ nhập giang hồ", onToggleMajorRole, allAvatars }) => {
     const [selectedId, setSelectedId] = useState<string | null>(
         socialList.length > 0 ? socialList[0].id : null
     );
 
     const currentNPC = socialList.find(n => n.id === selectedId);
     const showFemaleExtensions = currentNPC?.gender === 'Female' && Boolean(currentNPC?.isMainCharacter);
+
+    const resolveAvatar = (npc: NpcStructure) => {
+        return allAvatars[npc.id] || allAvatars[npc.name] || npc.avatar;
+    };
 
     const getFirstNonEmptyText = (...values: unknown[]): string => {
         for (const value of values) {
@@ -138,8 +143,8 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                                             }`}
                                     >
                                         <div className={`w-12 h-12 rounded-none flex items-center justify-center font-serif font-black text-xl border overflow-hidden relative ${npc.gender === 'Female' ? 'border-pink-500/30 bg-pink-500/10 text-pink-400' : 'border-wuxia-cyan/30 bg-wuxia-cyan/10 text-wuxia-cyan'} ${isSelected ? 'shadow-lg' : ''}`}>
-                                            {npc.avatar ? (
-                                                <img src={npc.avatar} alt={npc.name} className="w-full h-full object-cover object-top" />
+                                            {resolveAvatar(npc) ? (
+                                                <img src={resolveAvatar(npc)} alt={npc.name} className="w-full h-full object-cover object-top" />
                                             ) : (
                                                 <div className="flex items-center justify-center w-full h-full bg-black/20 backdrop-blur-sm">
                                                     <span className="text-xl font-serif font-black opacity-80 drop-shadow-md">
@@ -180,10 +185,10 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                         {currentNPC ? (
                             <div className="flex-1 overflow-y-auto no-scrollbar p-10">
                                         {/* NPC image banner at 16:9 aspect ratio */}
-                                        {currentNPC.avatar && (
+                                        {resolveAvatar(currentNPC) && (
                                             <div className="mb-8 rounded-none border border-wuxia-gold/20 overflow-hidden shadow-2xl relative group/img cursor-pointer aspect-video">
                                                 <img 
-                                                    src={currentNPC.avatar} 
+                                                    src={resolveAvatar(currentNPC)} 
                                                     alt={currentNPC.name} 
                                                     className="w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-110"
                                                 />
