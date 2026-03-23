@@ -472,16 +472,17 @@ export const useGame = () => {
         festival: null,
         weather: { type: '', intensity: 0, description: '' },
         gameDays: 1,
-        year: 1,
-        month: 1,
-        day: 1,
-        hour: 6,
+        Year: 2026,
+        Month: 3,
+        Day: 23,
+        Hour: 6,
+        Minute: 15,
         timeProgressEnabled: true,
         currentRegionId: '',
         currentAreaId: '',
         season: 'Xuân',
         envVariables: null,
-        time: '06:00'
+        time: 'Sáng'
     });
 
     const createOpeningBlankWorld = (): WorldDataStructure => ({
@@ -511,8 +512,8 @@ export const useGame = () => {
     });
 
     const parseStoryTimeValue = (raw?: any): number | null => {
-        if (typeof raw !== 'string') return null;
-        const normalized = normalizeCanonicalGameTime(raw.trim());
+        if (!raw) return null;
+        const normalized = normalizeCanonicalGameTime(raw);
         if (!normalized) return null;
         const m = normalized.match(/^(\d{1,6}):(\d{2}):(\d{2}):(\d{2}):(\d{2})$/);
         if (!m) return null;

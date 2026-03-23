@@ -20,8 +20,20 @@ const Divider = () => (
     <div className="h-3 md:h-4 w-px bg-gradient-to-b from-transparent via-wuxia-gold/20 to-transparent mx-0.5 md:mx-1"></div>
 );
 
-const parseCanonicalGameTime = (input?: string): { year: number; month: number; day: number; hour: number; minute: number } | null => {
-    if (!input || typeof input !== 'string') return null;
+const parseCanonicalGameTime = (input?: any): { year: number; month: number; day: number; hour: number; minute: number } | null => {
+    if (!input) return null;
+    
+    if (typeof input === 'object' && input !== null && 'Year' in input) {
+        return {
+            year: Number(input.Year),
+            month: Number(input.Month),
+            day: Number(input.Day),
+            hour: Number(input.Hour),
+            minute: Number(input.Minute)
+        };
+    }
+
+    if (typeof input !== 'string') return null;
     const match = input.trim().match(/^(\d{1,6}):(\d{1,2}):(\d{1,2}):(\d{1,2}):(\d{1,2})$/);
     if (!match) return null;
 
@@ -70,9 +82,9 @@ const mapMinuteToKe = (minute: number): string => {
 const TopBar: React.FC<Props> = ({ Environment, timeFormat, festivals = [] }) => {
     const [mobileLeftMode, setMobileLeftMode] = useState<'weather' | 'environment'>('weather');
     const [mobileRightMode, setMobileRightMode] = useState<'journey' | 'festival'>('journey');
-    const parsedTime = parseCanonicalGameTime(Environment?.time);
-    const month = parsedTime?.month ?? null;
-    const day = parsedTime?.day ?? null;
+    const parsedTime = parseCanonicalGameTime(Environment) || parseCanonicalGameTime(Environment?.time);
+    const month = parsedTime?.month ?? Environment?.Month ?? null;
+    const day = parsedTime?.day ?? Environment?.Day ?? null;
 
     const rawTime = Environment?.time || '';
     

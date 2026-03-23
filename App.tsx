@@ -112,15 +112,28 @@ const App: React.FC = () => {
         return '';
     };
 
-    const parseGameTimestampToNumber = (timeStr?: string): number => {
-        if (!timeStr || typeof timeStr !== 'string') return 0;
-        const m = timeStr.trim().match(/^(\d{1,6}):(\d{1,2}):(\d{1,2}):(\d{1,2}):(\d{1,2})$/);
-        if (!m) return 0;
-        const year = Number(m[1]);
-        const month = Number(m[2]);
-        const day = Number(m[3]);
-        const hour = Number(m[4]);
-        const minute = Number(m[5]);
+    const parseGameTimestampToNumber = (timeInput?: any): number => {
+        if (!timeInput) return 0;
+        
+        let year = 0, month = 0, day = 0, hour = 0, minute = 0;
+        
+        if (typeof timeInput === 'object' && timeInput !== null) {
+            year = Number(timeInput.Year ?? timeInput.year ?? 0);
+            month = Number(timeInput.Month ?? timeInput.month ?? 0);
+            day = Number(timeInput.Day ?? timeInput.day ?? 0);
+            hour = Number(timeInput.Hour ?? timeInput.hour ?? 0);
+            minute = Number(timeInput.Minute ?? timeInput.minute ?? 0);
+        } else if (typeof timeInput === 'string') {
+            const m = timeInput.trim().match(/^(\d{1,6}):(\d{1,2}):(\d{1,2}):(\d{1,2}):(\d{1,2})$/);
+            if (m) {
+                year = Number(m[1]);
+                month = Number(m[2]);
+                day = Number(m[3]);
+                hour = Number(m[4]);
+                minute = Number(m[5]);
+            }
+        }
+        
         return (((year * 12 + month) * 31 + day) * 24 + hour) * 60 + minute;
     };
 

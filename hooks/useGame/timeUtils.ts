@@ -1,12 +1,30 @@
-export const normalizeCanonicalGameTime = (input?: string): string | null => {
-    if (!input || typeof input !== 'string') return null;
-    const match = input.trim().match(/^(\d{1,6}):(\d{1,2}):(\d{1,2}):(\d{1,2}):(\d{1,2})$/);
-    if (!match) return null;
-    const year = Number(match[1]);
-    const month = Number(match[2]);
-    const day = Number(match[3]);
-    const hour = Number(match[4]);
-    const minute = Number(match[5]);
+export const normalizeCanonicalGameTime = (input?: any): string | null => {
+    if (!input) return null;
+    
+    let year, month, day, hour, minute;
+    
+    if (typeof input === 'object' && input !== null) {
+        year = input.Year ?? input.year;
+        month = input.Month ?? input.month;
+        day = input.Day ?? input.day;
+        hour = input.Hour ?? input.hour;
+        minute = input.Minute ?? input.minute;
+        
+        if (year === undefined || month === undefined || day === undefined || hour === undefined || minute === undefined) {
+             return null;
+        }
+    } else if (typeof input === 'string') {
+        const match = input.trim().match(/^(\d{1,6}):(\d{1,2}):(\d{1,2}):(\d{1,2}):(\d{1,2})$/);
+        if (!match) return null;
+        year = Number(match[1]);
+        month = Number(match[2]);
+        day = Number(match[3]);
+        hour = Number(match[4]);
+        minute = Number(match[5]);
+    } else {
+        return null;
+    }
+
     if (
         month < 1 || month > 12 ||
         day < 1 || day > 31 ||

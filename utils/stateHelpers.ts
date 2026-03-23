@@ -217,10 +217,11 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
 
     // Environment / World
     "Thời gian": "time",
-    "Năm": "year",
-    "Tháng": "month",
-    "Ngày": "day",
-    "Giờ": "hour",
+    "Năm": "Year",
+    "Tháng": "Month",
+    "Ngày": "Day",
+    "Giờ": "Hour",
+    "Phút": "Minute",
     "Mùa": "season",
     "Bản đồ": "maps",
     "Danh sách bản đồ": "maps",
@@ -230,9 +231,9 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     "Địa điểm nhỏ": "minorLocation",
     "Địa điểm cụ thể": "specificLocation",
     "Thuộc về": "affiliation",
-    "Môi trường": "env",
+    "Môi trường": "Environment",
     "Biến môi trường": "envVariables",
-    "Thế giới": "world",
+    "Thế giới": "World",
     "Sự kiện": "event",
     "Sự kiện hiện tại": "currentEvent",
     "Sự kiện đang diễn ra": "ongoingEvents",
@@ -673,12 +674,12 @@ export const applyStateCommand = (
         
         if (part.index !== undefined) {
              // Array access
-             if (!current[part.name]) current[part.name] = [];
-             if (!current[part.name][part.index]) current[part.name][part.index] = {};
+             if (!Array.isArray(current[part.name])) current[part.name] = [];
+             if (!current[part.name][part.index] || typeof current[part.name][part.index] !== 'object') current[part.name][part.index] = {};
              current = current[part.name][part.index];
         } else {
              // Object access
-             if (!current[part.name]) current[part.name] = {};
+             if (!current[part.name] || typeof current[part.name] !== 'object') current[part.name] = {};
              current = current[part.name];
         }
     }
@@ -716,7 +717,7 @@ export const applyStateCommand = (
         
         const translatedValue = translateObjectKeys(value);
         if ((key.endsWith('.memories') || finalKey === 'memories') && typeof translatedValue === 'object' && !translatedValue.time) {
-             translatedValue.time = newEnv.time || `${newEnv.year || ''}:${String(newEnv.month || 0).padStart(2,'0')}:${String(newEnv.day || 0).padStart(2,'0')}:${String(newEnv.hour || 0).padStart(2,'0')}:00`; 
+             translatedValue.time = newEnv.time || `${newEnv.Year || ''}:${String(newEnv.Month || 0).padStart(2,'0')}:${String(newEnv.Day || 0).padStart(2,'0')}:${String(newEnv.Hour || 0).padStart(2,'0')}:00`; 
         }
         
         arrayToPush.push(translatedValue);

@@ -85,11 +85,12 @@ const normalizeEnvironment = (rawEnv?: any): EnvironmentData => {
         weather,
         envVariables,
         gameDays: Math.max(1, Math.floor(originalGameDays)),
-        year: typeof source?.year === 'number' && Number.isFinite(source.year) ? source.year : 1,
-        month: typeof source?.month === 'number' && Number.isFinite(source.month) ? source.month : 1,
-        day: typeof source?.day === 'number' && Number.isFinite(source.day) ? source.day : 1,
-        hour: typeof source?.hour === 'number' && Number.isFinite(source.hour) ? source.hour : 6,
-        time: typeof source?.time === 'string' ? source.time : '06:00',
+        Year: typeof source?.Year === 'number' && Number.isFinite(source.Year) ? source.Year : (typeof source?.year === 'number' ? source.year : 2026),
+        Month: typeof source?.Month === 'number' && Number.isFinite(source.Month) ? source.Month : (typeof source?.month === 'number' ? source.month : 3),
+        Day: typeof source?.Day === 'number' && Number.isFinite(source.Day) ? source.Day : (typeof source?.day === 'number' ? source.day : 23),
+        Hour: typeof source?.Hour === 'number' && Number.isFinite(source.Hour) ? source.Hour : (typeof source?.hour === 'number' ? source.hour : 6),
+        Minute: typeof source?.Minute === 'number' && Number.isFinite(source.Minute) ? source.Minute : (typeof source?.minute === 'number' ? source.minute : 15),
+        time: typeof source?.time === 'string' ? source.time : 'Sáng',
         season: typeof source?.season === 'string' ? source.season : 'Xuân',
         timeProgressEnabled: source?.timeProgressEnabled ?? true
     } as any;

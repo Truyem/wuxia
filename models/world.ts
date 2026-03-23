@@ -3,6 +3,14 @@
 // Định dạng thời gian nghiêm ngặt: YYYY:MM:DD:HH:MM (Ví dụ: 2024:03:12:12:00)
 export type GameTimeFormat = string;
 
+export interface GameTimeObject {
+    Year: number;
+    Month: number;
+    Day: number;
+    Hour: number;
+    Minute: number;
+}
+
 // --- NPC Hoạt động (Mô phỏng hậu trường) ---
 
 export interface ActiveNpcStructure {
@@ -80,4 +88,5 @@ export interface WorldDataStructure {
     ongoingEvents: WorldEventStructure[];
     settledEvents: WorldEventStructure[];
     worldHistory: WorldEventStructure[]; // Giang hồ sử sách
+    time?: GameTimeObject;
 }

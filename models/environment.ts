@@ -1,4 +1,6 @@
 // Thông tin môi trường: Thời gian, Thời tiết, Lễ hội
+import { GameTimeObject } from './world';
+
 export interface EnvironmentFestivalInfo {
     name: string;
     description: string;
@@ -13,10 +15,11 @@ export interface WeatherInfo {
 
 export interface EnvironmentData {
     gameDays: number;
-    year: number;
-    month: number;
-    day: number;
-    hour: number;
+    Year: number;
+    Month: number;
+    Day: number;
+    Hour: number;
+    Minute: number;
     
     timeProgressEnabled: boolean;
     weather: WeatherInfo;

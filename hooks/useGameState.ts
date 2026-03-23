@@ -99,10 +99,11 @@ export const useGameState = () => {
     };
     const createEmptyEnvironment = (): EnvironmentInfo => ({
         gameDays: 1,
-        year: 1,
-        month: 1,
-        day: 1,
-        hour: 6,
+        Year: 2026,
+        Month: 3,
+        Day: 23,
+        Hour: 6,
+        Minute: 15,
         timeProgressEnabled: true,
         weather: { type: 'Nắng ráo', intensity: 50, description: 'Trời quang mây tạnh' },
         festival: null,
@@ -119,7 +120,8 @@ export const useGameState = () => {
         buildings: [],
         ongoingEvents: [],
         settledEvents: [],
-        worldHistory: []
+        worldHistory: [],
+        time: { Year: 2026, Month: 3, Day: 23, Hour: 6, Minute: 15 }
     });
 
     const createEmptySect = (): DetailedSect => ({
