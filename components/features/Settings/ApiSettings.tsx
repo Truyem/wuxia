@@ -237,10 +237,6 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
     };
 
     const handleSave = () => {
-        if (!form.featureModelPlaceholder.mainStoryModel.trim()) {
-            setMessage('mainStoryModel là bắt buộc, vui lòng lấy danh sách mô hình và chọn một mô hình trước.');
-            return;
-        }
         const normalized = normalizeApiSettings({
             ...form,
             activeConfigId: selectedConfigId || form.activeConfigId

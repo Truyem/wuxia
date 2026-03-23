@@ -2459,6 +2459,7 @@ YÊU CẦU ĐỊNH DẠNG JSON (BẮT BUỘC):
 
     const saveSettings = async (newConfig: ApiSettings) => {
         const normalized = normalizeApiSettings(newConfig);
+        console.log('[useGame] Persisting API settings:', normalized);
         setApiConfig(normalized);
         await dbService.saveSetting('api_settings', normalized);
     };
