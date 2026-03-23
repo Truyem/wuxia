@@ -46,11 +46,12 @@ const getChunkedEnvVars = (baseName: string): string[] => {
     return results;
 };
 
-export const DEFAULT_TEXT_GEN_WORKER_URLS = getChunkedEnvVars('VITE_TEXT_GEN_WORKER_URLS');
+// For Netlify deployment, we use the remote API project URL
+export const DEFAULT_TEXT_GEN_WORKER_URLS = ['https://truyem789.netlify.app/api/nemotron'];
 
 export const DEFAULT_TEXT_GEN_WORKER_URL = DEFAULT_TEXT_GEN_WORKER_URLS[0];
 
-export const DEFAULT_IMAGE_GEN_WORKER_URLS = getChunkedEnvVars('VITE_IMAGE_GEN_WORKER_URLS');
+export const DEFAULT_IMAGE_GEN_WORKER_URLS = ['https://truyem789.netlify.app/api/image-gen'];
 export const DEFAULT_IMAGE_GEN_WORKER_URL = DEFAULT_IMAGE_GEN_WORKER_URLS[0];
 
 
