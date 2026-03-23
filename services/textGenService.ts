@@ -40,7 +40,7 @@ export class TextGenService {
         // @ts-ignore - Support for AbortSignal.timeout
         signal: AbortSignal.timeout ? AbortSignal.timeout(5000) : undefined
       });
-      
+
       return response.ok;
     } catch (error) {
       console.warn(`[TextGenService] Health check failed for ${url}:`, error);
@@ -51,17 +51,17 @@ export class TextGenService {
   static async generateText(workerUrl: string | string[], options: TextGenOptions): Promise<string> {
     const inputUrls = parseWorkerUrls(workerUrl);
     const defaultUrls = parseWorkerUrls(DEFAULT_TEXT_GEN_WORKER_URLS);
-    
+
     // Combine and remove duplicates while preserving order
     const urls = [...new Set([...inputUrls, ...defaultUrls])];
-    
+
     if (urls.length === 0) {
       throw new Error("Chưa cấu hình URL cho Worker tạo văn bản.");
     }
 
     let lastErrorMessage = "";
     let i = 0;
-    
+
     while (i < urls.length) {
       const normalizedUrl = urls[i];
       console.log(`[TextGenService] Đang thử kết nối tới Worker: ${normalizedUrl} (${i + 1}/${urls.length})`);
@@ -83,25 +83,25 @@ export class TextGenService {
         if (!response.ok) {
           const errorText = await response.text().catch(() => "Unknown error");
           let errorMessage = `HTTP ${response.status}: ${errorText}`;
-          
+
           try {
             const errorData = JSON.parse(errorText);
             const serverError = (errorData && typeof errorData === 'object' && 'error' in errorData) ? (errorData as any).error : null;
             if (serverError) errorMessage = String(serverError);
-          } catch (e) {}
+          } catch (e) { }
 
-          const is4006 = errorMessage.includes('4006') || 
-                         errorMessage.toLowerCase().includes('daily free allocation') ||
-                         errorMessage.toLowerCase().includes('neurons');
+          const is4006 = errorMessage.includes('4006') ||
+            errorMessage.toLowerCase().includes('daily free allocation') ||
+            errorMessage.toLowerCase().includes('neurons');
 
           // Check if this error is transient (4006, 429, 500 range)
-          const isTransient = is4006 || 
-                            response.status === 429 ||
-                            response.status >= 500;
-          
+          const isTransient = is4006 ||
+            response.status === 429 ||
+            response.status >= 500;
+
           if (isTransient && i < urls.length - 1) {
             console.warn(`[TextGenService] Worker ${normalizedUrl} lỗi (${response.status}/${errorMessage.slice(0, 50)}). Đang tìm link dự phòng hoạt động...`);
-            
+
             // Search for the next healthy link
             let foundHealthy = false;
             for (let nextIdx = i + 1; nextIdx < urls.length; nextIdx++) {
@@ -114,21 +114,21 @@ export class TextGenService {
                 break;
               }
             }
-            
+
             if (foundHealthy) {
               await new Promise(r => setTimeout(r, 100));
               continue; // Re-run with updated i
             } else {
               console.error(`[TextGenService] Đã thử hết tất cả các link dự phòng nhưng không có link nào khả dụng.`);
-              throw new Error(`Đã thử hết 40 link nhưng tất cả đều lỗi (Lỗi cuối: ${response.status})`);
+              throw new Error(`Đã thử hết nhưng tất cả đều lỗi (Lỗi cuối: ${response.status})`);
             }
           }
-          
+
           throw new Error(errorMessage);
         }
 
         const data = await response.json() as any;
-        
+
         // Robust response parsing
         let text = "";
         if (data.response) {
@@ -143,7 +143,7 @@ export class TextGenService {
           if (data.error) {
             const errorStr = String(data.error);
             const is4006Inside = errorStr.includes('4006') || errorStr.toLowerCase().includes('daily free allocation');
-            
+
             if (is4006Inside && i < urls.length - 1) {
               console.warn(`[TextGenService] Worker ${normalizedUrl} báo lỗi 4006 trong dữ liệu. Đang tìm link dự phòng...`);
               // Similar to above, search for next healthy link
@@ -185,12 +185,12 @@ export class TextGenService {
         return text;
       } catch (error: any) {
         lastErrorMessage = error?.message || String(error);
-        
+
         // Retry only on connection errors
-        const isNetworkError = lastErrorMessage.includes("fetch") || 
-                               lastErrorMessage.includes("network") || 
-                               lastErrorMessage.includes("Failed to fetch");
-                               
+        const isNetworkError = lastErrorMessage.includes("fetch") ||
+          lastErrorMessage.includes("network") ||
+          lastErrorMessage.includes("Failed to fetch");
+
         if (isNetworkError && i < urls.length - 1) {
           console.warn(`[TextGenService] Lỗi kết nối tới ${normalizedUrl}: ${lastErrorMessage}. Thử link dự phòng...`);
           i++;

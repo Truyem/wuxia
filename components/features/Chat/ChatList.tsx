@@ -20,13 +20,14 @@ interface Props {
     generatingNames?: Set<string>;
     onClearHistory?: () => void;
     onRetry?: () => void;
+    onReroll?: () => void;
 }
 
-const ChatList: React.FC<Props> = ({ 
-    history, 
-    loading, 
-    scrollRef, 
-    onUpdateHistory, 
+const ChatList: React.FC<Props> = ({
+    history,
+    loading,
+    scrollRef,
+    onUpdateHistory,
     renderCount = 30,
     generationStartTime,
     generationMetadata,
@@ -36,8 +37,10 @@ const ChatList: React.FC<Props> = ({
     isPlayerGenerating,
     generatingNames,
     onClearHistory,
-    onRetry
+    onRetry,
+    onReroll
 }) => {
+
     const normalizedRenderCount = Number.isFinite(renderCount) ? Math.max(1, Math.floor(renderCount)) : 30;
 
     // Build stable turn anchors from assistant structured responses.
@@ -87,17 +90,17 @@ const ChatList: React.FC<Props> = ({
             <div className="flex justify-end mb-4">
                 <button
                     onClick={() => {
-                        if (window.confirm("Bạn có chắc chắn muốn xóa toàn bộ lịch sử trò chuyện không?")) {
+                        if (window.confirm("Bạn có chắc chắn muốn xóa toàn bộ lịch sử và bắt đầu một cuộc trò chuyện mới không?")) {
                             onClearHistory?.();
                         }
                     }}
-                    className="flex items-center gap-2 px-3 py-1.5 text-[10px] font-serif uppercase tracking-widest text-rose-400/60 hover:text-rose-400 border border-rose-900/30 hover:border-rose-500/50 bg-rose-900/10 hover:bg-rose-900/20 rounded-lg transition-all"
-                    title="Xóa toàn bộ lịch sử"
+                    className="flex items-center gap-2 px-3 py-1.5 text-[10px] font-serif uppercase tracking-widest text-emerald-400/60 hover:text-emerald-400 border border-emerald-900/30 hover:border-emerald-500/50 bg-emerald-900/10 hover:bg-emerald-900/20 rounded-lg transition-all"
+                    title="Bắt đầu cuộc trò chuyện mới (Xóa lịch sử)"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
-                    <span>Xóa lịch sử</span>
+                    <span>Tạo hội thoại mới</span>
                 </button>
             </div>
             {history.length === 0 && (
@@ -130,6 +133,7 @@ const ChatList: React.FC<Props> = ({
                             rawJson={msg.rawJson}
                             onSaveEdit={(newJson) => onUpdateHistory && onUpdateHistory(absoluteIdx, newJson)}
                             onRetry={absoluteIdx === latestTurnAnchorIndex ? onRetry : undefined}
+                            onReroll={absoluteIdx === latestTurnAnchorIndex ? onReroll : undefined}
                             allAvatars={allAvatars}
                             isPlayerGenerating={isPlayerGenerating}
                             generatingNames={generatingNames}
@@ -137,17 +141,18 @@ const ChatList: React.FC<Props> = ({
                     );
                 }
 
+
                 // 2. User Input (Right aligned)
                 if (msg.role === 'user') {
                     const sender = playerName || 'Người chơi';
                     const playerAvatar = allAvatars?.[sender];
                     return (
-                        <CharacterRenderer 
-                            key={absoluteIdx} 
-                            sender={sender} 
-                            text={msg.content} 
-                            providedAvatar={playerAvatar} 
-                            isUser={true} 
+                        <CharacterRenderer
+                            key={absoluteIdx}
+                            sender={sender}
+                            text={msg.content}
+                            providedAvatar={playerAvatar}
+                            isUser={true}
                             isGenerating={isPlayerGenerating}
                         />
                     );
@@ -201,7 +206,7 @@ const ChatList: React.FC<Props> = ({
             })}
 
             {loading && (
-                <GenerationStatusBar 
+                <GenerationStatusBar
                     loading={loading}
                     startTime={generationStartTime}
                     tokens={generationMetadata}

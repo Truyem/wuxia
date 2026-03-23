@@ -64,6 +64,7 @@ const App: React.FC = () => {
     const [generatingNpcs, setGeneratingNpcs] = React.useState<Set<string>>(new Set());
     const generatingProtagonistFor = React.useRef<string | null>(null);
     const generatingItems = React.useRef<Set<string>>(new Set());
+    const [pendingInputToPreload, setPendingInputToPreload] = React.useState<string>('');
     const generatingMaps = React.useRef<Set<string>>(new Set());
 
     const requestConfirm = React.useCallback((options: ConfirmOptions) => {
@@ -522,6 +523,10 @@ const App: React.FC = () => {
                                 onClearHistory={actions.handleClearHistory}
                                 onRetry={() => {
                                     const input = actions.handleRegenerate();
+                                    if (input) setPendingInputToPreload(input);
+                                }}
+                                onReroll={() => {
+                                    const input = actions.handleRegenerate();
                                     if (input) actions.handleSend(input, true);
                                 }}
                             />
@@ -536,6 +541,8 @@ const App: React.FC = () => {
                                 canQuickRestart={meta.canQuickRestart}
                                 options={currentOptions}
                                 enableRetryOnParseFail={(state.gameConfig as any).enableRetryOnParseFail !== false}
+                                initialValue={pendingInputToPreload}
+                                onInitialValueConsumed={() => setPendingInputToPreload('')}
                             />
                         </div>
 

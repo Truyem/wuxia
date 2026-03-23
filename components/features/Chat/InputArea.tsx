@@ -39,6 +39,8 @@ interface Props {
     canQuickRestart?: boolean;
     options?: unknown[]; // Quick actions from the last turn
     enableRetryOnParseFail?: boolean;
+    initialValue?: string;
+    onInitialValueConsumed?: () => void;
 }
 
 const InputArea: React.FC<Props> = ({
@@ -51,9 +53,19 @@ const InputArea: React.FC<Props> = ({
     canReroll = true,
     canQuickRestart = false,
     options = [],
-    enableRetryOnParseFail = true
+    enableRetryOnParseFail = true,
+    initialValue,
+    onInitialValueConsumed
 }) => {
     const [content, setContent] = useState('');
+
+    React.useEffect(() => {
+        if (initialValue) {
+            setContent(initialValue);
+            onInitialValueConsumed?.();
+        }
+    }, [initialValue, onInitialValueConsumed]);
+
     const [isStreaming, setIsStreaming] = useState(true);
     const [lastSentContent, setLastSentContent] = useState('');
     const [isPreparing, setIsPreparing] = useState(false);
