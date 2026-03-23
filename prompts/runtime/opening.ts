@@ -2,7 +2,7 @@ export const OPENING_INITIALIZATION_PROMPT = `
 【Nhiệm vụ Khởi tạo Khai cuộc Hiệp 0】
 Vui lòng dựa trên GameState hiện tại (các biến mẫu đã dọn dẹp + world_prompt bản gốc thế giới quan + thông tin hồ sơ nhân vật) để tạo ra màn đầu tiên bằng TIẾNG VIỆT CÓ DẤU, yêu cầu:
 1. Đầu ra phải khớp nghiêm ngặt với **JSON GameResponse** (xuất theo các trường suy nghĩ đang bật và thứ tự yêu cầu, phải bao gồm \`logs\`, \`tavern_commands\`, \`shortTerm\`, \`action_options\`); nghiêm cấm xuất văn bản giải thích bên ngoài JSON.
-2. **Ràng buộc cứng về số lượng từ**: Tổng độ dài văn bản tự sự bên trong trường \`logs\` phải nằm trong khoảng **800 - 1200 ký tự** (không tính \`thinking_pre\` và \`tavern_commands\`).
+2. **Ràng buộc cứng về số lượng từ**: Tổng độ dài văn bản tự sự bên trong trường \`logs\` phải ở mức khoảng **10000 ký tự** (không tính \`thinking_pre\` và \`tavern_commands\`).
     - Phải sử dụng ít nhất 3 loại cảm quan (Khứu giác, Thính giác, Xúc giác) để mô tả môi trường.
     - Áp dụng triệt để "Show, Don't Tell": Mô tả hành động và phản hồi môi trường thay vì tóm tắt trạng thái.
 3. **Ràng buộc cứng về khởi tạo toàn lượng**: Hiệp này phải hoàn thành khởi tạo đầy đủ cho "Vùng ghi được của GameState", và được thực hiện thông qua \`tavern_commands\`, cấm việc chỉ kể chuyện mà không thay đổi biến số.

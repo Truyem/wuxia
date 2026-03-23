@@ -22,11 +22,31 @@ export const parseWorkerUrls = (urlInput: string | string[] | undefined | null):
         .map(u => u.endsWith('/') ? u.slice(0, -1) : u);
 };
 
-export const DEFAULT_TEXT_GEN_WORKER_URLS = parseWorkerUrls(import.meta.env.VITE_TEXT_GEN_WORKER_URLS) || [];
+/**
+ * Aggregates chunked environment variables (e.g., _1, _2, _3) into a single array.
+ */
+const getChunkedEnvVars = (baseName: string): string[] => {
+    const results: string[] = [];
+    let i = 1;
+    while (true) {
+        const value = (import.meta as any).env[`${baseName}_${i}`];
+        if (!value) break;
+        results.push(...parseWorkerUrls(value));
+        i++;
+    }
+    // Fallback to non-indexed variable if no indexed ones found
+    if (results.length === 0) {
+        const fallback = (import.meta as any).env[baseName];
+        if (fallback) return parseWorkerUrls(fallback);
+    }
+    return results;
+};
+
+export const DEFAULT_TEXT_GEN_WORKER_URLS = getChunkedEnvVars('VITE_TEXT_GEN_WORKER_URLS');
 
 export const DEFAULT_TEXT_GEN_WORKER_URL = DEFAULT_TEXT_GEN_WORKER_URLS[0];
 
-export const DEFAULT_IMAGE_GEN_WORKER_URLS = parseWorkerUrls(import.meta.env.VITE_IMAGE_GEN_WORKER_URLS) || [];
+export const DEFAULT_IMAGE_GEN_WORKER_URLS = getChunkedEnvVars('VITE_IMAGE_GEN_WORKER_URLS');
 
 
 export const PROVIDER_LABELS: Record<ApiProviderType, string> = {

@@ -226,7 +226,7 @@ export const PresetBackground: Background[] = [
     { name: "Ngoại môn Linh Miếu", description: "Giữ đền thờ thần linh, linh cảm nhạy bén, thường thấy điềm báo.", effect: "Khí vận+10，Linh cảm sự kiện đặc biệt+30%，Kháng tà thuật+20%" },
     { name: "Thoát thân nô lệ", description: "Khát vọng tự do cháy bỏng, thể lực phi thường do lao dịch.", effect: "Thể chất+12，Sức bền+20%，Khả năng chịu đựng nghịch cảnh cực cao" },
     { name: "Bộ đầu nha môn", description: "Chính trực cương minh, hành quân pháp độ, quen thuộc luật lệ.", effect: "Danh tiếng quan phủ+20，Uy hiếp tội phạm+30%，Kỹ năng tra án+50%" },
-    { name: "Chu nhân Vương Phủ", description: "Quen thuộc với thói đời quý tộc, giỏi mưu kế và lung lạc lòng người.", effect: "Mưu lược+10，Vốn ban đầu+1500，Quan hệ giới thượng tầng+30%" },
+    { name: "Chu nhân Vương Phủ", description: "Quen thuộc với thói đời quý tộc, giỏi mưu kế và lung lạc lòng người.", effect: "Mưu lược+10，Vốn ban đầu+1600，Quan hệ giới thượng tầng+30%" },
     { name: "Thợ săn núi sâu", description: "Am hiểu cạm bẫy và tập tính dã thú, theo dấu cực giỏi.", effect: "Theo dấu+40%，Sát thương đối với dã thú+20%，Tỷ lệ dính bẫy giảm" },
     { name: "Vũ sư trà lâu", description: "Linh hoạt uyển chuyển, giỏi thu thập tin tức qua giao tiếp.", effect: "Nhanh nhẹn+8，Giao tiếp+30%，Tỷ lệ trốn thoát trong chiến đấu+20%" },
     { name: "Tù nhân vượt ngục", description: "Kiên cường vượt qua nghịch cảnh, tâm tính lạnh lùng và tàn nhẫn.", effect: "Sức mạnh+5，Sát khí+15，Tỷ lệ phá khóa và vượt ngục+50%" },

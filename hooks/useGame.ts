@@ -1665,9 +1665,7 @@ export const useGame = () => {
             }
 
             const openingGameConfig = normalizeGameSettings(gameConfig);
-            const openingLengthRequirementPrompt = constructWordCountRequirementPrompt(
-                Math.max(650, openingGameConfig.bodyLengthRequirement)
-            );
+            const openingLengthRequirementPrompt = constructWordCountRequirementPrompt(10000);
             const openingDisclaimerRequirementPrompt = openingContext.contextPieces.disclaimerOutputPrompt || undefined;
             const openingOutputProtocolPrompt = openingContext.contextPieces.outputProtocolPrompt;
             const aiResult = await aiService.generateStoryResponse(

@@ -117,7 +117,7 @@ const GameSettings: React.FC<Props> = ({ settings, onSave }) => {
                         value={form.bodyLengthRequirement}
                         onChange={(e) => {
                             const n = Number(e.target.value);
-                            realTimeUpdates({ bodyLengthRequirement: Number.isFinite(n) && n > 0 ? Math.max(50, Math.floor(n)) : 5000 });
+                            realTimeUpdates({ bodyLengthRequirement: Number.isFinite(n) && n > 0 ? Math.max(50, Math.floor(n)) : 3000 });
                         }}
                         className="w-full bg-transparent border border-wuxia-gold/10 focus:border-wuxia-gold p-3 text-paper-white text-sm outline-none rounded-md transition-all font-medium"
                     />

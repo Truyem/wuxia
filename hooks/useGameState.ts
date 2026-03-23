@@ -264,7 +264,7 @@ export const useGameState = () => {
         textGenWorkerUrl: 'https://wuxia-nemotron-worker.vudinhtrungv1010.workers.dev'
     });
     const defaultGameSettings: GameSettings = {
-        bodyLengthRequirement: 1500,
+        bodyLengthRequirement: 3000,
         narrativePerspective: 'Ngôi thứ hai',
         enableActionOptions: true,
         enablePseudoCotInjection: true,
