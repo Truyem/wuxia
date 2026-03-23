@@ -52,9 +52,9 @@ export const Core_OutputFormat_MultiThought: PromptStructure = {
   "t_mem": "Tóm tắt ký ức... (Vietnamese)",
   "t_opts": "Sàng lọc lựa chọn... (Vietnamese)",
   "tavern_commands": [
-    {"action": "SET", "key": "gameState.Environment.Time", "value": "317:03:16:09:45"},
-    {"action": "ADD", "key": "gameState.Character.Energy", "value": -8},
-    {"action": "PUSH", "key": "gameState.SocialNet[3].Memories", "value": {"Content": "...", "Time": "..."}}
+    {"action": "SET", "key": "gameState.Environment.time", "value": "317:03:16:09:45"},
+    {"action": "ADD", "key": "gameState.Character.energy", "value": -8},
+    {"action": "PUSH", "key": "gameState.Social[3].memories", "value": {"content": "...", "time": "..."}}
   ],
   "action_options": ["Lựa chọn 1", "Lựa chọn 2", "Lựa chọn 3"]
 }

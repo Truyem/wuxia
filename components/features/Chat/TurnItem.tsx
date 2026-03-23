@@ -335,6 +335,8 @@ const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, raw
                     } else {
                         const senderName = log.sender || 'Unknown';
                         let matchedId = senderName; // Default to name
+                        let npcInfo = null;
+
                         if (npcs) {
                             let match = npcs.find(n => n.name === senderName);
                             if (!match) {
@@ -342,15 +344,30 @@ const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, raw
                             }
                             if (match) {
                                 matchedId = match.id;
+                                npcInfo = match;
                             } else if (playerName && (senderName === playerName || senderName.includes(playerName) || playerName.includes(senderName))) {
                                 matchedId = playerId || senderName;
                             }
                         } else if (playerName && (senderName === playerName || senderName.includes(playerName) || playerName.includes(senderName))) {
                             matchedId = playerId || senderName;
                         }
+
                         const providedAvatar = allAvatars?.[matchedId] || allAvatars?.[senderName];
                         const isGenerating = generatingNames?.has(senderName);
-                        return <CharacterRenderer key={idx} sender={senderName} text={log.text} providedAvatar={providedAvatar} isGenerating={isGenerating} />;
+                        
+                        return (
+                            <CharacterRenderer 
+                                key={idx} 
+                                sender={senderName} 
+                                text={log.text} 
+                                providedAvatar={providedAvatar} 
+                                isGenerating={isGenerating} 
+                                identity={npcInfo?.identity}
+                                personality={npcInfo?.corePersonalityTraits || npcInfo?.personality}
+                                relationStatus={npcInfo?.relationStatus}
+                                favorability={npcInfo?.favorability}
+                            />
+                        );
                     }
                 })}
             </div>

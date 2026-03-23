@@ -560,8 +560,8 @@ export const standardizeSingleNPC = (rawNpc: any, fallbackIndex: number): any =>
     const npc = rawNpc && typeof rawNpc === 'object' ? rawNpc : {};
     const appearanceDescription = getFirstNonEmptyText(
         npc?.appearanceDescription,
-        npc?.appearanceDescription,
-        npc?.appearanceDescription
+        npc?.appearance,
+        npc?.['Ngoại hình']
     );
     const bodyDescription = getFirstNonEmptyText(
         npc?.bodyDescription,
@@ -572,34 +572,36 @@ export const standardizeSingleNPC = (rawNpc: any, fallbackIndex: number): any =>
         npc?.clothingStyle
     );
     const memories = standardizationNPCMemory(npc?.memories || npc?.Memory);
-    const corePersonalityTraits = getFirstNonEmptyText(npc?.corePersonalityTraits);
-    const favorabilityBreakthroughCondition = getFirstNonEmptyText(npc?.favorabilityBreakthroughCondition);
-    const relationBreakthroughCondition = getFirstNonEmptyText(npc?.relationBreakthroughCondition);
-    const socialNetworkVariables = standardizeRelationshipVariables(npc?.socialNetworkVariables);
+    const corePersonalityTraits = getFirstNonEmptyText(npc?.corePersonalityTraits || npc?.personality || npc?.personalityDescription || npc?.['Tính cách']);
+    const favorabilityBreakthroughCondition = getFirstNonEmptyText(npc?.favorabilityBreakthroughCondition || npc?.['Điều kiện đột phá hảo cảm']);
+    const relationBreakthroughCondition = getFirstNonEmptyText(npc?.relationBreakthroughCondition || npc?.['Điều kiện đột phá quan hệ']);
+    const socialNetworkVariables = standardizeRelationshipVariables(npc?.socialNetworkVariables || npc?.relationNetwork || npc?.['Mạng lưới quan hệ']);
 
     return {
         ...npc,
         id: getFirstNonEmptyText(npc?.id, npc?.ID, `npc_${fallbackIndex}`) || `npc_${fallbackIndex}`,
         name: (() => {
-            const rawName = getFirstNonEmptyText(npc?.name, npc?.fullName, npc?.['Họ tên']);
+            const rawName = getFirstNonEmptyText(npc?.name, npc?.fullName, npc?.['Họ tên'], npc?.lastName);
             const isGeneric = !rawName || /^(role|npc|char)_?\d+$/i.test(rawName);
-            if (isGeneric && typeof npc?.identity === 'string' && npc.identity.trim().length > 0) {
-                return npc.identity.trim();
+            if (isGeneric && typeof (npc?.identity || npc?.title || npc?.['Thân phận']) === 'string') {
+                const combined = [npc?.identity, npc?.title, npc?.['Thân phận']].filter(Boolean).join(' - ');
+                if (combined) return combined;
             }
             return rawName || `Vô danh ${fallbackIndex}`;
         })(),
         gender: typeof npc?.gender === 'string' ? npc.gender : 'Unknown',
         age: Number.isFinite(Number(npc?.age)) ? Number(npc.age) : undefined,
-        realm: typeof npc?.realm === 'string' ? npc.realm : 'Unknown realm',
-        identity: typeof npc?.identity === 'string' ? npc.identity : 'Unknown identity',
+        realm: typeof (npc?.realm || npc?.['Cảnh giới']) === 'string' ? (npc?.realm || npc?.['Cảnh giới']) : 'Bình thường',
+        identity: getFirstNonEmptyText(npc?.identity, npc?.title, npc?.['Thân phận'], npc?.role) || 'Người qua đường',
         isPresent: typeof npc?.isPresent === 'boolean' ? npc.isPresent : true,
         isTeammate: typeof npc?.isTeammate === 'boolean' ? npc.isTeammate : false,
-        isMainCharacter: typeof npc?.isMainCharacter === 'boolean' ? npc.isMainCharacter : false,
-        favorability: Number.isFinite(Number(npc?.favorability)) ? Number(npc.favorability) : 0,
-        relationStatus: typeof npc?.relationStatus === 'string' ? npc.relationStatus : 'Unknown',
-        description: typeof npc?.description === 'string' ? npc.description : 'No intro yet',
+        isMajorCharacter: typeof (npc?.isMajorCharacter ?? npc?.isMainCharacter) === 'boolean' ? (npc?.isMajorCharacter ?? npc?.isMainCharacter) : false,
+        favorability: Number.isFinite(Number(npc?.favorability || npc?.['Hảo cảm'])) ? Number(npc?.favorability || npc?.['Hảo cảm']) : 0,
+        relationStatus: typeof (npc?.relationStatus || npc?.relationshipStatus) === 'string' ? (npc?.relationStatus || npc?.relationshipStatus) : 'Unknown',
+        description: typeof (npc?.description || npc?.introduction || npc?.goals) === 'string' ? (npc?.description || npc?.introduction || npc?.goals) : 'Chưa có giới thiệu',
         memories,
-        ...(corePersonalityTraits ? { corePersonalityTraits } : {}),
+        personality: corePersonalityTraits || 'Bình thường',
+        corePersonalityTraits: corePersonalityTraits || 'Bình thường',
         ...(favorabilityBreakthroughCondition ? { favorabilityBreakthroughCondition } : {}),
         ...(relationBreakthroughCondition ? { relationBreakthroughCondition } : {}),
         ...(Array.isArray(socialNetworkVariables) && socialNetworkVariables.length > 0 ? { socialNetworkVariables } : {}),
@@ -645,7 +647,7 @@ const mergeNPCObject = (leftRaw: any, rightRaw: any, fallbackIndex: number): any
         isTeammate: typeof right?.isTeammate === 'boolean'
             ? right.isTeammate
             : (typeof left?.isTeammate === 'boolean' ? left.isTeammate : false),
-        isMainCharacter: Boolean(left?.isMainCharacter) || Boolean(right?.isMainCharacter),
+        isMajorCharacter: Boolean(left?.isMajorCharacter) || Boolean(right?.isMajorCharacter),
         favorability: Number.isFinite(Number(right?.favorability))
             ? Number(right.favorability)
             : (Number.isFinite(Number(left?.favorability)) ? Number(left.favorability) : 0),

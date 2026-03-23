@@ -37,9 +37,9 @@ export const buildNpcContext = (socialData: any[], memoryConfig: MemoryConfig): 
     };
 
     const extractBaseData = (npc: any, index: number, isTeammate?: boolean) => {
-        const coreTraits = typeof npc?.coreTraits === 'string' ? npc.coreTraits.trim() : '';
-        const favorabilityBreakthrough = typeof npc?.favorabilityBreakthrough === 'string' ? npc.favorabilityBreakthrough.trim() : '';
-        const relationshipBreakthrough = typeof npc?.relationshipBreakthrough === 'string' ? npc.relationshipBreakthrough.trim() : '';
+        const corePersonalityTraits = typeof npc?.corePersonalityTraits === 'string' ? npc.corePersonalityTraits.trim() : '';
+        const favorabilityBreakthroughCondition = typeof npc?.favorabilityBreakthroughCondition === 'string' ? npc.favorabilityBreakthroughCondition.trim() : '';
+        const relationBreakthroughCondition = typeof npc?.relationBreakthroughCondition === 'string' ? npc.relationBreakthroughCondition.trim() : '';
         const relationshipNetwork = Array.isArray(npc?.relationshipNetwork)
             ? npc.relationshipNetwork
                 .map((item: any) => ({
@@ -64,12 +64,13 @@ export const buildNpcContext = (socialData: any[], memoryConfig: MemoryConfig): 
             realm: typeof npc?.realm === 'string' ? npc.realm : 'Unknown realm',
             identity: typeof npc?.identity === 'string' ? npc.identity : 'Unknown identity',
             isTeammate,
-            relationshipStatus: typeof npc?.relationshipStatus === 'string' ? npc.relationshipStatus : 'Unknown',
+            relationStatus: typeof npc?.relationStatus === 'string' ? npc.relationStatus : 'Unknown',
             favorability: typeof npc?.favorability === 'number' ? npc.favorability : 0,
-            introduction: typeof npc?.introduction === 'string' ? npc.introduction : 'No intro yet',
-            ...(coreTraits ? { coreTraits } : {}),
-            ...(favorabilityBreakthrough ? { favorabilityBreakthrough } : {}),
-            ...(relationshipBreakthrough ? { relationshipBreakthrough } : {}),
+            introduction: typeof npc?.introduction === 'string' ? npc.introduction : (typeof npc?.description === 'string' ? npc.description : 'No intro yet'),
+            appearanceDescription: typeof npc?.appearanceDescription === 'string' ? npc.appearanceDescription : '',
+            ...(corePersonalityTraits ? { corePersonalityTraits } : {}),
+            ...(favorabilityBreakthroughCondition ? { favorabilityBreakthroughCondition } : {}),
+            ...(relationBreakthroughCondition ? { relationBreakthroughCondition } : {}),
             ...(relationshipNetwork.length > 0 ? { relationshipNetwork } : {})
         };
     };
@@ -154,6 +155,7 @@ export const buildNpcContext = (socialData: any[], memoryConfig: MemoryConfig): 
             completeData,
             combatStatus,
             lastInteraction,
+            appearanceDescription: baseData.appearanceDescription,
             keyMemories: standardizeMemory(npc, memoryLimit)
         };
     };

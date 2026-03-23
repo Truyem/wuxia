@@ -239,7 +239,17 @@ export const SceneryRenderer: React.FC<{ text: string }> = ({ text }) => (
 );
 
 // --- 2. Character Dialogue Renderer ---
-export const CharacterRenderer: React.FC<{ sender: string; text: string; providedAvatar?: string; isUser?: boolean; isGenerating?: boolean }> = ({ sender, text, providedAvatar, isUser, isGenerating }) => {
+export const CharacterRenderer: React.FC<{ 
+    sender: string; 
+    text: string; 
+    providedAvatar?: string; 
+    isUser?: boolean; 
+    isGenerating?: boolean;
+    identity?: string;
+    personality?: string;
+    relationStatus?: string;
+    favorability?: number;
+}> = ({ sender, text, providedAvatar, isUser, isGenerating, identity, personality, relationStatus, favorability }) => {
     let avatarUrl = providedAvatar;
     
     return (
@@ -307,6 +317,27 @@ export const CharacterRenderer: React.FC<{ sender: string; text: string; provide
 
             {/* Speech bubble */}
             <div className={`w-full sm:flex-1 relative ${isUser ? 'text-right' : ''}`}>
+                {/* Meta info (Identity/Personality) */}
+                {!isUser && (identity || personality) && (
+                    <div className="flex items-center gap-2 mb-1.5 opacity-60 group-hover:opacity-100 transition-opacity">
+                        {identity && (
+                            <span className="text-[9px] font-mono text-wuxia-gold/80 bg-wuxia-gold/5 px-1.5 py-0.5 rounded border border-wuxia-gold/15 uppercase tracking-tighter">
+                                {identity}
+                            </span>
+                        )}
+                        {personality && (
+                            <span className="text-[9px] font-serif italic text-paper-white/50 truncate max-w-[200px]">
+                                {personality}
+                            </span>
+                        )}
+                        {relationStatus && (
+                            <span className="text-[9px] font-mono font-bold text-wuxia-cyan/70 bg-wuxia-cyan/5 px-1.5 py-0.5 rounded border border-wuxia-cyan/20">
+                                {relationStatus} {favorability !== undefined ? `(${favorability})` : ''}
+                            </span>
+                        )}
+                    </div>
+                )}
+
                 <div
                     className={`relative rounded-2xl p-4 sm:p-5 shadow-2xl group-hover:shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-500 ${isUser ? 'border border-wuxia-gold/25' : 'border border-paper-white/8'}`}
                     style={{
