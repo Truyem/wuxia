@@ -7,7 +7,7 @@ import { RadarChart, RadarData } from '../shared/RadarChart';
 import { StatBar } from '../shared/StatBar';
 import { ImageService } from '../../services/imageService';
 import { TextGenService } from '../../services/textGenService';
-import { Sparkles, Dices } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { OrnateBorder } from '../ui/decorations/OrnateBorder';
 
 interface Props {

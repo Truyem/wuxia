@@ -483,8 +483,6 @@ const App: React.FC = () => {
                                 isGenerating={isGeneratingProtagonist}
                                 generatingNames={generatingNpcs}
                                 allAvatars={allAvatars}
-                                isGachaLoading={state.isNpcGachaLoading}
-                                onGachaNpcs={actions.handleGachaNpc}
                             />
                         </div>
 
