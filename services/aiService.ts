@@ -19,6 +19,7 @@ type RequestProtocolType = 'openai' | 'gemini' | 'claude' | 'deepseek';
 interface StoryStreamOptions {
     stream?: boolean;
     onDelta?: (delta: string, accumulated: string) => void;
+    id?: string;
 }
 
 interface StoryRequestOptions {
@@ -32,6 +33,7 @@ interface StoryRequestOptions {
     errorDetailLimit?: number;
     enableClaudeMode?: boolean;
     enableTagIntegrityCheck?: boolean;
+    id?: string;
 }
 
 export interface ConnectionTestResult {
@@ -59,16 +61,19 @@ export class StoryResponseParseError extends Error {
 interface WorldStreamOptions {
     stream?: boolean;
     onDelta?: (delta: string, accumulated: string) => void;
+    id?: string;
 }
 
 interface RecallStreamOptions {
     stream?: boolean;
     onDelta?: (delta: string, accumulated: string) => void;
+    id?: string;
 }
 
 type UniversalStreamingOptions = {
     stream?: boolean;
     onDelta?: (delta: string, accumulated: string) => void;
+    id?: string;
 } | undefined;
 
 class ProtocolRequestError extends Error {
@@ -1177,7 +1182,8 @@ const requestOpenAIFamilyText = async (
     if (apiConfig.provider !== 'worker' && !apiConfig.apiKey) throw new Error("API configuration or API Key is missing. Please check settings.");
     const endpointCandidates = buildOpenAICandidateEndpoints(apiConfig.baseUrl);
     if (endpointCandidates.length === 0) throw new Error('Missing API Base URL');
-    const enableStream = !!streamOptions?.stream;
+    const enableStream = false;
+    const sessionId = streamOptions?.id;
 
     let useStream = enableStream;
     let useResponseFormat = responseFormatJsonObject && !(protocol === 'deepseek' && isDeepSeekReasoner(apiConfig.model));
@@ -1207,7 +1213,8 @@ const requestOpenAIFamilyText = async (
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiConfig.apiKey}`
+                'Authorization': `Bearer ${apiConfig.apiKey}`,
+                ...(streamOptions?.id ? { 'x-session-affinity': streamOptions.id } : {})
             },
             body: JSON.stringify(body),
             signal
@@ -1280,7 +1287,7 @@ const requestGeminiText = async (
     const model = standardizeGeminiModelName(apiConfig.model);
     if (!model) throw new Error('Gemini model is required');
 
-    const enableStream = !!streamOptions?.stream;
+    const enableStream = false;
     let useStream = enableStream;
     const baseUrl = standardizeGeminiBaseAddress(apiConfig.baseUrl);
     const path = `/v1beta/models/${encodeURIComponent(model)}:${useStream ? 'streamGenerateContent' : 'generateContent'}${useStream ? '?alt=sse' : ''}`;
@@ -1375,7 +1382,7 @@ const requestClaudeText = async (
     if (apiConfig.provider !== 'worker' && !apiConfig.apiKey) throw new Error("API configuration or API Key is missing. Please check settings.");
     const baseUrl = standardizeClaudeBaseAddress(apiConfig.baseUrl);
     const endpoint = `${baseUrl}/v1/messages`;
-    const enableStream = !!streamOptions?.stream;
+    const enableStream = false;
     let useStream = enableStream;
 
     const { system, list, prefillJsonBrace } = assembleClaudeMessage(messages, responseFormatJsonObject);
@@ -1452,12 +1459,16 @@ const requestWorkerText = async (
     options: {
         temperature?: number;
         max_tokens?: number;
+        id?: string;
+        onDelta?: (delta: string, accumulated: string) => void;
     }
 ): Promise<string> => {
     return TextGenService.generateText(workerUrl, {
         messages,
         temperature: options.temperature,
         max_tokens: options.max_tokens,
+        id: options.id,
+        onDelta: options.onDelta
     });
 };
 
@@ -1470,6 +1481,7 @@ const requestModelText = async (
         streamOptions?: UniversalStreamingOptions;
         responseFormatJsonObject?: boolean;
         errorDetailLimit?: number;
+        id?: string;
     }
 ): Promise<string> => {
     if (!apiConfig) throw new Error("API configuration is missing. Please check settings.");
@@ -1557,14 +1569,19 @@ export const generateMemoryRecall = async (
 
     // Use worker fallback when no API config is available
     if ((!apiConfig || !apiConfig.apiKey) && workerUrl) {
-        return requestWorkerText(workerUrl, messages, { temperature: 0.2 });
+        return requestWorkerText(workerUrl, messages, { 
+            temperature: 0.2,
+            id: streamOptions?.id,
+            onDelta: streamOptions?.onDelta
+        });
     }
 
     return requestModelText(apiConfig!, messages, {
         temperature: 0.2,
         signal,
         streamOptions,
-        responseFormatJsonObject: true
+        responseFormatJsonObject: true,
+        id: streamOptions?.id
     });
 };
 
@@ -1623,7 +1640,11 @@ export const generateWorldData = async (
     // Use worker fallback when no API config is available
     const effectiveWorkerUrl = workerUrl || DEFAULT_NEMOTRON_WORKER_URL;
     if ((!apiConfig || !apiConfig.apiKey) && effectiveWorkerUrl) {
-        const rawText = await requestWorkerText(effectiveWorkerUrl, messages, { temperature: 0.8 });
+        const rawText = await requestWorkerText(effectiveWorkerUrl, messages, { 
+            temperature: 0.8,
+            id: streamOptions?.id,
+            onDelta: streamOptions?.onDelta
+        });
         return parseWorldResponse(rawText);
     }
 
@@ -1632,8 +1653,12 @@ export const generateWorldData = async (
     const responseFormatJsonObject = true;
     const rawText = await requestModelText(apiConfig, messages, {
         temperature: 0.8,
-        streamOptions,
-        responseFormatJsonObject
+        streamOptions: {
+            ...streamOptions,
+            id: streamOptions?.id
+        },
+        responseFormatJsonObject,
+        id: streamOptions?.id
     });
 
     return parseWorldResponse(rawText);
@@ -1749,14 +1774,23 @@ export const generateStoryResponse = async (
 
     if (useWorker) {
         // Use Cloudflare Worker (Nemotron) for text generation
-        rawText = await requestWorkerText(effectiveWorkerUrl!, apiMessages, { temperature: 0.7 });
+        rawText = await requestWorkerText(effectiveWorkerUrl!, apiMessages, { 
+            temperature: 0.7,
+            id: requestOptions?.id,
+            onDelta: streamOptions?.onDelta
+        });
     } else {
         rawText = await requestModelText(apiConfig!, apiMessages, {
             temperature: 0.7,
             signal,
-            streamOptions,
+            streamOptions: {
+                ...streamOptions,
+                stream: false,
+                id: requestOptions?.id
+            },
             responseFormatJsonObject,
-            errorDetailLimit: requestOptions?.errorDetailLimit
+            errorDetailLimit: requestOptions?.errorDetailLimit,
+            id: requestOptions?.id
         });
     }
 

@@ -9,6 +9,9 @@ export interface TextGenOptions {
   messages: TextGenMessage[];
   max_tokens?: number;
   temperature?: number;
+  id?: string;
+  onDelta?: (delta: string, accumulated: string) => void;
+  model?: string;
 }
 
 export interface TextGenResponse {
@@ -71,12 +74,14 @@ export class TextGenService {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            ...(options.id ? { 'x-session-affinity': options.id } : {}),
           },
           body: JSON.stringify({
             messages: options.messages,
             max_tokens: options.max_tokens || 131000,
             temperature: options.temperature || 0.7,
-            stream: true, // Enabled streaming
+            id: options.id,
+            model: options.model
           }),
         });
 
@@ -114,44 +119,16 @@ export class TextGenService {
           throw new Error(errorMessage);
         }
 
-        // Handle streaming response (SSE)
         let text = "";
         let errorDataFromStream: any = null;
-        const reader = response.body?.getReader();
-        const decoder = new TextDecoder();
 
-        if (reader) {
-          let done = false;
-          while (!done) {
-            const { value, done: doneReading } = await reader.read();
-            done = doneReading;
-            const chunk = decoder.decode(value, { stream: !done });
+        const data = await response.json() as any;
+        if (data.error) errorDataFromStream = data;
+        text = data.response || data.result?.response || data.choices?.[0]?.message?.content || "";
 
-            const lines = chunk.split('\n');
-            for (const line of lines) {
-              if (line.startsWith('data: ')) {
-                const dataStr = line.slice(6).trim();
-                if (dataStr === '[DONE]') continue;
-                try {
-                  const data = JSON.parse(dataStr);
-                  if (data.error) errorDataFromStream = data;
-                  const delta = data.response || data.result?.response || data.choices?.[0]?.delta?.content || "";
-                  text += delta;
-                } catch (e) { }
-              } else if (line.trim() && !line.startsWith(':')) {
-                try {
-                  const data = JSON.parse(line);
-                  if (data.error) errorDataFromStream = data;
-                  const delta = data.response || data.result?.response || "";
-                  text += delta;
-                } catch (e) { }
-              }
-            }
-          }
-        } else {
-          const data = await response.json() as any;
-          if (data.error) errorDataFromStream = data;
-          text = data.response || data.result?.response || data.choices?.[0]?.message?.content || "";
+        // Handle onDelta for compatibility (send full text as one delta)
+        if (options.onDelta && text) {
+            options.onDelta(text, text);
         }
 
         if (!text && errorDataFromStream) {
