@@ -101,59 +101,8 @@ const VisualSettings: React.FC<Props> = ({ settings, currentEnvironment, onSave 
 
     const [generatingForEnv, setGeneratingForEnv] = useState<string | null>(null);
 
-    // Auto-generation logic for background
-    React.useEffect(() => {
-        const checkAndGenerateEnv = async () => {
-            if (!currentEnvironment?.name || isGenerating || generatingForEnv === currentEnvironment.name) return;
+    // Manual generation logic for background (Auto disabled as requested)
 
-            // Check if we need to generate a new image
-            const isUsingDefaultOrOld = !safeSettings.backgroundImage || 
-                                       (!safeSettings.backgroundImage.includes('/images/backgrounds/') && 
-                                        !safeSettings.backgroundImage.startsWith('data:'));
-            
-            if (!isUsingDefaultOrOld) return;
-
-            const workerUrl = safeSettings.imageGenWorkerUrl;
-            if (!workerUrl) return;
-
-            const cacheKey = `env_${currentEnvironment.name.replace(/\s+/g, '_')}`;
-            const fileName = `${currentEnvironment.name.replace(/\s+/g, '_')}.png`;
-            const envImagePath = `/images/backgrounds/${fileName}`;
-            
-            const existingImage = await ImageService.checkImageExists(envImagePath, cacheKey);
-            
-            if (existingImage) {
-                if (safeSettings.backgroundImage !== existingImage) {
-                    onSave({
-                        ...safeSettings,
-                        backgroundImage: existingImage
-                    });
-                }
-            } else {
-                setGeneratingForEnv(currentEnvironment.name);
-                setIsGenerating(true);
-                try {
-                    const prompt = ImageService.constructBackgroundPrompt({
-                        name: currentEnvironment.name,
-                        description: currentEnvironment.description
-                    });
-                    const dataUrl = await ImageService.generateAndCache(workerUrl, { prompt }, cacheKey);
-                    if (dataUrl) {
-                        onSave({
-                            ...safeSettings,
-                            backgroundImage: dataUrl
-                        });
-                    }
-                } catch (error) {
-                    console.error('Environment background generation error:', error);
-                } finally {
-                    setIsGenerating(false);
-                }
-            }
-        };
-
-        checkAndGenerateEnv();
-    }, [currentEnvironment?.name, safeSettings.backgroundImage, safeSettings.imageGenWorkerUrl]);
 
     const handleTestImage = async () => {
         const workerUrl = safeSettings.imageGenWorkerUrl;

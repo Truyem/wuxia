@@ -1539,17 +1539,6 @@ export const useGame = () => {
                 for (const map of skeletonMaps) {
                     if (Array.isArray(map.cities)) {
                         for (const city of map.cities) {
-                            // Generate image for city if possible
-                            try {
-                                const cityPrompt = ImageService.constructMapPrompt({
-                                    name: `${city.name} (${map.name})`,
-                                    description: city.description || `Thành phố sầm uất tại ${map.name}`
-                                });
-                                const cacheKey = await ImageCacheService.generateCacheKey(cityPrompt, 'map', `city-${city.name}-${map.name}`);
-                                city.image = await ImageService.generateAndCache(workerUrl, { prompt: cityPrompt }, cacheKey);
-                            } catch (e) {
-                                console.warn(`Failed to generate image for city ${city.name}:`, e);
-                            }
 
                             // Flatten buildings
                             if (Array.isArray(city.buildings)) {

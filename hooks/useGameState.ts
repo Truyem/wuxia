@@ -290,10 +290,12 @@ export const useGameState = () => {
         const oldImageGenUrl = 'https://wuxia-image-gen.vudinhtrungv1010.workers.dev';
         const oldTextGenUrl = 'https://wuxia-nemotron-worker.vudinhtrungv1010.workers.dev';
 
-        if (result.imageGenWorkerUrl === oldImageGenUrl) {
+        if (result.imageGenWorkerUrl === oldImageGenUrl || (result.imageGenWorkerUrl && result.imageGenWorkerUrl.includes('/api/nemotron'))) {
+            console.log('[useGameState] Migrating/Correcting imageGenWorkerUrl');
             result.imageGenWorkerUrl = DEFAULT_IMAGE_GEN_WORKER_URL || '';
         }
-        if (result.textGenWorkerUrl === oldTextGenUrl) {
+        if (result.textGenWorkerUrl === oldTextGenUrl || (result.textGenWorkerUrl && result.textGenWorkerUrl.includes('/api/image-gen'))) {
+            console.log('[useGameState] Migrating/Correcting textGenWorkerUrl');
             result.textGenWorkerUrl = DEFAULT_TEXT_GEN_WORKER_URL || '';
         }
 

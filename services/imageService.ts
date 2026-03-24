@@ -263,21 +263,4 @@ export class ImageService {
     return `${basePrompt}, ${details}, vibrant colors, glowing aura, isolated item`;
   }
 
-  /**
-   * Helper to construct a background prompt
-   */
-  static constructBackgroundPrompt(environment: { name: string, description?: string }): string {
-    const basePrompt = "Wuxia landscape, epic scale, traditional Chinese artistic style, beautiful scenery";
-    let details = `${environment.name}`;
-    if (environment.description) details += `, ${environment.description}`;
-    
-    return `${basePrompt}, ${details}, serene, high resolution, cinematic light`;
-  }
-
-  /**
-   * Helper to construct a map prompt
-   */
-  static constructMapPrompt(map: { name: string, description?: string }): string {
-    return this.constructBackgroundPrompt(map);
-  }
 }

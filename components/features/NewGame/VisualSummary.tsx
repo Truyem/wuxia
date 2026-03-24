@@ -51,9 +51,6 @@ const VisualSummary: React.FC<VisualSummaryProps> = ({
                 }
                 
                 cacheKey = `${type}_${data.name.replace(/\s+/g, '_')}${favSuffix}`;
-            } else if (type === 'location') {
-                prompt = ImageService.constructMapPrompt(data);
-                cacheKey = `map_${(data.Name || data.name).replace(/\s+/g, '_')}`;
             } else if (type === 'item') {
                 prompt = ImageService.constructItemPrompt(data);
                 cacheKey = `item_${data.name.replace(/\s+/g, '_')}`;

@@ -57,39 +57,9 @@ export const MapModal: React.FC<MapModalProps> = ({ world, env, settings, apiCon
         }).slice(0, 9);
     }, [currentCity, allBuildings]);
 
-    // Image Generation Logic
+    // Image Generation Logic - REMOVED AS PER USER REQUEST
     const handleGenerateImage = async () => {
-        if (!currentCity || isGenerating) return;
-        setIsGenerating(true);
-        try {
-            const cityPrompt = ImageService.constructMapPrompt({
-                name: `${currentCity.name} (${currentProvince?.name})`,
-                description: currentCity.description || "Một thành phố sầm uất"
-            });
-            const cacheKey = await ImageCacheService.generateCacheKey(cityPrompt, 'map', `city-${currentCity.name}-${currentProvince?.name}`);
-            const imageUrl = await ImageService.generateAndCache(workerUrl, { prompt: cityPrompt }, cacheKey);
-            
-            // Create a deep copy of maps to update state correctly
-            const updatedMaps = provinces.map((p, pIdx) => {
-                if (pIdx !== selectedProvinceIndex) return p;
-                return {
-                    ...p,
-                    cities: p.cities.map((c: any, cIdx: number) => {
-                        if (cIdx !== selectedCityIndex) return c;
-                        return { ...c, image: imageUrl };
-                    })
-                };
-            });
-
-            onUpdateWorld({
-                ...world,
-                maps: updatedMaps
-            });
-        } catch (error) {
-            console.error("Failed to generate city image:", error);
-        } finally {
-            setIsGenerating(false);
-        }
+        // Disabled
     };
 
     // Auto-generate if missing - REMOVED AS PER USER REQUEST
