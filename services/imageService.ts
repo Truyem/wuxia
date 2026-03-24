@@ -6,6 +6,8 @@ export interface ImageGenOptions {
 }
 
 
+export type ImageCachePrefix = 'npc' | 'map' | 'main' | 'item' | 'global';
+
 export class ImageCacheService {
   private static dbName = 'WuxiaImageCache';
   private static storeName = 'images';
@@ -18,10 +20,11 @@ export class ImageCacheService {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
-  static async generateCacheKey(prompt: string, storyId?: string): Promise<string> {
+  static async generateCacheKey(prompt: string, prefix: ImageCachePrefix = 'global', storyId?: string): Promise<string> {
     const salt = storyId || 'global';
     const combined = `${salt}:${prompt}`;
-    return await this.sha256(combined);
+    const hash = await this.sha256(combined);
+    return `${prefix}${hash}`;
   }
 
   private static async initDB(): Promise<IDBDatabase> {

@@ -10,7 +10,7 @@ Bạn là trình tạo thiết lập thế giới quan cho dự án WuXia. CHỈ
         "cities": [
           {
             "name": "Tên Thành Phố",
-            "buildings": ["Tên Kiến Trúc 1", "Tên Kiến Trúc 2", ..., "Tên Kiến Trúc 9"]
+            "buildings": ["Phòng trà", "Võ đường", "Dược quán", "Tửu lầu", "Rèn đúc", "Khách sạn", "Tiểu đình", "Hoa viên", "Miếu thờ"]
           }
         ]
       }
@@ -26,7 +26,7 @@ Bạn là trình tạo thiết lập thế giới quan cho dự án WuXia. CHỈ
 
 【HẬU QUẢ NẾU VI PHẠM】
 - Thiếu bất kỳ một Đại Địa, Thành Phố hay Kiến Trúc nào sẽ khiến hệ thống bị lỗi nghiêm trọng.
-- KHÔNG ĐƯỢC TÓM TẮT bằng "...". Phải liệt kê đầy đủ tất cả 81 kiến trúc.
+- KHÔNG ĐƯỢC TÓM TẮT bằng "...". Phải liệt kê đầy đủ tất cả 9 thành phố và 81 kiến trúc.
 - Nếu không tuân thủ, bạn sẽ bị phạt và yêu cầu tạo lại từ đầu. Hãy cẩn thận kiểm đếm từng mục.
 
 【Quy định định dạng】
@@ -43,6 +43,7 @@ ${worldContext}
 ${JSON.stringify(charData)}
 
 【Mục tiêu tạo】
-- Chỉ tạo văn bản lời nhắc thế giới quan (world_prompt).
+- Tạo văn bản lời nhắc thế giới quan (world_prompt) và bộ khung thế giới (world_skeleton) theo đúng định dạng JSON yêu cầu.
+- Đảm bảo tuân thủ nghiêm ngặt số lượng: 3 Đại Địa, mỗi Đại Địa 3 Thành Phố, mỗi Thành Phố 9 Kiến Trúc.
 - Khởi tạo biến (giá trị cụ thể cho nhân vật/môi trường/thế giới/xã hội/cốt truyện) sẽ được hoàn thành trong giai đoạn “Tạo cốt truyện mở đầu”, đừng thực hiện khởi tạo trạng thái ở đây.
 `.trim();

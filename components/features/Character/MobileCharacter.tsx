@@ -133,7 +133,11 @@ const MobileCharacter: React.FC<Props> = ({ character, onClose, allAvatars }) =>
                                 <div className="flex items-start justify-between">
                                     <div>
                                         <div className="text-xl text-wuxia-gold font-serif font-bold">{character.name}</div>
-                                        <div className="text-[11px] text-gray-400 mt-1">{character.title || character.background || 'Vô danh tiểu tốt'}</div>
+                                        <div className="text-[11px] text-gray-400 mt-1">
+                                            {character.title || 
+                                             (typeof character.background === 'object' ? character.background.name : character.background) || 
+                                             'Vô danh tiểu tốt'}
+                                        </div>
                                     </div>
                                     <div className="text-right">
                                         <div className="text-[10px] text-gray-500 uppercase tracking-widest">Cảnh giới</div>
@@ -156,7 +160,7 @@ const MobileCharacter: React.FC<Props> = ({ character, onClose, allAvatars }) =>
                         {character.personality && (
                             <div className="mt-4 pt-3 border-t border-ink-gray/60 italic text-[11px] text-gray-400 leading-relaxed bg-black/10 p-2 rounded-lg">
                                 <span className="text-wuxia-gold/70 not-italic mr-2 font-bold uppercase tracking-tighter">Tính cách:</span>
-                                {character.personality}
+                                {typeof character.personality === 'object' ? (character.personality as any).text || (character.personality as any).name : character.personality}
                             </div>
                         )}
                     </div>
@@ -186,7 +190,7 @@ const MobileCharacter: React.FC<Props> = ({ character, onClose, allAvatars }) =>
                             <div className="flex flex-wrap gap-2">
                                 {character.playerBuffs.map((buff, i) => (
                                     <span key={i} className="text-[10px] px-2 py-1 border border-wuxia-cyan/30 text-wuxia-cyan bg-wuxia-cyan/5 rounded">
-                                        {buff}
+                                        {typeof buff === 'object' ? (buff as any).name || (buff as any).text : buff}
                                     </span>
                                 ))}
                             </div>

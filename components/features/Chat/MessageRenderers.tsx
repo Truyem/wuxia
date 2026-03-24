@@ -37,14 +37,29 @@ const MODIFIER_LABELS: Record<string, string> = {
 };
 
 const parseModifier = (part: string): JudgmentModifier | null => {
-    const modifierMatch = part.match(/^(Basic|Environment|Status|Luck|Equipment)\s*([+\-]?\d+(?:\.\d+)?)(?:\s*\((.+)\))?$/);
+    // English: Basic, Environment, Status, Luck, Equipment
+    // Vietnamese: Cơ bản, Môi trường, Trạng thái, May mắn, Trang bị
+    const modifierMatch = part.match(/^(Basic|Environment|Status|Luck|Equipment|Cơ bản|Môi trường|Trạng thái|May mắn|Trang bị)\s*([+\-]?\d+(?:\.\d+)?|B|E|S|L|Q)?(?:\s*\((.+)\))?$/i);
     if (!modifierMatch) return null;
 
     const [, key, valueRaw, reason] = modifierMatch;
+    // Map Vietnamese keys back to English if possible, or use as is
+    const keyMap: Record<string, string> = {
+        'Cơ bản': 'Basic',
+        'Môi trường': 'Environment',
+        'Trạng thái': 'Status',
+        'May mắn': 'Luck',
+        'Trang bị': 'Equipment'
+    };
+    const mappedKey = keyMap[key] || key;
+    
+    // Check if valueRaw is numeric
+    const numericValue = valueRaw && !isNaN(Number(valueRaw)) ? Number(valueRaw) : null;
+
     return {
-        key,
-        label: MODIFIER_LABELS[key] || key,
-        value: Number(valueRaw),
+        key: mappedKey,
+        label: MODIFIER_LABELS[mappedKey] || key,
+        value: numericValue,
         reason: reason?.trim(),
         raw: part
     };
@@ -60,7 +75,8 @@ const parseJudgmentText = (text: string): ParsedJudgment => {
         eventName: parts[0] || 'Sự kiện kiểm tra'
     };
 
-    const isResultToken = (token: string) => /(Success|Failure|Critical Success|Critical Failure|Ultimate Success|Ultimate Failure)/.test(token);
+    const isResultToken = (token: string) => 
+        /(Success|Failure|Critical Success|Critical Failure|Ultimate Success|Ultimate Failure|Thành công|Thất bại|Đại thành công|Đại thất bại|Cực thành công|Cực thất bại)/i.test(token);
 
     if (parts[1] && isResultToken(parts[1])) {
         parsed.result = parts[1];
@@ -74,16 +90,18 @@ const parseJudgmentText = (text: string): ParsedJudgment => {
             continue;
         }
 
-        const targetMatch = part.match(/^Trigger object\s*(.+)$/);
+        // Support both "Trigger object Player" and "Người chơi: Lý Vân"
+        const targetMatch = part.match(/^(Trigger object|Đối tượng kích hoạt|Người chơi|NPC)\s*[:\s]*(.+)$/i);
         if (targetMatch) {
-            parsed.target = targetMatch[1].trim() || parsed.target;
+            parsed.target = targetMatch[2].trim() || parsed.target;
             continue;
         }
 
-        const scoreDiffMatch = part.match(/^Check value\s*([+\-]?\d+(?:\.\d+)?)\s*\/\s*Difficulty\s*([+\-]?\d+(?:\.\d+)?)$/);
+        // Support both "Check value X / Difficulty Y" and "Giá trị phán đoán X/Độ khó Y"
+        const scoreDiffMatch = part.match(/^(Check value|Giá trị phán đoán|Phán đoán|Kiểm tra)\s*([+\-]?\d+(?:\.\d+)?)\s*\/\s*(Difficulty|Độ khó)\s*([+\-]?\d+(?:\.\d+)?)$/i);
         if (scoreDiffMatch) {
-            parsed.score = Number(scoreDiffMatch[1]);
-            parsed.difficulty = Number(scoreDiffMatch[2]);
+            parsed.score = Number(scoreDiffMatch[2]);
+            parsed.difficulty = Number(scoreDiffMatch[4]);
             continue;
         }
 

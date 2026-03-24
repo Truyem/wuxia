@@ -70,12 +70,20 @@ export interface MapStructure {
     avatar?: string;
     affiliation: LocationAffiliation;
     internalBuildings: BuildingStructure[]; // Changed from string[] to BuildingStructure[] for inline data
+    cities?: any[]; // Added to support nested city structure from AI
 }
 
 export interface BuildingStructure {
     name: string;
     description: string;
     affiliation: LocationAffiliation;
+}
+
+// --- Camera bản đồ ---
+export interface MapCamera {
+    x: number;
+    y: number;
+    zoom: number;
 }
 
 // --- Toàn cảnh thế giới ---
@@ -89,4 +97,5 @@ export interface WorldDataStructure {
     settledEvents: WorldEventStructure[];
     worldHistory: WorldEventStructure[]; // Giang hồ sử sách
     time?: GameTimeObject;
+    mapCamera?: MapCamera; // Vị trí và độ phóng đại của bản đồ vô tận
 }

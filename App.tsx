@@ -63,9 +63,7 @@ const App: React.FC = () => {
     const [isGeneratingProtagonist, setIsGeneratingProtagonist] = React.useState(false);
     const [generatingNpcs, setGeneratingNpcs] = React.useState<Set<string>>(new Set());
     const generatingProtagonistFor = React.useRef<string | null>(null);
-    const generatingItems = React.useRef<Set<string>>(new Set());
     const [pendingInputToPreload, setPendingInputToPreload] = React.useState<string>('');
-    const generatingMaps = React.useRef<Set<string>>(new Set());
 
     const requestConfirm = React.useCallback((options: ConfirmOptions) => {
         return new Promise<boolean>((resolve) => {
@@ -143,10 +141,10 @@ const App: React.FC = () => {
             .filter(evt => evt && (evt.currentStatus === 'In progress' || !evt.currentStatus))
             .sort((a, b) => parseGameTimestampToNumber(b.startTime) - parseGameTimestampToNumber(a.startTime))
             .map(evt => {
-                const type = evt.type || 'Event';
-                const start = evt.startTime || 'Unknown time';
-                const title = evt.title || 'No title';
-                const location = evt.location || 'Unknown location';
+                const type = evt.type || 'Sự kiện';
+                const start = evt.startTime || 'Không rõ thời gian';
+                const title = evt.title || evt.name || 'Không có tiêu đề';
+                const location = evt.location || 'Nơi nào đó';
                 return `【${type}】${start} ${title}（${location}）`;
             })
             .filter(Boolean);
@@ -208,7 +206,7 @@ const App: React.FC = () => {
 
                 if (needsProtagonistGen && noCustomProtagonist) {
                     const prompt = ImageService.constructCharacterPrompt(Role);
-                    const cacheKey = await ImageCacheService.generateCacheKey(prompt, (state as any).storyId);
+                    const cacheKey = await ImageCacheService.generateCacheKey(prompt, 'main', (state as any).storyId);
                     const existingImage = await ImageService.checkImageExists('', cacheKey);
                     
                     if (existingImage) {
@@ -244,7 +242,7 @@ const App: React.FC = () => {
                             realm: npc.realm || 'Phàm nhân',
                             appearanceDescription: `${npc.identity || ''}. ${npc.appearanceDescription || ''}`.trim()
                         });
-                        const cacheKey = await ImageCacheService.generateCacheKey(prompt, (state as any).storyId);
+                        const cacheKey = await ImageCacheService.generateCacheKey(prompt, 'npc', (state as any).storyId);
                         const existingNpcImage = await ImageService.checkImageExists('', cacheKey);
 
                         if (existingNpcImage) {
@@ -281,72 +279,12 @@ const App: React.FC = () => {
                 }
             }
 
-            // 3. Check Inventory Items
-            if (Array.isArray(state.character.itemList)) {
-                for (const item of state.character.itemList) {
-                    if (item.name && typeof item.image !== 'string' && !generatingItems.current.has(item.name)) {
-                        const prompt = ImageService.constructItemPrompt(item);
-                        const cacheKey = await ImageCacheService.generateCacheKey(prompt, (state as any).storyId);
-                        const existingImage = await ImageService.checkImageExists(`/images/items/${item.name.replace(/\s+/g, '_')}.png`, cacheKey);
-                        if (existingImage) {
-                            state.setCharacter(prev => ({
-                                ...prev,
-                                itemList: prev.itemList.map(i => i.name === item.name ? { ...i, image: existingImage } : i)
-                            }));
-                        } else {
-                            generatingItems.current.add(item.name);
-                            try {
-                                const dataUrl = await ImageService.generateAndCache(workerUrl, { prompt }, cacheKey);
-                                if (dataUrl) {
-                                    state.setCharacter(prev => ({
-                                        ...prev,
-                                        itemList: prev.itemList.map(i => i.name === item.name ? { ...i, image: dataUrl } : i)
-                                    }));
-                                }
-                            } catch (error) {
-                                console.error(`Item generation error for ${item.name}:`, error);
-                            }
-                        }
-                    }
-                }
-            }
-
-            // 4. Check Maps
-            if (Array.isArray(state.world?.maps)) {
-                for (const map of state.world.maps) {
-                    const mapName = map.Name || map.name; // Some maps use Name instead of name
-                    if (mapName && typeof map.image !== 'string' && !generatingMaps.current.has(mapName)) {
-                        const prompt = ImageService.constructMapPrompt(map);
-                        const cacheKey = await ImageCacheService.generateCacheKey(prompt, (state as any).storyId);
-                        const existingImage = await ImageService.checkImageExists(`/images/maps/${mapName.replace(/\s+/g, '_')}.png`, cacheKey);
-                        if (existingImage) {
-                            state.setWorld(prev => ({
-                                ...prev,
-                                maps: prev.maps.map(m => (m.Name || m.name) === mapName ? { ...m, image: existingImage } : m)
-                            }));
-                        } else {
-                            generatingMaps.current.add(mapName);
-                            try {
-                                const dataUrl = await ImageService.generateAndCache(workerUrl, { prompt }, cacheKey);
-                                if (dataUrl) {
-                                    state.setWorld(prev => ({
-                                        ...prev,
-                                        maps: prev.maps.map(m => (m.Name || m.name) === mapName ? { ...m, avatar: dataUrl } : m)
-                                    }));
-                                }
-                            } catch (error) {
-                                console.error(`Map generation error for ${mapName}:`, error);
-                            }
-                        }
-                    }
-                }
-            }
         };
 
         if (state.view === 'game') {
             checkAndGenerate();
         }
-    }, [state.character.name, state.character.avatar, state.social, state.character.itemList, state.world?.maps, state.visualConfig.imageGenWorkerUrl, state.view]);
+    }, [state.character.name, state.character.avatar, state.social, state.visualConfig.imageGenWorkerUrl, state.view]);
 
     const renderTickerItems = (items: string[], keyPrefix: string) => (
         items.map((e, i) => (
@@ -887,7 +825,10 @@ const App: React.FC = () => {
                         <MapModal
                             world={state.world}
                             env={state.environment}
+                            apiConfig={state.apiConfig}
                             onClose={() => setters.setShowMap(false)}
+                            onUpdateWorld={state.setWorld}
+                            workerUrl={state.apiConfig.imageGenWorkerUrl || state.apiConfig.workerUrl}
                         />
                     )}
 

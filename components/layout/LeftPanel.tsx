@@ -96,26 +96,33 @@ const PremiumBar: React.FC<{ label: string; current: number; max: number; colorC
 };
 
 // Mini Body Part with Liquid Glass look
-const MiniBodyPart: React.FC<{ name: string; current: number; max: number }> = ({ name, current, max }) => {
+const MiniBodyPart: React.FC<{ name: string; current: number; max: number; status?: string }> = ({ name, current, max, status }) => {
     const pct = (current / (max || 1)) * 100;
+    const s = status?.trim().toLowerCase();
+    const isHealthy = !s || s === 'khỏe mạnh' || s === 'bình thường' || s === 'ổn định' || s === 'tốt' || s === 'khỏe' || s === 'bình thường';
+    const isInjured = pct < 99.5 || !isHealthy;
     const isCritical = pct < 30;
     
     return (
         <div className="flex items-center gap-4 w-full group transition-all py-[2px]">
-            <span className={`font-serif text-[9px] w-12 shrink-0 uppercase tracking-widest font-black ${isCritical ? 'text-wuxia-red' : 'text-wuxia-red/80'}`}>
+            <span className={`font-serif text-[9px] w-12 shrink-0 uppercase tracking-widest font-black ${isCritical ? 'text-wuxia-red animate-pulse' : 'text-wuxia-red/80'}`}>
                 {name}
             </span>
-            <div className="flex-1 h-[2px] bg-white/5 rounded-full overflow-hidden">
+            <div className="flex-1 h-[3px] bg-white/5 rounded-full overflow-hidden border border-white/5">
                 <div
-                    className={`h-full transition-all duration-1000 ${isCritical ? 'bg-wuxia-red' : 'bg-wuxia-red/40'}`}
+                    className={`h-full transition-all duration-1000 ${isCritical ? 'bg-wuxia-red shadow-[0_0_8px_rgba(239,68,68,0.6)]' : 'bg-wuxia-red'}`}
                     style={{ width: `${pct}%` }}
                 ></div>
             </div>
-            {/* The small red icon on the right from the mockup */}
+            {/* Conditional icon: X for injury, dot for healthy */}
             <div className="w-3 h-3 flex items-center justify-center">
-                <svg className="w-2.5 h-2.5 text-wuxia-red" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                {isInjured ? (
+                    <svg className={`w-2.5 h-2.5 ${isCritical ? 'text-wuxia-red' : 'text-wuxia-red/70'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                ) : (
+                    <div className="w-1 h-1 rounded-full bg-wuxia-gold/40 shadow-[0_0_4px_rgba(230,200,110,0.4)]" />
+                )}
             </div>
         </div>
     );
@@ -287,13 +294,13 @@ const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visual
 
 
     const bodyParts = [
-        { name: 'Đầu', current: Role.headCurrentHp, max: Role.headMaxHp },
-        { name: 'Ngực', current: Role.chestCurrentHp, max: Role.chestMaxHp },
-        { name: 'Bụng', current: Role.abdomenCurrentHp, max: Role.abdomenMaxHp },
-        { name: 'T.Tay', current: Role.leftArmCurrentHp, max: Role.leftArmMaxHp },
-        { name: 'P.Tay', current: Role.rightArmCurrentHp, max: Role.rightArmMaxHp },
-        { name: 'T.Chân', current: Role.leftLegCurrentHp, max: Role.leftLegMaxHp },
-        { name: 'P.Chân', current: Role.rightLegCurrentHp, max: Role.rightLegMaxHp },
+        { name: 'Đầu', current: Role.headCurrentHp, max: Role.headMaxHp, status: Role.headStatus },
+        { name: 'Ngực', current: Role.chestCurrentHp, max: Role.chestMaxHp, status: Role.chestStatus },
+        { name: 'Bụng', current: Role.abdomenCurrentHp, max: Role.abdomenMaxHp, status: Role.abdomenStatus },
+        { name: 'T.Tay', current: Role.leftArmCurrentHp, max: Role.leftArmMaxHp, status: Role.leftArmStatus },
+        { name: 'P.Tay', current: Role.rightArmCurrentHp, max: Role.rightArmMaxHp, status: Role.rightArmStatus },
+        { name: 'T.Chân', current: Role.leftLegCurrentHp, max: Role.leftLegMaxHp, status: Role.leftLegStatus },
+        { name: 'P.Chân', current: Role.rightLegCurrentHp, max: Role.rightLegMaxHp, status: Role.rightLegStatus },
     ];
 
     const equipmentOrder = [
@@ -407,7 +414,7 @@ const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visual
                                 {Role.name}
                             </h2>
                             <span className="text-[9px] text-wuxia-gold font-serif italic tracking-[0.15em] uppercase opacity-70 block mt-1.5 truncate">
-                                {Role.title || 'Giang hồ tản nhân'}
+                                {Role.title || (typeof Role.background === 'object' ? Role.background.name : Role.background) || 'Giang hồ tản nhân'}
                             </span>
                         </div>
                         {/* Realm Indicator Pill — only in profile */}
@@ -434,9 +441,9 @@ const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visual
                                 <span className="opacity-40 text-wuxia-gold font-mono">#</span> Tính cách
                             </h3>
                             <p className="text-[10px] leading-relaxed text-paper-white/70 font-serif italic min-h-[1.5em]">
-                                {Role.personality || (
+                                {typeof Role.personality === 'object' ? (Role.personality as any).text || (Role.personality as any).name : (Role.personality || (
                                     <span className="text-paper-white/20 italic">Chưa có mô tả tính cách...</span>
-                                )}
+                                ))}
                             </p>
                         </div>
 
@@ -510,27 +517,7 @@ const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visual
                 )}
 
 
-                {/* ── NPC Slots (Nội viện) ── */}
-                <div className="">
-                    <div className="flex items-center justify-between mb-3 px-1">
-                        <div className="flex items-center gap-2">
-                            <div className="w-3.5 h-3.5 rounded-full border-2 border-wuxia-gold rotate-45 flex items-center justify-center">
-                                <div className="w-1 h-1 bg-wuxia-gold rounded-full"></div>
-                            </div>
-                            <h3 className="text-[9px] text-wuxia-gold uppercase tracking-[0.3em] font-black">Nội viện tòng hành</h3>
-                        </div>
-                        <span className="text-[9px] text-paper-white/30 font-mono font-black italic">[{presentNpcs.length}]</span>
-                    </div>
-                    <div className="flex flex-wrap gap-4 p-4 rounded-xl bg-transparent border border-white/[0.03]">
-                        {presentNpcs.length > 0 ? (
-                            presentNpcs.map(npc => <NpcSlot key={npc.id} npc={npc} visualConfig={visualConfig} isGenerating={generatingNames?.has(npc.name)} allAvatars={allAvatars} />)
-                        ) : (
-                            <div className="w-full flex flex-col items-center justify-center py-5 border border-dashed border-white/5 rounded-xl bg-transparent">
-                                <span className="text-[9px] text-paper-white/30 tracking-[0.2em] uppercase font-serif italic text-center w-full">Cô độc giữa nhân gian</span>
-                            </div>
-                        )}
-                    </div>
-                </div>
+
                 
                 {isProfile && (
                     <div className="px-5 py-4 bg-transparent border border-white/[0.05] rounded-xl relative group/status">
@@ -539,7 +526,7 @@ const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visual
                         </h3>
                         <div className="space-y-1">
                             {bodyParts.map(part => (
-                                <MiniBodyPart key={part.name} name={part.name} current={part.current} max={part.max} />
+                                <MiniBodyPart key={part.name} name={part.name} current={part.current} max={part.max} status={part.status} />
                             ))}
                         </div>
                     </div>

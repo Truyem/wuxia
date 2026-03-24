@@ -61,6 +61,7 @@ import { constructStorylineStyleAssistantPrompt } from '../prompts/runtime/story
 import { CoreChainOfThoughtMulti as Core_ChainOfThought_MultiThought } from '../prompts/core/cotMulti';
 import { Core_OutputFormat_MultiThought } from '../prompts/core/formatMulti';
 import { WritingNoControl as Writing_PreventSpeaking } from '../prompts/writing/noControl';
+import { ImageService, ImageCacheService } from '../services/imageService';
 
 import {
     normalizeEnvironment,
@@ -859,14 +860,15 @@ export const useGame = () => {
                     estimatedCompletionTime: npc.estimatedCompletionTime || '',
                     holdingHeavyTreasure: npc.holdingHeavyTreasure || []
                 })),
-                maps: (world.maps || []).slice(0, 15).map((item: any) => ({
+                maps: (world.maps || []).slice(0, 100).map((item: any) => ({
                     name: item.name || '',
                     coordinate: item.coordinate || '',
                     description: item.description || '',
                     affiliation: item.affiliation || { majorLocation: '', mediumLocation: '', minorLocation: '' },
+                    cities: item.cities || [],
                     internalBuildings: item.internalBuildings || []
                 })),
-                buildings: (world.buildings || []).slice(0, 15).map((item: any) => ({
+                buildings: (world.buildings || []).slice(0, 200).map((item: any) => ({
                     name: item.name || '',
                     description: item.description || '',
                     affiliation: item.affiliation || { majorLocation: '', mediumLocation: '', minorLocation: '' }
@@ -996,7 +998,7 @@ export const useGame = () => {
             const buildingList = Array.isArray(world.buildings) ? world.buildings : [];
 
             const mapText = mapList.length > 0
-                ? mapList.slice(0, 15).map((mapItem: any) => {
+                ? mapList.slice(0, 100).map((mapItem: any) => {
                     const name = typeof mapItem?.name === 'string' ? mapItem.name.trim() : 'Bản đồ không tên';
                     const coord = typeof mapItem?.coordinate === 'string' ? mapItem.coordinate.trim() : 'Số liệu không rõ';
                     const desc = typeof mapItem?.description === 'string' ? mapItem.description.trim() : 'Không có mô tả';
@@ -1008,7 +1010,10 @@ export const useGame = () => {
                         ].join(' > ')
                         : 'Không rõ quy thuộc';
                     const interiors = Array.isArray(mapItem?.internalBuildings)
-                        ? mapItem.internalBuildings.filter((n: any) => typeof n === 'string' && n.trim().length > 0).join(' | ')
+                        ? mapItem.internalBuildings
+                            .map((b: any) => typeof b === 'string' ? b.trim() : (b?.name || '').trim())
+                            .filter((n: string) => n.length > 0)
+                            .join(' | ')
                         : '';
                     return `- Tên: ${name} | Tọa độ: ${coord} | Quy thuộc: ${ownership}\n  Mô tả: ${desc}\n  Kiến trúc nội bộ: ${interiors || 'Không có'}`;
                 }).join('\n')
@@ -1518,6 +1523,57 @@ export const useGame = () => {
 
             const worldPromptContent = worldResponse.world_prompt?.trim() || worldPromptSeed;
             const worldSkeleton = worldResponse.world_skeleton;
+
+            // Merge skeleton data into initial base state if present
+            if (worldSkeleton) {
+                const skeletonMaps = Array.isArray(worldSkeleton.maps) ? worldSkeleton.maps : [];
+                const skeletonBuildings = Array.isArray(worldSkeleton.buildings) ? worldSkeleton.buildings : [];
+                
+                // 1. Generate images for each city and collect all buildings
+                const extraBuildings: any[] = [];
+                for (const map of skeletonMaps) {
+                    if (Array.isArray(map.cities)) {
+                        for (const city of map.cities) {
+                            // Generate image for city if possible
+                            try {
+                                const cityPrompt = ImageService.constructMapPrompt({
+                                    name: `${city.name} (${map.name})`,
+                                    description: city.description || `Thành phố sầm uất tại ${map.name}`
+                                });
+                                const cacheKey = await ImageCacheService.generateCacheKey(cityPrompt, 'map', `city-${city.name}-${map.name}`);
+                                city.image = await ImageService.generateAndCache(workerUrl, { prompt: cityPrompt }, cacheKey);
+                            } catch (e) {
+                                console.warn(`Failed to generate image for city ${city.name}:`, e);
+                            }
+
+                            // Flatten buildings
+                            if (Array.isArray(city.buildings)) {
+                                city.buildings.forEach((bName: any) => {
+                                    const bRealName = typeof bName === 'string' ? bName : (bName?.name || '');
+                                    if (bRealName && !skeletonBuildings.some((sb: any) => (sb.name || sb) === bRealName)) {
+                                        extraBuildings.push({
+                                            name: bRealName,
+                                            description: `Kiến trúc tại ${city.name}, ${map.name}`,
+                                            affiliation: {
+                                                majorLocation: map.name,
+                                                mediumLocation: city.name,
+                                                minorLocation: bRealName
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+
+                openingBase.world = {
+                    ...openingBase.world,
+                    maps: skeletonMaps,
+                    buildings: [...skeletonBuildings, ...extraBuildings],
+                };
+            }
+
             const finalPrompts = updatedPrompts.map(p => (
                 p.id === 'core_world' ? { ...p, content: worldPromptContent } : p
             ));
@@ -1597,10 +1653,19 @@ export const useGame = () => {
 
             const openingMem: MemorySystem = { recallArchives: [], instantMemory: [], shortTermMemory: [], midTermMemory: [], longTermMemory: [] };
             const openingEnv = normalizeEnvironment(contextData?.environment || environment);
+            
+            // Merge worldSkeleton into world payload if it explicitly exists for the opening
+            const baseWorldForOpening = contextData.world || world;
+            const mergedWorldForOpening = worldSkeleton ? {
+                ...baseWorldForOpening,
+                maps: Array.isArray(worldSkeleton.maps) ? worldSkeleton.maps : baseWorldForOpening.maps,
+                buildings: Array.isArray(worldSkeleton.buildings) ? worldSkeleton.buildings : baseWorldForOpening.buildings,
+            } : baseWorldForOpening;
+
             const openingStatePayload = {
                 character: contextData.character || character,
                 environment: openingEnv,
-                world: contextData.world || world,
+                world: mergedWorldForOpening,
                 battle: contextData.battle || battle,
                 playerSect: contextData.playerSect || playerSect,
                 taskList: contextData.taskList || taskList,
@@ -1698,7 +1763,7 @@ export const useGame = () => {
                 character: contextData.character || character,
                 environment: contextData.environment || environment,
                 social: contextData.social || social,
-                world: contextData.world || world,
+                world: mergedWorldForOpening,
                 battle: contextData.battle || battle,
                 story: normalizeStoryStatus(contextData.story || story, contextData.environment || environment)
             });

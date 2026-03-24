@@ -290,35 +290,74 @@ export const MapGraph: React.FC<MapGraphProps> = ({ maps }) => {
       });
 
       // ── Cities ──
-      const raw = map.affiliation?.mediumLocation;
-      const cities: string[] = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+      // 1. Try to get cities from the nested array (new structure)
+      // 2. Fallback to affiliation.mediumLocation (old structure)
+      const citiesRaw = (map as any).cities;
+      const mediumLocRaw = map.affiliation?.mediumLocation;
+      
+      let cities: string[] = [];
+      if (Array.isArray(citiesRaw) && citiesRaw.length > 0) {
+        cities = citiesRaw.map((c: any) => typeof c === 'string' ? c : (c.name || ''));
+      } else if (Array.isArray(mediumLocRaw)) {
+        cities = mediumLocRaw;
+      } else if (mediumLocRaw) {
+        cities = [mediumLocRaw];
+      }
+      
       const allBuildings: any[] = Array.isArray(map.internalBuildings) ? map.internalBuildings : [];
       const used = new Set<number>();
 
       cities.forEach((city, ci) => {
-        const name = typeof city === 'string' ? city.trim() : String(city);
-        if (!name) return;
+        const cityName = typeof city === 'string' ? city.trim() : String(city);
+        if (!cityName) return;
         const cityId = `city-${mi}-${ci}`;
 
         // match buildings
         const matched: { b: any; idx: number }[] = [];
         allBuildings.forEach((b, bi) => {
           if (used.has(bi)) return;
-          const loc = b?.affiliation?.mediumLocation;
+          
+          const medLoc = b?.affiliation?.mediumLocation;
+          const minLoc = b?.affiliation?.minorLocation;
+          const bName = typeof b === 'string' ? b : (b?.name || '');
+          
           let hit = false;
-          if (Array.isArray(loc)) hit = loc.some((l: any) => typeof l === 'string' && l.trim() === name);
-          else if (typeof loc === 'string') hit = loc.trim() === name;
-          if (hit) { used.add(bi); matched.push({ b, idx: bi }); }
+          // Check mediumLocation
+          if (Array.isArray(medLoc)) hit = medLoc.some((l: any) => typeof l === 'string' && l.trim() === cityName);
+          else if (typeof medLoc === 'string') hit = medLoc.trim() === cityName;
+          
+          // Check minorLocation (where stateTransforms often puts city names for buildings)
+          if (!hit) {
+            if (Array.isArray(minLoc)) hit = minLoc.some((l: any) => typeof l === 'string' && l.trim() === cityName);
+            else if (typeof minLoc === 'string') hit = minLoc.trim() === cityName;
+          }
+          
+          // Check name prefix (e.g. "Long Thành: Nhà Thuốc")
+          if (!hit && bName.startsWith(`${cityName}:`)) {
+            hit = true;
+          }
+
+          if (hit) { 
+            used.add(bi); 
+            matched.push({ b, idx: bi }); 
+          }
         });
 
-        const connectionNames = matched.map(({ b }) => typeof b === 'string' ? b : (b?.name || '?'));
+        const connectionNames = matched.map(({ b }) => {
+          let bName = typeof b === 'string' ? b : (b?.name || '?');
+          // Clean up prefix if it exists
+          if (bName.startsWith(`${cityName}:`)) {
+            bName = bName.substring(cityName.length + 1).trim();
+          }
+          return bName;
+        });
 
         n.push({
           id: cityId,
           type: 'mediumNode',
           position: { x: 0, y: 0 },
           data: {
-            label: name,
+            label: cityName,
             buildingCount: matched.length,
             connections: connectionNames,
             type: 'Thành thị',
@@ -339,7 +378,11 @@ export const MapGraph: React.FC<MapGraphProps> = ({ maps }) => {
         // ── Buildings under this city ──
         matched.forEach(({ b }, bi) => {
           const bId = `b-${mi}-${ci}-${bi}`;
-          const bName = typeof b === 'string' ? b : (b?.name || '?');
+          let bName = typeof b === 'string' ? b : (b?.name || '?');
+          // Clean up prefix
+          if (bName.startsWith(`${cityName}:`)) {
+            bName = bName.substring(cityName.length + 1).trim();
+          }
           const bDesc = typeof b === 'object' ? (b?.description || '') : '';
 
           n.push({
@@ -352,7 +395,7 @@ export const MapGraph: React.FC<MapGraphProps> = ({ maps }) => {
               type: 'Kiến trúc',
               typeColor: 'rgba(59, 130, 246, 0.2)',
               textColor: '#93c5fd',
-              affiliation: name
+              affiliation: cityName
             },
           });
 
@@ -403,10 +446,7 @@ export const MapGraph: React.FC<MapGraphProps> = ({ maps }) => {
   }, [maps]);
 
   // Stats
-  const totalCities = maps.reduce((acc, m) => {
-    const loc = m.affiliation?.mediumLocation;
-    return acc + (Array.isArray(loc) ? loc.length : (loc ? 1 : 0));
-  }, 0);
+  const totalCities = maps.reduce((acc, m) => acc + (m.cities?.length || 0), 0);
   const totalBuildings = maps.reduce((acc, m) => acc + (m.internalBuildings?.length || 0), 0);
 
   return (

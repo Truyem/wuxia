@@ -25,7 +25,23 @@ const normalizeCurrency = (value: unknown): number => {
     if (!Number.isFinite(n)) return 0;
     return Math.max(0, Math.floor(n));
 };
-const getLocationFragment = (raw: unknown): string => (typeof raw === 'string' ? raw.trim() : '');
+const coerceToString = (val: unknown): string => {
+    if (val === null || val === undefined) return '';
+    if (typeof val === 'string') return val.trim();
+    if (typeof val === 'object') {
+        const obj = val as any;
+        const candidate = obj.content || obj.text || obj.description || obj.value || obj.name;
+        if (typeof candidate === 'string') return candidate.trim();
+        if (Array.isArray(val)) return val.map(v => coerceToString(v)).join(', ');
+        try {
+            return JSON.stringify(val);
+        } catch {
+            return '[Object]';
+        }
+    }
+    return String(val).trim();
+};
+const getLocationFragment = (raw: unknown): string => coerceToString(raw);
 const removeSpecificLocationRedundancy = (specificRaw: string, smallRaw: string): string => {
     const specific = getLocationFragment(specificRaw);
     const small = getLocationFragment(smallRaw);
@@ -75,6 +91,19 @@ const normalizeEnvironment = (rawEnv?: any): EnvironmentData => {
                 effect: typeof rawEnvVar?.effect === 'string' ? rawEnvVar.effect.trim() : ''
             }
             : null);
+    const rawTime = coerceToString(source?.time);
+    let parsedTime: any = {};
+    if (rawTime.match(/^\d{1,4}:\d{1,2}:\d{1,2}:\d{1,2}:\d{1,2}$/)) {
+        const parts = rawTime.split(':').map(Number);
+        parsedTime = { Year: parts[0], Month: parts[1], Day: parts[2], Hour: parts[3], Minute: parts[4] };
+    } else if (rawTime.match(/^\d{1,4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}$/)) {
+        // Handle standard ISO-like format if AI sends it
+        const [datePart, timePart] = rawTime.split(' ');
+        const [y, m, d] = datePart.split('-').map(Number);
+        const [h, min] = timePart.split(':').map(Number);
+        parsedTime = { Year: y, Month: m, Day: d, Hour: h, Minute: min };
+    }
+
     return {
         ...source,
         majorLocation: major,
@@ -85,12 +114,12 @@ const normalizeEnvironment = (rawEnv?: any): EnvironmentData => {
         weather,
         envVariables,
         gameDays: Math.max(1, Math.floor(originalGameDays)),
-        Year: typeof source?.Year === 'number' && Number.isFinite(source.Year) ? source.Year : (typeof source?.year === 'number' ? source.year : 2026),
-        Month: typeof source?.Month === 'number' && Number.isFinite(source.Month) ? source.Month : (typeof source?.month === 'number' ? source.month : 3),
-        Day: typeof source?.Day === 'number' && Number.isFinite(source.Day) ? source.Day : (typeof source?.day === 'number' ? source.day : 23),
-        Hour: typeof source?.Hour === 'number' && Number.isFinite(source.Hour) ? source.Hour : (typeof source?.hour === 'number' ? source.hour : 6),
-        Minute: typeof source?.Minute === 'number' && Number.isFinite(source.Minute) ? source.Minute : (typeof source?.minute === 'number' ? source.minute : 15),
-        time: typeof source?.time === 'string' ? source.time : 'Sáng',
+        Year: parsedTime.Year ?? (typeof source?.Year === 'number' && Number.isFinite(source.Year) ? source.Year : (typeof source?.year === 'number' ? source.year : 2026)),
+        Month: parsedTime.Month ?? (typeof source?.Month === 'number' && Number.isFinite(source.Month) ? source.Month : (typeof source?.month === 'number' ? source.month : 3)),
+        Day: parsedTime.Day ?? (typeof source?.Day === 'number' && Number.isFinite(source.Day) ? source.Day : (typeof source?.day === 'number' ? source.day : 23)),
+        Hour: parsedTime.Hour ?? (typeof source?.Hour === 'number' && Number.isFinite(source.Hour) ? source.Hour : (typeof source?.hour === 'number' ? source.hour : 6)),
+        Minute: parsedTime.Minute ?? (typeof source?.Minute === 'number' && Number.isFinite(source.Minute) ? source.Minute : (typeof source?.minute === 'number' ? source.minute : 15)),
+        time: rawTime || (typeof source?.time === 'string' ? source.time : 'Sáng'),
         season: typeof source?.season === 'string' ? source.season : 'Xuân',
         timeProgressEnabled: source?.timeProgressEnabled ?? true
     } as any;
@@ -601,8 +630,8 @@ export const standardizeSingleNPC = (rawNpc: any, fallbackIndex: number): any =>
         relationStatus: typeof (npc?.relationStatus || npc?.relationshipStatus) === 'string' ? (npc?.relationStatus || npc?.relationshipStatus) : 'Unknown',
         description: typeof (npc?.description || npc?.introduction || npc?.goals) === 'string' ? (npc?.description || npc?.introduction || npc?.goals) : 'Chưa có giới thiệu',
         memories,
-        personality: corePersonalityTraits || 'Bình thường',
-        corePersonalityTraits: corePersonalityTraits || 'Bình thường',
+        personality: coerceToString(corePersonalityTraits) || 'Bình thường',
+        corePersonalityTraits: coerceToString(corePersonalityTraits) || 'Bình thường',
         ...(favorabilityBreakthroughCondition ? { favorabilityBreakthroughCondition } : {}),
         ...(relationBreakthroughCondition ? { relationBreakthroughCondition } : {}),
         ...(Array.isArray(socialNetworkVariables) && socialNetworkVariables.length > 0 ? { socialNetworkVariables } : {}),
@@ -729,7 +758,13 @@ const mergeSameNamesNPCList = (list: any[]): any[] => {
 };
 
 const normalizeLocationAffiliation = (raw: any): any => {
-    const source = raw && typeof raw === 'object' ? raw : {};
+    let source: any = {};
+    if (raw && typeof raw === 'object') {
+        source = raw;
+    } else if (typeof raw === 'string') {
+        source = { majorLocation: raw };
+    }
+    
     const getTargetValue = (primary: any, ...fallbacks: any[]) => {
         if (primary !== undefined && primary !== null) return primary;
         for (const f of fallbacks) {
@@ -775,13 +810,35 @@ const normalizeSingleMap = (raw: any): any => {
         return null;
     }).filter(Boolean);
 
+    const rawCities = Array.isArray(m.cities) ? m.cities : (Array.isArray(m['Thành thị']) ? m['Thành thị'] : []);
+    const cities = rawCities.map((c: any) => {
+        const cityName = getFirstNonEmptyText(c.name, c.Name, c['Tên'], c['Thành thị']) || 'Unnamed City';
+        const cityBuildings = Array.isArray(c.buildings) ? c.buildings : [];
+        return { name: cityName, buildings: cityBuildings };
+    });
+
+    // If we have cities, we can also synthesize internalBuildings if it is empty
+    if (internalBuildings.length === 0 && cities.length > 0) {
+        cities.forEach(city => {
+            city.buildings.forEach((bName: any) => {
+                const name = typeof bName === 'string' ? bName : (bName?.name || 'Unnamed');
+                internalBuildings.push({
+                    name: `${city.name}: ${name}`,
+                    description: '',
+                    affiliation: { ...normalizeLocationAffiliation(m.affiliation), minorLocation: city.name }
+                });
+            });
+        });
+    }
+
     return {
         name: getFirstNonEmptyText(m.name, m.Name, m['Tên'], m['Tên địa điểm'], m['Địa danh']) || 'Unnamed Location',
         coordinate: getFirstNonEmptyText(m.coordinate, m.coordinates, m.Coordinate, m['Tọa độ'], m['Vị trí'], m['Vị trí bản đồ']) || 'Unknown',
         description: getFirstNonEmptyText(m.description, m.Description, m['Mô tả'], m['Cảnh vật'], m['Chi tiết']) || '',
         avatar: m.avatar || m.image || m['Ảnh'] || m['Hình ảnh'] || '',
         affiliation: normalizeLocationAffiliation(m.affiliation || m.ownership || m['Sở hữu'] || m['Quy thuộc'] || m['Thuộc về'] || m['Nằm trong']),
-        internalBuildings
+        internalBuildings,
+        cities
     };
 };
 
@@ -804,12 +861,14 @@ const standardizeSocialList = (list: any[], options?: { mergeSameNames?: boolean
 const normalizeWorldStatus = (raw?: any): any => {
     const world = raw && typeof raw === 'object' ? raw : {};
     const rawMaps = Array.isArray(world.maps) ? world.maps
-        : (Array.isArray(world.Maps) ? world.Maps
-            : (Array.isArray(world['Bản đồ']) ? world['Bản đồ']
-                : (Array.isArray(world['Danh sách bản đồ']) ? world['Danh sách bản đồ'] : [])));
+        : (world.maps && typeof world.maps === 'object' ? [world.maps]
+            : (Array.isArray(world.Maps) ? world.Maps
+                : (Array.isArray(world['Bản đồ']) ? world['Bản đồ']
+                    : (Array.isArray(world['Danh sách bản đồ']) ? world['Danh sách bản đồ'] : []))));
     const rawBuildings = Array.isArray(world.buildings) ? world.buildings
-        : (Array.isArray(world.Buildings) ? world.Buildings
-            : (Array.isArray(world['Kiến trúc']) ? world['Kiến trúc'] : []));
+        : (world.buildings && typeof world.buildings === 'object' ? [world.buildings]
+            : (Array.isArray(world.Buildings) ? world.Buildings
+                : (Array.isArray(world['Kiến trúc']) ? world['Kiến trúc'] : [])));
     const rawOngoing = Array.isArray(world.ongoingEvents) ? world.ongoingEvents
         : (Array.isArray(world['Sự kiện đang diễn ra']) ? world['Sự kiện đang diễn ra'] : []);
     const rawSettled = Array.isArray(world.settledEvents) ? world.settledEvents
@@ -822,7 +881,14 @@ const normalizeWorldStatus = (raw?: any): any => {
         buildings: rawBuildings.map((b: any) => normalizeSingleBuilding(b)),
         ongoingEvents: rawOngoing,
         settledEvents: rawSettled,
-        worldHistory: Array.isArray(world.worldHistory) ? world.worldHistory : []
+        worldHistory: Array.isArray(world.worldHistory) ? world.worldHistory : [],
+        mapCamera: world.mapCamera && typeof world.mapCamera === 'object' 
+            ? { 
+                x: Number(world.mapCamera.x) || 0, 
+                y: Number(world.mapCamera.y) || 0, 
+                zoom: Number(world.mapCamera.zoom) || 1 
+            } 
+            : undefined
     };
 };
 
@@ -857,14 +923,19 @@ const normalizeStoryStatus = (raw?: any, env?: any): any => {
             ...currentChapter,
             id: typeof currentChapter.id === 'string' ? currentChapter.id : 'ch_0',
             index: Number(currentChapter.index) || 0,
-            title: typeof currentChapter.title === 'string' ? currentChapter.title : 'Intro',
-            summary: typeof currentChapter.summary === 'string' ? currentChapter.summary : '',
-            backgroundStory: typeof currentChapter.backgroundStory === 'string' ? currentChapter.backgroundStory : '',
-            mainConflict: typeof currentChapter.mainConflict === 'string' ? currentChapter.mainConflict : '',
-            endConditions: Array.isArray(currentChapter.endConditions) ? currentChapter.endConditions : [],
-            foreshadowingList: Array.isArray(currentChapter.foreshadowingList) ? currentChapter.foreshadowingList : []
+            title: coerceToString(currentChapter.title) || 'Intro',
+            summary: coerceToString(currentChapter.summary),
+            backgroundStory: coerceToString(currentChapter.backgroundStory),
+            mainConflict: coerceToString(currentChapter.mainConflict),
+            endConditions: Array.isArray(currentChapter.endConditions) ? currentChapter.endConditions.map(coerceToString) : [],
+            foreshadowingList: Array.isArray(currentChapter.foreshadowingList) ? currentChapter.foreshadowingList.map(coerceToString) : []
         },
-        nextChapterPreview: story.nextChapterPreview && typeof story.nextChapterPreview === 'object' ? story.nextChapterPreview : { title: '', outline: '' },
+        nextChapterPreview: story.nextChapterPreview && typeof story.nextChapterPreview === 'object' 
+            ? { 
+                title: coerceToString(story.nextChapterPreview.title), 
+                outline: coerceToString(story.nextChapterPreview.outline) 
+              } 
+            : { title: '', outline: '' },
         historicalArchives: Array.isArray(story.historicalArchives) ? story.historicalArchives : [],
         shortTermPlanning: typeof story.shortTermPlanning === 'string' ? story.shortTermPlanning : '',
         mediumTermPlanning: typeof story.mediumTermPlanning === 'string' ? story.mediumTermPlanning : '',

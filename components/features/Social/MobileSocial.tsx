@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NpcStructure } from '../../../models/social';
 import IconGlyph from '../../ui/Icon/IconGlyph';
 
@@ -16,12 +17,15 @@ const Tag: React.FC<{ label: string }> = ({ label }) => (
     </span>
 );
 
-const PrivateTag: React.FC<{ label: string; value?: string; color?: string }> = ({ label, value, color = "text-pink-300" }) => (
-    <div className="flex flex-col border border-gray-800 p-2 rounded-none bg-black/20">
-        <span className="text-[9px] text-gray-500 uppercase tracking-widest mb-1">{label}</span>
-        <span className={`font-serif text-sm ${color}`}>{value || "???"}</span>
-    </div>
-);
+const PrivateTag: React.FC<{ label: string; value?: string; color?: string }> = ({ label, value, color = "text-pink-300" }) => {
+    const { t } = useTranslation();
+    return (
+        <div className="flex flex-col border border-gray-800 p-2 rounded-none bg-black/20">
+            <span className="text-[9px] text-gray-500 uppercase tracking-widest mb-1">{label}</span>
+            <span className={`font-serif text-sm ${color}`}>{value || t('social.labels.unknown')}</span>
+        </div>
+    );
+};
 
 const StatRow: React.FC<{ label: string; count?: number }> = ({ label, count }) => (
     <div className="flex justify-between items-center border-b border-gray-800/50 py-1 last:border-0">
@@ -30,14 +34,18 @@ const StatRow: React.FC<{ label: string; count?: number }> = ({ label, count }) 
     </div>
 );
 
-const RelationTag: React.FC<{ label: string; value?: string; accent?: string }> = ({ label, value, accent = 'text-wuxia-cyan' }) => (
-    <div className="bg-ink-black/35 border border-gray-800 rounded-none p-3">
-        <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">{label}</div>
-        <div className={`text-xs font-serif leading-relaxed ${accent}`}>{value?.trim() || 'No records'}</div>
-    </div>
-);
+const RelationTag: React.FC<{ label: string; value?: string; accent?: string }> = ({ label, value, accent = 'text-wuxia-cyan' }) => {
+    const { t } = useTranslation();
+    return (
+        <div className="bg-ink-black/35 border border-gray-800 rounded-none p-3">
+            <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">{label}</div>
+            <div className={`text-xs font-serif leading-relaxed ${accent}`}>{value?.trim() || t('social.labels.noRecords')}</div>
+        </div>
+    );
+};
 
-const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName = "Young Hero", onToggleMajorRole, allAvatars }) => {
+const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName, onToggleMajorRole, allAvatars }) => {
+    const { t } = useTranslation();
     const [selectedId, setSelectedId] = useState<string | null>(
         socialList.length > 0 ? socialList[0].id : null
     );
@@ -46,9 +54,21 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName = "Youn
         if (!allAvatars) return npc.avatar;
         return allAvatars[npc.id] || allAvatars[npc.name] || npc.avatar;
     };
-    const currentNPC = socialList.find(n => n.id === selectedId);
-    const showFemaleExtensions = currentNPC?.gender === 'Female' && Boolean(currentNPC?.isMainCharacter);
     
+    const currentNPC = socialList.find(n => n.id === selectedId);
+
+    // FIX: Check for both English and Vietnamese gender strings
+    const isFemale = currentNPC?.gender === 'Female' || currentNPC?.gender === 'Nữ';
+    const showFemaleExtensions = isFemale && Boolean(currentNPC?.isMainCharacter);
+    
+    // Helper to translate dynamic values
+    const tValue = (val?: string) => {
+        if (!val) return t('social.labels.unknown');
+        // Try to translate from social.values, otherwise return original
+        const translated = t(`social.values.${val}`);
+        return translated === `social.values.${val}` ? val : translated;
+    };
+
     const getFirstNonEmptyText = (...values: unknown[]): string => {
         for (const value of values) {
             if (typeof value === 'string' && value.trim().length > 0) return value.trim();
@@ -95,6 +115,8 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName = "Youn
         onToggleMajorRole(npc.id, !Boolean(npc.isMainCharacter));
     };
 
+    const effectivePlayerName = playerName || t('social.labels.hero');
+
     return (
         <div className="fixed inset-0 bg-ink-black/80 backdrop-blur-md z-[200] flex items-center justify-center p-3 md:hidden">
             <div className="bg-wuxia-glass border border-wuxia-gold/30 w-full max-w-[560px] h-[84vh] flex flex-col shadow-[0_0_60px_rgba(0,0,0,0.8)] relative overflow-hidden rounded-none">
@@ -102,12 +124,12 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName = "Youn
                 <div className="h-12 shrink-0 border-b border-wuxia-gold/20 bg-ink-black/60 flex items-center justify-between px-4">
                     <h3 className="text-wuxia-gold font-serif font-bold text-base tracking-[0.3em] flex items-center gap-2">
                         <IconGlyph name="scroll" className="w-4 h-4" />
-                        JIANGHU REGISTER
+                        {t('social.title')}
                     </h3>
                     <button
                         onClick={onClose}
                         className="w-8 h-8 flex items-center justify-center rounded-none bg-ink-black/50 border border-gray-700 text-gray-400"
-                        title="Đóng"
+                        title={t('common.close')}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -119,8 +141,8 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName = "Youn
                     {/* Directory Selection */}
                     <div className="bg-ink-black/40 border border-wuxia-gold/10 rounded-none p-3">
                         <div className="flex items-center justify-between mb-2">
-                            <span className="text-[10px] text-gray-500 tracking-[0.3em]">DIRECTORY</span>
-                            <span className="text-[10px] text-wuxia-cyan/80">{socialList.length} Person</span>
+                            <span className="text-[10px] text-gray-500 tracking-[0.3em]">{t('social.directory')}</span>
+                            <span className="text-[10px] text-wuxia-cyan/80">{socialList.length} {t('social.personCount')}</span>
                         </div>
                         <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                             {socialList.map(npc => (
@@ -133,7 +155,7 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName = "Youn
                                         }`}
                                 >
                                     <div className="flex items-center gap-2">
-                                        <div className={`w-9 h-9 rounded-none flex items-center justify-center font-serif font-bold text-base border-2 ${npc.gender === 'Female' ? 'border-pink-800/60 bg-pink-900/20 text-pink-500' : 'border-wuxia-cyan/30 bg-wuxia-cyan/10 text-wuxia-cyan'
+                                        <div className={`w-9 h-9 rounded-none flex items-center justify-center font-serif font-bold text-base border-2 ${npc.gender === 'Female' || npc.gender === 'Nữ' ? 'border-pink-800/60 bg-pink-900/20 text-pink-500' : 'border-wuxia-cyan/30 bg-wuxia-cyan/10 text-wuxia-cyan'
                                             }`}>
                                             {resolveAvatar(npc) ? (
                                                 <img src={resolveAvatar(npc)} alt={npc.name} className="w-full h-full object-cover" />
@@ -146,7 +168,7 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName = "Youn
                                                 }`}>
                                                 {npc.name}
                                             </div>
-                                            <div className="text-[9px] text-gray-500">{npc.identity}</div>
+                                            <div className="text-[9px] text-gray-500">{tValue(npc.identity)}</div>
                                         </div>
                                     </div>
                                     <div className="mt-2 text-[10px] text-wuxia-red font-mono flex items-center gap-1">
@@ -155,7 +177,7 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName = "Youn
                                 </button>
                             ))}
                             {socialList.length === 0 && (
-                                <div className="text-center text-gray-600 text-xs py-6 w-full">No known acquaintances yet</div>
+                                <div className="text-center text-gray-600 text-xs py-6 w-full">{t('social.noAcquaintances')}</div>
                             )}
                         </div>
                     </div>
@@ -179,20 +201,20 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName = "Youn
                                 <div className="flex items-start justify-between">
                                     <div>
                                         <div className="text-xl text-wuxia-gold font-serif font-bold">{currentNPC.name}</div>
-                                        <div className="text-[10px] text-gray-500 mt-1 uppercase tracking-widest">{currentNPC.relationStatus}</div>
+                                        <div className="text-[10px] text-gray-500 mt-1 uppercase tracking-widest">{tValue(currentNPC.relationStatus)}</div>
                                     </div>
                                     <div className="text-right">
                                         <div className="text-2xl text-wuxia-red font-serif flex items-center justify-end gap-1">
                                             <IconGlyph name="heart" className="w-6 h-6" /> {currentNPC.favorability}
                                         </div>
-                                        <div className="text-[9px] text-gray-500">{currentNPC.realm}</div>
+                                        <div className="text-[9px] text-gray-500">{tValue(currentNPC.realm)}</div>
                                     </div>
                                 </div>
                                 <div className="mt-3 flex flex-wrap gap-2">
-                                    <Tag label={`${currentNPC.identity}`} />
-                                    <Tag label={`${currentNPC.gender} · ${currentNPC.age}Age`} />
-                                    <Tag label={currentNPC.isPresent ? 'Present' : 'Leave'} />
-                                    <Tag label={currentNPC.isTeammate ? 'Teammate' : 'Non-teammate'} />
+                                    <Tag label={tValue(currentNPC.identity)} />
+                                    <Tag label={`${tValue(currentNPC.gender)} · ${currentNPC.age} ${t('social.labels.age')}`} />
+                                    <Tag label={currentNPC.isPresent ? t('social.status.present') : t('social.status.leave')} />
+                                    <Tag label={currentNPC.isTeammate ? t('social.status.teammate') : t('social.status.nonTeammate')} />
                                 </div>
                                 
                                 {/* Toggle Control */}
@@ -201,128 +223,126 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName = "Youn
                                     onClick={() => toggleImportantCharacterState(currentNPC)}
                                     className="mt-4 flex items-center gap-3 w-full p-2 border border-gray-800 bg-black/20 rounded-none"
                                 >
-                                    <span className="text-[10px] text-gray-400 uppercase tracking-widest">Main Character Status</span>
+                                    <span className="text-[10px] text-gray-400 uppercase tracking-widest">{t('social.status.mainStatus')}</span>
                                     <div className={`w-10 h-5 rounded-none border flex items-center px-0.5 ${currentNPC.isMainCharacter ? 'bg-wuxia-gold/20 border-wuxia-gold/50' : 'bg-gray-900 border-gray-700'}`}>
                                         <div className={`w-3.5 h-3.5 rounded-none ${currentNPC.isMainCharacter ? 'ml-auto bg-wuxia-gold shadow-[0_0_8px_rgba(212,175,55,0.6)]' : 'bg-gray-600'}`} />
                                     </div>
                                     <span className={`text-[10px] font-bold ${currentNPC.isMainCharacter ? 'text-wuxia-gold' : 'text-gray-500'}`}>
-                                        {currentNPC.isMainCharacter ? 'TRACKED' : 'NORMAL'}
+                                        {currentNPC.isMainCharacter ? t('social.status.tracked') : t('social.status.normal')}
                                     </span>
                                 </button>
                             </div>
 
                             {/* Biography */}
                             <div className="bg-ink-black/30 border border-wuxia-gold/10 rounded-none p-4 border-l-2 border-l-wuxia-gold/30">
-                                <div className="text-[10px] text-wuxia-gold/60 tracking-[0.3em] mb-2 uppercase">Character Biography</div>
+                                <div className="text-[10px] text-wuxia-gold/60 tracking-[0.3em] mb-2 uppercase">{t('social.sections.biography')}</div>
                                 <p className="text-sm text-gray-300 font-serif leading-relaxed italic">
-                                    {currentNPC.description || 'No detailed records yet。'}
+                                    {currentNPC.description || t('social.labels.noBiography')}
                                 </p>
                             </div>
 
-                            {/* Relationship-Driven Panel */}
-                            {showFemaleExtensions && (
-                                <div className="bg-ink-black/30 border border-wuxia-cyan/30 rounded-none p-4 space-y-3">
-                                    <div className="flex items-center justify-between border-b border-wuxia-cyan/20 pb-2">
-                                        <div className="text-wuxia-cyan font-serif font-bold text-sm tracking-widest uppercase flex items-center gap-2">
-                                            <IconGlyph name="scroll" className="w-3.5 h-3.5" />
-                                            Fate Interaction
-                                        </div>
-                                        <span className="text-[10px] text-wuxia-cyan/80 tracking-[0.2em]">DYNAMIC STATUS</span>
+                            {/* Relationship-Driven Panel - VISIBLE FOR ALL */}
+                            <div className="bg-ink-black/30 border border-wuxia-cyan/30 rounded-none p-4 space-y-3">
+                                <div className="flex items-center justify-between border-b border-wuxia-cyan/20 pb-2">
+                                    <div className="text-wuxia-cyan font-serif font-bold text-sm tracking-widest uppercase flex items-center gap-2">
+                                        <IconGlyph name="scroll" className="w-3.5 h-3.5" />
+                                        {t('social.sections.fateInteraction')}
                                     </div>
-                                    <div className="grid grid-cols-1 gap-2">
-                                        <RelationTag label="CORE PERSONALITY TRAITS" value={currentNPC.corePersonalityTraits} accent="text-wuxia-cyan" />
-                                        <RelationTag label="AFFINITY BREAKTHROUGH" value={currentNPC.favorabilityBreakthroughCondition} accent="text-emerald-200" />
-                                        <RelationTag label="RELATION BREAKTHROUGH" value={currentNPC.relationBreakthroughCondition} accent="text-amber-200" />
-                                    </div>
-                                    
-                                    {/* Relationship Network */}
-                                    <div className="bg-pink-950/10 border border-pink-900/30 rounded-none p-3 mt-4">
-                                        <div className="text-[10px] text-pink-400 tracking-[0.2em] mb-2 uppercase flex items-center gap-2">
-                                            <IconGlyph name="heart" className="w-3 h-3" />
-                                            Social Ties
-                                        </div>
-                                        {currentRelationshipNetwork.length > 0 ? (
-                                            <div className="space-y-2">
-                                                {currentRelationshipNetwork.map((edge, idx) => (
-                                                    <div key={`${edge.targetName}_${edge.relation}_${idx}`} className="bg-ink-black/40 border border-pink-900/20 rounded-none p-2 border-l border-l-pink-500/40">
-                                                        <div className="text-[11px] text-white">
-                                                            <span className="text-pink-400 font-bold uppercase text-[9px]">Target：</span>{edge.targetName}
-                                                        </div>
-                                                        <div className="text-[11px] text-white mt-1">
-                                                            <span className="text-pink-400 font-bold uppercase text-[9px]">Relation：</span>{edge.relation}
-                                                        </div>
-                                                        {edge.note && (
-                                                            <div className="text-[10px] text-pink-200/60 mt-1 leading-relaxed border-t border-pink-900/20 pt-1 italic">{edge.note}</div>
-                                                        )}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <div className="text-[11px] text-pink-100/40 font-serif italic text-center py-2">No connection recorded</div>
-                                        )}
-                                    </div>
+                                    <span className="text-[10px] text-wuxia-cyan/80 tracking-[0.2em]">{t('social.sections.dynamicStatus')}</span>
                                 </div>
-                            )}
+                                <div className="grid grid-cols-1 gap-2">
+                                    <RelationTag label={t('social.sections.corePersonality')} value={currentNPC.corePersonalityTraits} accent="text-wuxia-cyan" />
+                                    <RelationTag label={t('social.sections.affinityBreakthrough')} value={currentNPC.favorabilityBreakthroughCondition} accent="text-emerald-200" />
+                                    <RelationTag label={t('social.sections.relationBreakthrough')} value={currentNPC.relationBreakthroughCondition} accent="text-amber-200" />
+                                </div>
+                                
+                                {/* Relationship Network */}
+                                <div className="bg-pink-950/10 border border-pink-900/30 rounded-none p-3 mt-4">
+                                    <div className="text-[10px] text-pink-400 tracking-[0.2em] mb-2 uppercase flex items-center gap-2">
+                                        <IconGlyph name="heart" className="w-3 h-3" />
+                                        {t('social.sections.socialTies')}
+                                    </div>
+                                    {currentRelationshipNetwork.length > 0 ? (
+                                        <div className="space-y-2">
+                                            {currentRelationshipNetwork.map((edge, idx) => (
+                                                <div key={`${edge.targetName}_${edge.relation}_${idx}`} className="bg-ink-black/40 border border-pink-900/20 rounded-none p-2 border-l border-l-pink-500/40">
+                                                    <div className="text-[11px] text-white">
+                                                        <span className="text-pink-400 font-bold uppercase text-[9px]">{t('social.labels.target')}：</span>{edge.targetName}
+                                                    </div>
+                                                    <div className="text-[11px] text-white mt-1">
+                                                        <span className="text-pink-400 font-bold uppercase text-[9px]">{t('social.labels.relation')}：</span>{edge.relation}
+                                                    </div>
+                                                    {edge.note && (
+                                                        <div className="text-[10px] text-pink-200/60 mt-1 leading-relaxed border-t border-pink-900/20 pt-1 italic">{edge.note}</div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="text-[11px] text-pink-100/40 font-serif italic text-center py-2">{t('social.labels.noConnections')}</div>
+                                    )}
+                                </div>
+                            </div>
 
-                            {/* Private Records */}
+                            {/* Private Records - STILL FOR IMPORTANT FEMALE */}
                             {showFemaleExtensions && (
                                 <div className="bg-ink-black/30 border border-pink-900/60 rounded-none p-4 space-y-4">
                                     <div className="flex items-center justify-between border-b border-pink-900/40 pb-2">
                                         <div className="text-pink-400 font-serif font-bold text-sm tracking-widest uppercase flex items-center gap-2">
                                             <IconGlyph name="heart" className="w-4 h-4" />
-                                            Private Boudoir
+                                            {t('social.sections.privateBoudoir')}
                                         </div>
                                         {currentNPC.isVirgin && (
-                                            <span className="text-[9px] bg-pink-500/10 text-pink-300 px-2 py-0.5 rounded-none border border-pink-500/40 uppercase font-bold tracking-tighter">PURE SOUL</span>
+                                            <span className="text-[9px] bg-pink-500/10 text-pink-300 px-2 py-0.5 rounded-none border border-pink-500/40 uppercase font-bold tracking-tighter">{t('social.labels.pureSoul')}</span>
                                         )}
                                     </div>
 
                                     <div className="bg-ink-black/60 border border-pink-900/40 rounded-none p-3 space-y-3">
-                                        <div className="text-[10px] text-pink-400 tracking-[0.3em] uppercase underline underline-offset-4 decoration-pink-900/60">Appearance Data</div>
-                                        <p className="text-xs text-gray-300 italic font-serif leading-relaxed">“{readAppearance(currentNPC) || 'No appearance description'}”</p>
+                                        <div className="text-[10px] text-pink-400 tracking-[0.3em] uppercase underline underline-offset-4 decoration-pink-900/60">{t('social.sections.appearanceData')}</div>
+                                        <p className="text-xs text-gray-300 italic font-serif leading-relaxed">“{readAppearance(currentNPC) || t('social.labels.noAppearance')}”</p>
                                         <div className="grid grid-cols-2 gap-2 text-[10px] text-gray-400 p-2 bg-black/30">
-                                            <div><span className="text-pink-400 font-bold uppercase">Stature：</span>{readBuildBody(currentNPC) || 'N/A'}</div>
-                                            <div><span className="text-pink-400 font-bold uppercase">Clothing：</span>{readClothing(currentNPC) || 'N/A'}</div>
+                                            <div><span className="text-pink-400 font-bold uppercase">{t('social.labels.stature')}：</span>{readBuildBody(currentNPC) || t('common.empty')}</div>
+                                            <div><span className="text-pink-400 font-bold uppercase">{t('social.labels.clothing')}：</span>{readClothing(currentNPC) || t('common.empty')}</div>
                                         </div>
                                     </div>
 
-                                    {!currentNPC.isVirgin && currentNPC.firstNightClaimer === playerName && (
+                                    {!currentNPC.isVirgin && currentNPC.firstNightClaimer === effectivePlayerName && (
                                         <div className="p-3 bg-pink-900/20 border border-pink-500/40 rounded-none text-[11px] text-pink-100 border-l-4 border-l-pink-500">
-                                            <div className="text-[10px] text-pink-300 mb-1 font-bold uppercase">Sacred Union Record</div>
+                                            <div className="text-[10px] text-pink-300 mb-1 font-bold uppercase">{t('social.labels.sacredUnionTitle')}</div>
                                             <span className="text-wuxia-gold font-bold">【{currentNPC.firstNightTime}】</span>
-                                            <span className="mx-1">Dedication to</span>
+                                            <span className="mx-1">{t('social.labels.dedication')}</span>
                                             <span className="text-wuxia-gold font-bold underline decoration-wuxia-gold/40 underline-offset-2">{currentNPC.firstNightClaimer}</span>
                                         </div>
                                     )}
 
                                     <div className="grid grid-cols-2 gap-3">
-                                        <PrivateTag label="CHEST" value={currentNPC.breastSize} />
-                                        <PrivateTag label="HIP SHAPE" value={currentNPC.buttockSize} />
-                                        <PrivateTag label="NIPPLE COLOR" value={currentNPC.nippleColor} />
-                                        <PrivateTag label="SECRET POINT" value={currentNPC.vaginaColor} />
+                                        <PrivateTag label={t('social.labels.chest')} value={currentNPC.breastSize} />
+                                        <PrivateTag label={t('social.labels.hip')} value={currentNPC.buttockSize} />
+                                        <PrivateTag label={t('social.labels.nippleColor')} value={currentNPC.nippleColor} />
+                                        <PrivateTag label={t('social.labels.secretPoint')} value={currentNPC.vaginaColor} />
                                     </div>
 
                                     <div className="bg-ink-black/40 border border-pink-900/30 rounded-none p-3">
-                                        <div className="text-[10px] text-pink-400 tracking-widest uppercase mb-1 font-bold">Innate Lust</div>
+                                        <div className="text-[10px] text-pink-400 tracking-widest uppercase mb-1 font-bold">{t('social.labels.innateLust')}</div>
                                         <div className="text-sm text-pink-100/80 font-serif leading-relaxed">
-                                            {currentNPC.privateTraits || 'No records available'}
+                                            {currentNPC.privateTraits || t('social.labels.noLustRecords')}
                                         </div>
                                     </div>
 
                                     <div className="bg-ink-black/40 border border-gray-800 rounded-none p-3 text-xs text-pink-200/70 font-serif leading-relaxed border-l-2 border-l-pink-900/40">
-                                        {currentNPC.privateFullDescription || 'The details of the jade body remain concealed.'}
+                                        {currentNPC.privateFullDescription || t('social.labels.bodyDetailsConcealed')}
                                     </div>
 
                                     {/* Body Stats */}
                                     <div className="bg-ink-black/50 border border-gray-800 rounded-none p-3 border-t-2 border-t-pink-900/40">
-                                        <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-3 font-bold border-b border-gray-800 pb-1">Dual Cultivation Progress</div>
+                                        <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-3 font-bold border-b border-gray-800 pb-1">{t('social.sections.bodyDevelopment')}</div>
                                         <div className="grid grid-cols-1 gap-1">
-                                            <StatRow label="Oral Devotion" count={currentNPC.count_oral} />
-                                            <StatRow label="Jade Caress" count={currentNPC.count_breast} />
-                                            <StatRow label="Cinnabar Union" count={currentNPC.count_vaginal} />
-                                            <StatRow label="Hidden Valley" count={currentNPC.count_anal} />
+                                            <StatRow label={t('social.labels.mouth')} count={currentNPC.count_oral} />
+                                            <StatRow label={t('social.labels.breast')} count={currentNPC.count_breast} />
+                                            <StatRow label={t('social.labels.vaginal')} count={currentNPC.count_vaginal} />
+                                            <StatRow label={t('social.labels.anal')} count={currentNPC.count_anal} />
                                             <div className="mt-2 pt-1 border-t border-gray-800/70">
-                                                <StatRow label="Transcendental Climax" count={currentNPC.count_orgasm} />
+                                                <StatRow label={t('social.labels.climax')} count={currentNPC.count_orgasm} />
                                             </div>
                                         </div>
                                     </div>
@@ -333,7 +353,7 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName = "Youn
                             <div className="bg-ink-black/30 border border-wuxia-gold/10 rounded-none p-4">
                                 <div className="text-[10px] text-wuxia-gold/60 tracking-[0.3em] mb-3 uppercase flex items-center gap-2">
                                     <IconGlyph name="scroll" className="w-3 h-3" />
-                                    Shared Path
+                                    {t('social.sections.sharedPath')}
                                 </div>
                                 <div className="space-y-3 max-h-56 overflow-y-auto custom-scrollbar pr-2">
                                     {currentNPC.memories.map((mem, idx) => (
@@ -344,7 +364,7 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName = "Youn
                                         </div>
                                     ))}
                                     {currentNPC.memories.length === 0 && (
-                                        <div className="text-xs text-gray-600 font-serif italic text-center py-4">The scroll of memory is yet to be written.</div>
+                                        <div className="text-xs text-gray-600 font-serif italic text-center py-4">{t('social.labels.noMemories')}</div>
                                     )}
                                 </div>
                             </div>
@@ -352,7 +372,7 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName = "Youn
                     ) : (
                         <div className="flex flex-col items-center justify-center h-48 text-gray-600 font-serif gap-3">
                             <IconGlyph name="scroll" className="w-10 h-10 opacity-10" />
-                            <span className="tracking-widest uppercase text-xs opacity-50">Select a figure to examine</span>
+                            <span className="tracking-widest uppercase text-xs opacity-50">{t('social.labels.selectNpc')}</span>
                         </div>
                     )}
                 </div>
