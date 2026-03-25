@@ -79,7 +79,8 @@ export const PROVIDER_LABELS: Record<ApiProviderType, string> = {
     cerebras: 'Cerebras',
     sambanova: 'SambaNova',
     openai_compatible: 'OpenAI Tương thích',
-    worker: 'Hệ thống (Nemotron)'
+    worker: 'Hệ thống (Nemotron)',
+    system_gemini: 'Hệ thống (Gemini 3 Flash)'
 };
 
 export const OPENAI_COMPATIBILITY_PRESETS: Record<OpenAICompatibilitySolution, { label: string; baseUrl: string }> = {
@@ -189,6 +190,10 @@ const PROVIDER_DEFAULTS: Record<ApiProviderType, { baseUrl: string; model: strin
     worker: {
         baseUrl: DEFAULT_TEXT_GEN_WORKER_URL,
         model: '@cf/openai/gpt-oss-120b'
+    },
+    system_gemini: {
+        baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai',
+        model: 'gemini-3-flash-preview'
     }
 };
 
