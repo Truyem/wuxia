@@ -46,12 +46,17 @@ const getChunkedEnvVars = (baseName: string): string[] => {
     return results;
 };
 
-// For Cloudflare deployment, we use the consolidated worker URL
-export const DEFAULT_TEXT_GEN_WORKER_URLS = ['https://wuxia-api.vdt99.workers.dev/api/nemotron'];
+// Discovery endpoints for dynamic worker selection
+
+export const DEFAULT_TEXT_GEN_WORKER_URLS = [
+    'https://wuxia-api.vdt99.workers.dev/nemotron'
+];
 
 export const DEFAULT_TEXT_GEN_WORKER_URL = DEFAULT_TEXT_GEN_WORKER_URLS[0];
 
-export const DEFAULT_IMAGE_GEN_WORKER_URLS = ['https://wuxia-api.vdt99.workers.dev/api/image-gen'];
+export const DEFAULT_IMAGE_GEN_WORKER_URLS = [
+    'https://wuxia-api.vdt99.workers.dev/image-gen'
+];
 export const DEFAULT_IMAGE_GEN_WORKER_URL = DEFAULT_IMAGE_GEN_WORKER_URLS[0];
 
 

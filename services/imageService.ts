@@ -131,7 +131,24 @@ export class ImageService {
     let lastErrorMessage = "";
     
     for (let i = 0; i < urls.length; i++) {
-        const normalizedUrl = urls[i];
+        let normalizedUrl = urls[i];
+
+        // Node Discovery: If the URL is a discovery endpoint, resolve the actual worker URL
+        if (normalizedUrl.includes('/api/nodes/')) {
+          try {
+            console.log(`[ImageService] Đang tìm node hoạt động từ: ${normalizedUrl}`);
+            const discRes = await fetch(normalizedUrl);
+            const discData = await discRes.json();
+            if (discData.url) {
+              normalizedUrl = discData.url;
+              console.log(`[ImageService] Đã tìm thấy node: ${normalizedUrl}`);
+            }
+          } catch (e) {
+            console.warn(`[ImageService] Lỗi discovery tại ${normalizedUrl}, chuyển sang link tiếp theo...`, e);
+            continue;
+          }
+        }
+
         console.log(`[ImageService] Đang thử kết nối tới Worker tạo ảnh: ${normalizedUrl} (${i + 1}/${urls.length})`);
 
         try {

@@ -47,12 +47,7 @@ export const executeStoryMemoryRecall = async (
         userPrompt,
         recallApi,
         options?.signal,
-        options?.onDelta
-            ? {
-                stream: true,
-                onDelta: options.onDelta
-            }
-            : undefined,
+        options?.onDelta ? { onDelta: options.onDelta } : undefined,
         workerUrl
     );
     const parsed = parseStoryMemoryOutput(raw);
