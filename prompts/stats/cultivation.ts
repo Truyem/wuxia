@@ -14,10 +14,27 @@ export const StatCultivation: PromptStructure = {
 - \`breakthroughSuccess\`: Tỷ lệ thành công đột phá.
 
 ## 2. Khung Cảnh giới (Tham chiếu)
+I. Cảnh giới Nhân Giới (Hạ Giới)
+Đây là giai đoạn khởi đầu, tập trung vào việc tẩy tủy, luyện khí và ngưng tụ nguyên anh.
 1. Phàm Nhân (Mortality)
-2. Luyện Khí (Qi Refining)
-3. Trúc Cơ (Foundation Establishment)
-... (và các cảnh giới cao hơn)
+2. Luyện Khí (Sơ kỳ - Trung kỳ - Hậu kỳ)
+3. Trúc Cơ (Sơ kỳ - Trung kỳ - Hậu kỳ)
+4. Kết Đan (Sơ kỳ - Trung kỳ - Hậu kỳ) - Hình thành Kim Đan.
+5. Nguyên Anh (Sơ kỳ - Trung kỳ - Hậu kỳ) - Đạt đến mức này có thể coi là "lão quái vật" tại nhân giới.
+6. Hóa Thần (Sơ kỳ - Trung kỳ - Hậu kỳ) - Cảnh giới cao nhất có thể đạt được tại các tiểu tinh cầu trước khi phi thăng.
+II. Cảnh giới Linh Giới (Trung Giới)
+Tại đây, tu sĩ bắt đầu tiếp xúc với sức mạnh của thiên địa quy luật và đối mặt với các lần Thiên Kiếp định kỳ.
+6.  Luyện Hư (Sơ kỳ - Trung kỳ - Hậu kỳ) - Bắt đầu điều động linh khí thiên địa.
+7.  Hợp Thể (Sơ kỳ - Trung kỳ - Hậu kỳ) - Thân thể và Nguyên Anh hợp nhất.
+8.  Đại Thừa (Sơ kỳ - Trung kỳ - Hậu kỳ) - Đứng đầu một phương, chuẩn bị cho quá trình độ kiếp phi thăng tiên giới.
+9.  Độ Kiếp (Giai đoạn chuyển tiếp) - Những người đã vượt qua thiên kiếp nhưng chưa chính thức phi thăng.
+III. Cảnh giới Tiên Giới (Thượng Giới)
+Giai đoạn này tu sĩ tu luyện "Tiên Nguyên Lực" và nắm giữ các loại "Thái Cổ Luật Lệnh".
+10. Chân Tiên (Sơ kỳ - Trung kỳ - Hậu kỳ)
+11. Kim Tiên (Sơ kỳ - Trung kỳ - Hậu kỳ)
+12. Thái Ất Ngọc Tiên (Sơ kỳ - Trung kỳ - Hậu kỳ)
+13. Đại La Tiên (Sơ kỳ - Trung kỳ - Hậu kỳ) - Chia làm 3 mức độ ngộ đạo (Cấp thấp - Trung cấp - Đỉnh phong).
+14. Đạo Tổ (Cảnh giới tối cao) - Mỗi một loại quy luật trong vũ trụ chỉ có duy nhất một Đạo Tổ nắm giữ.
 
 ## 3. Công thức Tăng trưởng Tu vi
 - Tăng trưởng dựa trên: \`comprehension\`, môi trường linh khí, dược quán, và võ công tâm pháp.

@@ -521,7 +521,7 @@ export const getCurrentApiConfig = (settings: ApiSettings): ActiveApiConfig | nu
             provider: 'system_gemini',
             protocolOverride: 'gemini',
             baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai',
-            apiKey: '',
+            apiKey: process.env.GEMINI_API_KEY || '',
             model: 'gemini-3-flash-preview',
             createdAt: Date.now(),
             updatedAt: Date.now()

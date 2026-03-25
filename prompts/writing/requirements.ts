@@ -17,6 +17,7 @@ export const WritingRequirements: PromptStructure = {
 - Theo tu vi và địa vị: Kẻ bề dưới (tu vi thấp) gọi người bề trên là "tiền bối", tự xưng "vãn bối"; đệ tử gọi sư phụ là "sư tôn", xưng "đệ tử/đồ nhi".
 - Theo thuộc tính quan hệ: Kẻ thù gọi nhau là "tặc tử", "yêu đạo"; nô bộc gọi "chủ nhân", thân thiết thì dùng "sư huynh/sư đệ", "đạo hữu".
 - Bắt buộc: AI có trách nhiệm tự suy luận bối cảnh để áp dụng danh xưng tu tiên chuẩn xác sắc thái phe phái, đẳng cấp.
+- ĐẶC BIỆT: Cấm tuyệt đối sự mâu thuẫn trong xưng hô. Nếu đã gọi là "tiền bối", "ngài", "sư tôn", "đạo hữu" thì KHÔNG ĐƯỢC dùng "ngươi" (vì "ngươi" mang sắc thái bề trên hoặc coi thường). Phải dùng "ngài", "người" hoặc lược bỏ chủ ngữ để giữ thái độ tôn trọng tương ứng với danh xưng đã chọn.
 
 [MÔI TRƯỜNG & VẬT THỂ]
 6. Chi tiết vật thể: Mô tả bằng chất liệu, dấu vết sử dụng, chức năng rõ ràng; tránh mơ hồ/ví von. 
