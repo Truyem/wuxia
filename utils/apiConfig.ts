@@ -371,7 +371,7 @@ const normalizeFeatureModelPlaceholder = (raw: any): FeatureModelPlaceholderConf
 
 export const createEmptyApiSettings = (): ApiSettings => ({
     activeConfigId: null,
-    useSystemGemini: true,
+    useSystemGemini: false,
     configs: [],
     featureModelPlaceholder: { ...DEFAULT_FEATURE_MODEL_PLACEHOLDER }
 });
@@ -505,7 +505,7 @@ export const normalizeApiSettings = (raw: unknown): ApiSettings => {
 
     return {
         activeConfigId,
-        useSystemGemini: source.useSystemGemini !== false,
+        useSystemGemini: source.useSystemGemini === true,
         configs: normalizedConfigs,
         featureModelPlaceholder: normalizeFeatureModelPlaceholder(source.featureModelPlaceholder ?? source['Function model placeholder'])
     };
@@ -514,7 +514,7 @@ export const normalizeApiSettings = (raw: unknown): ApiSettings => {
 
 
 export const getCurrentApiConfig = (settings: ApiSettings): ActiveApiConfig | null => {
-    if (settings?.useSystemGemini !== false) {
+    if (settings?.useSystemGemini === true) {
         return {
             id: 'system_gemini',
             name: 'Hệ thống (Gemini 3 Flash)',

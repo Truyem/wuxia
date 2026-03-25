@@ -313,7 +313,7 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
                         <div className="text-xs text-paper-white/40 mt-1">Bật để sử dụng mô hình Gemini 3 Flash được cấu hình sẵn của hệ thống thay vì API key của bạn.</div>
                     </div>
                     <ToggleSwitch
-                        checked={form.useSystemGemini !== false}
+                        checked={!!form.useSystemGemini}
                         onChange={(checked) => setForm(prev => ({ ...prev, useSystemGemini: checked }))}
                     />
                 </div>
