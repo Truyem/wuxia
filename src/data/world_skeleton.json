@@ -1,0 +1,189 @@
+{
+  "thinking_pre": "Để tạo ra một thế giới võ hiệp đúng chất Kim Dung, Cổ Long nhưng vẫn mang nét riêng của 'Mặc Sắc Giang Hồ', ta cần chú trọng vào sự cân bằng giữa chính - tà, thế lực triều đình và các bí mật ẩn giấu. Thế giới sẽ được chia thành các vùng chiến lược với đặc trưng riêng biệt về võ học và phong cảnh.",
+  "world_skeleton": {
+    "regions": [
+      {
+        "id": "bac_dao",
+        "name": "Bắc Đảo (Tuyết Lãnh)",
+        "description": "Vùng đất quanh năm tuyết phủ, nơi cư ngụ của các cao thủ tu sĩ và những dị tộc bí ẩn. Võ học nơi đây mạnh về kình lực băng giá và sự bền bỉ.",
+        "sub_regions": [
+          "Thanh Vân Thành",
+          "Hàn Băng Cung",
+          "Vô Kỵ Thành"
+        ]
+      },
+      {
+        "id": "nam_luc",
+        "name": "Nam Lục (Thịnh Thế)",
+        "description": "Trung tâm chính trị và kinh tế của Giang Hồ. Nơi đây có quan phủ, các đại gia tộc và trung tâm giao thương sầm uất. Võ học đa dạng, thiên về kỹ thuật và ám khí.",
+        "sub_regions": [
+          "Xích Hỏa Thành",
+          "Hoàng Sa Thành",
+          "Lâm Hải Thành"
+        ]
+      },
+      {
+        "id": "dong_hai",
+        "name": "Đông Hải (Vô Tận)",
+        "description": "Quần đảo xa xôi lãng đãng sương mù. Nơi đây là cội nguồn của những tà phái và các bí tịch thất truyền từ ngàn xưa. Võ học quái dị, thiên về tốc độ và ảo ảnh.",
+        "sub_regions": [
+          "Vạn Đảo Thành",
+          "Hải Long Thành",
+          "Lưu Ly Thành"
+        ]
+      }
+    ],
+    "maps": [
+      {
+        "region": "Bắc Đảo",
+        "cities": [
+          {
+            "name": "Thanh Vân Thành",
+            "description": "Đô thị tấp nập nhất phương Bắc, trạm dừng chân cho các lãng khách.",
+            "landmarks": [
+              { "name": "Lộc An Quán", "description": "Tửu lâu nổi tiếng nhất vùng." },
+              { "name": "Tuyết Sơn Môn", "description": "Cổng thành hướng về dãy núi tuyết." },
+              { "name": "Vịnh Ngư Phong", "description": "Bến thuyền giao lưu hàng hóa." },
+              { "name": "Vạn Kiếm Các", "description": "Nơi rèn binh khí danh lừng." },
+              { "name": "Ám Nguyệt Tự", "description": "Ngôi chùa cổ u linh." },
+              { "name": "Bắc Thị Trường", "description": "Khu chợ buôn bán sầm uất." },
+              { "name": "Thủ Phủ Quân", "description": "Dinh thự của quản hạt vùng." },
+              { "name": "Hàn Băng Động", "description": "Hang động băng giá cổ xưa." },
+              { "name": "Phong Vân Đài", "description": "Nơi quan sát cao nhất thành." }
+            ]
+          },
+          {
+            "name": "Hàn Băng Cung",
+            "description": "Cung điện xây từ băng thạch, nơi ở của các nữ cao thủ.",
+            "landmarks": [
+              { "name": "Tuyết Liên Trì", "description": "Hồ sen tuyết quý hiếm." },
+              { "name": "Băng Phong Đạo", "description": "Đường huyết mạch vào cung." },
+              { "name": "Thiên Nha Các", "description": "Lầu quan sát từ trên cao." },
+              { "name": "Ngọc Tuyết Viện", "description": "Vườn băng thanh ngọc khiết." },
+              { "name": "Tinh Hà Lầu", "description": "Lầu gác ngắm sao trời." },
+              { "name": "Vạn Hàn Đài", "description": "Nơi tế lễ thần băng." },
+              { "name": "Vô Song Điện", "description": "Chánh điện uy nghiêm." },
+              { "name": "Minh Kính Hồ", "description": "Hồ nước trong như gương." },
+              { "name": "Cô Phong Đỉnh", "description": "Ngọn núi cô độc quanh cung." }
+            ]
+          },
+          {
+            "name": "Vô Kỵ Thành",
+            "description": "Thành bang tự do của lãng khách và tội phạm bị trục xuất.",
+            "landmarks": [
+              { "name": "Cuồng Phong Điện", "description": "Đại sảnh hội họp bang phái." },
+              { "name": "Thiết Huyết Trường", "description": "Võ trường huấn luyện tàn khốc." },
+              { "name": "U Minh Ngõ", "description": "Khu phố đen của giới ngầm." },
+              { "name": "Chiến Thần Miếu", "description": "Miếu thờ các chiến binh cổ." },
+              { "name": "Lãng Tử Lầu", "description": "Nơi dừng chân của dân du mục." },
+              { "name": "Hạc Vân Quán", "description": "Trà quán bên rìa đại sa mạc." },
+              { "name": "Thiên Long Môn", "description": "Cửa ngõ chính vào thành." },
+              { "name": "Địa Sát Đường", "description": "Nơi treo thưởng nhiệm vụ." },
+              { "name": "Vô Ngạn Hải", "description": "Bờ biển hoang sơ phía đông bắc." }
+            ]
+          }
+        ]
+      },
+      {
+        "region": "Nam Lục",
+        "cities": [
+          {
+            "name": "Xích Hỏa Thành",
+            "description": "Thành phố nằm cạnh núi lửa, nổi tiếng with nghề đúc kim loại.",
+            "landmarks": [
+              { "name": "Hỏa Long Trì", "description": "Hồ dung nham nóng chảy." },
+              { "name": "Thiết Gia Viện", "description": "Gia tộc rèn sắt truyền đời." },
+              { "name": "Xích Nguyệt Lầu", "description": "Lầu cao ánh ngọc đỏ." },
+              { "name": "Phong Hỏa Đài", "description": "Hệ thống báo hiệu lửa." },
+              { "name": "Linh Sơn Tự", "description": "Ngôi chùa thiêng trên đỉnh núi." },
+              { "name": "Hỏa Vân Các", "description": "Thư viện chứa bí kíp hỏa công." },
+              { "name": "Nam Môn Bảo", "description": "Pháo đài kiên cố cổng Nam." },
+              { "name": "Đường Môn Đường", "description": "Cơ sở của thế gia ám khí." },
+              { "name": "Thiên Hỏa Động", "description": "Hang động lửa thiêng." }
+            ]
+          },
+          {
+            "name": "Hoàng Sa Thành",
+            "description": "Ốc đảo phồn vinh giữa đại sa mạc cằn cỗi.",
+            "landmarks": [
+              { "name": "Kim Sa Tửu Quán", "description": "Điểm dừng chân duy nhất giữa cát." },
+              { "name": "Ngọc Môn Quan", "description": "Cửa ải trấn giữ vùng biên." },
+              { "name": "Phong Trần Các", "description": "Nơi giao lưu của khách thương." },
+              { "name": "Lạc Đà Thành", "description": "Khu vực sầm uất nuôi thú cưỡi." },
+              { "name": "Thánh Trụ Miếu", "description": "Nơi thờ thần bảo hộ sa mạc." },
+              { "name": "Linh Xà Động", "description": "Hang của bộ tộc xà nhân." },
+              { "name": "Đường Tơ Viện", "description": "Trung tâm dệt lụa tơ sa mạc." },
+              { "name": "Hoàng Hôn Đài", "description": "Nơi ngắm mặt trời lặn đẹp nhất." },
+              { "name": "Cổ Thành Phế Tích", "description": "Tàn tích của một quốc gia cổ." }
+            ]
+          },
+          {
+            "name": "Lâm Hải Thành",
+            "description": "Cửa ngõ quan trọng nối liền rừng sâu và biển cả.",
+            "landmarks": [
+              { "name": "Thiên Lâm Môn", "description": "Cổng vào khu rừng đại ngàn." },
+              { "name": "Hải Vân Đài", "description": "Nơi ngắm mây và sóng biển." },
+              { "name": "Thiên Hương Viện", "description": "Khu vườn thảo dược trân quý." },
+              { "name": "Thư Sinh Các", "description": "Học viện võ lâm bác học." },
+              { "name": "Ngư Ông Đảo", "description": "Hòn đảo của những kỳ nhân ẩn dật." },
+              { "name": "Lam Nguyệt Hồ", "description": "Hồ nước lấp lánh dưới ánh trăng." },
+              { "name": "Tĩnh Phong Môn", "description": "Cửa ải chắn gió biển phương nam." },
+              { "name": "Mộc Linh Đường", "description": "Nơi thờ linh hồn rừng xanh." },
+              { "name": "Vạn Trúc Lâm", "description": "Rừng trúc bát ngát ẩn chứa kỳ quan." }
+            ]
+          }
+        ]
+      },
+      {
+        "region": "Đông Hải",
+        "cities": [
+          {
+            "name": "Vạn Đảo Thành",
+            "description": "Kinh đô trên hàng ngàn hòn đảo nổi.",
+            "landmarks": [
+              { "name": "Phù Chú Đảo", "description": "Đảo chuyên về bùa chú bí ẩn." },
+              { "name": "Long Quy Động", "description": "Hang động rùa rồng huyền thoại." },
+              { "name": "Hải Tiêu Đài", "description": "Đài quan sát thảm họa sóng." },
+              { "name": "Ngọc Vân Đường", "description": "Phố buôn trân châu nạm ngọc." },
+              { "name": "Tinh Tú Đảo", "description": "Hòn đảo của những chiêm tinh gia." },
+              { "name": "Bắc Đẩu Các", "description": "Tháp quan sát chòm sao thần." },
+              { "name": "Hải Sư Môn", "description": "Cổng sư tử biển trang nghiêm." },
+              { "name": "Linh Châu Viện", "description": "Khu vườn của các loài linh vật biển." },
+              { "name": "Vô Danh Đảo", "description": "Đảo ẩn của các tà phái." }
+            ]
+          },
+          {
+            "name": "Hải Long Thành",
+            "description": "Thành phố nằm dưới mặt nước, xây bằng san hô trắng.",
+            "landmarks": [
+              { "name": "Long Vương Điện", "description": "Nơi cai trị của quốc vương biển." },
+              { "name": "San Hô Lầu", "description": "Khách sạn lộng lẫy nhất giới thủy tộc." },
+              { "name": "Cự Nhẫn Bảo", "description": "Pháo đài kiếm khổng lồ thủ thế." },
+              { "name": "Tinh Triều Ngạn", "description": "Bờ cát lấp lánh vô số lân quang." },
+              { "name": "Thủy Tinh Cung", "description": "Cung điện pha lê lung linh." },
+              { "name": "Minh Châu Trì", "description": "Hồ ngọc quý giá sâu dưới đáy." },
+              { "name": "U Minh Vực", "description": "Vực thẳm của những kẻ bị nguyền rủa." },
+              { "name": "Hắc Kình Viện", "description": "Nơi ở của các cao thủ cá voi." },
+              { "name": "Hải Thần Trụ", "description": "Cột trụ cân bằng sóng nước." }
+            ]
+          },
+          {
+            "name": "Lưu Ly Thành",
+            "description": "Thành phố phát sáng bởi những loại quặng độc đáo.",
+            "landmarks": [
+              { "name": "Nguyệt Hạ Lầu", "description": "Nơi múa hát dưới ánh trăng." },
+              { "name": "Tinh Triều Môn", "description": "Cổng vào rực rỡ sắc cầu vồng." },
+              { "name": "Linh Lan Viện", "description": "Sân đình ngập tràn linh lan tím." },
+              { "name": "Phong Vân Lầu", "description": "Quán trà tụ họp các hào kiệt." },
+              { "name": "Di Hoa Cung", "description": "Phiến phái bí ẩn của phụ nữ." },
+              { "name": "Tuyệt Nguyệt Đài", "description": "Nơi đứng đầu thành thưởng rượu." },
+              { "name": "Bạch Ngọc Đường", "description": "Cửa hiệu tơ lụa và bảo vật quý." },
+              { "name": "Phù Tử Môn", "description": "Hệ thống trường dạy nho giáo - võ thuật." },
+              { "name": "Vô Biên Hải", "description": "Chân trời nơi đại dương bắt đầu." }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

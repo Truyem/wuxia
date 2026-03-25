@@ -66,7 +66,25 @@ export class TextGenService {
     let i = 0;
 
     while (i < urls.length) {
-      const normalizedUrl = urls[i];
+      let normalizedUrl = urls[i];
+      
+      // Node Discovery: If the URL is a discovery endpoint, resolve the actual worker URL
+      if (normalizedUrl.includes('/api/nodes/')) {
+        try {
+          console.log(`[TextGenService] Đang tìm node hoạt động từ: ${normalizedUrl}`);
+          const discRes = await fetch(normalizedUrl);
+          const discData = await discRes.json();
+          if (discData.url) {
+            normalizedUrl = discData.url;
+            console.log(`[TextGenService] Đã tìm thấy node: ${normalizedUrl}`);
+          }
+        } catch (e) {
+          console.warn(`[TextGenService] Lỗi discovery tại ${normalizedUrl}, chuyển sang link tiếp theo...`, e);
+          i++;
+          continue;
+        }
+      }
+
       console.log(`[TextGenService] Đang thử kết nối tới Worker: ${normalizedUrl} (${i + 1}/${urls.length})`);
 
       try {
@@ -122,9 +140,18 @@ export class TextGenService {
         let text = "";
         let errorDataFromStream: any = null;
 
-        const data = await response.json() as any;
-        if (data.error) errorDataFromStream = data;
-        text = data.response || data.result?.response || data.choices?.[0]?.message?.content || "";
+        const responseText = (await response.text()).trim();
+        
+        try {
+          const data = JSON.parse(responseText);
+          if (data.error) errorDataFromStream = data;
+          
+          // Legacy support for wrapped JSON, or fallback to raw text if it's already the content
+          text = data.response || data.result?.response || data.choices?.[0]?.message?.content || responseText;
+        } catch (e) {
+          // If not valid JSON, it's already the raw text response
+          text = responseText;
+        }
 
         // Handle onDelta for compatibility (send full text as one delta)
         if (options.onDelta && text) {
