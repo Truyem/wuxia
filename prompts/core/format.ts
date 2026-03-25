@@ -41,6 +41,12 @@ export const Core_OutputFormat: PromptStructure = {
 - Use asterisks \`*\` to wrap important proper nouns (Characters, Locations, Kungfu, Items).
 - Default log sender is "Background" for narration and "Character Name" for dialogue.
 - Supported senders: Background, InnerThought, Flashback, System, Scenery.
+
+【Social Command Stability — CRITICAL】
+- For \`gameState.Social[INDEX]\` updates, ALWAYS use the NPC's **id** provided in the context (e.g., \`npc_ton_ngo_vuong\`).
+- If you don't have the ID, use the EXACT **fullName** or **name** inside the brackets.
+- The property name MUST be **memories** (plural).
+- Example: \`{"action": "PUSH", "key": "gameState.Social[npc_ton_ngo_vuong].memories", "value": {"content": "...", "time": "..."}}\`
 `,
     type: 'core',
     enabled: true

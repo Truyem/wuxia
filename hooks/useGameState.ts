@@ -252,7 +252,6 @@ export const useGameState = () => {
     const [generationMetadata, setGenerationMetadata] = useState<{ input: number, output: number } | undefined>(undefined);
 
     const [activeTab, setActiveTab] = useState<'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'visual' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'realworld'>('api');
-    const [showVisualSummary, setShowVisualSummary] = useState(false);
 
     // Status State
     const [isSettingsLoaded, setIsSettingsLoaded] = useState(false);
@@ -267,6 +266,7 @@ export const useGameState = () => {
         defaultFontSizeChat: 16,
         defaultLineHeightChat: 1.6,
         imageGenWorkerUrl: DEFAULT_IMAGE_GEN_WORKER_URL || '',
+        imageGenModel: '@cf/black-forest-labs/flux-2-klein-4b',
         textGenWorkerUrl: DEFAULT_TEXT_GEN_WORKER_URL || ''
     });
 
@@ -279,6 +279,7 @@ export const useGameState = () => {
             defaultFontSizeChat: 16,
             defaultLineHeightChat: 1.6,
             imageGenWorkerUrl: DEFAULT_IMAGE_GEN_WORKER_URL || '',
+            imageGenModel: '@cf/black-forest-labs/flux-2-klein-4b',
             textGenWorkerUrl: DEFAULT_TEXT_GEN_WORKER_URL || ''
         };
 
@@ -526,7 +527,6 @@ export const useGameState = () => {
         showStory, setShowStory,
         showMemory, setShowMemory,
         showSaveLoad, setShowSaveLoad,
-        showVisualSummary, setShowVisualSummary,
         storyId, setStoryId,
         activeTab, setActiveTab,
         isGenerating, setIsGenerating,

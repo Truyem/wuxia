@@ -128,6 +128,7 @@ export interface VisualSettings {
     defaultLineHeightChat?: number;
 
     imageGenWorkerUrl?: string;
+    imageGenModel?: string;
     textGenWorkerUrl?: string;
 }
 

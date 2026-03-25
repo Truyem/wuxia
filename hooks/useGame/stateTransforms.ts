@@ -51,6 +51,10 @@ const slugify = (text: string): string => {
         .replace(/[^a-z0-9]+/g, '_') // Thay ký tự đặc biệt bằng _
         .replace(/^_+|_+$/g, ''); // Trim _
 };
+const cleanWuxiaName = (name: string): string => {
+    if (!name) return '';
+    return name.replace(/\*/g, '').trim();
+};
 const generateAnonymousId = () => `npc_${Math.random().toString(36).substring(2, 11)}`;
 const getLocationFragment = (raw: unknown): string => coerceToString(raw);
 const removeSpecificLocationRedundancy = (specificRaw: string, smallRaw: string): string => {
@@ -237,6 +241,9 @@ const normalizeInventoryMapping = (rawRole: CharacterData): CharacterData => {
     };
 
     const role: CharacterData = { ...deepCopy(DefaultCharacterTemplate), ...deepCopy(rawRole) };
+    if (role.name) {
+        role.name = cleanWuxiaName(role.name);
+    }
     if (typeof (role as any).appearance !== 'string' || !(role as any).appearance.trim()) {
         (role as any).appearance = 'Ordinary appearance, simply dressed.';
     }
@@ -566,7 +573,8 @@ const standardizeRelationshipVariables = (raw: any): Array<{ targetName: string;
     const merged = new Map<string, { targetName: string; relation: string; note?: string }>();
     raw.forEach((item: any) => {
         if (!item || typeof item !== 'object') return;
-        const targetName = getFirstNonEmptyText(item?.targetName, item?.targetName, item?.targetName) || '';
+        const rawTargetName = getFirstNonEmptyText(item?.targetName, item?.targetName, item?.targetName) || '';
+        const targetName = cleanWuxiaName(rawTargetName);
         const relation = getFirstNonEmptyText(item?.relation, item?.relation) || '';
         const note = typeof item?.note === 'string' ? item.note.trim() : '';
         if (!targetName || !relation) return;
@@ -614,29 +622,37 @@ export const standardizeSingleNPC = (rawNpc: any, fallbackIndex: number): any =>
         npc?.clothingStyle,
         npc?.clothingStyle
     );
-    const memories = standardizationNPCMemory(npc?.memories || npc?.Memory);
+    const memories = standardizationNPCMemory(npc?.memories || npc?.Memory || npc?.memory || npc?.['Ký ức']);
     const corePersonalityTraits = getFirstNonEmptyText(npc?.corePersonalityTraits || npc?.personality || npc?.personalityDescription || npc?.['Tính cách']);
     const favorabilityBreakthroughCondition = getFirstNonEmptyText(npc?.favorabilityBreakthroughCondition || npc?.['Điều kiện đột phá hảo cảm']);
     const relationBreakthroughCondition = getFirstNonEmptyText(npc?.relationBreakthroughCondition || npc?.['Điều kiện đột phá quan hệ']);
-    const socialNetworkVariables = standardizeRelationshipVariables(npc?.socialNetworkVariables || npc?.relationNetwork || npc?.['Mạng lưới quan hệ']);
+    const socialNetworkVariables = standardizeRelationshipVariables(npc?.socialNetworkVariables || npc?.relationNetwork || npc?.['Mạng lưới quan hệ'] || npc?.relationVariables);
 
     return {
         ...npc,
         id: (() => {
             const rawId = getFirstNonEmptyText(npc?.id, npc?.ID);
-            // If it's a specific personal ID, slugify it
-            if (rawId && !/^(role|npc|char|unknown)_?\d*$/i.test(rawId)) {
-                return slugify(rawId);
+            
+            // If ID already exists and is not a generic placeholder, keep it as is
+            if (rawId && /^npc_[a-z0-9_]+$/i.test(rawId)) {
+                return rawId;
             }
+
+            // If it's a specific personal ID, slugify it and add npc_ prefix
+            if (rawId && !/^(role|npc|char|unknown)_?\d*$/i.test(rawId)) {
+                const slug = slugify(rawId);
+                return slug.startsWith('npc_') ? slug : `npc_${slug}`;
+            }
+            
             // If ID is generic or missing, try to use slugified real name
             const rawName = getFirstNonEmptyText(npc?.name, npc?.fullName, npc?.['Họ tên']);
-            // Check if name is NOT a title/generic (heuristic: common titles or generic patterns)
-            const isTitle = /^(trưởng|chủ|tiểu|đại|nhị|lính|người|vô danh|kẻ|hắc y|ngụy trang)/i.test(rawName || '');
-            if (rawName && !isTitle && !/^(role|npc|char|unknown)_?\d*$/i.test(rawName)) {
-                return slugify(rawName);
+            const isTitle = Array.isArray(npc?.title) || (typeof npc?.title === 'string' && npc.title.length > 5);
+            
+            if (rawName && !isTitle && !/^(role|npc|char|unknown|vô danh)_?\d*$/i.test(rawName)) {
+                return "npc_" + slugify(rawName);
             }
-            // Otherwise generate a unique anonymous ID for image generation consistency
-            return rawId && /^npc_[a-z0-9]{8,12}$/i.test(rawId) ? rawId : generateAnonymousId();
+
+            return rawId && /^npc_[a-z0-9]{8,12}$/i.test(rawId) ? rawId : (rawId || `npc_${fallbackIndex}`);
         })(),
         name: (() => {
             const rawName = getFirstNonEmptyText(npc?.name, npc?.fullName, npc?.['Họ tên'], npc?.lastName);
@@ -644,9 +660,9 @@ export const standardizeSingleNPC = (rawNpc: any, fallbackIndex: number): any =>
             
             if (isGenericName && typeof (npc?.identity || npc?.title || npc?.['Thân phận']) === 'string') {
                 const combined = [npc?.identity, npc?.title, npc?.['Thân phận']].filter(Boolean).join(' - ');
-                if (combined) return combined;
+                if (combined) return cleanWuxiaName(combined);
             }
-            return rawName || 'Vô danh';
+            return cleanWuxiaName(rawName || 'Vô danh');
         })(),
         gender: typeof npc?.gender === 'string' ? npc.gender : 'Unknown',
         age: Number.isFinite(Number(npc?.age)) ? Number(npc.age) : undefined,

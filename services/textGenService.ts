@@ -67,7 +67,7 @@ export class TextGenService {
 
     while (i < urls.length) {
       let normalizedUrl = urls[i];
-      
+
       // Node Discovery: If the URL is a discovery endpoint, resolve the actual worker URL
       if (normalizedUrl.includes('/api/nodes/')) {
         try {
@@ -92,6 +92,7 @@ export class TextGenService {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'x-model': options.model || '@cf/openai/gpt-oss-120b',
             ...(options.id ? { 'x-session-affinity': options.id } : {}),
           },
           body: JSON.stringify({
@@ -141,11 +142,11 @@ export class TextGenService {
         let errorDataFromStream: any = null;
 
         const responseText = (await response.text()).trim();
-        
+
         try {
           const data = JSON.parse(responseText);
           if (data.error) errorDataFromStream = data;
-          
+
           // Legacy support for wrapped JSON, or fallback to raw text if it's already the content
           text = data.response || data.result?.response || data.choices?.[0]?.message?.content || responseText;
         } catch (e) {
@@ -155,7 +156,7 @@ export class TextGenService {
 
         // Handle onDelta for compatibility (send full text as one delta)
         if (options.onDelta && text) {
-            options.onDelta(text, text);
+          options.onDelta(text, text);
         }
 
         if (!text && errorDataFromStream) {

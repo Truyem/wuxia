@@ -34,7 +34,6 @@ import MobileStory from './components/features/Story/MobileStory';
 import MemoryModal from './components/features/Memory/MemoryModal';
 import MobileMemory from './components/features/Memory/MobileMemory';
 import SaveLoadModal from './components/features/SaveLoad/SaveLoadModal'; // New
-import VisualSummary from './components/features/NewGame/VisualSummary';
 import InAppConfirmModal, { ConfirmOptions } from './components/ui/InAppConfirmModal';
 import BattleOverlay from './components/features/battle/BattleOverlay';
 import { useGame } from './hooks/useGame';
@@ -60,6 +59,7 @@ const App: React.FC = () => {
         danger: false
     });
 
+    const [selectedSocialId, setSelectedSocialId] = React.useState<string | null>(null);
     const [isGeneratingProtagonist, setIsGeneratingProtagonist] = React.useState(false);
     const [generatingNpcs, setGeneratingNpcs] = React.useState<Set<string>>(new Set());
     const generatingProtagonistFor = React.useRef<string | null>(null);
@@ -234,12 +234,12 @@ const App: React.FC = () => {
                         setIsGeneratingProtagonist(true);
                         try {
                             // constructCharacterPrompt now supports .appearance (protagonist field)
-                            const dataUrl = await ImageService.generateAndCache(workerUrl, { prompt }, cacheKey);
+                            const dataUrl = await ImageService.generateAndCache(workerUrl, { prompt, model: visualConfig.imageGenModel }, cacheKey);
                             if (dataUrl) {
                                 state.setCharacter(prev => ({ ...prev, avatar: dataUrl }));
                             }
                         } catch (error) {
-                            console.error('Character global auto-generation error:', error);
+                            console.warn('Character auto-generation failed after all retries.');
                         } finally {
                             setIsGeneratingProtagonist(false);
                             generatingProtagonistFor.current = null;
@@ -266,7 +266,7 @@ const App: React.FC = () => {
                         } else {
                             setGeneratingNpcs(prev => new Set(prev).add(npc.name));
                             try {
-                                const dataUrl = await ImageService.generateAndCache(workerUrl, { prompt }, cacheKey);
+                                const dataUrl = await ImageService.generateAndCache(workerUrl, { prompt, model: visualConfig.imageGenModel }, cacheKey);
                                 if (dataUrl) {
                                     state.setSocial(prev => prev.map(n => {
                                         if (npc.id && n.id === npc.id) return { ...n, avatar: dataUrl };
@@ -282,7 +282,9 @@ const App: React.FC = () => {
 */
                                 }
                             } catch (error) {
-                                console.error(`NPC generation error for ${npc.name}:`, error);
+                                // Silent retry: actual errors are logged as warnings in ImageService
+                                // We only log a final heads-up here if all retries fail.
+                                console.warn(`NPC generation failed for ${npc.name} after all retries.`);
                             } finally {
                                 setGeneratingNpcs(prev => {
                                     const next = new Set(prev);
@@ -483,6 +485,11 @@ const App: React.FC = () => {
                                 isGenerating={isGeneratingProtagonist}
                                 generatingNames={generatingNpcs}
                                 allAvatars={allAvatars}
+                                onOpenSocial={(id: string) => {
+                                    setSelectedSocialId(id);
+                                    setters.setShowSocial(true);
+                                }}
+                                selectedNpcId={selectedSocialId || ''}
                             />
                         </div>
 
@@ -805,13 +812,14 @@ const App: React.FC = () => {
                                 onClose={() => setters.setShowSocial(false)}
                                 playerName={state.character.name}
                                 onToggleMajorRole={actions.updateNpcMajorRole}
+                                initialSelectedId={selectedSocialId}
                             />
                             <MobileSocial
                                 socialList={state.social}
                                 allAvatars={allAvatars}
                                 onClose={() => setters.setShowSocial(false)}
-                                playerName={state.character.name}
                                 onToggleMajorRole={actions.updateNpcMajorRole}
+                                initialSelectedId={selectedSocialId}
                             />
                         </>
                     )}
@@ -888,6 +896,7 @@ const App: React.FC = () => {
                             onClose={() => setters.setShowAgreement(false)}
                         />
                     )}
+
 
                     {state.showStory && (
                         <>

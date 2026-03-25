@@ -194,7 +194,6 @@ export const useGame = () => {
         showStory, setShowStory,
         showMemory, setShowMemory,
         showSaveLoad, setShowSaveLoad,
-        showVisualSummary, setShowVisualSummary,
         storyId, setStoryId,
         activeTab, setActiveTab,
 
@@ -685,8 +684,9 @@ export const useGame = () => {
         if (gameStateData.environment) {
             setEnvironment(normalizeEnvironment(gameStateData.environment));
         }
-        if (gameStateData.social) {
-            setSocial(standardizeSocialList(gameStateData.social));
+        const socialUpdate = gameStateData.social || gameStateData.Social || gameStateData.SocialNet || gameStateData['Danh hiệp phả'];
+        if (socialUpdate) {
+            setSocial(standardizeSocialList(socialUpdate));
         }
         if (gameStateData.world) {
             setWorld(normalizeWorldStatus(gameStateData.world));
@@ -711,7 +711,8 @@ export const useGame = () => {
     const applyOpeningBaseState = (openingBase: any) => {
         setCharacter(openingBase.character || openingBase.Role);
         setEnvironment(normalizeEnvironment(openingBase.environment || openingBase.Environment));
-        setSocial(standardizeSocialList(openingBase.social || openingBase.Social));
+        const socialData = openingBase.social || openingBase.Social || openingBase.SocialNet || openingBase['Danh hiệp phả'] || [];
+        setSocial(standardizeSocialList(socialData));
         setWorld(normalizeWorldStatus(openingBase.world || openingBase.World));
         setBattle(normalizeCombatStatus(openingBase.battle || openingBase.Combat));
         setPlayerSect(openingBase.playerSect || openingBase.PlayerSect);
@@ -1587,7 +1588,6 @@ export const useGame = () => {
                 // We pass genData explicitly because state updates might be async/batched
                 await generateOpeningStory(openingBase, finalPrompts, openingStreaming, currentApi, worldSkeleton);
                 // Trigger Visual Summary review step
-                setShowVisualSummary(true);
             }
         } catch (error: any) {
             if (worldStreamHeartbeat) clearInterval(worldStreamHeartbeat);

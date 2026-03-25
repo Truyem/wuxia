@@ -156,7 +156,7 @@ export const buildNpcContext = (socialData: any[], memoryConfig: MemoryConfig): 
             combatStatus,
             lastInteraction,
             appearanceDescription: baseData.appearanceDescription,
-            keyMemories: standardizeMemory(npc, memoryLimit)
+            memories: standardizeMemory(npc, memoryLimit)
         };
     };
 
@@ -172,7 +172,7 @@ export const buildNpcContext = (socialData: any[], memoryConfig: MemoryConfig): 
                 const data = {
                     ...baseData,
                     isMajorCharacter: n.isMajorCharacter,
-                    keyMemories: n.keyMemories,
+                    memories: n.memories,
                     ...(n.combatStatus && { combatStatus: n.combatStatus })
                 };
                 return [key, data];
@@ -189,7 +189,7 @@ export const buildNpcContext = (socialData: any[], memoryConfig: MemoryConfig): 
             const data = {
                 ...n.completeData,
                 isMajorCharacter: n.isMajorCharacter,
-                keyMemories: n.keyMemories
+                memories: n.memories
             };
             return [key, data];
         })

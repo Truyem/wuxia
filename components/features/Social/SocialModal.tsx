@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NpcStructure } from '../../../models/social';
 import IconGlyph from '../../ui/Icon/IconGlyph';
@@ -9,13 +9,53 @@ interface Props {
     playerName?: string;
     onToggleMajorRole?: (npcId: string, nextIsMajor: boolean) => void;
     allAvatars: Record<string, string>;
+    initialSelectedId?: string | null;
 }
 
-const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ nhập giang hồ", onToggleMajorRole, allAvatars }) => {
+const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ nhập giang hồ", onToggleMajorRole, allAvatars, initialSelectedId }) => {
     const { t } = useTranslation();
     const [selectedId, setSelectedId] = useState<string | null>(
-        socialList.length > 0 ? socialList[0].id : null
+        initialSelectedId || (socialList.length > 0 ? socialList[0].id : null)
     );
+
+    React.useEffect(() => {
+        if (initialSelectedId) {
+            setSelectedId(initialSelectedId);
+        }
+    }, [initialSelectedId]);
+
+    const prevNpcName = useRef<string | null>(null);
+    const memoriesEndRef = useRef<HTMLDivElement>(null);
+
+    let currentNPC = socialList.find(n => n.id === selectedId);
+
+    // Fallback: If ID not found, try to find by Name from previous selection
+    if (!currentNPC && prevNpcName.current) {
+        const fallbackNpc = socialList.find(n => n.name === prevNpcName.current);
+        if (fallbackNpc) {
+            currentNPC = fallbackNpc;
+            // Sync the ID after render to stabilize the state
+            setTimeout(() => {
+                if (fallbackNpc.id !== selectedId) {
+                    setSelectedId(fallbackNpc.id);
+                }
+            }, 0);
+        }
+    }
+
+    // Sync the name ref whenever an NPC is active
+    useEffect(() => {
+        if (currentNPC) {
+            prevNpcName.current = currentNPC.name;
+        }
+    }, [currentNPC?.id, currentNPC?.name]);
+
+    // Auto-scroll to the bottom of memories when they update
+    useEffect(() => {
+        if (memoriesEndRef.current) {
+            memoriesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [currentNPC?.memories?.length]);
 
     const tValue = (val?: string) => {
         if (!val) return t('social.labels.unknown');
@@ -24,7 +64,7 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
         return translated === `social.values.${val}` ? val : translated;
     };
 
-    const currentNPC = socialList.find(n => n.id === selectedId);
+
     const showFemaleExtensions = currentNPC?.gender === 'Female' && Boolean(currentNPC?.isMainCharacter);
 
     const resolveAvatar = (npc: NpcStructure) => {
@@ -398,19 +438,22 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                                 {/* MEMORY LANE */}
                                  <div className="mt-20 border-t border-white/5 pt-10">
                                      <h4 className="text-paper-white/20 font-serif font-black uppercase tracking-[0.4em] text-xs mb-8">{t('social.sections.sharedPath') || "Ký ỨC TRƯỜNG HÀ"}</h4>
-                                    <div className="space-y-6 relative border-l border-white/5 ml-6 pl-10">
-                                        {currentNPC.memories.map((mem, idx) => (
-                                            <div key={idx} className="relative group/mem">
-                                                <div className="absolute left-[-46px] top-1 w-3 h-3 rounded-none bg-black border-2 border-white/10 z-10"></div>
-                                                <div className="bg-white/5 p-5 rounded-none border border-white/5">
-                                                    <div className="text-[9px] text-paper-white/30 font-mono mb-2 uppercase tracking-widest">{mem.time}</div>
-                                                    <p className="text-sm text-paper-white/70 leading-relaxed font-serif italic">"{mem.content}"</p>
+                                                       <div className="space-y-3 max-h-56 overflow-y-auto custom-scrollbar pr-2 pt-1 border-t border-wuxia-gold/10">
+                                        {(currentNPC.memories || []).map((mem, idx) => (
+                                            <div key={idx} className="border-l border-wuxia-gold/30 pl-3 relative group/mem hover:border-wuxia-gold transition-colors pb-1">
+                                                <div className="absolute top-0 left-[-2px] w-[4px] h-[4px] bg-wuxia-gold rounded-full shadow-[0_0_8px_rgba(230,200,110,0.6)]" />
+                                                <div className="text-xs text-paper-white/80 leading-relaxed font-serif">{mem.content}</div>
+                                                <div className="text-[9px] text-paper-white/30 font-mono mt-1 uppercase italic tracking-tighter opacity-70 group-hover/mem:opacity-100 transition-opacity flex justify-between items-center">
+                                                    <span>{mem.time}</span>
                                                 </div>
                                             </div>
                                         ))}
-                                         {currentNPC.memories.length === 0 && (
-                                             <div className="text-center py-6 text-xs text-paper-white/20 italic">{t('social.labels.noMemories') || "Vẫn chưa có những kỷ niệm khắc cốt ghi tâm."}</div>
-                                         )}
+                                        <div ref={memoriesEndRef} />
+                                        {(!currentNPC.memories || currentNPC.memories.length === 0) && (
+                                            <div className="text-xs text-paper-white/20 font-serif italic text-center py-8 border border-dashed border-white/5 bg-black/5 rounded-lg">
+                                                Vẫn chưa có những kỷ niệm khắc cốt ghi tâm.
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

@@ -16,10 +16,11 @@ interface Props {
     onOpenCharacter?: () => void;
     visualConfig: VisualSettings;
     onUpdateCharacter: (data: CharacterData) => void;
-    isProfile?: boolean;
     isGenerating?: boolean;
     generatingNames?: Set<string>;
     allAvatars?: Record<string, string>;
+    onOpenSocial?: (id: string) => void;
+    selectedNpcId?: string;
 }
 
 
@@ -281,7 +282,7 @@ const NpcSlot: React.FC<{ npc: NpcStructure; visualConfig: VisualSettings; isGen
     );
 };
 
-const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visualConfig, onUpdateCharacter, isProfile = false, isGenerating = false, generatingNames, allAvatars }) => {
+const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visualConfig, onUpdateCharacter, isProfile = false, isGenerating = false, generatingNames, allAvatars, onOpenSocial, selectedNpcId }) => {
 
 
     const radarData = useMemo(() => {
@@ -607,6 +608,8 @@ const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visual
                                     visualConfig={visualConfig} 
                                     isGenerating={generatingNames?.has(npc.name)}
                                     allAvatars={allAvatars} 
+                                    onClick={(id) => onOpenSocial?.(id)}
+                                    isSelected={selectedNpcId === npc.id}
                                 />
                             ))}
                             {/* Fill remaining slots if < 4 */}

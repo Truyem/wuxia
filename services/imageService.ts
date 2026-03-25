@@ -3,6 +3,9 @@ import { parseWorkerUrls, DEFAULT_IMAGE_GEN_WORKER_URLS } from '../utils/apiConf
 export interface ImageGenOptions {
   prompt: string;
   num_steps?: number;
+  width?: number;
+  height?: number;
+  model?: string;
 }
 
 
@@ -151,49 +154,79 @@ export class ImageService {
 
         console.log(`[ImageService] Đang thử kết nối tới Worker tạo ảnh: ${normalizedUrl} (${i + 1}/${urls.length})`);
 
-        try {
-          const formData = new FormData();
-          formData.append('prompt', options.prompt);
-          
-          const response = await fetch(normalizedUrl, {
-            method: 'POST',
-            body: formData,
-          });
+        const MAX_RETRIES = 2;
+        const INITIAL_RETRY_DELAY = 1500;
 
-          if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            const errorMessage = String(errorData.error || `HTTP error! status: ${response.status}`);
-            
-            // Check if this error is the "4006: daily free allocation" error or rate limit
-            const is4006 = errorMessage.includes('4006') || 
-                           errorMessage.toLowerCase().includes('daily free allocation') ||
-                           errorMessage.toLowerCase().includes('neurons') ||
-                           response.status === 429;
-            
-            if (is4006 && i < urls.length - 1) {
-              console.warn(`[ImageService] Worker ${normalizedUrl} đã hết hạn mức (4006/429). Đang chuyển sang URL dự phòng...`);
-              continue;
+        for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+            if (attempt > 0) {
+                const backoffDelay = INITIAL_RETRY_DELAY * Math.pow(2, attempt - 1);
+                console.log(`[ImageService] Đang thử lại lần ${attempt}/${MAX_RETRIES} cho ${normalizedUrl} sau ${backoffDelay}ms...`);
+                await new Promise(resolve => setTimeout(resolve, backoffDelay));
             }
-            
-            throw new Error(errorMessage);
-          }
 
-          const blob = await response.blob();
-          return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result as string);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-          });
-        } catch (error: any) {
-          lastErrorMessage = error?.message || String(error);
-          
-          // Retry on connection errors or 4006/429
-          if (i < urls.length - 1) {
-             console.warn(`[ImageService] Lỗi khi kết nối tới ${normalizedUrl}: ${lastErrorMessage}. Thử URL tiếp theo...`);
-             continue;
-          }
-          break;
+            try {
+              const formData = new FormData();
+              formData.append('prompt', options.prompt);
+              if (options.num_steps) formData.append('num_steps', String(options.num_steps));
+              if (options.width) formData.append('width', String(options.width));
+              if (options.height) formData.append('height', String(options.height));
+              if (options.model) formData.append('model', options.model);
+              
+              const response = await fetch(normalizedUrl, {
+                method: 'POST',
+                headers: {
+                  'x-model': options.model || '@cf/black-forest-labs/flux-2-klein-4b'
+                },
+                body: formData,
+              });
+
+              if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                const errorMessage = String(errorData.error || `HTTP error! status: ${response.status}`);
+                
+                // Check if this error is transient or quota-related
+                const isRetryable = response.status >= 500 || 
+                                   response.status === 429 ||
+                                   errorMessage.includes('4006') || 
+                                   errorMessage.toLowerCase().includes('daily free allocation') ||
+                                   errorMessage.toLowerCase().includes('neurons');
+
+                if (isRetryable && (attempt < MAX_RETRIES || i < urls.length - 1)) {
+                    // If it's 4006 or 429, we might want to skip to the next URL sooner
+                    // but for general 500s, we retry on the SAME URL first.
+                    if ((errorMessage.includes('4006') || response.status === 429) && i < urls.length - 1) {
+                        console.warn(`[ImageService] Worker ${normalizedUrl} đã hết hạn mức hoặc bận (4006/429). Đang chuyển sang URL kế tiếp...`);
+                        break; // Break the attempt loop to move to next URL
+                    }
+                    console.warn(`[ImageService] Lỗi tạm thời từ ${normalizedUrl} (Lần ${attempt + 1}): ${errorMessage}. Đang chuẩn bị thử lại...`);
+                    continue; // Continue to next attempt for this URL
+                }
+                
+                throw new Error(errorMessage);
+              }
+
+              const blob = await response.blob();
+              return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result as string);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+              });
+            } catch (error: any) {
+              lastErrorMessage = error?.message || String(error);
+              
+              // If it's a fetch/connection error, retry on same URL or move to next
+              if (attempt < MAX_RETRIES) {
+                  console.warn(`[ImageService] Lỗi kết nối "${lastErrorMessage}" cho ${normalizedUrl} (Lần ${attempt + 1}). Thử lại...`);
+                  continue; 
+              }
+              
+              if (i < urls.length - 1) {
+                  console.warn(`[ImageService] Đã thử hết số lần cho ${normalizedUrl}. Chuyển sang URL tiếp theo...`);
+                  break; 
+              }
+              throw new Error(lastErrorMessage);
+            }
         }
     }
 

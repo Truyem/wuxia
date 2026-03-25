@@ -671,15 +671,6 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
             currentExp: 0, levelUpExp: 100, playerBuffs: []
         };
 
-        const streamStatus = openingStreaming ? 'Mở' : 'Đóng';
-        const confirmText = `Chế độ bắt đầu truyền phát cốt truyện hiện đang được đặt thành 【${streamStatus}】.\nKhi được bật, hiển thị trong khi tạo. Chờ phản hồi đầy đủ nếu đóng.\nTiếp tục tạo?`;
-        const ok = requestConfirm
-            ? await requestConfirm({
-                title: 'Xác nhận tạo',
-                message: confirmText,
-                confirmText: 'Bắt đầu tạo'
-            })
-            : true;
         onComplete(worldConfig, charData, openingStreaming ? 'all' : 'step', openingStreaming);
     };
 
@@ -1482,18 +1473,6 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
                                 </div>
                             </OrnateBorder>
 
-                            <OrnateBorder className="w-full max-w-lg p-4">
-                                <div className="flex items-center justify-between p-4 bg-wuxia-gold/5 rounded-lg border border-wuxia-gold/20 group hover:border-wuxia-gold/40 transition-all">
-                                    <div className="flex flex-col">
-                                        <span className="text-wuxia-gold font-medium font-serif">Truyền phát cốt truyện mở đầu</span>
-                                        <span className="text-[11px] text-wuxia-gold/50 italic">Bật chế độ này để hiển thị nội dung tạo mở đầu theo thời gian thực</span>
-                                    </div>
-                                    <ToggleSwitch
-                                        checked={openingStreaming}
-                                        onChange={setOpeningStreaming}
-                                    />
-                                </div>
-                            </OrnateBorder>
 
                             <div className="flex flex-col gap-4 w-full max-w-md">
                                 <GameButton onClick={() => { void handleGenerate(); }} variant="primary" className="w-full py-4 text-lg">

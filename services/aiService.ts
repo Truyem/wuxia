@@ -1460,6 +1460,7 @@ const requestWorkerText = async (
         temperature?: number;
         max_tokens?: number;
         id?: string;
+        model?: string;
         onDelta?: (delta: string, accumulated: string) => void;
     }
 ): Promise<string> => {
@@ -1468,6 +1469,7 @@ const requestWorkerText = async (
         temperature: options.temperature,
         max_tokens: options.max_tokens,
         id: options.id,
+        model: options.model,
         onDelta: options.onDelta
     });
 };
@@ -1573,7 +1575,9 @@ const requestModelText = async (
             messages,
             {
                 temperature: resolvedTemperature,
-                max_tokens: maxOutputTokens
+                max_tokens: maxOutputTokens,
+                id: options.id,
+                model: apiConfig.model
             }
         );
     }
@@ -1715,6 +1719,7 @@ export const generateWorldData = async (
     if ((!apiConfig || !apiConfig.apiKey) && effectiveWorkerUrl) {
         const rawText = await requestWorkerText(effectiveWorkerUrl, messages, {
             temperature: 0.8,
+            max_tokens: 131000,
             id: streamOptions?.id,
             onDelta: streamOptions?.onDelta
         });
@@ -1847,8 +1852,10 @@ export const generateStoryResponse = async (
 
     if (useWorker) {
         // Use Cloudflare Worker (Nemotron) for text generation
+        const maxTokens = (apiConfig ? calculateMaxOutputToken(apiConfig, 'openai', apiMessages) : 4096);
         rawText = await requestWorkerText(effectiveWorkerUrl!, apiMessages, {
             temperature: 0.7,
+            max_tokens: maxTokens,
             id: requestOptions?.id,
             onDelta: streamOptions?.onDelta
         });

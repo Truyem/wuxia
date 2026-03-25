@@ -78,8 +78,10 @@ export class TransformationService {
                 { role: 'system', content: system },
                 { role: 'user', content: `Transform these items (Dữ liệu nhập):\n${processedInput}` }
             ],
-            max_tokens: 131000,
-            temperature: 1.0
+            max_tokens: 100000,
+            temperature: 1.0,
+            model: '@cf/meta/llama-4-scout-17b-16e-instruct',
+            id: 'transformation-system'
         });
     }
 }

@@ -72,6 +72,13 @@ const PromptManager: React.FC<Props> = ({ prompts, onUpdate, requestConfirm, api
     };
 
     const handleToggleEnable = (id: string) => {
+        const targetPrompt = prompts.find(p => p.id === id);
+        if (id === 'writing_nsfw' && targetPrompt && !targetPrompt.enabled) {
+            const activeConfig = getCurrentApiConfig(apiConfig);
+            if (activeConfig.provider === 'worker') {
+                pushNotice('error', 'ko sử dụng nsfw bằng worker free');
+            }
+        }
         const newPrompts = prompts.map(p => p.id === id ? { ...p, enabled: !p.enabled } : p);
         onUpdate(newPrompts);
     };

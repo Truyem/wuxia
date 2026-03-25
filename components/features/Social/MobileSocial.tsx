@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NpcStructure } from '../../../models/social';
 import IconGlyph from '../../ui/Icon/IconGlyph';
@@ -6,9 +6,9 @@ import IconGlyph from '../../ui/Icon/IconGlyph';
 interface Props {
     socialList: NpcStructure[];
     onClose: () => void;
-    playerName?: string;
     onToggleMajorRole?: (npcId: string, nextIsMajor: boolean) => void;
     allAvatars: Record<string, string>;
+    initialSelectedId?: string | null;
 }
 
 const Tag: React.FC<{ label: string }> = ({ label }) => (
@@ -44,19 +44,53 @@ const RelationTag: React.FC<{ label: string; value?: string; accent?: string }> 
     );
 };
 
-const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName, onToggleMajorRole, allAvatars }) => {
+const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName, onToggleMajorRole, allAvatars, initialSelectedId }) => {
     const { t } = useTranslation();
     const [selectedId, setSelectedId] = useState<string | null>(
-        socialList.length > 0 ? socialList[0].id : null
+        initialSelectedId || (socialList.length > 0 ? socialList[0].id : null)
     );
+
+    React.useEffect(() => {
+        if (initialSelectedId) {
+            setSelectedId(initialSelectedId);
+        }
+    }, [initialSelectedId]);
+
+    const prevNpcName = useRef<string | null>(null);
+    const memoriesEndRef = useRef<HTMLDivElement>(null);
+
+    let currentNPC = socialList.find(n => n.id === selectedId);
+
+    // Fallback logic for mobile
+    if (!currentNPC && prevNpcName.current) {
+        const fallbackNpc = socialList.find(n => n.name === prevNpcName.current);
+        if (fallbackNpc) {
+            currentNPC = fallbackNpc;
+            setTimeout(() => {
+                if (fallbackNpc.id !== selectedId) {
+                    setSelectedId(fallbackNpc.id);
+                }
+            }, 0);
+        }
+    }
+
+    useEffect(() => {
+        if (currentNPC) {
+            prevNpcName.current = currentNPC.name;
+        }
+    }, [currentNPC?.id, currentNPC?.name]);
+
+    useEffect(() => {
+        if (memoriesEndRef.current) {
+            memoriesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [currentNPC?.memories?.length]);
 
     const resolveAvatar = (npc: NpcStructure) => {
         if (!allAvatars) return npc.avatar;
         return allAvatars[npc.id] || allAvatars[npc.name] || npc.avatar;
     };
     
-    const currentNPC = socialList.find(n => n.id === selectedId);
-
     // FIX: Check for both English and Vietnamese gender strings
     const isFemale = currentNPC?.gender === 'Female' || currentNPC?.gender === 'Nữ';
     const showFemaleExtensions = isFemale && Boolean(currentNPC?.isMainCharacter);
@@ -356,14 +390,14 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName, onTogg
                                     {t('social.sections.sharedPath')}
                                 </div>
                                 <div className="space-y-3 max-h-56 overflow-y-auto custom-scrollbar pr-2">
-                                    {currentNPC.memories.map((mem, idx) => (
+                                    {(currentNPC.memories || []).map((mem, idx) => (
                                         <div key={idx} className="border-l border-wuxia-gold/30 pl-3 relative">
                                             <div className="absolute top-0 left-[-1.5px] w-[3px] h-[3px] bg-wuxia-gold" />
                                             <div className="text-xs text-gray-300 leading-relaxed">{mem.content}</div>
-                                            <div className="text-[9px] text-gray-500 font-mono mt-1 uppercase italic tracking-tighter opacity-70">{mem.time}</div>
                                         </div>
                                     ))}
-                                    {currentNPC.memories.length === 0 && (
+                                    <div ref={memoriesEndRef} />
+                                    {(!currentNPC.memories || currentNPC.memories.length === 0) && (
                                         <div className="text-xs text-gray-600 font-serif italic text-center py-4">{t('social.labels.noMemories')}</div>
                                     )}
                                 </div>

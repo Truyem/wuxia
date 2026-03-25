@@ -115,6 +115,8 @@
         "mainStatus": "Trạng thái nhân vật quan trọng"
       },
       "sections": {
+        "title": "DANH HIỆP PHẢ",
+        "subtitle": "Giang Hồ Nhân Mạch",
         "biography": "Hành Trình Ký Sự",
         "fateInteraction": "Duyên Phận Tương Tác",
         "dynamicStatus": "TRẠNG THÁI ĐỘNG",

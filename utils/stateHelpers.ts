@@ -16,7 +16,6 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     "Vàng": "gold",
     "Bạc": "silver",
     "Đồng": "copper",
-    "Đồng tiền": "copper",
     "Ngân lượng tàng trữ": "money",
     "Phụ trọng": "currentWeight",
     "Cân nặng hiện tại": "currentWeight",
@@ -139,6 +138,9 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     "Social memory": "memories",
     "Biến mạng lưới quan hệ": "socialNetworkVariables",
     "Social network": "socialNetworkVariables",
+    "SocialNet": "social",
+    "Social": "social",
+    "Danh hiệp phả": "social",
     "Đặc điểm tính cách cốt lõi": "corePersonalityTraits",
     "Điều kiện đột phá hảo cảm": "favorabilityBreakthroughCondition",
     "Điều kiện đột phá quan hệ": "relationBreakthroughCondition",
@@ -601,7 +603,7 @@ export const applyStateCommand = (
             else if (lSubPath.startsWith("buildings")) path = "buildings" + subPath.substring(9);
             else if (lSubPath.startsWith("activenpclist")) path = "activeNpcList" + subPath.substring(13);
             else if (!subPath) path = "";
-            else path = "maps." + subPath; // Default to maps for legacy "World.MapName"
+            else path = "maps" + (subPath.startsWith('[') ? subPath : "." + subPath); // Default to maps for legacy "World.MapName"
         } else {
             targetObj = newEnv;
             const subPath = key.replace(/^gameState\.(Environment\.|)Map\.?/i, "");
@@ -622,7 +624,12 @@ export const applyStateCommand = (
             }
         }
         targetObj = { Social: newSocial };
-        path = key.replace(/^gameState\.Social\.?(NPC_LIST\.?)?/i, "Social.");
+        path = key.replace(/^gameState\.Social\.?(NPC_LIST\.?)?/i, "Social");
+        // If it was just "gameState.Social" it becomes "Social", if it was "gameState.Social[0]" it becomes "Social[0]"
+        // If it was "gameState.Social.NPC_LIST[0]" it becomes "Social[0]"
+        if (path === "Social" && key.toLowerCase().includes("social.") && !key.toLowerCase().includes("social.npc_list")) {
+             path = "Social." + key.substring(key.toLowerCase().indexOf("social.") + 7);
+         }
     } else if (lowerKey.startsWith("gamestate.world")) {
         targetObj = newWorld;
         path = key.replace(/^gameState\.World\.?/i, "");
@@ -688,20 +695,33 @@ export const applyStateCommand = (
         }
         targetObj = newPlayerSect;
         path = key.replace(/^gameState\.PlayerSect\.?/i, "");
+        if (!path && normalizedAction === 'set') {
+            const translatedValue = translateObjectKeys(value);
+            newPlayerSect = { ...newPlayerSect, ...translatedValue };
+            return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
+        }
     }
 
     if (!targetObj || (!path && normalizedAction !== 'set')) return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
 
     const parts = path.split('.').filter(p => p !== "").map(p => {
         let partName = p;
-        let index: number | undefined = undefined;
+        let index: string | number | undefined = undefined;
         
-        // Handle parts like "TaskList[0]" or standalone "[0]"
+        // Handle parts like "Social[npc_id]", "TaskList[0]" or standalone "[0]"
         if (p.includes('[') && p.includes(']')) {
             const bracketStart = p.indexOf('[');
             const bracketEnd = p.indexOf(']');
             partName = p.substring(0, bracketStart);
-            index = parseInt(p.substring(bracketStart + 1, bracketEnd));
+            const rawIndex = p.substring(bracketStart + 1, bracketEnd);
+            const numericIndex = parseInt(rawIndex);
+            
+            // If it's digits and matches the whole string, it's a number
+            if (/^\d+$/.test(rawIndex.trim())) {
+                index = numericIndex;
+            } else {
+                index = rawIndex.trim(); // Keep as string for ID/Name lookup
+            }
         }
         
         // Translate Vietnamese key if mapped
@@ -760,11 +780,42 @@ export const applyStateCommand = (
         const part = parts[i];
         
         if (part.index !== undefined) {
-             // Array access
-             if (!Array.isArray(current[part.name])) current[part.name] = [];
-             if (!current[part.name][part.index] || typeof current[part.name][part.index] !== 'object') current[part.name][part.index] = {};
-             current = current[part.name][part.index];
+             const arr = part.name === "" ? current : current[part.name];
+             if (!Array.isArray(arr)) {
+                 if (part.name !== "") current[part.name] = [];
+                 else {
+                     // Can't turn non-array current into array for empty name index
+                     return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
+                 }
+             }
+             
+             const targetArray = part.name === "" ? current : current[part.name];
+             let targetIdx: number;
+             if (typeof part.index === 'number') {
+                 targetIdx = part.index;
+             } else {
+                 // ID or Name lookup (flexible)
+                 const searchId = String(part.index).toLowerCase();
+                 const searchIdx = targetArray.findIndex((item: any) => {
+                     if (!item) return false;
+                     const id = String(item.id || item.ID || "").toLowerCase();
+                     const name = String(item.name || "").toLowerCase();
+                     const fullName = String(item.fullName || "").toLowerCase();
+                     return id === searchId || ("npc_" + id === searchId) || (searchId.startsWith("npc_") && id === searchId.substring(4)) || name === searchId || fullName === searchId;
+                 });
+                 targetIdx = searchIdx;
+             }
+             
+             if (targetIdx === -1) {
+                  return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
+             }
+             
+             if (!targetArray[targetIdx] || typeof targetArray[targetIdx] !== 'object') {
+                 targetArray[targetIdx] = {};
+             }
+             current = targetArray[targetIdx];
         } else {
+             if (part.name === "") continue; // Skip empty names in path
              // Object access
              if (!current[part.name] || typeof current[part.name] !== 'object') current[part.name] = {};
              current = current[part.name];
@@ -776,10 +827,39 @@ export const applyStateCommand = (
     
     // Determine the object to modify
     let finalObj = current;
+    let finalIdx: number | undefined = undefined;
 
     if (lastPart.index !== undefined) {
-        if (!Array.isArray(current[finalKey])) current[finalKey] = [];
-        finalObj = current[finalKey];
+        const arr = lastPart.name === "" ? current : current[finalKey];
+        if (!Array.isArray(arr)) {
+            if (lastPart.name !== "") {
+                current[finalKey] = [];
+                finalObj = current[finalKey];
+            } else {
+                // Final is an index on current but current is not an array
+                return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
+            }
+        } else {
+            finalObj = arr;
+        }
+        
+        if (typeof lastPart.index === 'number') {
+            finalIdx = lastPart.index;
+        } else {
+            // ID/Name lookup (flexible)
+            const searchId = String(lastPart.index).toLowerCase();
+            const searchIdx = (finalObj as any[]).findIndex((item: any) => {
+                if (!item) return false;
+                const id = String(item.id || item.ID || "").toLowerCase();
+                const name = String(item.name || "").toLowerCase();
+                const fullName = String(item.fullName || "").toLowerCase();
+                return id === searchId || ("npc_" + id === searchId) || (searchId.startsWith("npc_") && id === searchId.substring(4)) || name === searchId || fullName === searchId;
+            });
+            finalIdx = searchIdx;
+            if (finalIdx === -1 && normalizedAction === 'push') {
+                return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
+            }
+        }
     }
 
     const effectiveKey = (finalObj === newChar && finalKey === 'weight') ? 'currentWeight' : finalKey;
@@ -802,19 +882,19 @@ export const applyStateCommand = (
     }
 
     if (normalizedAction === 'set') {
-        if (lastPart.index !== undefined) finalObj[lastPart.index] = processedValue;
+        if (finalIdx !== undefined) finalObj[finalIdx] = processedValue;
         else finalObj[effectiveKey] = processedValue;
     } else if (normalizedAction === 'add') {
-        if (lastPart.index !== undefined) finalObj[lastPart.index] = (finalObj[lastPart.index] || 0) + Number(value);
+        if (finalIdx !== undefined) finalObj[finalIdx] = (finalObj[finalIdx] || 0) + Number(value);
         else finalObj[effectiveKey] = (finalObj[effectiveKey] || 0) + Number(value);
     } else if (normalizedAction === 'sub') {
-         if (lastPart.index !== undefined) finalObj[lastPart.index] = (finalObj[lastPart.index] || 0) - Number(value);
+         if (finalIdx !== undefined) finalObj[finalIdx] = (finalObj[finalIdx] || 0) - Number(value);
          else finalObj[effectiveKey] = (finalObj[effectiveKey] || 0) - Number(value);
     } else if (normalizedAction === 'push') {
-        let arrayToPush = (lastPart.index !== undefined) ? finalObj[lastPart.index] : finalObj[effectiveKey];
+        let arrayToPush = (finalIdx !== undefined) ? finalObj[finalIdx] : finalObj[effectiveKey];
         if (!Array.isArray(arrayToPush)) {
             arrayToPush = [];
-            if (lastPart.index !== undefined) finalObj[lastPart.index] = arrayToPush;
+            if (finalIdx !== undefined) finalObj[finalIdx] = arrayToPush;
             else finalObj[effectiveKey] = arrayToPush;
         }
         
@@ -824,9 +904,9 @@ export const applyStateCommand = (
         
         arrayToPush.push(processedValue);
     } else if (normalizedAction === 'delete') {
-        if (lastPart.index !== undefined) {
-            if (Array.isArray(finalObj) && lastPart.index >= 0 && lastPart.index < finalObj.length) {
-                finalObj.splice(lastPart.index, 1);
+        if (finalIdx !== undefined) {
+            if (Array.isArray(finalObj) && finalIdx >= 0 && finalIdx < finalObj.length) {
+                finalObj.splice(finalIdx, 1);
             }
         } else if (finalObj && typeof finalObj === 'object' && effectiveKey in finalObj) {
             // Safeguard: Prevent deleting core stats

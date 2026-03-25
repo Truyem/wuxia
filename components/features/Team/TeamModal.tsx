@@ -83,9 +83,6 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                                 <span className="text-[8px] text-paper-white/30 uppercase font-black tracking-widest">Đội trưởng</span>
                                 <span className="text-sm font-serif font-black text-wuxia-gold">{character.name}</span>
                             </div>
-                            <div className="w-10 h-10 rounded-none border border-wuxia-gold/30 overflow-hidden bg-black/40">
-                                <img src="/images/avatar_female.png" alt="Player" className="w-full h-full object-cover" />
-                            </div>
                         </div>
 
                         <button 

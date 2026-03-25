@@ -188,7 +188,7 @@ const PROVIDER_DEFAULTS: Record<ApiProviderType, { baseUrl: string; model: strin
     },
     worker: {
         baseUrl: DEFAULT_TEXT_GEN_WORKER_URL,
-        model: '@cf/zai-org/glm-4.7-flash'
+        model: '@cf/openai/gpt-oss-120b'
     }
 };
 
@@ -399,7 +399,7 @@ export const API_PRESET_TEMPLATES: Array<{
         { label: 'SambaNova', provider: 'sambanova', baseUrl: 'https://api.sambanova.ai/v1', model: 'Meta-Llama-3.1-70B-Instruct' },
         { label: 'HuggingFace', provider: 'huggingface', baseUrl: 'https://api-inference.huggingface.co/v1', model: 'gpt2' },
         { label: 'Cloudflare', provider: 'cloudflare', baseUrl: 'https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/ai/v1', model: '@cf/meta/llama-3-8b-instruct' },
-        { label: 'Hệ thống (Nemotron-Free)', provider: 'worker', baseUrl: DEFAULT_TEXT_GEN_WORKER_URL, model: '@cf/zai-org/glm-4.7-flash' }
+        { label: 'Hệ thống (Nemotron-Free)', provider: 'worker', baseUrl: DEFAULT_TEXT_GEN_WORKER_URL, model: '@cf/openai/gpt-oss-120b' }
     ];
 
 export const createApiConfigFromPreset = (preset: typeof API_PRESET_TEMPLATES[number]): ApiConfig => {
@@ -482,7 +482,7 @@ export const normalizeApiSettings = (raw: unknown): ApiSettings => {
             id: 'nemotron-system-worker',
             name: 'Hệ thống (Nemotron-Free)',
             provider: 'worker',
-            model: '@cf/zai-org/glm-4.7-flash',
+            model: '@cf/openai/gpt-oss-120b',
             baseUrl: DEFAULT_TEXT_GEN_WORKER_URL, // Added baseUrl
             apiKey: '', // Added apiKey
             protocolOverride: 'auto', // Added protocolOverride
