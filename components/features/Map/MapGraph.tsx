@@ -4,12 +4,14 @@ import { MapService, MapNode, TransientNode } from '../../../services/mapService
 
 interface MapGraphProps {
   currentLocation?: string;
+  focalNodeName?: string | null;
   currentX: number;
   currentY: number;
   visitedNodeIds?: string[];
   dynamicNodes?: TransientNode[];
   currentTimeMinutes?: number;
   onNodeClick?: (node: MapNode) => void;
+  onResetFocus?: () => void;
 }
 
 const WORLD_SIZE = 3000;
@@ -18,12 +20,14 @@ const MAP_SIZE = WORLD_SIZE * SCALE;
 
 export const MapGraph: React.FC<MapGraphProps> = ({ 
   currentLocation,
+  focalNodeName,
   currentX, 
   currentY, 
   visitedNodeIds,
   dynamicNodes,
   currentTimeMinutes,
-  onNodeClick: externalOnNodeClick
+  onNodeClick: externalOnNodeClick,
+  onResetFocus
 }) => {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<MapNode | null>(null);
@@ -32,10 +36,16 @@ export const MapGraph: React.FC<MapGraphProps> = ({
   const [zoom, setZoom] = useState(1);
   const controls = useAnimation();
 
-  // Synchronize Map Focal Point with Player's actual position
+  // Synchronize Map Focal Point with Player's actual position or Sidebar Selection
   const focalPoint = useMemo(() => {
+    // If user clicked a node in sidebar
+    if (focalNodeName) {
+        const targetNode = MapService.findNodeByName(focalNodeName) || dynamicNodes?.find(n => n.name === focalNodeName);
+        if (targetNode) return { x: targetNode.x, y: targetNode.y };
+    }
+    // Else fall back to current location
     if (currentLocation) {
-        const node = MapService.findNodeByName(currentLocation);
+        const node = MapService.findNodeByName(currentLocation) || dynamicNodes?.find(n => n.name === currentLocation);
         if (node) return { x: node.x, y: node.y };
     }
     
@@ -44,7 +54,7 @@ export const MapGraph: React.FC<MapGraphProps> = ({
         return { x: currentX * mult, y: currentY * mult };
     }
     return { x: 1500, y: 1500 };
-  }, [currentLocation, currentX, currentY]);
+  }, [currentLocation, focalNodeName, currentX, currentY, dynamicNodes]);
 
   const targetX = - (focalPoint.x * SCALE);
   const targetY = - (focalPoint.y * SCALE);
@@ -59,11 +69,15 @@ export const MapGraph: React.FC<MapGraphProps> = ({
 
   const handleResetPosition = () => {
     setZoom(1);
-    controls.start({
-        x: targetX,
-        y: targetY,
-        transition: { type: "spring", damping: 30, stiffness: 200 }
-    });
+    if (onResetFocus) {
+        onResetFocus();
+    } else {
+        controls.start({
+            x: - ((currentX < 1100 ? currentX * 3 : currentX) * SCALE),
+            y: - ((currentY < 1100 ? currentY * 3 : currentY) * SCALE),
+            transition: { type: "spring", damping: 30, stiffness: 200 }
+        });
+    }
   };
 
   const handleZoomIn = () => setZoom(z => Math.min(z + 0.5, 3));
@@ -116,7 +130,7 @@ export const MapGraph: React.FC<MapGraphProps> = ({
     });
 
     return { locations: mergedNodes, visibleConnections: paths };
-  }, [allNodes]);
+  }, [allNodes, dynamicNodes, currentTimeMinutes]);
 
   const handleNodeClick = (loc: MapNode) => {
     setSelectedNode(loc);
@@ -128,15 +142,46 @@ export const MapGraph: React.FC<MapGraphProps> = ({
       <motion.path
         key={conn.id}
         d={`M ${conn.from.x} ${conn.from.y} L ${conn.to.x} ${conn.to.y}`}
-        stroke={conn.isDynamic ? "#a0aec0" : "#c5a059"}
+        stroke={conn.isDynamic ? "url(#gold-gradient)" : "rgba(197, 160, 89, 0.2)"}
         strokeWidth="1.5"
-        strokeOpacity="0.4"
         strokeDasharray={conn.isDynamic ? "4 4" : "none"}
         initial={{ pathLength: 0, opacity: 0 }}
         animate={{ pathLength: 1, opacity: 1 }}
       />
     ));
   }, [visibleConnections]);
+
+  const getIconForType = (type: string, isDynamic: boolean, isCurrent: boolean) => {
+    const t = (type || '').toLowerCase();
+    const color = isCurrent ? '#fff' : (isDynamic ? '#a0aec0' : '#c5a059');
+    
+    // Tông môn (Sect) - Đền/Tháp
+    if (t.includes('tông môn') || t.includes('môn phái')) return (
+      <path d="M-8,-2 L0,-12 L8,-2 L6,8 L-6,8 Z" fill="none" stroke={color} strokeWidth="1.5" />
+    );
+    // Thành trì (City) - Tường thành
+    if (t.includes('thành trì') || t.includes('thành thị') || t.includes('trấn')) return (
+      <path d="M-10,6 L-10,-4 L-6,-4 L-6,0 L-2,0 L-2,-6 L2,-6 L2,0 L6,0 L6,-4 L10,-4 L10,6 Z" fill="none" stroke={color} strokeWidth="1.5" />
+    );
+    // Bí cảnh (Realm/Dungeon) - Vòng xoáy
+    if (t.includes('bí cảnh') || t.includes('động phủ')) return (
+      <g stroke={color} fill="none" strokeWidth="1.5">
+          <circle cx="0" cy="0" r="7" strokeDasharray="3 2" />
+          <circle cx="0" cy="0" r="3" />
+      </g>
+    );
+    // Thôn trang (Village) - Ngôi nhà nhỏ
+    if (t.includes('thôn trang') || t.includes('bản')) return (
+      <path d="M-6,6 L-6,0 L0,-6 L6,0 L6,6 Z M-2,6 L-2,3 L2,3 L2,6" fill="none" stroke={color} strokeWidth="1.5" />
+    );
+    // Cấm kỵ / Di tích (Ruins) - Đầu lâu / Ngôi sao gãy
+    if (t.includes('cấm kỵ') || t.includes('di tích')) return (
+      <path d="M-5,-5 L5,5 M5,-5 L-5,5" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" />
+    );
+    
+    // Default Map Point (Địa điểm thường)
+    return <circle cx="0" cy="0" r={isDynamic ? "4" : "5"} fill={isDynamic ? "transparent" : "#1a1a1a"} stroke={color} strokeWidth={isDynamic ? "1" : "1.5"} strokeDasharray={isDynamic ? "2 2" : "none"} />;
+  };
 
   return (
     <div
@@ -145,14 +190,14 @@ export const MapGraph: React.FC<MapGraphProps> = ({
     >
       <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/parchment.png')]"></div>
       
-      <div className="absolute top-12 left-12 z-20 pointer-events-none">
+      <div className="absolute top-10 left-10 z-20 pointer-events-none">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="border-l-2 border-wuxia-gold/50 pl-6"
+          className="border-l-2 border-wuxia-gold/30 pl-5"
         >
-          <h1 className="text-5xl text-white font-black tracking-widest uppercase mb-2">Thần Cơ Đồ</h1>
-          <p className="text-wuxia-gold/60 text-sm tracking-[0.3em] font-sans">INK-WASH STRATEGIC MAP</p>
+          <h1 className="text-3xl text-white/90 font-black tracking-widest uppercase mb-1" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>Thần Cơ Đồ</h1>
+          <p className="text-wuxia-gold/50 text-[10px] tracking-[0.4em] font-sans">INK-WASH STRATEGIC MAP</p>
         </motion.div>
       </div>
 
@@ -187,6 +232,10 @@ export const MapGraph: React.FC<MapGraphProps> = ({
               <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
+            <linearGradient id="gold-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#c5a059" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#8b7355" stopOpacity="0.1" />
+            </linearGradient>
           </defs>
 
           <g>{renderConnections}</g>
@@ -205,17 +254,13 @@ export const MapGraph: React.FC<MapGraphProps> = ({
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
               >
-                <circle
-                  cx={loc.x}
-                  cy={loc.y}
-                  r={isHovered || isCurrent ? 8 : 4}
-                  fill={isCurrent ? "#c5a059" : ((loc as any).isDynamic ? "transparent" : (loc.type === 'Tông môn' ? "#c5a059" : "#444"))}
-                  stroke={isCurrent ? "#fff" : ((loc as any).isDynamic ? "#a0aec0" : "#c5a059")}
-                  strokeWidth={isCurrent ? 2 : 1}
-                  strokeDasharray={(loc as any).isDynamic && !isCurrent ? "2 2" : "none"}
+                <g 
+                  transform={`translate(${loc.x}, ${loc.y})`}
                   className="transition-all duration-300"
-                  filter={isCurrent ? "url(#glow-gold)" : ""}
-                />
+                  filter={isCurrent ? "url(#glow-gold)" : (isHovered ? "drop-shadow(0px 0px 4px rgba(197,160,89,0.5))" : "")}
+                >
+                  {getIconForType(loc.type, (loc as any).isDynamic, isCurrent)}
+                </g>
 
                 {isCurrent && (
                   <motion.circle
@@ -231,14 +276,14 @@ export const MapGraph: React.FC<MapGraphProps> = ({
                   />
                 )}
 
-                {(isHovered || isCurrent || loc.type === 'Tông môn') && (
+                {(isHovered || isCurrent || loc.type === 'Tông môn' || loc.type === 'Thành trì' || (loc as any).isDynamic) && (
                   <motion.text
                     x={loc.x}
-                    y={loc.y - 15}
+                    y={loc.y - 18}
                     textAnchor="middle"
-                    fill={isCurrent ? "#fff" : "#c5a059"}
-                    className="text-[12px] font-bold pointer-events-none select-none"
-                    style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}
+                    fill={isCurrent ? "#fff" : ((loc as any).isDynamic ? "#e2e8f0" : "#c5a059")}
+                    className={`text-[12px] pointer-events-none select-none ${isCurrent ? 'font-black' : 'font-bold'}`}
+                    style={{ textShadow: '0 2px 4px rgba(0,0,0,0.9)' }}
                   >
                     {loc.name}
                   </motion.text>

@@ -38,7 +38,7 @@ export const Core_OutputFormat: PromptStructure = {
 
 【CRITICAL FORMAT RULES — VIOLATION = SYSTEM FAILURE】
 - NEVER output plain text responses like "I'm sorry" or "I can't help with that". This will cause a FATAL SYSTEM ERROR (StoryResponseParseError).
-- If the narrative leads the player to discover a NEW temporary/hidden location (like a forest, cave, secret realm) that isn't a fixed city/sect, you MUST output the "t_dynamic_location" object to register it on the map.
+- If the narrative leads the player to discover a NEW temporary/hidden location (like a forest, cave, secret realm) that isn't a fixed city/sect, you MUST output the "t_dynamic_location" object to register it on the map. AND you MUST also include a "SET" command in "tavern_commands" to move the player's "gameState.Environment.specificLocation" to this new location's name.
 - You MUST ALWAYS respond with a valid JSON object containing at minimum: "logs", "shortTerm", and "tavern_commands".
 - If you feel unable to generate story content for ANY reason, you MUST still output valid JSON with a creative in-character narrative in the logs array. Example fallback: {"logs":[{"sender":"Background","text":"Gió lạnh thổi qua, mọi thứ yên tĩnh trở lại..."}],"shortTerm":"Không có sự kiện đặc biệt","tavern_commands":[]}
 
