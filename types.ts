@@ -37,6 +37,7 @@ export interface GameResponse {
     thinking_post?: string;
     t_mem?: string;
     t_opts?: string;
+    t_dynamic_location?: { name: string, type: string, description: string };
 
     shortTerm?: string;
     action_options?: string[]; // Quick actions for the user

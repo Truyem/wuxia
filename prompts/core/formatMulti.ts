@@ -50,6 +50,11 @@ export const Core_OutputFormat_MultiThought: PromptStructure = {
   "t_fix": "Sửa lỗi lệnh... (Vietnamese)",
   "t_mem": "Tóm tắt ký ức... (Vietnamese)",
   "t_opts": "Sàng lọc lựa chọn... (Vietnamese)",
+  "t_dynamic_location": {
+    "name": "Tên địa điểm mới",
+    "type": "Rừng/Hang/...",
+    "description": "Mô tả ngắn"
+  },
   "tavern_commands": [
     {"action": "SET", "key": "gameState.Environment.time", "value": "317:03:16:09:45"},
     {"action": "ADD", "key": "gameState.Character.energy", "value": -8},
@@ -81,6 +86,9 @@ export const Core_OutputFormat_MultiThought: PromptStructure = {
 ## 4) NPC and Female Lead Control
 - If \`Gender=Female AND isMainCharacter=true\`, use detailed fields for profile updates (Appearance, Body, NippleColor, VaginaColor, etc.).
 - Memories must be synced after significant interactions.
+
+## 5) Dynamic Location Creation
+- If the narrative describes finding a NEW temporary or hidden area (forest, cave, etc.), output the \`t_dynamic_location\` object with name, type, and description. Do not use this for existing static cities/sects.
 `,
   type: 'core setting',
   enabled: false

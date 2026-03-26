@@ -1909,6 +1909,19 @@ export const useGame = () => {
             ...(Array.isArray(response.tavern_commands) ? response.tavern_commands : [])
         ];
 
+        // Handle Dynamic Location Spawn
+        if (response.t_dynamic_location && typeof response.t_dynamic_location === 'object') {
+            const loc = response.t_dynamic_location;
+            if (loc.name && typeof loc.name === 'string') {
+                const parentNode = MapService.findNodeByName(envBuffer.minorLocation || envBuffer.specificLocation || envBuffer.mediumLocation);
+                if (parentNode) {
+                    const currentMins = envBuffer.gameDays ? (envBuffer.gameDays * 24 * 60 + envBuffer.Hour * 60 + envBuffer.Minute) : 0;
+                    const newNode = MapService.generateDynamicNode(parentNode, loc.name, loc.type || 'Địa điểm', loc.description || '', currentMins);
+                    worldBuffer.dynamicNodes = [...(worldBuffer.dynamicNodes || []), newNode];
+                }
+            }
+        }
+
         // Also process t_ fields if they contain command-like strings
         const tFields: (keyof GameResponse)[] = ['t_npc', 't_state', 't_cmd', 't_var'];
         tFields.forEach(field => {
