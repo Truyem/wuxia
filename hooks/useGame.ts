@@ -1913,7 +1913,16 @@ export const useGame = () => {
         if (response.t_dynamic_location && typeof response.t_dynamic_location === 'object') {
             const loc = response.t_dynamic_location;
             if (loc.name && typeof loc.name === 'string') {
-                const parentNode = MapService.findNodeByName(envBuffer.minorLocation || envBuffer.specificLocation || envBuffer.mediumLocation);
+                let parentNode = MapService.findNodeByName(envBuffer.minorLocation) 
+                              || MapService.findNodeByName(envBuffer.specificLocation) 
+                              || MapService.findNodeByName(envBuffer.mediumLocation)
+                              || MapService.findNodeByName(envBuffer.majorLocation);
+                
+                if (!parentNode) {
+                    const nearNodes = MapService.getNodesByProximity(envBuffer.x ?? 1500, envBuffer.y ?? 1500, 2000);
+                    if (nearNodes.length > 0) parentNode = nearNodes[0];
+                }
+
                 if (parentNode) {
                     const currentMins = envBuffer.gameDays ? (envBuffer.gameDays * 24 * 60 + envBuffer.Hour * 60 + envBuffer.Minute) : 0;
                     const newNode = MapService.generateDynamicNode(parentNode, loc.name, loc.type || 'Địa điểm', loc.description || '', currentMins);

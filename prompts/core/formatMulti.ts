@@ -89,6 +89,7 @@ export const Core_OutputFormat_MultiThought: PromptStructure = {
 
 ## 5) Dynamic Location Creation
 - If the narrative describes finding a NEW temporary or hidden area (forest, cave, etc.), output the \`t_dynamic_location\` object with name, type, and description. Do not use this for existing static cities/sects.
+- IMPERATIVE: When you create a \`t_dynamic_location\`, you MUST explicitly move the player there by adding a "SET" command to \`tavern_commands\` targeting \`gameState.Environment.specificLocation\` with the new location's name.
 `,
   type: 'core setting',
   enabled: false
