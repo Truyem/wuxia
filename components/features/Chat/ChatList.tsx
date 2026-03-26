@@ -191,7 +191,7 @@ const ChatList: React.FC<Props> = ({
                 return (
                     <div key={absoluteIdx} className="flex w-full justify-center mb-4 opacity-70">
                         <div className="bg-red-900/20 text-red-400 text-xs px-4 py-1 border border-red-900/50 font-mono">
-                            [{msg.role.toUpperCase()}] {msg.content}
+                            [{(msg.role as string).toUpperCase()}] {msg.content}
                         </div>
                     </div>
                 );

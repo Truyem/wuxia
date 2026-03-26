@@ -11,7 +11,11 @@ const highlightText = (text: string) => {
         if (part.startsWith('*') && part.endsWith('*')) {
             const content = part.slice(1, -1);
             return (
-                <span key={i} className="text-wuxia-gold font-bold bg-gradient-to-t from-wuxia-gold/20 to-transparent px-1 rounded-sm" style={{textShadow:'0 0 8px rgba(230,200,110,0.5)'}}>
+                <span 
+                    key={i} 
+                    className="text-wuxia-gold font-bold bg-gradient-to-t from-wuxia-gold/20 to-transparent px-1 rounded-sm" 
+                    style={{textShadow:'0 0 8px rgba(230,200,110,0.5)'}}
+                >
                     {content}
                 </span>
             );

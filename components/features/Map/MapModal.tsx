@@ -16,34 +16,43 @@ interface MapModalProps {
 export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, world }) => {
   const [activeTab, setActiveTab] = useState<'fixed' | 'dynamic'>('fixed');
   const [focalNodeName, setFocalNodeName] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const currentTimeMinutes = env?.gameDays ? (env.gameDays * 24 * 60 + env?.Hour * 60 + env?.Minute) : 0;
+
 
   // Build grouped fixed locations
   const groupedFixedNodes = useMemo(() => {
     const all = MapService.getAllNodes();
     const groups: Record<string, MapNode[]> = {};
     const visitedSet = new Set(world?.visitedNodeIds || []);
+    const query = searchQuery.toLowerCase().trim();
     
     all.forEach(n => {
-      // Show important landmarks + visited nodes to keep the list practical
-      if (visitedSet.has(n.id) || n.type === 'Tông môn' || n.type === 'Thành trì' || n.type === 'Bí cảnh') {
+      const matchesSearch = !query || n.name.toLowerCase().includes(query) || n.type.toLowerCase().includes(query) || n.regionName?.toLowerCase().includes(query);
+      
+      // Show important landmarks + visited nodes to keep the list practical, OR if it matches search
+      if (matchesSearch && (visitedSet.has(n.id) || n.type === 'Tông môn' || n.type === 'Thành trì' || n.type === 'Bí cảnh' || query)) {
         const region = n.regionName || 'Vô Định Khu';
         if (!groups[region]) groups[region] = [];
         groups[region].push(n);
       }
     });
     return groups;
-  }, [world?.visitedNodeIds]);
+  }, [world?.visitedNodeIds, searchQuery]);
 
   // Build dynamic nodes
   const dynamicNodesList = useMemo(() => {
     const list = world?.dynamicNodes || [];
+    const query = searchQuery.toLowerCase().trim();
+
     return list.filter((node: TransientNode) => {
         const age = currentTimeMinutes - node.createdAtMinutes;
-        return age <= node.expiresInMinutes;
+        const isAlive = age <= node.expiresInMinutes;
+        const matchesSearch = !query || node.name.toLowerCase().includes(query) || node.type.toLowerCase().includes(query);
+        return isAlive && matchesSearch;
     });
-  }, [world?.dynamicNodes, currentTimeMinutes]);
+  }, [world?.dynamicNodes, currentTimeMinutes, searchQuery]);
 
   const currentLocation = env?.specificLocation || env?.minorLocation || env?.mediumLocation || '';
   return (
@@ -58,23 +67,47 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
           <div className="absolute inset-4 border border-wuxia-gold/10 rounded-3xl pointer-events-none opacity-40"></div>
           
           {/* Close Button UI */}
-          <div className="absolute top-8 right-8 z-[1001]">
+          <div className="absolute top-4 md:top-8 right-4 md:right-8 z-[1001]">
             <button 
               onClick={onClose}
-              className="group relative flex items-center gap-4 px-6 py-2 bg-black/40 border border-wuxia-gold/30 rounded-full hover:border-wuxia-gold transition-all duration-300"
+              className="group relative flex items-center gap-2 md:gap-4 px-4 md:px-6 py-2 bg-black/60 backdrop-blur-md border border-wuxia-gold/30 rounded-full hover:border-wuxia-gold transition-all duration-300 shadow-xl"
             >
-              <div className="text-[10px] text-wuxia-gold/60 tracking-[0.4em] uppercase group-hover:text-wuxia-gold transition-colors">Close Map</div>
-              <div className="w-8 h-px bg-wuxia-gold/30 group-hover:w-12 transition-all"></div>
+              <div className="hidden md:block text-[10px] text-wuxia-gold/60 tracking-[0.4em] uppercase group-hover:text-wuxia-gold transition-colors">Close Map</div>
+              <div className="hidden md:block w-8 h-px bg-wuxia-gold/30 group-hover:w-12 transition-all"></div>
               <div className="text-wuxia-gold font-bold text-xl leading-none">×</div>
             </button>
           </div>
- 
+
           {/* Main Map Content Area */}
-          <div className="w-full h-full max-w-7xl max-h-[90vh] relative bg-[#0a0a0a] rounded-none md:rounded-2xl border border-white/5 shadow-2xl overflow-hidden flex flex-row">
+          <div className="w-full h-full max-w-7xl max-h-screen md:max-h-[90vh] relative bg-[#0a0a0a] rounded-none md:rounded-2xl border border-white/5 shadow-2xl overflow-hidden flex flex-col md:flex-row">
               {/* Left Sidebar */}
-              <div className="w-72 border-r border-white/5 bg-black/60 backdrop-blur-md flex flex-col relative z-30 flex-shrink-0">
+              <div className="w-full md:w-72 h-48 md:h-full border-b md:border-b-0 md:border-r border-white/5 bg-black/60 backdrop-blur-md flex flex-col relative z-30 flex-shrink-0">
                   <div className="p-4 border-b border-white/5">
-                      <h2 className="text-wuxia-gold font-bold tracking-widest uppercase text-sm mb-4">Danh sách Địa danh</h2>
+                      <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-wuxia-gold font-bold tracking-widest uppercase text-sm">Danh sách Địa danh</h2>
+                        {searchQuery && (
+                          <button 
+                            onClick={() => setSearchQuery('')}
+                            className="text-[10px] text-white/30 hover:text-white transition-colors uppercase tracking-widest"
+                          >
+                            Clear
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Search Bar */}
+                      <div className="relative mb-4">
+                        <input 
+                          type="text" 
+                          placeholder="Tìm kiếm địa danh..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-xs text-white placeholder:text-white/20 focus:outline-none focus:border-wuxia-gold/50 transition-colors pl-8"
+                        />
+                        <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                      </div>
                       <div className="flex gap-2">
                           <button 
                             onClick={() => setActiveTab('fixed')}
@@ -159,24 +192,28 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
                         visitedNodeIds={world?.visitedNodeIds}
                         dynamicNodes={world?.dynamicNodes}
                         currentTimeMinutes={env?.gameDays ? (env.gameDays * 24 * 60 + env?.Hour * 60 + env?.Minute) : 0}
-                        onResetFocus={() => setFocalNodeName(null)}
+                        onResetFocus={() => {
+                          setFocalNodeName(null);
+                        }}
                       />
                   </div>
 
                   {/* Bottom Legend/Instructions */}
-                  <div className="h-16 bg-black/80 border-t border-white/5 flex items-center justify-between px-8 z-20 flex-shrink-0">
-                      <div className="flex gap-8 items-center">
+                  <div className="h-auto md:h-16 bg-black/80 border-t border-white/5 flex flex-col md:flex-row items-center justify-between px-4 md:px-8 py-2 md:py-0 z-20 flex-shrink-0 gap-2 md:gap-0">
+                      <div className="flex gap-4 md:gap-8 items-center">
                           <div className="flex items-center gap-2">
-                              {/* Cập nhật Icon màu sắc để diễn giải Legend nếu cần */}
+                              {/* Icon colors interpret Legend */}
                               <svg className="w-3 h-3" viewBox="0 0 16 16"><path d="M1,6 L8,14 L15,6 L15,-4 L1,-4 Z" fill="none" stroke="#c5a059" strokeWidth="1.5"/></svg>
-                              <span className="text-[10px] text-wuxia-gold/60 uppercase tracking-widest font-bold">Kinh Thành / Sect</span>
+                              <span className="text-[9px] md:text-[10px] text-wuxia-gold/60 uppercase tracking-widest font-bold">Kinh Thành / Sect</span>
                           </div>
                           <div className="flex items-center gap-2">
-                              <circle cx="8" cy="8" r="4" fill="transparent" stroke="#a0aec0" strokeWidth="1" strokeDasharray="2 2" className="w-4 h-4" />
-                              <span className="text-[10px] text-wuxia-gold/60 uppercase tracking-widest font-bold">Vùng Đất / Tạm Thời</span>
+                              <svg className="w-4 h-4" viewBox="0 0 16 16">
+                                <circle cx="8" cy="8" r="4" fill="transparent" stroke="#a0aec0" strokeWidth="1" strokeDasharray="2 2" />
+                              </svg>
+                              <span className="text-[9px] md:text-[10px] text-wuxia-gold/60 uppercase tracking-widest font-bold">Vùng Đất / Tạm Thời</span>
                           </div>
                       </div>
-                      <div className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-sans text-right">
+                      <div className="text-[8px] md:text-[9px] text-white/30 uppercase tracking-[0.2em] md:tracking-[0.3em] font-sans text-center md:text-right">
                           Select a node to travel or view details
                       </div>
                   </div>

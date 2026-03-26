@@ -65,7 +65,24 @@ export const MapGraph: React.FC<MapGraphProps> = ({
         y: targetY,
         transition: { type: "spring", damping: 30, stiffness: 200 }
     });
-  }, [focalPoint, controls, targetX, targetY]);
+
+    // Auto-select the node when focalNodeName changes (from sidebar click)
+    if (focalNodeName) {
+      const targetNode = MapService.findNodeByName(focalNodeName) || dynamicNodes?.find(n => n.name === focalNodeName);
+      if (targetNode) {
+        setSelectedNode({
+          ...targetNode,
+          x: targetNode.x * SCALE,
+          y: targetNode.y * SCALE,
+          isVisited: true,
+          isDynamic: !!dynamicNodes?.find(n => n.name === focalNodeName)
+        } as any);
+        
+        // Slightly zoom in when focusing
+        setZoom(1.5);
+      }
+    }
+  }, [focalPoint, controls, targetX, targetY, focalNodeName, dynamicNodes]);
 
   const handleResetPosition = () => {
     setZoom(1);
@@ -190,14 +207,14 @@ export const MapGraph: React.FC<MapGraphProps> = ({
     >
       <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/parchment.png')]"></div>
       
-      <div className="absolute top-10 left-10 z-20 pointer-events-none">
+      <div className="absolute top-6 md:top-10 left-6 md:left-10 z-20 pointer-events-none">
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="border-l-2 border-wuxia-gold/30 pl-5"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="border-l-2 border-wuxia-gold/30 pl-3 md:pl-5"
         >
-          <h1 className="text-3xl text-white/90 font-black tracking-widest uppercase mb-1" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>Thần Cơ Đồ</h1>
-          <p className="text-wuxia-gold/50 text-[10px] tracking-[0.4em] font-sans">INK-WASH STRATEGIC MAP</p>
+          <h1 className="text-xl md:text-3xl text-white/90 font-black tracking-widest uppercase mb-1" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>Thần Cơ Đồ</h1>
+          <p className="text-wuxia-gold/50 text-[8px] md:text-[10px] tracking-[0.2em] md:tracking-[0.4em] font-sans">INK-WASH STRATEGIC MAP</p>
         </motion.div>
       </div>
 
@@ -301,7 +318,7 @@ export const MapGraph: React.FC<MapGraphProps> = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="absolute bottom-12 left-1/2 -translate-x-1/2 z-50 w-80 bg-black/90 border border-wuxia-gold/40 p-6 backdrop-blur-md"
+            className="absolute bottom-6 md:bottom-12 left-1/2 -translate-x-1/2 z-50 w-[90%] md:w-80 bg-black/95 border border-wuxia-gold/40 p-4 md:p-6 backdrop-blur-md"
           >
             <div className="flex justify-between items-start mb-4">
               <div>
@@ -329,14 +346,13 @@ export const MapGraph: React.FC<MapGraphProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Map Controls */}
-      <div className="absolute right-8 bottom-8 z-50 flex flex-col gap-4">
+      <div className="absolute right-4 md:right-8 bottom-4 md:bottom-8 z-50 flex flex-col gap-3 md:gap-4 scale-90 md:scale-100">
         <button
           onClick={handleResetPosition}
-          className="bg-black/80 border border-wuxia-gold/30 hover:border-wuxia-gold text-wuxia-gold w-12 h-12 rounded-full flex items-center justify-center transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)] group"
+          className="bg-black/80 border border-wuxia-gold/30 hover:border-wuxia-gold text-wuxia-gold w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)] group"
           title="Vị trí hiện tại"
         >
-          <svg className="w-6 h-6 opacity-80 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-5 h-5 md:w-6 md:h-6 opacity-80 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v2m0 12v2m8-8h-2M6 12H4" />
           </svg>
@@ -345,18 +361,18 @@ export const MapGraph: React.FC<MapGraphProps> = ({
         <div className="bg-black/80 border border-wuxia-gold/30 rounded-full flex flex-col items-center shadow-[0_0_15px_rgba(0,0,0,0.5)] overflow-hidden">
           <button
             onClick={handleZoomIn}
-            className="w-12 h-12 flex items-center justify-center text-wuxia-gold hover:bg-wuxia-gold/10 transition-colors"
+            className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-wuxia-gold hover:bg-wuxia-gold/10 transition-colors"
             title="Phóng to"
           >
-            <span className="text-2xl leading-none font-light">+</span>
+            <span className="text-xl md:text-2xl leading-none font-light">+</span>
           </button>
-          <div className="w-8 h-px bg-wuxia-gold/20"></div>
+          <div className="w-6 md:w-8 h-px bg-wuxia-gold/20"></div>
           <button
             onClick={handleZoomOut}
-            className="w-12 h-12 flex items-center justify-center text-wuxia-gold hover:bg-wuxia-gold/10 transition-colors"
+            className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-wuxia-gold hover:bg-wuxia-gold/10 transition-colors"
             title="Thu nhỏ"
           >
-            <span className="text-2xl leading-none font-light">-</span>
+            <span className="text-xl md:text-2xl leading-none font-light">-</span>
           </button>
         </div>
       </div>
