@@ -38,6 +38,12 @@ Lựa chọn phải bao gồm nhiều loại hành động đa dạng:
 - **Không có nội dung tiết lộ (Spoiler)**: Không viết thông tin "hướng kết quả" báo trước thành bại (Ví dụ KHÔNG dùng: "Giải cứu thành công", "Vô tình kích hoạt phục kích").
 - Các tùy chọn phải là **hành động trung lập, có thể thực hiện được tức thì**.
 </Action Option Standards>
+
+** 4. KẾT QUẢ HÀNH ĐỘNG:**
+- KHÔNG đảm bảo thành công
+- Luôn luôn suy luận để quyết định kết quả
+- Hậu quả logic dựa trên kỹ năng và hoàn cảnh, không nên bị động xoay quanh người chơi.
+
     `.trim(),
   type: 'core setting',
   enabled: true
