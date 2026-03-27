@@ -1783,15 +1783,15 @@ export const determineStartingLocation = async (
         try {
             const parsed = parseJsonWithRepair<any>(content);
             const data = parsed.value;
-            
+
             const targetBiomeId = data.biomeId;
             const targetLocationType = data.locationType;
 
             const biomes = skeleton?.world_skeleton?.level_1_biomes || [];
-            
+
             // 1. Find the target biome
             let selectedBiome = biomes.find((b: any) => b.id === targetBiomeId) || biomes[0];
-            
+
             // 2. Find all nodes in this biome that match the location type
             let candidateNodes: any[] = [];
             let fallbackNodes: any[] = []; // All nodes in the biome
@@ -1806,7 +1806,7 @@ export const determineStartingLocation = async (
             });
 
             // 3. Pick a random node from candidates, or fallback to any node in biome
-            let finalSelection = candidateNodes.length > 0 
+            let finalSelection = candidateNodes.length > 0
                 ? candidateNodes[Math.floor(Math.random() * candidateNodes.length)]
                 : (fallbackNodes.length > 0 ? fallbackNodes[Math.floor(Math.random() * fallbackNodes.length)] : null);
 
@@ -1832,7 +1832,7 @@ export const determineStartingLocation = async (
                     righteousness: 50, evil: 50, arrogance: 50, humility: 50, coldness: 50, passion: 50
                 },
                 reason: data.reason || "Khởi đầu tại vị trí phù hợp với căn cơ.",
-                selectedContinents: [] 
+                selectedContinents: []
             };
         } catch (e) {
             console.error("Failed to parse starting location JSON", e);
@@ -1841,12 +1841,12 @@ export const determineStartingLocation = async (
             const fallbackNode = fallbackRegion?.level_3_nodes?.[0];
 
             return {
-                majorLocation: fallbackBiome?.name || "Võ Lâm", 
-                mediumLocation: fallbackRegion?.name || "Trung Nguyên", 
+                majorLocation: fallbackBiome?.name || "Võ Lâm",
+                mediumLocation: fallbackRegion?.name || "Trung Nguyên",
                 minorLocation: fallbackNode?.name || "Khởi đầu",
-                biomeId: fallbackBiome?.id || "b001", 
-                regionId: fallbackRegion?.id || "r001", 
-                x: fallbackNode?.x || 500, 
+                biomeId: fallbackBiome?.id || "b001",
+                regionId: fallbackRegion?.id || "r001",
+                x: fallbackNode?.x || 500,
                 y: fallbackNode?.y || 500,
                 personalityStats: { righteousness: 50, evil: 50, arrogance: 50, humility: 50, coldness: 50, passion: 50 },
                 reason: "Lỗi xử lý, chọn địa điểm mặc định.",
