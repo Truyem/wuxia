@@ -15,6 +15,7 @@ export interface TextGenOptions {
   top_p?: number;
   top_k?: number;
   response_format?: { type: 'json_object' };
+  apiKey?: string;
 }
 
 export interface TextGenResponse {
@@ -106,12 +107,15 @@ export class TextGenService {
       console.log(`[TextGenService] Đang thử kết nối tới Worker: ${normalizedUrl} (${i + 1}/${urls.length})`);
 
       try {
+        const resolveApiKey = options.apiKey || (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.VITE_ACCESS_KEY : '');
+        
         const response = await fetch(normalizedUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'x-model': options.model || '@cf/nvidia/nemotron-3-120b-a12b',
             ...(options.id ? { 'x-session-affinity': options.id } : {}),
+            ...(resolveApiKey ? { 'Authorization': `Bearer ${resolveApiKey}` } : {})
           },
           body: JSON.stringify({
             messages: options.messages,

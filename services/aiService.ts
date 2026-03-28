@@ -397,7 +397,7 @@ const extractOpenAIFullText = (payload: any): string => {
     const message = payload?.choices?.[0]?.message;
     const content = message?.content || '';
     const reasoning = message?.reasoning_content ?? message?.reasoning ?? message?.reasoning_text;
-    
+
     if (typeof reasoning === 'string' && reasoning.length > 0) {
         return `<thinking>${reasoning}</thinking>${content}`;
     }
@@ -439,10 +439,10 @@ const createGeminiStreamIncrementExtractor = (): IncrementalExtractor => {
     const extract = ((payload: any): string => {
         const parts = payload?.candidates?.[0]?.content?.parts;
         if (!Array.isArray(parts)) return '';
-        
+
         const thoughtPart = parts.find((p: any) => typeof p?.thought === 'string');
         const textPart = parts.find((p: any) => typeof p?.text === 'string');
-        
+
         let result = '';
         if (thoughtPart) {
             if (!inReasoningPhase) {
@@ -1047,7 +1047,7 @@ const normalizationJsonStructureResponse = (raw: any): GameResponse => {
 export const parseStoryRawText = (content: string): GameResponse => {
     // Primary: try JSON parsing (forced JSON mode)
     let parsed = parseJsonWithRepair<any>(content);
-    
+
     // Handle double-stringified JSON (happens if input is a JSON string itself)
     if (typeof parsed.value === 'string' && (parsed.value.trim().startsWith('{') || parsed.value.trim().startsWith('['))) {
         const secondAttempt = parseJsonWithRepair<any>(parsed.value);
@@ -1068,11 +1068,11 @@ export const parseStoryRawText = (content: string): GameResponse => {
         }) || (typeof parsed.value.thinking === 'string' && parsed.value.thinking.trim().length > 0);
 
         const isLikelyValidJsonResponse = hasRenderableLogs || hasThinking;
-        console.log('Debug Normalization:', { 
-            logCount: normalized.logs.length, 
-            hasRenderableLogs, 
-            hasThinking, 
-            isLikelyValid: isLikelyValidJsonResponse 
+        console.log('Debug Normalization:', {
+            logCount: normalized.logs.length,
+            hasRenderableLogs,
+            hasThinking,
+            isLikelyValid: isLikelyValidJsonResponse
         });
 
         if (isLikelyValidJsonResponse) {
@@ -1615,6 +1615,7 @@ const requestWorkerText = async (
         top_p?: number;
         top_k?: number;
         onDelta?: (delta: string, accumulated: string) => void;
+        apiKey?: string;
     }
 ): Promise<string> => {
     return TextGenService.generateText(workerUrl, {
@@ -1625,7 +1626,8 @@ const requestWorkerText = async (
         model: options.model,
         top_p: options.top_p,
         top_k: options.top_k,
-        onDelta: options.onDelta
+        onDelta: options.onDelta,
+        apiKey: options.apiKey
     });
 };
 
@@ -1752,7 +1754,8 @@ const requestModelText = async (
                 temperature: resolvedTemperature,
                 max_tokens: maxOutputTokens,
                 id: options.id,
-                model: apiConfig.model
+                model: apiConfig.model,
+                apiKey: apiConfig.apiKey
             }
         );
     }
@@ -1830,7 +1833,8 @@ export const generateMemoryRecall = async (
         return requestWorkerText(workerUrl, messages, {
             temperature: 0.2,
             id: id || streamOptions?.id,
-            onDelta: streamOptions?.onDelta
+            onDelta: streamOptions?.onDelta,
+            apiKey: apiConfig?.apiKey
         });
     }
 
@@ -1903,7 +1907,8 @@ export const generateWorldData = async (
             temperature: 0.7,
             max_tokens: 131000,
             id: id || streamOptions?.id,
-            onDelta: streamOptions?.onDelta
+            onDelta: streamOptions?.onDelta,
+            apiKey: apiConfig?.apiKey
         });
         return parseWorldResponse(rawText);
     }
@@ -2032,7 +2037,8 @@ export const determineStartingLocation = async (
     if ((!apiConfig || !apiConfig.apiKey) && workerUrl) {
         const rawText = await requestWorkerText(workerUrl, messages, {
             temperature: 0.3,
-            id: options?.id
+            id: options?.id,
+            apiKey: apiConfig?.apiKey
         });
         return parseResponse(rawText);
     }
@@ -2068,7 +2074,8 @@ Mạch văn: 1. Kiểm tra sự thật. 2. Hiệu đính cấu trúc. 3. Trau ch
 
 const detectNSFW = async (
     input: string,
-    workerUrl?: string | string[]
+    workerUrl?: string | string[],
+    apiKey?: string
 ): Promise<boolean> => {
     const messages: GeneralMessage[] = [
         { role: 'user', content: input }
@@ -2078,12 +2085,13 @@ const detectNSFW = async (
     try {
         const response = await requestWorkerText(effectiveWorkerUrl, messages, {
             model: NSFW_DETECTION_MODEL,
-            temperature: 0,
-            max_tokens: 10,
+            temperature: 0.1,
+            max_tokens: 100,
             // @ts-ignore - response_format is now supported in TextGenOptions
-            response_format: { type: 'json_object' }
+            response_format: { type: 'json_object' },
+            apiKey
         });
-        
+
         const lowerRes = response.trim().toLowerCase();
         // Handle standard Llama Guard JSON: {"safe": false, "categories": [...]}
         // Or raw text: "unsafe"
@@ -2098,7 +2106,8 @@ const detectNSFW = async (
 
 const refineStoryProse = async (
     rawJsonText: string,
-    workerUrl?: string | string[]
+    workerUrl?: string | string[],
+    apiKey?: string
 ): Promise<string> => {
     // 1. Extract thinking blocks to prevent refinement model from messing with them.
     const thinkingBlocks: string[] = [];
@@ -2124,9 +2133,10 @@ const refineStoryProse = async (
     try {
         const refined = await requestWorkerText(effectiveWorkerUrl, messages, {
             model: REFINEMENT_MODEL,
-            temperature: 0.3
+            temperature: 0.3,
+            apiKey
         });
-        
+
         // 2. Re-combine thinking blocks with refined JSON.
         if (thinkingBlocks.length > 0) {
             return thinkingBlocks.join('\n') + '\n' + refined;
@@ -2185,7 +2195,7 @@ export const generateStoryResponse = async (
         : 'Start task.';
 
     // Model Selection & NSFW Detection
-    const isNSFWContent = await detectNSFW(normalizedPlayerInput, effectiveWorkerUrl);
+    const isNSFWContent = await detectNSFW(normalizedPlayerInput, effectiveWorkerUrl, apiConfig?.apiKey);
     const targetModel = isNSFWContent ? NSFW_STORY_MODEL : NORMAL_STORY_MODEL;
 
     // NSFW & World Rules injection
@@ -2277,7 +2287,8 @@ export const generateStoryResponse = async (
                 max_tokens: maxTokens,
                 id: requestOptions?.id,
                 onDelta: streamOptions?.onDelta,
-                model: targetModel
+                model: targetModel,
+                apiKey: apiConfig?.apiKey
             });
         } else {
             rawText = await requestModelText(apiConfig!, apiMessages, {
@@ -2310,7 +2321,7 @@ export const generateStoryResponse = async (
 
     // Apply Refinement for high-quality prose (Only for normal story chat)
     if (!isNSFWContent) {
-        rawText = await refineStoryProse(rawText, effectiveWorkerUrl);
+        rawText = await refineStoryProse(rawText, effectiveWorkerUrl, apiConfig?.apiKey);
     }
 
     try {
