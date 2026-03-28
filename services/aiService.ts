@@ -141,7 +141,21 @@ const includeJsonKeyword = (messages: GeneralMessage[]): boolean => {
     return messages.some(m => m.content.toLowerCase().includes('json'));
 };
 
-export const addJsonOutputConstraints = (messages: GeneralMessage[]): GeneralMessage[] => {
+export /**
+ * Strips technical/system tags from AI responses to ensure a clean UI.
+ * Handles tags like <thinking>, <Main Body>, t_ tags, etc.
+ */
+const stripSystemTags = (text: string | null | undefined): string => {
+    if (!text) return '';
+    return text
+        .replace(/<(?:thinking|Thinking|Main Body|Nội dung chính|Nghiệm|suy nghĩ|t_[a-z]+)[^>]*>([\s\S]*?)<\/\1>/gi, '$1') // Extract content from paired tags
+        .replace(/<\/?(?:thinking|Thinking|Main Body|Nội dung chính|Nghiệm|suy nghĩ|Lệnh|Tùy chọn hành động|Trí nhớ ngắn hạn|Short-term memory|Narrative|Truyện|t_[a-z]+|Main Body|Body)[^>]*>/gi, '') // Remove leftover or single tags
+        .replace(/<[^>]+>/g, ' ') // Remove any remaining unknown XML-like tags
+        .replace(/\s+/g, ' ') // Optional: normalize whitespace
+        .trim();
+};
+
+const addJsonOutputConstraints = (messages: GeneralMessage[]): GeneralMessage[] => {
     const lastMsg = messages[messages.length - 1];
     if (lastMsg && lastMsg.role === 'user') {
         lastMsg.content += `\n\n【Hệ thống: Trả lời theo đúng kịch bản văn học trong trò chơi. LUÔN LUÔN trả về JSON hợp lệ với logs, shortTerm và tavern_commands.】`;
@@ -920,13 +934,11 @@ const parseTagProtocolResponse = (content: string): GameResponse | null => {
         || extractFirstTagContent(text, 'Options')
         || extractFirstTagContent(text, 'Hành động');
 
-    let logs = parsingBodyLog(bodyBlock || '');
+    let logs = parsingBodyLog(stripSystemTags(bodyBlock || ''));
 
     // Fallback 1: If bodyBlock is empty but text looks like it has content markers
     if (logs.length === 0) {
-        const stripped = text
-            .replace(/<(thinking|Command|Action options|Lệnh|Tùy chọn hành động|Short-term memory|Trí nhớ ngắn hạn|Narrative|Truyện|t_[a-z]+)[\s\S]*?(?:<\/\1>|$)/gi, '') // Remove OTHER tags (including t_ tags)
-            .replace(/<[^>]+>/g, '\n'); // Remove residual tags
+        const stripped = stripSystemTags(text);
 
         if (/【[^】]+】/.test(stripped)) {
             logs = parsingBodyLog(stripped);
@@ -938,13 +950,13 @@ const parseTagProtocolResponse = (content: string): GameResponse | null => {
 
     const commands = parseCommandBlock(commandBlock);
     const actionOptions = parsingActionOptionsBlock(actionOptionsBlock);
-    const thinking = thinkingParts.map(item => item.trim()).filter(Boolean).join('\n\n');
+    const thinking = thinkingParts.map(item => stripSystemTags(item.trim())).filter(Boolean).join('\n\n');
 
     const thinkingFields: Partial<GameResponse> = {};
     COT_THINKING_FIELD_KEYS.forEach(key => {
         const content = extractFirstTagContent(text, key);
         if (content) {
-            thinkingFields[key] = content;
+            thinkingFields[key] = stripSystemTags(content);
         }
     });
 
@@ -993,12 +1005,12 @@ const normalizationJsonStructureResponse = (raw: any): GameResponse => {
     const logs = rawLogs
         .map((item: any) => {
             if (typeof item === 'string') {
-                return { sender: 'Narrator', text: item };
+                return { sender: 'Narrator', text: stripSystemTags(item) };
             }
             if (item && typeof item === 'object') {
                 return {
                     sender: typeof item.sender === 'string' ? item.sender : 'Narrator',
-                    text: typeof item.text === 'string' ? item.text : String(item.text ?? '')
+                    text: stripSystemTags(typeof item.text === 'string' ? item.text : String(item.text ?? ''))
                 };
             }
             return null;
@@ -1009,14 +1021,14 @@ const normalizationJsonStructureResponse = (raw: any): GameResponse => {
     const normalizedThinkingFields = Object.fromEntries(
         thinkingFieldKeys
             .filter((key) => typeof raw?.[key] === 'string' && raw[key].trim().length > 0)
-            .map((key) => [key, stripFence(raw[key])])
+            .map((key) => [key, stripSystemTags(stripFence(raw[key]))])
     ) as Partial<GameResponse>;
 
     return {
-        thinking_pre: typeof raw?.thinking_pre === 'string' ? stripFence(raw.thinking_pre) : undefined,
+        thinking_pre: typeof raw?.thinking_pre === 'string' ? stripSystemTags(stripFence(raw.thinking_pre)) : undefined,
         logs,
         ...normalizedThinkingFields,
-        thinking_post: typeof raw?.thinking_post === 'string' ? stripFence(raw.thinking_post) : undefined,
+        thinking_post: typeof raw?.thinking_post === 'string' ? stripSystemTags(stripFence(raw.thinking_post)) : undefined,
         tavern_commands: Array.isArray(raw?.tavern_commands)
             ? raw.tavern_commands.flatMap(item => {
                 if (typeof item === 'string') return parseCommandBlock(item);
@@ -1694,10 +1706,49 @@ const requestSystemGeminiText = async (
 };
 
 const QWQ_ADDRESSING_PROMPT = `
-【QUY TẮC XƯNG HÔ (CỰC KỲ QUAN TRỌNG)】:
-- Đối với Nhân vật chính (Ngươi/Ta): Luôn sử dụng cặp đại từ "Ngươi - Ta" để thể hiện sự phong trần, kiếm hiệp. 
-- TUYỆT ĐỐI CẤM sử dụng "Bạn", "Tôi", "Anh", "Chị", "Cậu", "Tớ" trong lời dẫn chuyện và lời thoại giữa các nhân vật (trừ khi có bối cảnh đặc biệt).
-- Giữ phong cách xưng hô nhất quán theo vai vế: Tiền bối/Vãn bối, Sư đồ, Huynh đệ...
+[HỆ THỐNG QUY TẮC NHẬP VAI VÀ XƯNG HÔ KIẾM HIỆP CỔ TRANG]
+
+Nhiệm vụ của bạn là nhập vai một nhân vật trong thế giới võ hiệp/cổ trang. Để giữ vững bối cảnh, bạn PHẢI TUÂN THỦ TUYỆT ĐỐI các quy tắc xưng hô, văn phong và từ vựng dưới đây. Bất kỳ sự vi phạm nào cũng là lỗi nghiêm trọng.
+
+--- PHẦN 1: LỆNH CẤM KỴ (TUYỆT ĐỐI KHÔNG VI PHẠM) ---
+1.1. CẤM SỬ DỤNG TỪ NGỮ HIỆN ĐẠI: Tuyệt đối không dùng các đại từ: "Tôi", "Bạn", "Anh", "Em", "Chú", "Bác", "Cậu", "Tớ", "Ông", "Bà", "Mình".
+1.2. CẤM SAI LỆCH NGÔI THỨ NHẤT: Tuyệt đối KHÔNG BAO GIỜ xưng bản thân là "Cô". 
+1.3. CẤM TỪ VỰNG NGOẠI LAI/HIỆN ĐẠI: Không dùng các từ như: "Ok", "Hello", "Internet", "Công nghệ", "Khoa học", "Cảm xúc", "Stress"... Nếu bị hỏi về những thứ này, hãy tỏ ra khó hiểu hoặc nhầm tưởng đó là một loại bí kíp võ công/kỳ độc nào đó.
+
+--- PHẦN 2: HỆ THỐNG ĐẠI TỪ NHÂN XƯNG CƠ BẢN ---
+2.1. TỰ XƯNG (Ngôi thứ nhất):
+- Mặc định/Phổ thông: "Ta".
+- Kẻ dưới/Khiêm nhường/Khách sáo: "Tại hạ" (nam/nữ chung), "Vãn bối", "Tiểu nhân" (dân thường), "Tiểu nữ" / "Thiếp thân" (nữ giới), "Tiểu tăng" (nhà sư), "Bần đạo" (đạo sĩ).
+- Kẻ trên/Bá khí/Ma giáo: "Bổn tọa", "Lão phu", "Bản tôn", "Lão nương" (nữ giang hồ sành sỏi).
+- Thân thiết (chỉ dùng với người nhà/huynh đệ tỷ muội): "Đệ", "Muội", "Vi huynh", "Ngu huynh".
+
+2.2. GỌI NGƯỜI ĐỐI DIỆN (Ngôi thứ hai):
+- Mặc định/Kẻ thù/Kẻ dưới: "Ngươi", "Các ngươi".
+- Tôn trọng/Khách sáo (Nam): "Các hạ", "Huynh đài", "Công tử", "Tiền bối", "Đại hiệp", "Thiếu hiệp", "Tôn giá".
+- Tôn trọng/Khách sáo (Nữ): "Cô nương", "Tỷ tỷ", "Muội muội", "Phu nhân", "Nữ hiệp", "Tiên tử".
+
+2.3. NHẮC ĐẾN KẺ KHÁC (Ngôi thứ ba):
+- Nam giới: "Hắn", "Y", "Lão", "Kẻ đó", "Tên kia".
+- Nữ giới: "Nàng", "Thị", "Nữ tử kia", "Yêu nữ kia".
+- Số nhiều: "Bọn chúng", "Bọn họ", "Đám người kia", "Chư vị".
+
+--- PHẦN 3: XƯNG HÔ THEO VAI VẾ ĐẶC THÙ ---
+3.1. Trong Sư môn/Tông phái:
+- Gọi thầy: "Sư phụ", "Tôn sư". Tự xưng: "Đồ đệ", "Đệ tử".
+- Bậc trưởng bối: "Sư bá", "Sư thúc", "Sư tổ". Tự xưng: "Sư điệt".
+- Đồng môn: "Sư huynh", "Sư tỷ", "Sư đệ", "Sư muội".
+
+3.2. Trong Gia tộc/Huyết thống:
+- Gọi cha mẹ mình (khi nói với người khác): "Gia phụ", "Gia từ", "Gia nghiêm".
+- Gọi cha mẹ người khác: "Lệnh tôn", "Lệnh đường".
+- Gọi con cái người khác: "Lệnh lang" (con trai), "Lệnh ái" (con gái).
+
+--- PHẦN 4: VĂN PHONG VÀ TỪ VỰNG BẮT BUỘC ---
+4.1. Khí chất: Hành văn phải mang đậm chất cổ trang giang hồ. Có thể lạnh lùng dứt khoát, hào sảng phóng khoáng, hoặc thâm sâu bí hiểm tùy thuộc vào ngữ cảnh. Không được dùng cấu trúc câu quá Tây hóa.
+4.2. Chào hỏi/Giao tiếp: Dùng "Đa tạ", "Cáo từ", "Hạnh ngộ", "Mạn phép", "Thất kính", "Thứ lỗi", "Đắc tội".
+4.3. Cảm thán: "Hừ!", "Làm càn!", "To gan!", "Hảo!", "Quả nhiên!", "Tuyệt diệu!".
+4.4. Thuật ngữ Giang hồ: "Khinh công", "Nội công", "Tẩu hỏa nhập ma", "Kinh mạch", "Huyệt đạo", "Ám khí", "Bí kíp", "Chưởng pháp", "Kiếm khí", "Bế quan", "Hành tẩu giang hồ".
+4.5. Diễn đạt thời gian/Không gian: "Một nén nhang", "Một canh giờ", "Khoảng khắc", "Chớp mắt", "Dặm", "Trượng", "Tấc".
 `.trim();
 
 const requestModelText = async (
@@ -2060,16 +2111,16 @@ const NORMAL_STORY_MODEL = '@cf/openai/gpt-oss-120b';
 const REFINEMENT_MODEL = '@cf/qwen/qwq-32b';
 
 const REFINEMENT_SYSTEM_PROMPT = `
-【Tối ưu Chính văn】
-Vai trò: Tổng biên tập trau chuốt văn phong mà không đổi sự thật/nhân quả.
+【Tối ưu Chính văn Võ Hiệp Cổ Trang】
+Nhiệm vụ: Trau chuốt văn phong cổ trang, đảm bảo 100% đúng quy tắc xưng hô.
 Cấm: 1. Viết thêm hành động, tâm lý, lời thoại mới. 2. Thay đổi kết quả phán định. 3. Vượt POV người chơi.
-Quy tắc:
-- Dùng <thinking> và <Main Body>.
-- Thể hiện qua hành động (Show, don't tell).
-- Cấm mô tả trong ngoặc. Cấm dùng số (HP, EXP) trong logs.
-- Nhấn mạnh Tên/Võ công/Địa điểm bằng dấu *.
-- Loại bỏ cảm xúc cực đoan thiếu nhân quả.
-Mạch văn: 1. Kiểm tra sự thật. 2. Hiệu đính cấu trúc. 3. Trau chuốt ngôn ngữ. 4. Xuất Main Body.
+
+QUY TẮC BẮT BUỘC:
+- Tuyệt đối KHÔNG BAO GIỜ xưng bản thân là "Cô". Phải dùng "Ta" (mặc định) hoặc các từ tự xưng phù hợp (Tại hạ, Tiểu nữ, Lão nương...).
+- Loại bỏ 100% từ hiện đại: Anh, Em, Cô, Tôi, Bạn, Ok, Hello...
+- Dùng từ ngữ giang hồ: Đa tạ, Cáo từ, Đắc tội, Hừ, To gan...
+- Nhấn mạnh Tên/Võ công bằng dấu *.
+- Xuất kết quả duy nhất là JSON object hợp lệ.
 `.trim();
 
 const detectNSFW = async (
