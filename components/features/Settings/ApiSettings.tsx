@@ -20,7 +20,8 @@ import {
     OPENAI_COMPATIBILITY_PRESETS,
     PROTOCOL_OVERRIDE_LABELS,
     PROVIDER_LABELS,
-    normalizeApiSettings
+    normalizeApiSettings,
+    GPT_FREE_HEALTH_CHECK_URL
 } from '../../../utils/apiConfig';
 import IconGlyph from '../../ui/Icon/IconGlyph';
 
@@ -84,6 +85,7 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
     const [newProvider, setNewProvider] = useState<ApiProviderType>('openai');
     const [newCompatiblePreset, setNewCompatiblePreset] = useState<OpenAICompatibilitySolution>('custom');
     const [testingConnection, setTestingConnection] = useState(false);
+    const [healthStatus, setHealthStatus] = useState<'online' | 'offline' | 'checking' | null>(null);
     const [testResultModal, setTestResultModal] = useState<{
         open: boolean;
         title: string;
@@ -104,6 +106,27 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
         const selected = form.configs.find((cfg) => cfg.id === selectedConfigId);
         return selected || form.configs[0] || null;
     }, [form.configs, selectedConfigId]);
+
+    const checkHealth = async () => {
+        setHealthStatus('checking');
+        try {
+            const res = await fetch(GPT_FREE_HEALTH_CHECK_URL);
+            if (res.ok) {
+                setHealthStatus('online');
+            } else {
+                setHealthStatus('offline');
+            }
+        } catch (err) {
+            console.error('Health check failed:', err);
+            setHealthStatus('offline');
+        }
+    };
+
+    useEffect(() => {
+        if (activeConfig?.provider === 'worker') {
+            checkHealth();
+        }
+    }, [activeConfig?.id, activeConfig?.provider]);
 
     const filteredConfigs = useMemo(() => {
         let configs = form.configs;
@@ -522,7 +545,26 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
                             {activeConfig.provider === 'worker' && (
                                 <div className="space-y-4">
                                     <div className="p-4 rounded border border-wuxia-gold/30 bg-wuxia-gold/10 text-xs text-wuxia-gold font-medium leading-relaxed">
-                                        Đang sử dụng cấu hình API hệ thống (GPT-Free). Các thiết lập mô hình và tham số sẽ được tự động tối ưu hóa bởi máy chủ.
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span>Đang sử dụng cấu hình API hệ thống (GPT-Free).</span>
+                                            <div className="flex items-center gap-2">
+                                                <div className={`w-2 h-2 rounded-full ${
+                                                    healthStatus === 'online' ? 'bg-green-500 shadow-[0_0_8px_#22c55e]' : 
+                                                    healthStatus === 'offline' ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : 
+                                                    'bg-gray-500 animate-pulse'
+                                                }`} />
+                                                <span className={`font-bold uppercase tracking-wider ${
+                                                    healthStatus === 'online' ? 'text-green-500' : 
+                                                    healthStatus === 'offline' ? 'text-red-500' : 
+                                                    'text-paper-white/40'
+                                                }`}>
+                                                    {healthStatus === 'online' ? 'Online' : 
+                                                     healthStatus === 'offline' ? 'Offline' : 
+                                                     'Checking...'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        Các thiết lập mô hình và tham số sẽ được tự động tối ưu hóa bởi máy chủ.
                                     </div>
                                 </div>
                             )}

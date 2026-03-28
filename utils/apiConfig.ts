@@ -63,6 +63,8 @@ export const DEFAULT_IMAGE_GEN_WORKER_URLS = [
 ];
 export const DEFAULT_IMAGE_GEN_WORKER_URL = DEFAULT_IMAGE_GEN_WORKER_URLS[0];
 
+export const GPT_FREE_HEALTH_CHECK_URL = 'https://glorious-eveleen-truyem789-26b9b858.koyeb.app/health';
+
 
 export const PROVIDER_LABELS: Record<ApiProviderType, string> = {
     gemini: 'Google Gemini',
