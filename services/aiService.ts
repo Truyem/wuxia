@@ -2114,6 +2114,7 @@ const REFINEMENT_SYSTEM_PROMPT = `
 【Tối ưu Trau Chuốt Chính Văn】
 Nhiệm vụ: Trau chuốt văn phong cổ trang, đảm bảo 100% đúng quy tắc xưng hô.
 Cấm: 1. Viết thêm hành động, tâm lý, lời thoại mới. 2. Thay đổi kết quả phán định. 3. Vượt POV người chơi.
+Nếu có ngôn ngữ khác tiếng việt thì chuyển sang tiếng việt.
 - Ngôn ngữ: Hán Việt cổ điển, giàu hình ảnh ẩn dụ (Phong, Vũ, Kiếm, Đao).
 Mỗi câu chữ phải được trau chuốt. TRÁNH lặp từ, lặp ý. Sử dụng các cấu trúc câu đa dạng và các biện pháp tu từ để làm cho câu chuyện hấp dẫn.
 KHÔNG BAO GIỜ được sai chính tả, gõ thiếu chữ, hoặc dùng từ sai. Quy tắc này áp dụng cho cả tên riêng. Ví dụ: 'Ánh nắng' (đúng) thay vì 'Áh nắng' (sai), 'vội vàng' (đúng) thay vì 'ội vàng' (sai).
