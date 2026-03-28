@@ -13,6 +13,7 @@ export const Core_OutputFormat_MultiThought: PromptStructure = {
 
 ## 0) Structural Hard Constraints (100% Mandatory)
 - Output only **ONE single valid JSON object**; any text outside the JSON is strictly forbidden.
+- AI TUYỆT ĐỐI KHÔNG ĐƯỢC tự ý thay đổi cấu trúc hoặc giá trị của các trường dữ liệu JSON hệ thống cung cấp trong context trừ khi có lệnh điều chỉnh cụ thể.
 - Fixed JSON structure, fields order as follows:
   1. PRE-story thoughts: \`t_input\` → \`t_plan\` → \`t_state\` → \`t_branch\` → \`t_precheck\`
   2. \`logs\` (Mandatory array — **write immediately after PRE-story thoughts**)

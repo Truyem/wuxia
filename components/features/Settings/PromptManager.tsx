@@ -238,7 +238,9 @@ const PromptManager: React.FC<Props> = ({ prompts, onUpdate, requestConfirm, api
                         </div>
                         <div className="flex gap-2">
                             <button onClick={() => handleEdit(p)} className="text-[10px] text-wuxia-gold hover:text-paper-white transition-colors">Edit</button>
-                            <button onClick={() => handleDelete(p.id)} className="text-[10px] text-wuxia-red hover:text-paper-white transition-colors">Delete</button>
+                            {!p.isSystem && (
+                                <button onClick={() => handleDelete(p.id)} className="text-[10px] text-wuxia-red hover:text-paper-white transition-colors">Delete</button>
+                            )}
                         </div>
                     </div>
                 ))}

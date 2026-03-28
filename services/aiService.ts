@@ -3,9 +3,17 @@ import type { ApiConfig, ActiveApiConfig, ApiProviderType } from '../types';
 import { parseJsonWithRepair, stripFence } from '../utils/jsonRepair';
 import { WORLD_GENERATION_SYSTEM_PROMPT, constructWorldviewUserPrompt } from '../prompts/runtime/worldGeneration';
 import { constructStartingLocationPrompt } from '../prompts/runtime/worldSetup';
-import { DEFAULT_COT_PROMPT } from '../prompts/runtime/defaults';
 import { NSFW_RULES_PROMPT } from '../prompts/runtime/nsfwRules';
 import { WORLD_RULES_PROMPT } from '../prompts/runtime/worldRules';
+import { 
+    JSON_CONSTRAINTS_PROMPT, 
+    JSON_SYSTEM_PROMPT,
+    DEFAULT_COT_PROMPT
+} from '../prompts/runtime/defaults';
+import { 
+    REFINEMENT_SYSTEM_PROMPT, 
+    WORLD_REFINEMENT_SYSTEM_PROMPT 
+} from '../prompts/runtime/refinement';
 import { NSFW_DETAILED_INSTRUCTIONS } from '../prompts/writing/nsfw';
 import { TextGenService } from './textGenService';
 import { DEFAULT_TEXT_GEN_WORKER_URLS } from '../utils/apiConfig';
@@ -149,15 +157,11 @@ const includeJsonKeyword = (messages: GeneralMessage[]): boolean => {
 export const addJsonOutputConstraints = (messages: GeneralMessage[]): GeneralMessage[] => {
     const lastMsg = messages[messages.length - 1];
     if (lastMsg && lastMsg.role === 'user') {
-        lastMsg.content += `\n\n【Hệ thống: Trả lời theo đúng kịch bản văn học trong trò chơi. LUÔN LUÔN trả về JSON hợp lệ với logs, shortTerm và tavern_commands.】`;
+        lastMsg.content += `\n\n${JSON_CONSTRAINTS_PROMPT}`;
     }
 
     if (lastMsg) {
-        const jsonPrompt = `
-[SYSTEM: JSON OUTPUT ONLY]
-1. You MUST respond ONLY with a valid JSON object.
-2. If you are stuck, return a minimal valid JSON story state instead of an error message.
-`.trim();
+        const jsonPrompt = JSON_SYSTEM_PROMPT;
 
         if (!lastMsg.content.toLowerCase().includes('json')) {
             lastMsg.content += `\n\n${jsonPrompt}`;
@@ -1696,32 +1700,6 @@ const requestSystemGeminiText = async (
     }
 };
 
-const LLM_ADDRESSING_PROMPT = `
-【QUY TẮC BẮT BUỘC - NGÔN NGỮ & ĐỘ NHẬP VAI】:
-1. CẤM KỴ TUYỆT ĐỐI (LỖI CHẾT NGƯỜI):
-   - CẤM TUYỆT ĐỐI dùng tiếng Anh hoặc từ ngoại ngữ (VD: (spirit), (mana), (damage) -> SAI). 100% tiếng Việt.
-   - CẤM TUYỆT ĐỐI dùng số, chỉ số, điểm (VD: HP 100/100, 5 điểm, 10 lượng -> SAI). Mô tả bằng lời (Tràn trề, đầy đủ, hốt nhiên, một mớ...).
-   - CẤM dùng từ "ơi", "trẻ", "này" ở cuối câu theo cách hiện đại (VD: "Ngươi tới đây hỏi gì, trẻ?" -> SAI).
-   - CẤM dùng đại từ hiện đại: "Bạn", "Tôi", "Chúng tôi", "Anh", "Chị", "Cậu".
-
-2. HÌNH TƯỢNG NHÂN VẬT MẪU (BẮT BUỘC CHỌN VÀ THIẾT LẬP TÔNG GIỌNG RIÊNG):
-   - **Tiền bối uy nghiêm**: Cách nói đanh thép, răn đe. 
-     *Mẫu: "Ngươi tìm đến ta để hỏi điều gì, kẻ trẻ tuổi? Giữ lấy cái đầu của ngươi cho kỹ."*
-   - **Tỷ muội hào sảng**: Lanh lợi, dùng từ ngữ sống động. 
-     *Mẫu: "A ha! Huynh đệ lại ghé hàng muội đấy à? Cá tươi xanh, vảy bạc lấp lánh đầy khoang đây!"*
-   - **Tiểu nương tử sắc sảo**: Ngọt ngào nhưng ẩn ý, khéo léo. 
-     *Mẫu: "Chào vị đại ca này! Xem kìa, hôm nay biển chiều lòng người, cá đầy mạn thuyền rồi đây."*
-   - **Tiền bối khắt khe**: Ngắn gọn, thực dung. 
-     *Mẫu: "Muốn hỏi gì thì nói nhanh đi. Huyết Hải không dung thứ cho kẻ chỉ biết đứng nhìn."*
-
-3. MA TRẬN XƯNG HÔ THEO TÔN TI:
-   - Bề trên -> Bề dưới: "Người trẻ", "Kẻ trẻ tuổi", "Tiểu hữu", "Ngươi" - Xưng: "Ta", "Lão phu", "Bản tọa".
-   - Bề dưới -> Bề trên: "Tiền bối", "Đại nhân", "Ngài" - Xưng: "Vãn bối", "Tại hạ", "Tiểu nhân".
-
-4. VĂN PHONG VÀ HÌNH ẢNH:
-   - Sử dụng hình ảnh so sánh sống động: "Vảy bạc lấp lánh", "Linh hồn mục rỗng", "Vật bất ly thân".
-   - Ngôn ngữ giàu tính nhạc điệu và từ Hán Việt cổ để tăng độ nhập vai.
-`.trim();
 
 const requestModelText = async (
     apiConfig: ActiveApiConfig,
@@ -1739,17 +1717,7 @@ const requestModelText = async (
     if (apiConfig.provider !== 'worker' && apiConfig.provider !== 'system_gemini' && !apiConfig.apiKey) throw new Error("API Key is missing for the selected provider. Please check settings.");
 
     // Inject QWQ-specific addressing prompt if applicable
-    let finalMessages = messages;
-    if (apiConfig.model?.toLowerCase().includes('llama')) {
-        const hasAddressingPrompt = messages.some(m => m.content.includes('【QUY TẮC XƯNG HÔ'));
-        if (!hasAddressingPrompt) {
-            finalMessages = [
-                ...messages.filter(m => m.role === 'system'),
-                { role: 'system', content: LLM_ADDRESSING_PROMPT },
-                ...messages.filter(m => m.role !== 'system')
-            ];
-        }
-    }
+    const finalMessages = messages;
 
     // We force JSON mode globally as requested
     const jsonMode = true;
@@ -2076,29 +2044,6 @@ export const determineStartingLocation = async (
     return parseResponse(rawText);
 };
 
-const REFINEMENT_SYSTEM_PROMPT = `
-【Tối ưu Chính văn】
-Vai trò: Tổng biên tập trau chuốt văn phong mà không đổi sự thật/nhân quả.
-Cấm: 1. Viết thêm hành động, tâm lý, lời thoại mới. 2. Thay đổi kết quả phán định. 3. Vượt POV người chơi.
-Quy tắc:
-- Dùng <thinking> và <Main Body>.
-- Thể hiện qua hành động (Show, don't tell).
-- Cấm mô tả trong ngoặc. Cấm dùng số (HP, EXP) trong logs.
-- Nhấn mạnh Tên/Võ công/Địa điểm bằng dấu *.
-- Loại bỏ cảm xúc cực đoan thiếu nhân quả.
-Mạch văn: 1. Kiểm tra sự thật. 2. Hiệu đính cấu trúc. 3. Trau chuốt ngôn ngữ. 4. Xuất Main Body.
-`.trim();
-
-const WORLD_REFINEMENT_SYSTEM_PROMPT = `
-【Tối ưu Thế giới quan】
-Vai trò: Bậc thầy kiến tạo bối cảnh, trau chuốt văn phong hào hùng, phóng khoáng mà không đổi sự thật.
-Cấm: 1. Viết thêm các địa danh, nhân vật không có trong bản gốc. 2. Thay đổi tông màu chủ đạo.
-Quy tắc:
-- Dùng từ ngữ Hán Việt chuẩn kiếm hiệp (ví dụ: bôn ba, sương gió, chính tà, giang hồ...).
-- Thể hiện sự kỳ vĩ, huyền ảo của Giang Hồ.
-- Giữ nguyên cấu trúc JSON với trường "world_prompt".
-- Ngôn ngữ: Tiếng Việt.
-`.trim();
 
 const detectNSFW = async (
     input: string,
@@ -2149,7 +2094,7 @@ const refineStoryProse = async (
     const messages: GeneralMessage[] = [
         {
             role: 'system',
-            content: `${REFINEMENT_SYSTEM_PROMPT}\n\n${LLM_ADDRESSING_PROMPT}\n\n【YÊU CẦU】: Hãy biên tập lại nội dung truyện trong JSON sau. GIỮ NGUYÊN cấu trúc JSON.`
+            content: `${REFINEMENT_SYSTEM_PROMPT}\n\n【YÊU CẦU】: Hãy biên tập lại nội dung truyện trong JSON sau. GIỮ NGUYÊN cấu trúc JSON.`
         },
         { role: 'user', content: cleanJsonText }
     ];

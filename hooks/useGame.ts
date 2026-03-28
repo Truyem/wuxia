@@ -1979,6 +1979,46 @@ export const useGame = () => {
             }
         }
 
+        // 0.5. Parse [TAG] protocol from logs
+        if (Array.isArray(response.logs)) {
+            response.logs.forEach(log => {
+                if (typeof log.text === 'string') {
+                    // Extract [TAG]: { json } or [TAG]: text
+                    const tagRegex = /\[([A-ZÀ-Ỹ_ ]+)\]:\s*(\{.*?\}|.*)/g;
+                    let match;
+                    while ((match = tagRegex.exec(log.text)) !== null) {
+                        const tag = match[1].trim();
+                        const valueStr = match[2].trim();
+
+                        if (tag === 'CHARACTER_UPDATE' || tag === 'TRẠNG THÁI_NHÂN VẬT') {
+                            try {
+                                const val = JSON.parse(valueStr.startsWith('{') ? valueStr : `{ "summary": "${valueStr.replace(/"/g, '\\"')}" }`);
+                                Object.keys(val).forEach(k => {
+                                    allCommands.push({ key: k, value: val[k], action: 'SET' });
+                                });
+                            } catch (e) {
+                                allCommands.push({ key: 'Status', value: valueStr, action: 'SET' });
+                            }
+                        } else if (tag === 'WORLD_LOCATION') {
+                            try {
+                                const val = JSON.parse(valueStr);
+                                if (val.major) allCommands.push({ key: 'majorLocation', value: val.major, action: 'SET' });
+                                if (val.minor) allCommands.push({ key: 'minorLocation', value: val.minor, action: 'SET' });
+                                if (val.specific) allCommands.push({ key: 'specificLocation', value: val.specific, action: 'SET' });
+                            } catch (e) { /* skip */ }
+                        } else if (tag === 'SOCIAL_SYNC') {
+                            try {
+                                const val = JSON.parse(valueStr);
+                                if (val.id) allCommands.push({ key: `social.${val.id}`, value: val, action: 'MERGE' });
+                            } catch (e) { /* skip */ }
+                        } else if (tag === 'BẢN TIN_HỆ THỐNG' || tag === 'CHIẾN_BÁO') {
+                            // Can be used for specific UI highlights if needed
+                        }
+                    }
+                }
+            });
+        }
+
         // Also process t_ fields if they contain command-like strings
         const tFields: (keyof GameResponse)[] = ['t_npc', 't_state', 't_cmd', 't_var'];
         tFields.forEach(field => {

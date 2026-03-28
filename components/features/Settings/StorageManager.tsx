@@ -256,7 +256,7 @@ const StorageManager: React.FC<Props> = ({ requestConfirm }) => {
     const handleRepairHistory = async () => {
         await runWithConfirm('repair_history', {
             title: 'Sửa lỗi hội thoại',
-            message: 'Tính năng này sẽ quét tất cả các bản lưu và cố gắng sửa các đoạn hội thoại bị lỗi hiển thị JSON (thường gặp khi dùng mô hình có suy nghĩ như DeepSeek R1). Bạn có muốn tiếp tục?',
+            message: 'Tính năng này sẽ quét tất cả các bản lưu và cố gắng sửa các đoạn hội thoại bị lỗi hiển thị JSON. Bạn có muốn tiếp tục?',
             confirmText: 'Sửa lỗi ngay',
             onRun: async () => {
                 const result = await dbService.repairAllSaves();
@@ -272,8 +272,8 @@ const StorageManager: React.FC<Props> = ({ requestConfirm }) => {
         <div className="space-y-6 h-full flex flex-col">
             {notice && (
                 <div className={`text-xs px-3 py-2 border rounded ${notice.type === 'success'
-                        ? 'border-wuxia-gold/40 bg-wuxia-gold/10 text-wuxia-gold'
-                        : 'border-wuxia-red/40 bg-wuxia-red/10 text-wuxia-red'
+                    ? 'border-wuxia-gold/40 bg-wuxia-gold/10 text-wuxia-gold'
+                    : 'border-wuxia-red/40 bg-wuxia-red/10 text-wuxia-red'
                     }`}>
                     {notice.text}
                 </div>

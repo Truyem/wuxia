@@ -1,4 +1,5 @@
 import { parseWorkerUrls, DEFAULT_TEXT_GEN_WORKER_URLS } from '../utils/apiConfig';
+import { CONNECTION_TEST_PROMPT } from '../prompts/runtime/defaults';
 
 export interface TextGenMessage {
   role: 'system' | 'user' | 'assistant';
@@ -307,7 +308,7 @@ export class TextGenService {
     try {
       const text = await this.generateText(workerUrl, {
         messages: [
-          { role: 'system', content: 'You are a connection test. Please only answer OK.' },
+          { role: 'system', content: CONNECTION_TEST_PROMPT },
           { role: 'user', content: 'ping' }
         ],
         max_tokens: 50,

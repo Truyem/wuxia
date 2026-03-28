@@ -18,11 +18,12 @@ import { coreNpcFate } from './core/npc_fate';
 import { coreUserFate } from './core/user_fate';
 import { coreWorldMechanics } from './core/world_mechanics';
 import { coreRealWorld } from './core/realWorld';
+import { PostCombatRules } from './core/postCombatRules';
 
 // Stats
 import { StatCharacter } from './stats/character';
-import { StatItem } from './stats/items';
-import { StatKungfu } from './stats/kungfu';
+import { StatItem, ItemExtractionPrompt } from './stats/items';
+import { StatKungfu, SkillExtractionPrompt } from './stats/kungfu';
 import { StatWorldEvolution } from './stats/world';
 import { StatOtherSettings } from './stats/others';
 import { StatCombat } from './stats/combat';
@@ -43,6 +44,10 @@ import { WritingPerspectiveFirst, WritingPerspectiveSecond, WritingPerspectiveTh
 import { WritingStyle } from './writing/style';
 import { WritingNsfw } from './writing/nsfw';
 
+// Runtime
+import { REFINEMENT_SYSTEM_PROMPT_OBJ, WORLD_REFINEMENT_SYSTEM_PROMPT_OBJ } from './runtime/refinement';
+import { JSON_CONSTRAINTS_PROMPT_OBJ, JSON_SYSTEM_PROMPT_OBJ, CONNECTION_TEST_PROMPT_OBJ } from './runtime/defaults';
+
 export const DefaultPrompts: PromptStructure[] = [
     // Core
     coreWorldview,
@@ -61,11 +66,14 @@ export const DefaultPrompts: PromptStructure[] = [
     coreUserFate,
     coreWorldMechanics,
     coreRealWorld,
+    PostCombatRules,
     // Stats
 
     StatCharacter,
     StatItem,
+    ItemExtractionPrompt,
     StatKungfu,
+    SkillExtractionPrompt,
     StatWorldEvolution,
     StatOtherSettings,
     StatCombat,
@@ -86,5 +94,11 @@ export const DefaultPrompts: PromptStructure[] = [
     WritingPerspectiveSecond,
     WritingPerspectiveThird,
     WritingStyle,
-    WritingNsfw
+    WritingNsfw,
+    // New Runtime Prompts
+    REFINEMENT_SYSTEM_PROMPT_OBJ,
+    WORLD_REFINEMENT_SYSTEM_PROMPT_OBJ,
+    JSON_CONSTRAINTS_PROMPT_OBJ,
+    JSON_SYSTEM_PROMPT_OBJ,
+    CONNECTION_TEST_PROMPT_OBJ
 ].map(p => ({ ...p, isSystem: true }));

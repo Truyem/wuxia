@@ -12,4 +12,15 @@ export const WORLD_RULES_PROMPT = `
 6.LUẬT PHẢN ỨNG CƯỠNG CHẾ (ANTI-NSFW TROPES): Khi một nhân vật bị tấn công tình dục, quấy rối hoặc ép buộc thực hiện hành vi NSFW, "TUYỆT ĐỐI KHÔNG" miêu tả họ sinh ra khoái cảm, rên rỉ ướt át hay ngoan ngoãn phục tùng. Phản ứng sinh lý và tâm lý của họ phải là: Kinh tởm, phẫn nộ, ghê tởm, hoặc hoàn toàn vô cảm (nếu là quỷ/quái vật). Họ "BẮT BUỘC" phải phản kháng quyết liệt bằng bạo lực, chửi rủa, cắn xé, hoặc sử dụng sức mạnh/quy luật của mình để giết kẻ tấn công. Dục vọng của người chơi "KHÔNG THỂ" bẻ cong ý chí hay bản chất của NPC.
 
 7.Luật Nhận Thức Thực Tại (Góc nhìn giới hạn): Nhân vật tiếp nhận thế giới thông qua góc nhìn và trải nghiệm của riêng mình. Mọi kiến thức và diễn biến xung quanh đều yêu cầu nhân vật phải đích thân có mặt, chứng kiến hoặc trải nghiệm trực tiếp. Dòng chảy thông tin: Suy nghĩ của người khác và các sự kiện diễn ra ngoài tầm mắt là những ẩn số chờ được khám phá. Nhân vật thu thập thông tin bằng cách tương tác, giao tiếp, tìm kiếm tài liệu hoặc lắng nghe lời kể từ những người xung quanh. Phản ứng tuyến tính: Nhân vật tư duy và phản ứng với các sự kiện dựa trên đúng những gì họ đã trải qua và học được cho đến khoảnh khắc hiện tại.
+
+8.QUY TẮC SAU CHIẾN ĐẤU (Post-Combat Rules): Sau khi kết thúc một trận chiến, AI BẮT BUỘC chèn đoạn tag sau vào cuối phản hồi: [POST_COMBAT]: { "status": "đã kết thúc", "winner": "tên người thắng", "loser": "tên người thua", "injuries": "mô tả thương thế nhân quả" }. Tiếp theo, AI phải mô tả trạng thái tàn phế, kiệt sức hoặc hưng phấn sau trận đấu một cách chân thực nhất, dựa trên lượng máu và nội lực còn lại. Không được hồi phục ngay lập tức nếu không có linh dược hoặc trị thương.
+`.trim();
+
+export const POST_COMBAT_RULES = `
+【QUY TẮC SAU CHIẾN ĐẤU - BẮT BUỘC】
+Sau khi kết thúc một trận chiến (máu đối thủ hoặc người chơi về 0, hoặc có lệnh kết liễu):
+1. CHÈN TAG HỆ THỐNG: [POST_COMBAT]: { "status": "đã kết thúc", "winner": "tên người thắng", "loser": "tên người thua", "injuries": "mô tả thương thế nhân quả" }
+2. MÔ TẢ TRẠNG THÁI: Phải miêu tả sự kiệt sức, vết thương hở, hơi thở dốc, và dư âm của bạo lực. 
+3. NHÂN QUẢ: Thương thế phải tương xứng với diễn biến trận đấu. Nếu bị gãy xương trong trận, sau trận phải tàn phế hoặc đau đớn dữ dội. 
+4. CẤM HỒI PHỤC: Tuyệt đối không được mô tả nhân vật đứng dậy khỏe mạnh ngay lập tức.
 `.trim();

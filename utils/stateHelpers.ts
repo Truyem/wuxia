@@ -188,6 +188,13 @@ export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     "Máu hiện tại": "currentHp",
     "Máu tối đa": "maxHp",
     "Trạng thái cơ thể": "Status",
+    "máu": "currentHp",
+    "nội lực": "currentEnergy",
+    "năng lượng": "currentEnergy",
+    "tinh lực": "currentEnergy",
+    "trạng thái": "Status",
+    "vị trí": "location",
+    "quan hệ": "relation",
     
     
     // Generic Subkeys (for nested AI updates)
