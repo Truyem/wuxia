@@ -85,7 +85,7 @@ export const PROVIDER_LABELS: Record<ApiProviderType, string> = {
     cerebras: 'Cerebras',
     sambanova: 'SambaNova',
     openai_compatible: 'OpenAI Tương thích',
-    worker: 'Hệ thống (GPT)',
+    worker: 'Hệ thống (GPT-Free) (worker)',
     system_gemini: 'Hệ thống (Gemini 3 Flash)'
 };
 
@@ -453,7 +453,7 @@ export const API_PRESET_TEMPLATES: Array<{
         { label: 'SambaNova', provider: 'sambanova', baseUrl: 'https://api.sambanova.ai/v1', model: 'Meta-Llama-3.1-70B-Instruct' },
         { label: 'HuggingFace', provider: 'huggingface', baseUrl: 'https://api-inference.huggingface.co/v1', model: 'gpt2' },
         { label: 'Cloudflare', provider: 'cloudflare', baseUrl: 'https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/ai/v1', model: '@cf/meta/llama-3-8b-instruct' },
-        { label: 'Hệ thống (Free-Fast)', provider: 'worker', baseUrl: DEFAULT_TEXT_GEN_WORKER_URL, model: '@cf/nvidia/nemotron-3-120b-a12b' }
+        { label: 'Hệ thống (GPT-Free) (worker)', provider: 'worker', baseUrl: DEFAULT_TEXT_GEN_WORKER_URL, model: '@cf/nvidia/nemotron-3-120b-a12b' }
     ];
 
 export const createApiConfigFromPreset = (preset: typeof API_PRESET_TEMPLATES[number]): ApiConfig => {
@@ -540,7 +540,7 @@ export const normalizeApiSettings = (raw: unknown): ApiSettings => {
     if (normalizedConfigs.length === 0 || !normalizedConfigs.some(c => c.provider === 'worker')) {
         const systemWorker: ApiConfig = { // Changed ApiConfigState to ApiConfig
             id: 'nemotron-system-worker',
-            name: 'Hệ thống (GPT-Free)',
+            name: 'Hệ thống (GPT-Free) (worker)',
             provider: 'worker',
             baseUrl: DEFAULT_TEXT_GEN_WORKER_URL, // Added baseUrl
             apiKey: '', // Added apiKey

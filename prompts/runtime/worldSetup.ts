@@ -5,9 +5,9 @@ export const constructWorldviewAnchorPrompt = (worldConfig: WorldGenConfig, char
 - Tên thế giới: ${worldConfig.worldName || '[Tên thế giới]'}
 - Cấp độ sức mạnh: ${worldConfig.powerLevel}
 - Quy mô thế giới: ${worldConfig.worldSize}
-- Cấu trúc vương triều: ${worldConfig.dynastySetting || '[Bối cảnh triều đại chưa thiết lập]'}
+- Cấu trúc vương triều: ${worldConfig.dynastySetting || 'Hệ thống (GPT-Free) (worker)'}
 - Mật độ tông môn: ${worldConfig.sectDensity}
-- Thiết lập thiên kiêu: ${worldConfig.tianjiaoSetting || '[Thiết lập thiên kiêu/vũ lực chưa thiết lập]'}
+- Thiết lập thiên kiêu: ${worldConfig.tianjiaoSetting || 'Hệ thống (GPT-Free) (worker)'}
 - Độ khó trò chơi: ${worldConfig.difficulty || 'normal'}
 - Phong cách truyện: ${worldConfig.storyStyle || 'Thông thường'}
 

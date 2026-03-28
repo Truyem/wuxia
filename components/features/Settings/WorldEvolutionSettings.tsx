@@ -59,7 +59,7 @@ const WorldEvolutionSettings: React.FC<Props> = ({ settings, onSave }) => {
 
             <div className="bg-transparent rounded-xl border border-wuxia-gold/20 p-6 space-y-6 shadow-[0_0_30px_rgba(0,0,0,0.5)] backdrop-blur-sm">
                 <div className="text-xs text-paper-white/50 leading-relaxed font-medium opacity-80 pl-1">
-                    Cấu hình đang dùng: <span className={activeMainConfig?.name ? "text-wuxia-gold font-bold" : "text-wuxia-gold font-bold italic"}>{activeMainConfig?.name || 'Chưa thiết lập'}</span> ({activeMainConfig?.provider || 'Hệ thống'}).
+                    Cấu hình đang dùng: <span className={activeMainConfig?.name ? "text-wuxia-gold font-bold" : "text-wuxia-gold font-bold italic"}>{activeMainConfig?.name || 'Hệ thống (GPT-Free) (worker)'}</span> ({activeMainConfig?.provider || 'Hệ thống'}).
                     Khi bật, tiến hóa trạng thái thế giới sẽ được xử lý bởi mô hình độc lập; Có thể chỉ định riêng Base URL và API Key, để trống sẽ dùng lại cấu hình chính.
                 </div>
 

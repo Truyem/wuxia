@@ -165,7 +165,7 @@ const RecallModelSettings: React.FC<Props> = ({ settings, onSave }) => {
                                     onChange={(model) => updatePlaceholder('recallModel', model)}
                                     disabled={!independentModelEnabled || selectOptions.length === 0}
                                     placeholder={!independentModelEnabled
-                                        ? `Theo mô hình cốt truyện chính: ${mainStoryParsingModel || 'Chưa thiết lập'}`
+                                        ? `Theo mô hình cốt truyện chính: ${mainStoryParsingModel || 'Hệ thống (GPT-Free) (worker)'}`
                                         : (selectOptions.length ? 'Vui lòng chọn mô hình' : 'Vui lòng nhấp Lấy danh sách trước')}
                                     buttonClassName={independentModelEnabled
                                         ? 'bg-wuxia-gold/20 border-wuxia-gold/40 hover:bg-wuxia-gold/30 py-2.5'
@@ -184,7 +184,7 @@ const RecallModelSettings: React.FC<Props> = ({ settings, onSave }) => {
 
                         {!independentModelEnabled && (
                             <div className="text-[11px] text-paper-white/40 italic">
-                                Hiện tại: Đồng bộ với mô hình cốt truyện chính {mainStoryParsingModel ? `（${mainStoryParsingModel}）` : '（Chưa thiết lập mô hình cốt truyện chính）'}
+                                Hiện tại: Đồng bộ với mô hình cốt truyện chính {mainStoryParsingModel ? `（${mainStoryParsingModel}）` : '（Hệ thống (GPT-Free) (worker)）'}
                             </div>
                         )}
                     </>

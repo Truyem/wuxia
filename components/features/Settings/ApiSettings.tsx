@@ -814,7 +814,7 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
                                                                 onChange={(model) => updatePlaceholder(row.modelKey, model)}
                                                                 disabled={disabled || options.length === 0}
                                                                 placeholder={disabled
-                                                                    ? `Theo cốt truyện chính: ${mainStoryParseModel || 'Chưa thiết lập'}`
+                                                                    ? `Theo cốt truyện chính: ${mainStoryParseModel || 'Hệ thống (GPT-Free) (worker)'}`
                                                                     : (options.length ? 'Vui lòng chọn mô hình' : 'Vui lòng nhấp Lấy danh sách trước')}
                                                                 buttonClassName={disabled
                                                                     ? 'bg-transparent border-wuxia-red/10 py-3 opacity-60'

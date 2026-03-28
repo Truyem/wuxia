@@ -59,7 +59,7 @@ const ArticleOptimizationSettings: React.FC<Props> = ({ settings, onSave }) => {
 
             <div className="rounded-xl border border-wuxia-gold/20 bg-transparent p-6 space-y-6 shadow-[0_0_30px_rgba(0,0,0,0.5)] backdrop-blur-sm">
                 <div className="text-xs text-paper-white/50 leading-relaxed font-medium opacity-80 pl-1">
-                    Cấu hình đang dùng: <span className={activeMainConfig?.name ? "text-wuxia-gold font-bold" : "text-wuxia-gold/60 italic"}>{activeMainConfig?.name || 'Chưa thiết lập'}</span> ({activeMainConfig?.provider || 'N/A'}).
+                    Cấu hình đang dùng: <span className={activeMainConfig?.name ? "text-wuxia-gold font-bold" : "text-wuxia-gold/60 italic"}>{activeMainConfig?.name || 'Hệ thống (GPT-Free) (worker)'}</span> ({activeMainConfig?.provider || 'N/A'}).
                     Khi bật, một mô hình độc lập sẽ tự động trau chuốt văn bản <code className="text-wuxia-gold font-black">{'<Chính văn>'}</code>; Có thể chỉ định riêng Base URL và API Key, để trống sẽ dùng lại cấu hình chính.
                 </div>
 
