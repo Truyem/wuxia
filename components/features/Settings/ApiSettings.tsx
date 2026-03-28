@@ -39,10 +39,12 @@ type FeatureModelRow = {
     switchKey?: FeatureModelToggleField;
     label: string;
     hint: string;
+    apiUrlKey?: keyof FeatureModelPlaceholderConfig;
+    apiKeyKey?: keyof FeatureModelPlaceholderConfig;
 };
 
 const providerOptions: ApiProviderType[] = [
-    'worker', 'gemini', 'claude', 'openai', 'deepseek',
+    'gemini', 'claude', 'openai', 'deepseek',
     'mistral', 'groq', 'xai', 'perplexity', 'cohere',
     'moonshot', 'openrouter', 'huggingface', 'cloudflare',
     'together', 'fireworks', 'cerebras', 'sambanova',
@@ -56,9 +58,31 @@ const compatibilitySolutionOptions: Array<{ value: OpenAICompatibilitySolution; 
     }));
 
 const featureModelRows: FeatureModelRow[] = [
-    { id: 'world', modelKey: 'worldEvolutionModel', switchKey: 'worldEvolutionIndependentModelToggle', label: 'Mô hình diễn biến thế giới', hint: 'Ví dụ: gemini-2.0-flash' },
-    { id: 'vars', modelKey: 'variableCalculationModel', switchKey: 'variableCalculationIndependentModelToggle', label: 'Mô hình tính toán biến', hint: 'Ví dụ: deepseek-chat' },
-    { id: 'polish', modelKey: 'articleOptimizationModel', switchKey: 'articleOptimizationIndependentModelToggle', label: 'Mô hình tối ưu bài viết', hint: 'Ví dụ: claude-3-5-sonnet-latest' }
+    { 
+        id: 'world', 
+        modelKey: 'worldEvolutionModel', 
+        switchKey: 'worldEvolutionIndependentModelToggle', 
+        label: 'Mô hình diễn biến thế giới', 
+        hint: 'Ví dụ: gemini-2.0-flash',
+        apiUrlKey: 'worldEvolutionIndependentApiUrl',
+        apiKeyKey: 'worldEvolutionIndependentApiKey'
+    },
+    { 
+        id: 'vars', 
+        modelKey: 'variableCalculationModel', 
+        switchKey: 'variableCalculationIndependentModelToggle', 
+        label: 'Mô hình tính toán biến', 
+        hint: 'Ví dụ: deepseek-chat' 
+    },
+    { 
+        id: 'polish', 
+        modelKey: 'articleOptimizationModel', 
+        switchKey: 'articleOptimizationIndependentModelToggle', 
+        label: 'Mô hình tối ưu bài viết', 
+        hint: 'Ví dụ: claude-3-5-sonnet-latest',
+        apiUrlKey: 'articleOptimizationIndependentApiUrl',
+        apiKeyKey: 'articleOptimizationIndependentApiKey'
+    }
 ];
 
 const initFeatureModelList = (): Record<FeatureModelField, string[]> => ({
@@ -655,39 +679,6 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
                                 </div>
                             )}
 
-                            {activeConfig.provider !== 'worker' && (
-                                <div className="rounded-md border-2 border-yellow-500 bg-ink-black/60 p-4 space-y-4 shadow-[0_0_15px_rgba(255,255,0,0.2)]">
-                                    <div className="text-xs text-yellow-500 font-bold uppercase tracking-tighter mb-2">Cấu hình lấy mẫu cấp cao (Sampling)</div>
-                                    <div className="grid gap-4 md:grid-cols-2">
-                                        <div className="space-y-3">
-                                            <label className="text-sm text-wuxia-gold font-bold">Top P (Nucleus Sampling)</label>
-                                            <input
-                                                type="number"
-                                                step="0.05"
-                                                min="0"
-                                                max="1"
-                                                value={activeConfig.topP ?? 0.7}
-                                                onChange={(e) => updateActiveConfig({ topP: parseFloat(e.target.value) || 0.7 })}
-                                                className="w-full bg-ink-black/40 border border-wuxia-gold/40 focus:border-wuxia-gold p-2 text-paper-white text-sm rounded-md outline-none"
-                                            />
-                                            <div className="text-[10px] text-paper-white/40">Giới hạn lựa chọn từ ngữ trong top xác suất tích lũy P. Mặc định 0.7.</div>
-                                        </div>
-                                        <div className="space-y-3">
-                                            <label className="text-sm text-wuxia-gold font-bold">Top K</label>
-                                            <input
-                                                type="number"
-                                                step="1"
-                                                min="1"
-                                                max="100"
-                                                value={activeConfig.topK ?? 50}
-                                                onChange={(e) => updateActiveConfig({ topK: parseInt(e.target.value) || 50 })}
-                                                className="w-full bg-ink-black/40 border border-wuxia-gold/40 focus:border-wuxia-gold p-2 text-paper-white text-sm rounded-md outline-none"
-                                            />
-                                            <div className="text-[10px] text-paper-white/40">Giới hạn lựa chọn trong K từ ngữ có xác suất cao nhất. Mặc định 50.</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
 
 
                             {activeConfig.provider !== 'worker' && (
@@ -800,50 +791,87 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
                                                             )}
                                                         </div>
 
-                                                        <GameButton
-                                                            onClick={() => handleFetchFeatureModels(row.modelKey, row.label)}
-                                                            variant="secondary"
-                                                            className="px-4 py-1.5 text-xs h-auto min-h-0 flex-shrink-0 border-wuxia-red/50 shadow-[0_0_10px_rgba(var(--c-wuxia-red),0.1)]"
-                                                            disabled={loading}
-                                                        >
-                                                            {loading ? '...' : 'Lấy danh sách'}
-                                                        </GameButton>
+                                                        {independentEnabled && (
+                                                            <GameButton
+                                                                onClick={() => handleFetchFeatureModels(row.modelKey, row.label)}
+                                                                variant="secondary"
+                                                                className="px-4 py-1.5 text-xs h-auto min-h-0 flex-shrink-0 border-wuxia-red/50 shadow-[0_0_10px_rgba(var(--c-wuxia-red),0.1)]"
+                                                                disabled={loading}
+                                                            >
+                                                                {loading ? '...' : 'Lấy danh sách'}
+                                                            </GameButton>
+                                                        )}
                                                     </div>
 
                                                     <div className="space-y-4">
-                                                        <InlineSelect
-                                                            value={displayValue}
-                                                            options={options.map((model) => ({
-                                                                value: model,
-                                                                label: model
-                                                            }))}
-                                                            onChange={(model) => updatePlaceholder(row.modelKey, model)}
-                                                            disabled={disabled || options.length === 0}
-                                                            placeholder={disabled
-                                                                ? `Theo cốt truyện chính: ${mainStoryParseModel || 'Chưa thiết lập'}`
-                                                                : (options.length ? 'Vui lòng chọn mô hình' : 'Vui lòng nhấp Lấy danh sách trước')}
-                                                            buttonClassName={disabled
-                                                                ? 'bg-transparent border-wuxia-red/10 py-3 opacity-60'
-                                                                : 'bg-transparent border-wuxia-red/20 hover:border-wuxia-red/50 py-3 text-wuxia-red'}
-                                                            panelClassName="max-w-full"
-                                                        />
+                                                        {independentEnabled && (
+                                                            <InlineSelect
+                                                                value={displayValue}
+                                                                options={options.map((model) => ({
+                                                                    value: model,
+                                                                    label: model
+                                                                }))}
+                                                                onChange={(model) => updatePlaceholder(row.modelKey, model)}
+                                                                disabled={disabled || options.length === 0}
+                                                                placeholder={disabled
+                                                                    ? `Theo cốt truyện chính: ${mainStoryParseModel || 'Chưa thiết lập'}`
+                                                                    : (options.length ? 'Vui lòng chọn mô hình' : 'Vui lòng nhấp Lấy danh sách trước')}
+                                                                buttonClassName={disabled
+                                                                    ? 'bg-transparent border-wuxia-red/10 py-3 opacity-60'
+                                                                    : 'bg-transparent border-wuxia-red/20 hover:border-wuxia-red/50 py-3 text-wuxia-red'}
+                                                                panelClassName="max-w-full"
+                                                            />
+                                                        )}
 
                                                         {!disabled && (
-                                                            <div className="space-y-2">
-                                                                <label className="text-xs text-paper-white/40">Chỉnh sửa tên mô hình</label>
-                                                                <input
-                                                                    type="text"
-                                                                    value={rawValue}
-                                                                    onChange={(e) => updatePlaceholder(row.modelKey, e.target.value)}
-                                                                    placeholder={row.hint}
-                                                                    className="w-full bg-transparent border border-wuxia-red/20 focus:border-wuxia-red/50 p-3 text-paper-white outline-none rounded-md transition-all font-mono text-xs placeholder:text-wuxia-red/20"
-                                                                />
-                                                            </div>
+                                                            <>
+                                                                <div className="space-y-2">
+                                                                    <label className="text-xs text-paper-white/40">Chỉnh sửa tên mô hình</label>
+                                                                    <input
+                                                                        type="text"
+                                                                        value={rawValue}
+                                                                        onChange={(e) => updatePlaceholder(row.modelKey, e.target.value)}
+                                                                        placeholder={row.hint}
+                                                                        className="w-full bg-transparent border border-wuxia-red/20 focus:border-wuxia-red/50 p-3 text-paper-white outline-none rounded-md transition-all font-mono text-xs placeholder:text-wuxia-red/20"
+                                                                    />
+                                                                </div>
+
+                                                                {row.apiUrlKey && (
+                                                                    <div className="space-y-2">
+                                                                        <label className="text-xs text-paper-white/40">Địa chỉ API riêng (Tùy chọn)</label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={(form.featureModelPlaceholder[row.apiUrlKey] || '') as string}
+                                                                            onChange={(e) => updatePlaceholder(row.apiUrlKey!, e.target.value)}
+                                                                            placeholder="https://..."
+                                                                            className="w-full bg-transparent border border-wuxia-red/20 focus:border-wuxia-red/50 p-3 text-paper-white outline-none rounded-md transition-all font-mono text-xs placeholder:text-wuxia-red/20"
+                                                                        />
+                                                                    </div>
+                                                                )}
+
+                                                                {row.apiKeyKey && (
+                                                                    <div className="space-y-2">
+                                                                        <label className="text-xs text-paper-white/40">Mật khẩu API riêng (Tùy chọn)</label>
+                                                                        <input
+                                                                            type="password"
+                                                                            value={(form.featureModelPlaceholder[row.apiKeyKey] || '') as string}
+                                                                            onChange={(e) => updatePlaceholder(row.apiKeyKey!, e.target.value)}
+                                                                            placeholder="sk-..."
+                                                                            className="w-full bg-transparent border border-wuxia-red/20 focus:border-wuxia-red/50 p-3 text-paper-white outline-none rounded-md transition-all font-mono text-xs placeholder:text-wuxia-red/20"
+                                                                        />
+                                                                    </div>
+                                                                )}
+                                                            </>
                                                         )}
 
                                                         {disabled && (
-                                                            <div className="text-[11px] text-paper-white/40 italic bg-ink-black/20 p-2 rounded border border-wuxia-red/20 text-center">
-                                                                Đang sử dụng mô hình cốt truyện chính: <span className="text-wuxia-red font-bold">{mainStoryParseModel || 'Chưa thiết lập'}</span>
+                                                            <div className="p-3 rounded border border-wuxia-gold/30 bg-wuxia-gold/5 text-[11px] text-wuxia-gold/80 leading-relaxed">
+                                                                <div className="flex items-center gap-2 mb-1 font-bold">
+                                                                    <IconGlyph name="system" className="w-3 h-3" />
+                                                                    <span>Mô hình hệ thống (Mặc định)</span>
+                                                                </div>
+                                                                Đang sử dụng: <span className="text-paper-white font-mono">{mainStoryParseModel || 'N/A'}</span>. 
+                                                                Các thiết lập sẽ được tối ưu hóa theo cốt truyện chính.
                                                             </div>
                                                         )}
                                                     </div>

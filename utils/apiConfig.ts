@@ -52,13 +52,19 @@ const getChunkedEnvVars = (baseName: string): string[] => {
 
 // Discovery endpoints for dynamic worker selection
 
-export const DEFAULT_TEXT_GEN_WORKER_URLS = getChunkedEnvVars('VITE_BACKEND_ORIGIN_NEMOTRON');
-export const DEFAULT_TEXT_GEN_WORKER_URL = DEFAULT_TEXT_GEN_WORKER_URLS.length > 0 ? DEFAULT_TEXT_GEN_WORKER_URLS[0] : 'https://wuxia-api.vdt99.workers.dev/nemotron';
+export const DEFAULT_TEXT_GEN_WORKER_URLS = [
+    'https://wuxia-api.vdt99.workers.dev/nemotron'
+];
 
-export const DEFAULT_IMAGE_GEN_WORKER_URLS = getChunkedEnvVars('VITE_BACKEND_ORIGIN_IMAGE');
-export const DEFAULT_IMAGE_GEN_WORKER_URL = DEFAULT_IMAGE_GEN_WORKER_URLS.length > 0 ? DEFAULT_IMAGE_GEN_WORKER_URLS[0] : 'https://wuxia-api.vdt99.workers.dev/image-gen';
+export const DEFAULT_TEXT_GEN_WORKER_URL = DEFAULT_TEXT_GEN_WORKER_URLS[0];
+
+export const DEFAULT_IMAGE_GEN_WORKER_URLS = [
+    'https://wuxia-api.vdt99.workers.dev/image-gen'
+];
+export const DEFAULT_IMAGE_GEN_WORKER_URL = DEFAULT_IMAGE_GEN_WORKER_URLS[0];
 
 export const GPT_FREE_HEALTH_CHECK_URL = 'https://glorious-eveleen-truyem789-26b9b858.koyeb.app/health';
+
 
 export const PROVIDER_LABELS: Record<ApiProviderType, string> = {
     gemini: 'Google Gemini',
@@ -303,7 +309,7 @@ const normalizeProvider = (value: unknown, fallback: ApiProviderType): ApiProvid
     const validProviders: ApiProviderType[] = [
         'gemini', 'claude', 'openai', 'deepseek', 'mistral', 'groq', 'xai', 'perplexity',
         'cohere', 'moonshot', 'openrouter', 'huggingface', 'cloudflare', 'together',
-        'fireworks', 'cerebras', 'sambanova', 'openai_compatible', 'worker', 'system_gemini'
+        'fireworks', 'cerebras', 'sambanova', 'openai_compatible', 'worker'
     ];
     if (typeof value === 'string' && validProviders.includes(value as ApiProviderType)) {
         return value as ApiProviderType;
@@ -537,7 +543,7 @@ export const normalizeApiSettings = (raw: unknown): ApiSettings => {
             name: 'Hệ thống (GPT-Free)',
             provider: 'worker',
             baseUrl: DEFAULT_TEXT_GEN_WORKER_URL, // Added baseUrl
-            apiKey: (import.meta.env ? import.meta.env.VITE_ACCESS_KEY : '') || '', // Read the shared access key
+            apiKey: '', // Added apiKey
             protocolOverride: 'auto', // Added protocolOverride
             model: '@cf/nvidia/nemotron-3-120b-a12b',
             createdAt: Date.now(),

@@ -98,6 +98,11 @@ const cleanTrailingSlash = (baseUrl: string): string => baseUrl.replace(/\/+$/, 
 
 const DEFAULT_NEMOTRON_WORKER_URL = DEFAULT_TEXT_GEN_WORKER_URLS;
 
+const NSFW_DETECTION_MODEL = '@cf/meta/llama-guard-3-8b';
+const NSFW_STORY_MODEL = '@cf/zai-org/glm-4.7-flash';
+const NORMAL_STORY_MODEL = '@cf/openai/gpt-oss-120b';
+const REFINEMENT_MODEL = '@cf/qwen/qwen3-30b-a3b-fp8';
+
 
 const isGeminiModel = (modelRaw: string): boolean => /\bgemini\b/i.test((modelRaw || '').trim());
 
@@ -141,21 +146,7 @@ const includeJsonKeyword = (messages: GeneralMessage[]): boolean => {
     return messages.some(m => m.content.toLowerCase().includes('json'));
 };
 
-export /**
- * Strips technical/system tags from AI responses to ensure a clean UI.
- * Handles tags like <thinking>, <Main Body>, t_ tags, etc.
- */
-    const stripSystemTags = (text: string | null | undefined): string => {
-        if (!text) return '';
-        return text
-            .replace(/<(?:thinking|Thinking|Main Body|Nội dung chính|Nghiệm|suy nghĩ|t_[a-z]+)[^>]*>([\s\S]*?)<\/\1>/gi, '$1') // Extract content from paired tags
-            .replace(/<\/?(?:thinking|Thinking|Main Body|Nội dung chính|Nghiệm|suy nghĩ|Lệnh|Tùy chọn hành động|Trí nhớ ngắn hạn|Short-term memory|Narrative|Truyện|t_[a-z]+|Main Body|Body)[^>]*>/gi, '') // Remove leftover or single tags
-            .replace(/<[^>]+>/g, ' ') // Remove any remaining unknown XML-like tags
-            .replace(/\s+/g, ' ') // Optional: normalize whitespace
-            .trim();
-    };
-
-const addJsonOutputConstraints = (messages: GeneralMessage[]): GeneralMessage[] => {
+export const addJsonOutputConstraints = (messages: GeneralMessage[]): GeneralMessage[] => {
     const lastMsg = messages[messages.length - 1];
     if (lastMsg && lastMsg.role === 'user') {
         lastMsg.content += `\n\n【Hệ thống: Trả lời theo đúng kịch bản văn học trong trò chơi. LUÔN LUÔN trả về JSON hợp lệ với logs, shortTerm và tavern_commands.】`;
@@ -934,11 +925,13 @@ const parseTagProtocolResponse = (content: string): GameResponse | null => {
         || extractFirstTagContent(text, 'Options')
         || extractFirstTagContent(text, 'Hành động');
 
-    let logs = parsingBodyLog(stripSystemTags(bodyBlock || ''));
+    let logs = parsingBodyLog(bodyBlock || '');
 
     // Fallback 1: If bodyBlock is empty but text looks like it has content markers
     if (logs.length === 0) {
-        const stripped = stripSystemTags(text);
+        const stripped = text
+            .replace(/<(thinking|Command|Action options|Lệnh|Tùy chọn hành động|Short-term memory|Trí nhớ ngắn hạn|Narrative|Truyện|t_[a-z]+)[\s\S]*?(?:<\/\1>|$)/gi, '') // Remove OTHER tags (including t_ tags)
+            .replace(/<[^>]+>/g, '\n'); // Remove residual tags
 
         if (/【[^】]+】/.test(stripped)) {
             logs = parsingBodyLog(stripped);
@@ -950,13 +943,13 @@ const parseTagProtocolResponse = (content: string): GameResponse | null => {
 
     const commands = parseCommandBlock(commandBlock);
     const actionOptions = parsingActionOptionsBlock(actionOptionsBlock);
-    const thinking = thinkingParts.map(item => stripSystemTags(item.trim())).filter(Boolean).join('\n\n');
+    const thinking = thinkingParts.map(item => item.trim()).filter(Boolean).join('\n\n');
 
     const thinkingFields: Partial<GameResponse> = {};
     COT_THINKING_FIELD_KEYS.forEach(key => {
         const content = extractFirstTagContent(text, key);
         if (content) {
-            thinkingFields[key] = stripSystemTags(content);
+            thinkingFields[key] = content;
         }
     });
 
@@ -1005,12 +998,12 @@ const normalizationJsonStructureResponse = (raw: any): GameResponse => {
     const logs = rawLogs
         .map((item: any) => {
             if (typeof item === 'string') {
-                return { sender: 'Narrator', text: stripSystemTags(item) };
+                return { sender: 'Narrator', text: item };
             }
             if (item && typeof item === 'object') {
                 return {
                     sender: typeof item.sender === 'string' ? item.sender : 'Narrator',
-                    text: stripSystemTags(typeof item.text === 'string' ? item.text : String(item.text ?? ''))
+                    text: typeof item.text === 'string' ? item.text : String(item.text ?? '')
                 };
             }
             return null;
@@ -1021,14 +1014,14 @@ const normalizationJsonStructureResponse = (raw: any): GameResponse => {
     const normalizedThinkingFields = Object.fromEntries(
         thinkingFieldKeys
             .filter((key) => typeof raw?.[key] === 'string' && raw[key].trim().length > 0)
-            .map((key) => [key, stripSystemTags(stripFence(raw[key]))])
+            .map((key) => [key, stripFence(raw[key])])
     ) as Partial<GameResponse>;
 
     return {
-        thinking_pre: typeof raw?.thinking_pre === 'string' ? stripSystemTags(stripFence(raw.thinking_pre)) : undefined,
+        thinking_pre: typeof raw?.thinking_pre === 'string' ? stripFence(raw.thinking_pre) : undefined,
         logs,
         ...normalizedThinkingFields,
-        thinking_post: typeof raw?.thinking_post === 'string' ? stripSystemTags(stripFence(raw.thinking_post)) : undefined,
+        thinking_post: typeof raw?.thinking_post === 'string' ? stripFence(raw.thinking_post) : undefined,
         tavern_commands: Array.isArray(raw?.tavern_commands)
             ? raw.tavern_commands.flatMap(item => {
                 if (typeof item === 'string') return parseCommandBlock(item);
@@ -1627,7 +1620,6 @@ const requestWorkerText = async (
         top_p?: number;
         top_k?: number;
         onDelta?: (delta: string, accumulated: string) => void;
-        apiKey?: string;
     }
 ): Promise<string> => {
     return TextGenService.generateText(workerUrl, {
@@ -1638,8 +1630,7 @@ const requestWorkerText = async (
         model: options.model,
         top_p: options.top_p,
         top_k: options.top_k,
-        onDelta: options.onDelta,
-        apiKey: options.apiKey
+        onDelta: options.onDelta
     });
 };
 
@@ -1705,50 +1696,31 @@ const requestSystemGeminiText = async (
     }
 };
 
-const QWQ_ADDRESSING_PROMPT = `
-[HỆ THỐNG QUY TẮC NHẬP VAI VÀ XƯNG HÔ KIẾM HIỆP CỔ TRANG]
+const QWEN_ADDRESSING_PROMPT = `
+【QUY TẮC BẮT BUỘC - NGÔN NGỮ & ĐỘ NHẬP VAI】:
+1. CẤM KỴ TUYỆT ĐỐI (LỖI CHẾT NGƯỜI):
+   - CẤM TUYỆT ĐỐI dùng tiếng Anh hoặc từ ngoại ngữ (VD: (spirit), (mana), (damage) -> SAI). 100% tiếng Việt.
+   - CẤM TUYỆT ĐỐI dùng số, chỉ số, điểm (VD: HP 100/100, 5 điểm, 10 lượng -> SAI). Mô tả bằng lời (Tràn trề, đầy đủ, hốt nhiên, một mớ...).
+   - CẤM dùng từ "ơi", "trẻ", "này" ở cuối câu theo cách hiện đại (VD: "Ngươi tới đây hỏi gì, trẻ?" -> SAI).
+   - CẤM dùng đại từ hiện đại: "Bạn", "Tôi", "Chúng tôi", "Anh", "Chị", "Cậu".
 
-Nhiệm vụ của bạn là nhập vai một nhân vật trong thế giới võ hiệp/cổ trang. Để giữ vững bối cảnh, bạn PHẢI TUÂN THỦ TUYỆT ĐỐI các quy tắc xưng hô, văn phong và từ vựng dưới đây. Bất kỳ sự vi phạm nào cũng là lỗi nghiêm trọng.
+2. HÌNH TƯỢNG NHÂN VẬT MẪU (BẮT BUỘC CHỌN VÀ THIẾT LẬP TÔNG GIỌNG RIÊNG):
+   - **Tiền bối uy nghiêm**: Cách nói đanh thép, răn đe. 
+     *Mẫu: "Ngươi tìm đến ta để hỏi điều gì, kẻ trẻ tuổi? Giữ lấy cái đầu của ngươi cho kỹ."*
+   - **Tỷ muội hào sảng**: Lanh lợi, dùng từ ngữ sống động. 
+     *Mẫu: "A ha! Huynh đệ lại ghé hàng muội đấy à? Cá tươi xanh, vảy bạc lấp lánh đầy khoang đây!"*
+   - **Tiểu nương tử sắc sảo**: Ngọt ngào nhưng ẩn ý, khéo léo. 
+     *Mẫu: "Chào vị đại ca này! Xem kìa, hôm nay biển chiều lòng người, cá đầy mạn thuyền rồi đây."*
+   - **Tiền bối khắt khe**: Ngắn gọn, thực dung. 
+     *Mẫu: "Muốn hỏi gì thì nói nhanh đi. Huyết Hải không dung thứ cho kẻ chỉ biết đứng nhìn."*
 
---- PHẦN 1: LỆNH CẤM KỴ (TUYỆT ĐỐI KHÔNG VI PHẠM) ---
-1.1. CẤM SỬ DỤNG TỪ NGỮ HIỆN ĐẠI: Tuyệt đối không dùng các đại từ: "Tôi", "Bạn", "Anh", "Em", "Chú", "Bác", "Cậu", "Tớ", "Ông", "Bà", "Mình".
-1.2. CẤM SAI LỆCH NGÔI THỨ NHẤT: Tuyệt đối KHÔNG BAO GIỜ xưng bản thân là "Cô". 
-1.3. CẤM TỪ VỰNG NGOẠI LAI/HIỆN ĐẠI: Không dùng các từ như: "Ok", "Hello", "Internet", "Công nghệ", "Khoa học", "Cảm xúc", "Stress"... Nếu bị hỏi về những thứ này, hãy tỏ ra khó hiểu hoặc nhầm tưởng đó là một loại bí kíp võ công/kỳ độc nào đó.
+3. MA TRẬN XƯNG HÔ THEO TÔN TI:
+   - Bề trên -> Bề dưới: "Người trẻ", "Kẻ trẻ tuổi", "Tiểu hữu", "Ngươi" - Xưng: "Ta", "Lão phu", "Bản tọa".
+   - Bề dưới -> Bề trên: "Tiền bối", "Đại nhân", "Ngài" - Xưng: "Vãn bối", "Tại hạ", "Tiểu nhân".
 
---- PHẦN 2: HỆ THỐNG ĐẠI TỪ NHÂN XƯNG CƠ BẢN ---
-2.1. TỰ XƯNG (Ngôi thứ nhất):
-- Mặc định/Phổ thông: "Ta".
-- Kẻ dưới/Khiêm nhường/Khách sáo: "Tại hạ" (nam/nữ chung), "Vãn bối", "Tiểu nhân" (dân thường), "Tiểu nữ" / "Thiếp thân" (nữ giới), "Tiểu tăng" (nhà sư), "Bần đạo" (đạo sĩ).
-- Kẻ trên/Bá khí/Ma giáo: "Bổn tọa", "Lão phu", "Bản tôn", "Lão nương" (nữ giang hồ sành sỏi).
-- Thân thiết (chỉ dùng với người nhà/huynh đệ tỷ muội): "Đệ", "Muội", "Vi huynh", "Ngu huynh".
-
-2.2. GỌI NGƯỜI ĐỐI DIỆN (Ngôi thứ hai):
-- Mặc định/Kẻ thù/Kẻ dưới: "Ngươi", "Các ngươi".
-- Tôn trọng/Khách sáo (Nam): "Các hạ", "Huynh đài", "Công tử", "Tiền bối", "Đại hiệp", "Thiếu hiệp", "Tôn giá".
-- Tôn trọng/Khách sáo (Nữ): "Cô nương", "Tỷ tỷ", "Muội muội", "Phu nhân", "Nữ hiệp", "Tiên tử".
-
-2.3. NHẮC ĐẾN KẺ KHÁC (Ngôi thứ ba):
-- Nam giới: "Hắn", "Y", "Lão", "Kẻ đó", "Tên kia".
-- Nữ giới: "Nàng", "Thị", "Nữ tử kia", "Yêu nữ kia".
-- Số nhiều: "Bọn chúng", "Bọn họ", "Đám người kia", "Chư vị".
-
---- PHẦN 3: XƯNG HÔ THEO VAI VẾ ĐẶC THÙ ---
-3.1. Trong Sư môn/Tông phái:
-- Gọi thầy: "Sư phụ", "Tôn sư". Tự xưng: "Đồ đệ", "Đệ tử".
-- Bậc trưởng bối: "Sư bá", "Sư thúc", "Sư tổ". Tự xưng: "Sư điệt".
-- Đồng môn: "Sư huynh", "Sư tỷ", "Sư đệ", "Sư muội".
-
-3.2. Trong Gia tộc/Huyết thống:
-- Gọi cha mẹ mình (khi nói với người khác): "Gia phụ", "Gia từ", "Gia nghiêm".
-- Gọi cha mẹ người khác: "Lệnh tôn", "Lệnh đường".
-- Gọi con cái người khác: "Lệnh lang" (con trai), "Lệnh ái" (con gái).
-
---- PHẦN 4: VĂN PHONG VÀ TỪ VỰNG BẮT BUỘC ---
-4.1. Khí chất: Hành văn phải mang đậm chất cổ trang giang hồ. Có thể lạnh lùng dứt khoát, hào sảng phóng khoáng, hoặc thâm sâu bí hiểm tùy thuộc vào ngữ cảnh. Không được dùng cấu trúc câu quá Tây hóa.
-4.2. Chào hỏi/Giao tiếp: Dùng "Đa tạ", "Cáo từ", "Hạnh ngộ", "Mạn phép", "Thất kính", "Thứ lỗi", "Đắc tội".
-4.3. Cảm thán: "Hừ!", "Làm càn!", "To gan!", "Hảo!", "Quả nhiên!", "Tuyệt diệu!".
-4.4. Thuật ngữ Giang hồ: "Khinh công", "Nội công", "Tẩu hỏa nhập ma", "Kinh mạch", "Huyệt đạo", "Ám khí", "Bí kíp", "Chưởng pháp", "Kiếm khí", "Bế quan", "Hành tẩu giang hồ".
-4.5. Diễn đạt thời gian/Không gian: "Một nén nhang", "Một canh giờ", "Khoảng khắc", "Chớp mắt", "Dặm", "Trượng", "Tấc".
+4. VĂN PHONG VÀ HÌNH ẢNH:
+   - Sử dụng hình ảnh so sánh sống động: "Vảy bạc lấp lánh", "Linh hồn mục rỗng", "Vật bất ly thân".
+   - Ngôn ngữ giàu tính nhạc điệu và từ Hán Việt cổ để tăng độ nhập vai.
 `.trim();
 
 const requestModelText = async (
@@ -1768,12 +1740,12 @@ const requestModelText = async (
 
     // Inject QWQ-specific addressing prompt if applicable
     let finalMessages = messages;
-    if (apiConfig.model?.toLowerCase().includes('qwq')) {
+    if (apiConfig.model?.toLowerCase().includes('qwen')) {
         const hasAddressingPrompt = messages.some(m => m.content.includes('【QUY TẮC XƯNG HÔ'));
         if (!hasAddressingPrompt) {
             finalMessages = [
                 ...messages.filter(m => m.role === 'system'),
-                { role: 'system', content: QWQ_ADDRESSING_PROMPT },
+                { role: 'system', content: QWEN_ADDRESSING_PROMPT },
                 ...messages.filter(m => m.role !== 'system')
             ];
         }
@@ -1805,8 +1777,7 @@ const requestModelText = async (
                 temperature: resolvedTemperature,
                 max_tokens: maxOutputTokens,
                 id: options.id,
-                model: apiConfig.model,
-                apiKey: apiConfig.apiKey
+                model: apiConfig.model
             }
         );
     }
@@ -1884,8 +1855,7 @@ export const generateMemoryRecall = async (
         return requestWorkerText(workerUrl, messages, {
             temperature: 0.2,
             id: id || streamOptions?.id,
-            onDelta: streamOptions?.onDelta,
-            apiKey: apiConfig?.apiKey
+            onDelta: streamOptions?.onDelta
         });
     }
 
@@ -1954,20 +1924,21 @@ export const generateWorldData = async (
     // Use worker fallback when no API config is available
     const effectiveWorkerUrl = workerUrl || DEFAULT_NEMOTRON_WORKER_URL;
     if ((!apiConfig || !apiConfig.apiKey) && effectiveWorkerUrl) {
-        const rawText = await requestWorkerText(effectiveWorkerUrl, messages, {
+        let rawText = await requestWorkerText(effectiveWorkerUrl, messages, {
             temperature: 0.7,
-            max_tokens: 131000,
+            max_tokens: 24000,
             id: id || streamOptions?.id,
             onDelta: streamOptions?.onDelta,
-            apiKey: apiConfig?.apiKey
+            model: NORMAL_STORY_MODEL
         });
+        rawText = await refineWorldData(rawText, effectiveWorkerUrl);
         return parseWorldResponse(rawText);
     }
 
     if (!apiConfig || (apiConfig.provider !== 'worker' && !apiConfig.apiKey)) throw new Error("API configuration or API Key is missing. Please check settings.");
 
     const responseFormatJsonObject = true;
-    const rawText = await requestModelText(apiConfig, messages, {
+    let rawText = await requestModelText(apiConfig, messages, {
         temperature: 0.7,
         streamOptions: {
             ...streamOptions,
@@ -1977,6 +1948,7 @@ export const generateWorldData = async (
         id: id || streamOptions?.id
     });
 
+    rawText = await refineWorldData(rawText, effectiveWorkerUrl);
     return parseWorldResponse(rawText);
 };
 
@@ -2088,8 +2060,7 @@ export const determineStartingLocation = async (
     if ((!apiConfig || !apiConfig.apiKey) && workerUrl) {
         const rawText = await requestWorkerText(workerUrl, messages, {
             temperature: 0.3,
-            id: options?.id,
-            apiKey: apiConfig?.apiKey
+            id: options?.id
         });
         return parseResponse(rawText);
     }
@@ -2105,26 +2076,33 @@ export const determineStartingLocation = async (
     return parseResponse(rawText);
 };
 
-const NSFW_DETECTION_MODEL = '@cf/meta/llama-guard-3-8b';
-const NSFW_STORY_MODEL = '@cf/zai-org/glm-4.7-flash';
-const NORMAL_STORY_MODEL = '@cf/openai/gpt-oss-120b';
-const REFINEMENT_MODEL = '@cf/qwen/qwq-32b';
-
 const REFINEMENT_SYSTEM_PROMPT = `
-【Tối ưu Trau Chuốt Chính Văn】
-Nhiệm vụ: Trau chuốt văn phong cổ trang, đảm bảo 100% đúng quy tắc xưng hô.
+【Tối ưu Chính văn】
+Vai trò: Tổng biên tập trau chuốt văn phong mà không đổi sự thật/nhân quả.
 Cấm: 1. Viết thêm hành động, tâm lý, lời thoại mới. 2. Thay đổi kết quả phán định. 3. Vượt POV người chơi.
-Nếu có ngôn ngữ khác tiếng việt thì chuyển sang tiếng việt.
-- Ngôn ngữ: Hán Việt cổ điển, giàu hình ảnh ẩn dụ (Phong, Vũ, Kiếm, Đao).
-Mỗi câu chữ phải được trau chuốt. TRÁNH lặp từ, lặp ý. Sử dụng các cấu trúc câu đa dạng và các biện pháp tu từ để làm cho câu chuyện hấp dẫn.
-KHÔNG BAO GIỜ được sai chính tả, gõ thiếu chữ, hoặc dùng từ sai. Quy tắc này áp dụng cho cả tên riêng. Ví dụ: 'Ánh nắng' (đúng) thay vì 'Áh nắng' (sai), 'vội vàng' (đúng) thay vì 'ội vàng' (sai).
-- Xuất kết quả duy nhất là JSON object hợp lệ.
+Quy tắc:
+- Dùng <thinking> và <Main Body>.
+- Thể hiện qua hành động (Show, don't tell).
+- Cấm mô tả trong ngoặc. Cấm dùng số (HP, EXP) trong logs.
+- Nhấn mạnh Tên/Võ công/Địa điểm bằng dấu *.
+- Loại bỏ cảm xúc cực đoan thiếu nhân quả.
+Mạch văn: 1. Kiểm tra sự thật. 2. Hiệu đính cấu trúc. 3. Trau chuốt ngôn ngữ. 4. Xuất Main Body.
+`.trim();
+
+const WORLD_REFINEMENT_SYSTEM_PROMPT = `
+【Tối ưu Thế giới quan】
+Vai trò: Bậc thầy kiến tạo bối cảnh, trau chuốt văn phong hào hùng, phóng khoáng mà không đổi sự thật.
+Cấm: 1. Viết thêm các địa danh, nhân vật không có trong bản gốc. 2. Thay đổi tông màu chủ đạo.
+Quy tắc:
+- Dùng từ ngữ Hán Việt chuẩn kiếm hiệp (ví dụ: bôn ba, sương gió, chính tà, giang hồ...).
+- Thể hiện sự kỳ vĩ, huyền ảo của Giang Hồ.
+- Giữ nguyên cấu trúc JSON với trường "world_prompt".
+- Ngôn ngữ: Tiếng Việt.
 `.trim();
 
 const detectNSFW = async (
     input: string,
-    workerUrl?: string | string[],
-    apiKey?: string
+    workerUrl?: string | string[]
 ): Promise<boolean> => {
     const messages: GeneralMessage[] = [
         { role: 'user', content: input }
@@ -2134,11 +2112,10 @@ const detectNSFW = async (
     try {
         const response = await requestWorkerText(effectiveWorkerUrl, messages, {
             model: NSFW_DETECTION_MODEL,
-            temperature: 0.1,
-            max_tokens: 100,
+            temperature: 0,
+            max_tokens: 10,
             // @ts-ignore - response_format is now supported in TextGenOptions
-            response_format: { type: 'json_object' },
-            apiKey
+            response_format: { type: 'json_object' }
         });
 
         const lowerRes = response.trim().toLowerCase();
@@ -2155,8 +2132,7 @@ const detectNSFW = async (
 
 const refineStoryProse = async (
     rawJsonText: string,
-    workerUrl?: string | string[],
-    apiKey?: string
+    workerUrl?: string | string[]
 ): Promise<string> => {
     // 1. Extract thinking blocks to prevent refinement model from messing with them.
     const thinkingBlocks: string[] = [];
@@ -2173,7 +2149,7 @@ const refineStoryProse = async (
     const messages: GeneralMessage[] = [
         {
             role: 'system',
-            content: `${REFINEMENT_SYSTEM_PROMPT}\n\n${QWQ_ADDRESSING_PROMPT}\n\n【YÊU CẦU】: Hãy biên tập lại nội dung truyện trong JSON sau. GIỮ NGUYÊN cấu trúc JSON.`
+            content: `${REFINEMENT_SYSTEM_PROMPT}\n\n${QWEN_ADDRESSING_PROMPT}\n\n【YÊU CẦU】: Hãy biên tập lại nội dung truyện trong JSON sau. GIỮ NGUYÊN cấu trúc JSON.`
         },
         { role: 'user', content: cleanJsonText }
     ];
@@ -2183,7 +2159,7 @@ const refineStoryProse = async (
         const refined = await requestWorkerText(effectiveWorkerUrl, messages, {
             model: REFINEMENT_MODEL,
             temperature: 0.3,
-            apiKey
+            max_tokens: 16000
         });
 
         // 2. Re-combine thinking blocks with refined JSON.
@@ -2194,6 +2170,35 @@ const refineStoryProse = async (
     } catch (e) {
         console.warn("[AIService] Story prose refinement failed.", e);
         return rawJsonText;
+    }
+};
+
+const refineWorldData = async (
+    rawWorldJson: string,
+    workerUrl?: string | string[]
+): Promise<string> => {
+    if (!rawWorldJson.includes('{')) {
+        return rawWorldJson;
+    }
+
+    const messages: GeneralMessage[] = [
+        {
+            role: 'system',
+            content: `${WORLD_REFINEMENT_SYSTEM_PROMPT}\n\n【YÊU CẦU】: Hãy biên tập lại nội dung world_prompt trong JSON sau. GIỮ NGUYÊN cấu trúc JSON.`
+        },
+        { role: 'user', content: rawWorldJson }
+    ];
+
+    const effectiveWorkerUrl = workerUrl || DEFAULT_TEXT_GEN_WORKER_URLS[0];
+    try {
+        return await requestWorkerText(effectiveWorkerUrl, messages, {
+            model: REFINEMENT_MODEL,
+            temperature: 0.3,
+            max_tokens: 12000
+        });
+    } catch (e) {
+        console.warn("[AIService] World refinement failed.", e);
+        return rawWorldJson;
     }
 };
 
@@ -2244,7 +2249,7 @@ export const generateStoryResponse = async (
         : 'Start task.';
 
     // Model Selection & NSFW Detection
-    const isNSFWContent = await detectNSFW(normalizedPlayerInput, effectiveWorkerUrl, apiConfig?.apiKey);
+    const isNSFWContent = await detectNSFW(normalizedPlayerInput, effectiveWorkerUrl);
     const targetModel = isNSFWContent ? NSFW_STORY_MODEL : NORMAL_STORY_MODEL;
 
     // NSFW & World Rules injection
@@ -2336,8 +2341,7 @@ export const generateStoryResponse = async (
                 max_tokens: maxTokens,
                 id: requestOptions?.id,
                 onDelta: streamOptions?.onDelta,
-                model: targetModel,
-                apiKey: apiConfig?.apiKey
+                model: targetModel
             });
         } else {
             rawText = await requestModelText(apiConfig!, apiMessages, {
@@ -2370,7 +2374,7 @@ export const generateStoryResponse = async (
 
     // Apply Refinement for high-quality prose (Only for normal story chat)
     if (!isNSFWContent) {
-        rawText = await refineStoryProse(rawText, effectiveWorkerUrl, apiConfig?.apiKey);
+        rawText = await refineStoryProse(rawText, effectiveWorkerUrl);
     }
 
     try {
