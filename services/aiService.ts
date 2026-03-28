@@ -101,7 +101,7 @@ const DEFAULT_NEMOTRON_WORKER_URL = DEFAULT_TEXT_GEN_WORKER_URLS;
 const NSFW_DETECTION_MODEL = '@cf/meta/llama-guard-3-8b';
 const NSFW_STORY_MODEL = '@cf/zai-org/glm-4.7-flash';
 const NORMAL_STORY_MODEL = '@cf/openai/gpt-oss-120b';
-const REFINEMENT_MODEL = '@cf/qwen/qwen3-30b-a3b-fp8';
+const REFINEMENT_MODEL = '@cf/meta/llama-4-scout-17b-16e-instruct';
 
 
 const isGeminiModel = (modelRaw: string): boolean => /\bgemini\b/i.test((modelRaw || '').trim());
@@ -1696,7 +1696,7 @@ const requestSystemGeminiText = async (
     }
 };
 
-const QWEN_ADDRESSING_PROMPT = `
+const LLM_ADDRESSING_PROMPT = `
 【QUY TẮC BẮT BUỘC - NGÔN NGỮ & ĐỘ NHẬP VAI】:
 1. CẤM KỴ TUYỆT ĐỐI (LỖI CHẾT NGƯỜI):
    - CẤM TUYỆT ĐỐI dùng tiếng Anh hoặc từ ngoại ngữ (VD: (spirit), (mana), (damage) -> SAI). 100% tiếng Việt.
@@ -1740,12 +1740,12 @@ const requestModelText = async (
 
     // Inject QWQ-specific addressing prompt if applicable
     let finalMessages = messages;
-    if (apiConfig.model?.toLowerCase().includes('qwen')) {
+    if (apiConfig.model?.toLowerCase().includes('llama')) {
         const hasAddressingPrompt = messages.some(m => m.content.includes('【QUY TẮC XƯNG HÔ'));
         if (!hasAddressingPrompt) {
             finalMessages = [
                 ...messages.filter(m => m.role === 'system'),
-                { role: 'system', content: QWEN_ADDRESSING_PROMPT },
+                { role: 'system', content: LLM_ADDRESSING_PROMPT },
                 ...messages.filter(m => m.role !== 'system')
             ];
         }
@@ -2149,7 +2149,7 @@ const refineStoryProse = async (
     const messages: GeneralMessage[] = [
         {
             role: 'system',
-            content: `${REFINEMENT_SYSTEM_PROMPT}\n\n${QWEN_ADDRESSING_PROMPT}\n\n【YÊU CẦU】: Hãy biên tập lại nội dung truyện trong JSON sau. GIỮ NGUYÊN cấu trúc JSON.`
+            content: `${REFINEMENT_SYSTEM_PROMPT}\n\n${LLM_ADDRESSING_PROMPT}\n\n【YÊU CẦU】: Hãy biên tập lại nội dung truyện trong JSON sau. GIỮ NGUYÊN cấu trúc JSON.`
         },
         { role: 'user', content: cleanJsonText }
     ];
