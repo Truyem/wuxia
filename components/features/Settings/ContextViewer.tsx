@@ -12,8 +12,8 @@ type ContextSection = {
 };
 
 type ContextSnapshot = {
-    sections: ContextSection[];
-    fullText: string;
+    sections?: ContextSection[];
+    fullText?: string;
     totalTokens?: number;
 };
 
@@ -36,11 +36,12 @@ const ContextViewer: React.FC<Props> = ({ snapshot, memoryConfig, onSaveMemory }
     };
 
     const hasRecallSections = useMemo(
-        () => snapshot.sections.some(isRecallSection),
+        () => snapshot.sections?.some(isRecallSection) || false,
         [snapshot.sections]
     );
 
     const pageSections = useMemo(() => {
+        if (!snapshot.sections) return [];
         if (contextPage === 'recall') {
             return snapshot.sections.filter(isRecallSection);
         }

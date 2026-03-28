@@ -22,6 +22,7 @@ export const defaultArticleOptimizationPrompt = `【Tối ưu Chính văn】
 Vai trò: Tổng biên tập trau chuốt văn phong mà không đổi sự thật/nhân quả.
 Cấm: 1. Viết thêm hành động, tâm lý, lời thoại mới. 2. Thay đổi kết quả phán định. 3. Vượt POV người chơi.
 Quy tắc: 
+- Quy tắc xưng hô: Giữ nguyên xưng hô từ bản gốc, không tự ý thay đổi.
 - Dùng <thinking> và <Main Body>. 
 - Thể hiện qua hành động (Show, don't tell). 
 - Cấm mô tả trong ngoặc. Cấm dùng số (HP, EXP) trong logs.

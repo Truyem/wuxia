@@ -17,6 +17,8 @@ import { Core_OutputFormat_MultiThought } from './core/formatMulti';
 import { coreNpcFate } from './core/npc_fate';
 import { coreUserFate } from './core/user_fate';
 import { coreWorldMechanics } from './core/world_mechanics';
+import { coreRealWorld } from './core/realWorld';
+
 // Stats
 import { StatCharacter } from './stats/character';
 import { StatItem } from './stats/items';
@@ -38,12 +40,8 @@ import { Difficulty_Physiology } from './difficulty/physiology';
 
 // Writing
 import { WritingPerspectiveFirst, WritingPerspectiveSecond, WritingPerspectiveThird } from './writing/perspective';
-import { WritingRequirements } from './writing/requirements';
-import { WritingNoControl } from './writing/noControl';
 import { WritingStyle } from './writing/style';
 import { WritingNsfw } from './writing/nsfw';
-
-import { WritingEmotionGuard } from './writing/emotionGuard';
 
 export const DefaultPrompts: PromptStructure[] = [
     // Core
@@ -62,7 +60,9 @@ export const DefaultPrompts: PromptStructure[] = [
     coreNpcFate,
     coreUserFate,
     coreWorldMechanics,
+    coreRealWorld,
     // Stats
+
     StatCharacter,
     StatItem,
     StatKungfu,
@@ -85,11 +85,6 @@ export const DefaultPrompts: PromptStructure[] = [
     WritingPerspectiveFirst,
     WritingPerspectiveSecond,
     WritingPerspectiveThird,
-    WritingRequirements,
-    WritingNoControl,
     WritingStyle,
-    WritingNsfw,
-
-    WritingEmotionGuard
-
+    WritingNsfw
 ].map(p => ({ ...p, isSystem: true }));

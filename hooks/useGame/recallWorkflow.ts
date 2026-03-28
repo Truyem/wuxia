@@ -25,6 +25,7 @@ export const executeStoryMemoryRecall = async (
         signal?: AbortSignal;
         onDelta?: (delta: string, accumulated: string) => void;
         workerUrl?: string;
+        id?: string;
     }
 ): Promise<StoryMemoryRecallResult> => {
     const recallApi = getRecallApiConfig(apiSettings);
@@ -47,8 +48,9 @@ export const executeStoryMemoryRecall = async (
         userPrompt,
         recallApi,
         options?.signal,
-        options?.onDelta ? { onDelta: options.onDelta } : undefined,
-        workerUrl
+        options,
+        workerUrl,
+        options?.id
     );
     const parsed = parseStoryMemoryOutput(raw);
     const tagContent = constructRecallTags(mem, parsed);

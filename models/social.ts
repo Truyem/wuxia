@@ -1,4 +1,4 @@
-export type NpcGender = 'Nam' | 'Nữ';
+export type NpcGender = 'Nam' | 'Nữ' | 'Male' | 'Female';
 
 export interface NpcMemory {
     content: string;
@@ -107,4 +107,10 @@ export interface NpcStructure {
 
     // Hệ thống ký ức
     memories: NpcMemory[];
+
+    // Trạng thái cụ thể (ví dụ: "Sốc tâm lý", "Vết thương nhẹ")
+    status?: string;
+
+    // Trạng Thái sinh mệnh
+    lifeStatus?: 'Alive' | 'Dead';
 }

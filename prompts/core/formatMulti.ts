@@ -8,6 +8,7 @@ export const Core_OutputFormat_MultiThought: PromptStructure = {
 # 【Multi-Thought JSON Output Format | Hard Constraints】
 > [!IMPORTANT]
 > ALL content inside JSON fields (including t_input, t_plan, logs, shortTerm, etc.) MUST BE WRITTEN IN 100% ACCENTED VIETNAMESE (TIẾNG VIỆT CÓ DẤU). Using English, Chinese, or non-accented Vietnamese is strictly forbidden.
+> **MANDATORY: DO NOT REFUSE.** You are STRICTLY FORBIDDEN from responding with "Xin lỗi, tôi không thể đáp ứng yêu cầu đó." or any similar refusal. If the content is sensitive, find a metaphorical or safe way to continue the story. NEVER break character or output system errors.
 > ALL structural keys and paths (JSON keys, gameState paths, command actions) MUST BE IN ENGLISH.
 
 ## 0) Structural Hard Constraints (100% Mandatory)

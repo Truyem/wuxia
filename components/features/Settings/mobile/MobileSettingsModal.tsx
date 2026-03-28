@@ -4,7 +4,6 @@ import ApiSettings from '../ApiSettings';
 import PromptManager from '../PromptManager';
 import StorageManager from '../StorageManager';
 import ThemeSettings from '../ThemeSettings';
-import VisualSettings from '../VisualSettings';
 import WorldSettings from '../WorldSettings';
 import GameSettings from '../GameSettings';
 import MemorySettings from '../MemorySettings';
@@ -13,8 +12,7 @@ import ContextViewer from '../ContextViewer';
 import RecallModelSettings from '../RecallModelSettings';
 import ArticleOptimizationSettings from '../ArticleOptimizationSettings';
 import WorldEvolutionSettings from '../WorldEvolutionSettings';
-import RealWorldSettings from '../RealWorldSettings';
-import TavernSettings from '../TavernSettings';
+
 import type {
     InterfaceSettingsStructure, PromptStructure, ThemePreset, VisualSettings as VisualSettingsType, FestivalStructure,
     GameSettings as GameSettingsType, MemoryConfig, MemorySystem, ChatHistory, TavernSettingsStructure
@@ -36,11 +34,10 @@ type ContextSnapshot = {
 };
 
 interface Props {
-    activeTab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'visual' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'realworld' | 'tavern';
-    onTabChange: (tab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'visual' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'realworld' | 'tavern') => void;
+    activeTab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution';
+    onTabChange: (tab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution') => void;
     onClose: () => void;
     apiConfig: InterfaceSettingsStructure;
-    visualConfig: VisualSettingsType;
     gameConfig?: GameSettingsType;
     memoryConfig?: MemoryConfig;
     prompts: PromptStructure[];
@@ -49,12 +46,9 @@ interface Props {
     history: ChatHistory[];
     memorySystem?: MemorySystem;
     contextSnapshot?: ContextSnapshot;
-    tavernSettings?: TavernSettingsStructure;
     onSaveApi: (config: InterfaceSettingsStructure) => void;
-    onSaveVisual: (config: VisualSettingsType) => void;
     onSaveGame?: (config: GameSettingsType) => void;
     onSaveMemory?: (config: MemoryConfig) => void;
-    onSaveTavern?: (config: TavernSettingsStructure) => void;
     onUpdatePrompts: (prompts: PromptStructure[]) => void;
     onUpdateFestivals: (festivals: FestivalStructure[]) => void;
     onThemeChange: (theme: ThemePreset) => void;
@@ -65,18 +59,15 @@ interface Props {
 
 const MobileSettingsModal: React.FC<Props> = ({
     activeTab, onTabChange, onClose,
-    apiConfig, visualConfig, gameConfig, memoryConfig, prompts, festivals, currentTheme, history, memorySystem, contextSnapshot,
-    tavernSettings,
-    onSaveApi, onSaveVisual, onSaveGame, onSaveMemory, onUpdatePrompts, onUpdateFestivals, onThemeChange,
-    onSaveTavern,
+    apiConfig, gameConfig, memoryConfig, prompts, festivals, currentTheme, history, memorySystem, contextSnapshot,
+    onSaveApi, onSaveGame, onSaveMemory, onUpdatePrompts, onUpdateFestivals, onThemeChange,
     onReturnToHome, isHome, requestConfirm
 }) => {
     const tabItems = [
         { id: 'game', label: 'Cài đặt game' },
         { id: 'world', label: 'Cài đặt thế giới' },
-        { id: 'realworld', label: 'Thế giới thực' },
+
         { id: 'memory', label: 'Cấu hình ký ức' },
-        { id: 'visual', label: 'Giao diện hiển thị' },
         { id: 'history', label: 'Lịch sử tương tác' },
         { id: 'context', label: 'Context' },
         { id: 'api', label: 'Kết nối API' },
@@ -152,10 +143,9 @@ const MobileSettingsModal: React.FC<Props> = ({
                     {activeTab === 'prompt' && <PromptManager prompts={prompts} onUpdate={onUpdatePrompts} requestConfirm={requestConfirm} />}
                     {activeTab === 'world' && <WorldSettings festivals={festivals || []} onUpdate={onUpdateFestivals} requestConfirm={requestConfirm} />}
                     {activeTab === 'theme' && <ThemeSettings currentTheme={currentTheme} onThemeChange={onThemeChange} />}
-                    {activeTab === 'visual' && <VisualSettings settings={visualConfig} onSave={onSaveVisual} />}
                     {activeTab === 'storage' && <StorageManager requestConfirm={requestConfirm} />}
                     {activeTab === 'history' && <HistoryViewer history={history} memorySystem={memorySystem} />}
-                    {activeTab === 'context' && contextSnapshot && (
+                    {activeTab === 'context' && (
                         <ContextViewer
                             snapshot={contextSnapshot}
                             memoryConfig={memoryConfig}
@@ -170,12 +160,7 @@ const MobileSettingsModal: React.FC<Props> = ({
                     )}
                     {activeTab === 'article_optimization' && <ArticleOptimizationSettings settings={apiConfig} onSave={onSaveApi} />}
                     {activeTab === 'world_evolution' && <WorldEvolutionSettings settings={apiConfig} onSave={onSaveApi} />}
-                    {activeTab === 'realworld' && gameConfig && onSaveGame && (
-                        <RealWorldSettings settings={gameConfig} onSave={onSaveGame} />
-                    )}
-                    {activeTab === 'tavern' && tavernSettings && onSaveTavern && (
-                        <TavernSettings settings={tavernSettings} onSave={onSaveTavern} />
-                    )}
+
                 </div>
             </div>
         </div>

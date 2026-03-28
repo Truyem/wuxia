@@ -7,6 +7,10 @@ import {
     RequestProtocolOverride,
     ActiveApiConfig
 } from '../models/system';
+import { 
+    defaultArticleOptimizationPrompt, 
+    defaultWorldEvolutionPrompt 
+} from '../prompts/runtime/defaults';
 
 /**
  * Parses a comma-separated string of URLs or an array of URLs into a cleaned array of URLs.
@@ -79,7 +83,7 @@ export const PROVIDER_LABELS: Record<ApiProviderType, string> = {
     cerebras: 'Cerebras',
     sambanova: 'SambaNova',
     openai_compatible: 'OpenAI Tương thích',
-    worker: 'Hệ thống (Nemotron)',
+    worker: 'Hệ thống (GPT)',
     system_gemini: 'Hệ thống (Gemini 3 Flash)'
 };
 
@@ -111,7 +115,9 @@ export const DEFAULT_FEATURE_MODEL_PLACEHOLDER: FeatureModelPlaceholderConfig = 
     recallModel: '',
     worldEvolutionModel: '',
     variableCalculationModel: '',
-    articleOptimizationModel: ''
+    articleOptimizationModel: '',
+    articleOptimizationPrompt: defaultArticleOptimizationPrompt,
+    worldEvolutionPrompt: defaultWorldEvolutionPrompt
 };
 
 const PROVIDER_DEFAULTS: Record<ApiProviderType, { baseUrl: string; model: string }> = {
@@ -189,7 +195,7 @@ const PROVIDER_DEFAULTS: Record<ApiProviderType, { baseUrl: string; model: strin
     },
     worker: {
         baseUrl: DEFAULT_TEXT_GEN_WORKER_URL,
-        model: '@cf/zai-org/glm-4.7-flash'
+        model: '@cf/nvidia/nemotron-3-120b-a12b'
     },
     system_gemini: {
         baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai',
@@ -402,9 +408,11 @@ const normalizeFeatureModelPlaceholder = (raw: any): FeatureModelPlaceholderConf
     const articleApiKey = readString(raw?.articleOptimizationIndependentApiKey);
     if (articleApiKey) result.articleOptimizationIndependentApiKey = articleApiKey;
     const worldPrompt = readString(raw?.worldEvolutionPrompt);
-    if (worldPrompt) result.worldEvolutionPrompt = worldPrompt;
+    result.worldEvolutionPrompt = worldPrompt || defaultWorldEvolutionPrompt;
+    
     const articlePrompt = readString(raw?.articleOptimizationPrompt);
-    if (articlePrompt) result.articleOptimizationPrompt = articlePrompt;
+    result.articleOptimizationPrompt = articlePrompt || defaultArticleOptimizationPrompt;
+    
     return result;
 };
 
@@ -443,7 +451,7 @@ export const API_PRESET_TEMPLATES: Array<{
         { label: 'SambaNova', provider: 'sambanova', baseUrl: 'https://api.sambanova.ai/v1', model: 'Meta-Llama-3.1-70B-Instruct' },
         { label: 'HuggingFace', provider: 'huggingface', baseUrl: 'https://api-inference.huggingface.co/v1', model: 'gpt2' },
         { label: 'Cloudflare', provider: 'cloudflare', baseUrl: 'https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/ai/v1', model: '@cf/meta/llama-3-8b-instruct' },
-        { label: 'Hệ thống (Free-Fast)', provider: 'worker', baseUrl: DEFAULT_TEXT_GEN_WORKER_URL, model: '@cf/zai-org/glm-4.7-flash' }
+        { label: 'Hệ thống (Free-Fast)', provider: 'worker', baseUrl: DEFAULT_TEXT_GEN_WORKER_URL, model: '@cf/nvidia/nemotron-3-120b-a12b' }
     ];
 
 export const createApiConfigFromPreset = (preset: typeof API_PRESET_TEMPLATES[number]): ApiConfig => {
@@ -530,12 +538,12 @@ export const normalizeApiSettings = (raw: unknown): ApiSettings => {
     if (normalizedConfigs.length === 0 || !normalizedConfigs.some(c => c.provider === 'worker')) {
         const systemWorker: ApiConfig = { // Changed ApiConfigState to ApiConfig
             id: 'nemotron-system-worker',
-            name: 'Hệ thống (Nemotron-Free)',
+            name: 'Hệ thống (GPT-Free)',
             provider: 'worker',
             baseUrl: DEFAULT_TEXT_GEN_WORKER_URL, // Added baseUrl
             apiKey: '', // Added apiKey
             protocolOverride: 'auto', // Added protocolOverride
-            model: '@cf/zai-org/glm-4.7-flash',
+            model: '@cf/nvidia/nemotron-3-120b-a12b',
             createdAt: Date.now(),
             updatedAt: Date.now()
         };

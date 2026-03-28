@@ -30,13 +30,13 @@ async function testLoraNsfw() {
 
     for (let i = 0; i < payloads.length; i++) {
         console.log(`\n--- Testing Variant ${i + 11} ---`);
-        
+
         try {
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-model': '@cf/zai-org/glm-4.7-flash'
+                    'x-model': '@cf/nvidia/nemotron-3-120b-a12b'
                 },
                 body: JSON.stringify(payloads[i])
             });

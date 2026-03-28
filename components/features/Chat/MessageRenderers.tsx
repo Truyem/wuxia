@@ -6,9 +6,14 @@ import { useTranslation } from 'react-i18next';
 // --- Highlighting Utility ---
 const highlightText = (text: string) => {
     if (!text) return text;
-    const parts = text.split(/(\*[^*]+\*)/g);
+    // Support *...*, <...>, and [...]
+    const parts = text.split(/(\*[^*]+\*|<[^>]+>|\[[^\]]+\])/g);
     return parts.map((part, i) => {
-        if (part.startsWith('*') && part.endsWith('*')) {
+        const isAsterisk = part.startsWith('*') && part.endsWith('*');
+        const isBracket = part.startsWith('<') && part.endsWith('>');
+        const isSquare = part.startsWith('[') && part.endsWith(']');
+        
+        if (isAsterisk || isBracket || isSquare) {
             const content = part.slice(1, -1);
             return (
                 <span 
@@ -149,7 +154,9 @@ export const CharacterRenderer: React.FC<{
     personality?: string;
     relationStatus?: string;
     favorability?: number;
-}> = ({ sender, text, providedAvatar, isUser, isGenerating, identity, personality, relationStatus, favorability }) => {
+    status?: string;
+    lifeStatus?: 'Alive' | 'Dead';
+}> = ({ sender, text, providedAvatar, isUser, isGenerating, identity, personality, relationStatus, favorability, status, lifeStatus }) => {
     let avatarUrl = providedAvatar;
     const { t } = useTranslation();
     
@@ -242,6 +249,16 @@ export const CharacterRenderer: React.FC<{
                             <div className="flex items-center gap-1.5 px-2 py-0.5 rounded border border-cyan-900/30 bg-cyan-950/20 text-cyan-400 font-mono text-[10px] shadow-sm backdrop-blur-sm">
                                 <span className="uppercase tracking-tighter opacity-80">{tValue(relationStatus)}</span>
                                 <span className="opacity-50">({favorability})</span>
+                            </div>
+                        )}
+                        {status && (
+                            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded border border-wuxia-red/30 bg-wuxia-red/10 text-wuxia-red font-mono text-[10px] shadow-sm backdrop-blur-sm animate-pulse">
+                                <span className="uppercase tracking-tighter opacity-80">{status}</span>
+                            </div>
+                        )}
+                        {lifeStatus === 'Dead' && (
+                            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded border border-gray-700 bg-gray-900/50 text-gray-500 font-mono text-[10px] shadow-sm backdrop-blur-sm">
+                                <span className="uppercase tracking-tighter opacity-80">Đã chết</span>
                             </div>
                         )}
                     </div>

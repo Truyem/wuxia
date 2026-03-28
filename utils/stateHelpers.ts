@@ -2,6 +2,27 @@ import { CharacterData, EnvironmentData, NpcStructure, WorldDataStructure, Battl
 import { DetailedSectStructure } from '../models/sect';
 import { standardizeSingleNPC, standardizeSocialList, mergeSameNamesNPCList } from '../hooks/useGame/stateTransforms';
 
+/**
+ * Generates a UUID-like string. 
+ * Falls back to a pseudo-random generator if crypto.randomUUID is not available (e.g., in non-secure contexts).
+ */
+export const generateSafeUUID = (): string => {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        try {
+            return crypto.randomUUID();
+        } catch (e) {
+            console.warn('crypto.randomUUID failed, falling back to pseudo-random:', e);
+        }
+    }
+
+    // Fallback: simple pseudo-random UUID v4 implementation
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16) | 0;
+        const v = c === 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+    });
+};
+
 export const VIETNAMESE_SUBKEY_MAP: Record<string, string> = {
     // Character / Role
     "Danh sách vật phẩm": "itemList",
@@ -649,38 +670,58 @@ export const applyStateCommand = (
         // Correctly handles: gameState.Social[npc_id], gameState.Social.NPC_LIST[npc_id], etc.
         const bracketMatch = key.match(/^gameState\.Social\.?(?:NPC_LIST\.?)?\[(.+?)\](?:\.(.+))?/i);
         if (bracketMatch) {
-            const bracketValue = bracketMatch[1].trim();
+            const bracketValue = bracketMatch[1].trim().replace(/^['"]|['"]$/g, '');
             const subProp = bracketMatch[2] || "";
             const translatedValue = translateObjectKeys(value);
             
             let actualId = bracketValue;
             let actualName = bracketValue;
             
-            // If it's a numeric index, resolve to real ID/Name for better merging
+            // Resolve actual NPC from the list to get its current state for math/push operations
+            let existingNpc = newSocial.find(n => n.id === actualId || n.name === actualName);
+            
+            // If it's a numeric index, resolve to real ID/Name
             if (/^\d+$/.test(bracketValue)) {
                 const index = parseInt(bracketValue);
                 if (newSocial[index]) {
-                    actualId = newSocial[index].id || actualId;
-                    actualName = newSocial[index].name || actualName;
+                    existingNpc = newSocial[index];
+                    actualId = existingNpc.id || actualId;
+                    actualName = existingNpc.name || actualName;
                 }
             }
             
-            // Create a skeleton NPC to merge
-            let npcToMerge: any = { id: actualId };
-            // Only include name if it's not just a repeat of the ID/bracket value
-            if (actualName && actualName !== actualId && !/^(npc_|char_|role_)/i.test(actualName)) {
-                npcToMerge.name = actualName;
-            }
-            
+            // Create or copy the NPC object
+            let npcToMerge: any = existingNpc ? { ...existingNpc } : { id: actualId, name: actualName, memories: [] };
+
             if (subProp === "memories" || subProp.toLowerCase().includes("ký ức")) {
-                npcToMerge.memories = Array.isArray(translatedValue) ? translatedValue : [translatedValue];
+                const incomingArray = Array.isArray(translatedValue) ? translatedValue : [translatedValue];
+                if (normalizedAction === 'push') {
+                    npcToMerge.memories = [...(npcToMerge.memories || []), ...incomingArray];
+                } else {
+                    npcToMerge.memories = incomingArray;
+                }
             } else if (subProp) {
-                npcToMerge[subProp] = translatedValue;
+                // Determine if we should perform math, push or replacement
+                if (normalizedAction === 'add') {
+                    npcToMerge[subProp] = (Number(npcToMerge[subProp]) || 0) + Number(translatedValue);
+                } else if (normalizedAction === 'sub') {
+                    npcToMerge[subProp] = (Number(npcToMerge[subProp]) || 0) - Number(translatedValue);
+                } else if (normalizedAction === 'push') {
+                    if (Array.isArray(npcToMerge[subProp])) {
+                        npcToMerge[subProp] = [...npcToMerge[subProp], translatedValue];
+                    } else {
+                        npcToMerge[subProp] = [translatedValue];
+                    }
+                } else {
+                    npcToMerge[subProp] = translatedValue;
+                }
             } else {
+                // Root object merge
                 npcToMerge = { ...npcToMerge, ...translatedValue };
             }
             
-            newSocial = mergeSameNamesNPCList([...newSocial, npcToMerge]);
+            // Filter out old version and push new one
+            newSocial = mergeSameNamesNPCList([...newSocial.filter(n => (n.id && n.id !== actualId) && (n.name && n.name !== actualName)), npcToMerge]);
             return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
         }
 

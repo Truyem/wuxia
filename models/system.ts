@@ -138,20 +138,15 @@ export interface VisualSettings {
 export type StoryStyleType = 'Tu luyện' | 'Thông thường' | 'Tu la tràng' | 'Tu Tiên Ưu Ám' | 'Thuần ái';
 
 export interface GameSettings {
-    bodyLengthRequirement: number; // Độ dài tối thiểu của thân bài logs
     narrativePerspective: 'Ngôi thứ nhất' | 'Ngôi thứ hai' | 'Ngôi thứ ba';
     enableActionOptions: boolean; // Có yêu cầu action_options đầu ra không
-    enablePreventSpeaking: boolean; // Chèn prompt NoControl để tránh nói hộ người chơi
     enablePseudoCotInjection: boolean; // Chèn pseudo historical COT trước đầu vào người chơi mới nhất
-    enableClaudeMode?: boolean; // Định dạng tin nhắn đặc thù của Claude
-    enableDisclaimerOutput: boolean; // Yêu cầu một khối disclaimer riêng ở cuối
     enableTagIntegrityCheck?: boolean; // Kiểm tra tính toàn vẹn của tag trước khi parse
     enableTagAutoFix?: boolean; // Tự động sửa lỗi tag xml
     enableRetryOnParseFail?: boolean; // Tự động thử lại khi parse thất bại
     enableMultiThinking: boolean; // Chuyển đổi prompt COT sang biến thể đa tư duy
     enableExtraPrompt?: boolean; // Bật Prompt bổ sung tùy chỉnh
-    enableRealWorldMode?: boolean; // Bật chế độ thực tế
-    customRealWorldRules?: string; // Quy tắc thực tế tùy chỉnh
+
     storyStyle: StoryStyleType; // Phong cách truyện chèn vào context assistant trước COT
     extraPrompt: string; // Prompt tùy chỉnh chèn vào cuối cùng
 }

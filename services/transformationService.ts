@@ -25,7 +25,11 @@ export class TransformationService {
                 rawResponse = await aiService.generateMemoryRecall(
                     systemPrompt,
                     `Transform these items:\n${inputString}`,
-                    apiConfig
+                    apiConfig,
+                    undefined,
+                    undefined,
+                    undefined,
+                    'prompt-transformation'
                 );
             } catch (error) {
                 console.warn("User API failed, falling back to Cloudflare:", error);

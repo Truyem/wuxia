@@ -65,7 +65,9 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
     };
 
 
-    const showFemaleExtensions = currentNPC?.gender === 'Female' && Boolean(currentNPC?.isMainCharacter);
+    // FIX: Check for both English and Vietnamese gender strings
+    const isFemale = currentNPC?.gender === 'Female' || currentNPC?.gender === 'Nữ';
+    const showFemaleExtensions = isFemale && Boolean(currentNPC?.isMainCharacter);
 
     const resolveAvatar = (npc: NpcStructure) => {
         if (!allAvatars) return npc.avatar;
@@ -79,21 +81,21 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
         return '';
     };
 
-    const readAppearance = (npc: NpcStructure): string => getFirstNonEmptyText(
+    const readAppearance = (npc: NpcStructure): string => npc.appearance || getFirstNonEmptyText(
         (npc as any)['Appearance description'],
         (npc as any)['Appearance'],
-        (npc as any).Archive?.['Appearance points'],
-        (npc as any).Archive?.['Appearance description']
+        (npc as any).Archive?.['Appearance description'],
+        (npc as any).Archive?.['Appearance points']
     );
 
-    const readBuildBody = (npc: NpcStructure): string => getFirstNonEmptyText(
+    const readBuildBody = (npc: NpcStructure): string => npc.bodyDescription || getFirstNonEmptyText(
         (npc as any)['Body description'],
         (npc as any)['Stature'],
-        (npc as any).Archive?.['Body points'],
-        (npc as any).Archive?.['Body description']
+        (npc as any).Archive?.['Body description'],
+        (npc as any).Archive?.['Body points']
     );
 
-    const readClothing = (npc: NpcStructure): string => getFirstNonEmptyText(
+    const readClothing = (npc: NpcStructure): string => npc.clothingStyle || getFirstNonEmptyText(
         (npc as any)['Clothing style'],
         (npc as any)['Clothing'],
         (npc as any).Archive?.['Clothing style'],
@@ -192,7 +194,7 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                                                 : 'border-white/5 bg-white/5'
                                             }`}
                                     >
-                                        <div className={`w-12 h-12 rounded-none flex items-center justify-center font-serif font-black text-xl border overflow-hidden relative ${npc.gender === 'Female' ? 'border-pink-500/30 bg-pink-500/10 text-pink-400' : 'border-wuxia-cyan/30 bg-wuxia-cyan/10 text-wuxia-cyan'} ${isSelected ? 'shadow-lg' : ''}`}>
+                                        <div className={`w-12 h-12 rounded-none flex items-center justify-center font-serif font-black text-xl border overflow-hidden relative ${npc.gender === 'Female' || npc.gender === 'Nữ' ? 'border-pink-500/30 bg-pink-500/10 text-pink-400' : 'border-wuxia-cyan/30 bg-wuxia-cyan/10 text-wuxia-cyan'} ${isSelected ? 'shadow-lg' : ''}`}>
                                             {resolveAvatar(npc) ? (
                                                 <img src={resolveAvatar(npc)} alt={npc.name} className="w-full h-full object-cover object-top" />
                                             ) : (
@@ -210,9 +212,15 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                                             <div className="text-[9px] text-paper-white/30 flex items-center gap-2 mt-1 truncate">
                                                 <span className="font-bold">{tValue(npc.identity)}</span>
                                                 <span className="opacity-20">|</span>
-                                                <span className={npc.isPresent ? 'text-green-500 font-black' : ''}>
-                                                    {npc.isPresent ? t('social.status.present') : t('social.status.leave')}
-                                                </span>
+                                                {npc.lifeStatus ? (
+                                                    <span className={npc.lifeStatus === 'Dead' ? 'text-gray-500 font-black' : 'text-green-500 font-black'}>
+                                                        {npc.lifeStatus === 'Dead' ? 'Đã chết' : 'Còn sống'}
+                                                    </span>
+                                                ) : (
+                                                    <span className={npc.isPresent ? 'text-green-500 font-black' : ''}>
+                                                        {npc.isPresent ? t('social.status.present') : t('social.status.leave')}
+                                                    </span>
+                                                )}
                                             </div>
                                         </div>
                                          <div className="flex flex-col items-end">
@@ -252,7 +260,7 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                                         )}
 
                                         {/* NPC BANNER DETAIL */}
-                                        <div className={`relative mb-8 p-6 rounded-none border border-white/5 overflow-hidden group/banner ${currentNPC.gender === 'Female' ? 'glass-jade' : 'glass-ink'}`}>
+                                        <div className={`relative mb-8 p-6 rounded-none border border-white/5 overflow-hidden group/banner ${currentNPC.gender === 'Female' || currentNPC.gender === 'Nữ' ? 'glass-jade' : 'glass-ink'}`}>
                                     <div className="absolute inset-0 bg-ink-wash opacity-10 pointer-events-none"></div>
                                     <div className="absolute -right-6 -bottom-6 text-[140px] font-serif font-black text-white/5 select-none pointer-events-none">
                                         {currentNPC.name[0]}
@@ -273,6 +281,18 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                                                 <span className="text-[10px] font-bold bg-white/5 border border-white/10 px-3 py-1 rounded-none text-paper-white/40 tracking-widest uppercase">
                                                     {tValue(currentNPC.gender).toUpperCase()} • {currentNPC.age} {t('social.labels.age') || "TUỔI"}
                                                 </span>
+                                                
+                                                {currentNPC.lifeStatus && (
+                                                    <span className={`text-[10px] font-bold px-3 py-1 rounded-none tracking-widest uppercase border ${currentNPC.lifeStatus === 'Dead' ? 'bg-gray-900 border-gray-700 text-gray-500' : 'bg-emerald-950 border-emerald-500/30 text-emerald-400'}`}>
+                                                        {currentNPC.lifeStatus === 'Dead' ? 'Đã chết' : 'Còn sống'}
+                                                    </span>
+                                                )}
+
+                                                {currentNPC.status && (
+                                                    <span className="text-[10px] font-bold bg-wuxia-red/10 border border-wuxia-red/30 px-3 py-1 rounded-none text-wuxia-red tracking-widest uppercase animate-pulse">
+                                                        {currentNPC.status}
+                                                    </span>
+                                                )}
                                             </div>
 
                                             <button
@@ -296,7 +316,7 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                                 </div>
 
                                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-                                    <div className={`lg:col-span-2 p-8 rounded-none border border-white/5 relative group/bio overflow-hidden ${currentNPC.gender === 'Female' ? 'bg-pink-900/10' : 'bg-black/40'}`}>
+                                    <div className={`lg:col-span-2 p-8 rounded-none border border-white/5 relative group/bio overflow-hidden ${currentNPC.gender === 'Female' || currentNPC.gender === 'Nữ' ? 'bg-pink-900/10' : 'bg-black/40'}`}>
                                         {/* Decorative Ink Pattern */}
                                         <div className="absolute inset-0 bg-liquid-glass opacity-30 pointer-events-none"></div>
                                         <div className="flex items-center gap-3 mb-6">

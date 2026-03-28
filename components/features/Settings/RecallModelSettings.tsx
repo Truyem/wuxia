@@ -17,7 +17,6 @@ const RecallModelSettings: React.FC<Props> = ({ settings, onSave }) => {
     const [modelOptions, setModelOptions] = useState<string[]>([]);
     const [loadingModels, setLoadingModels] = useState(false);
     const [message, setMessage] = useState('');
-    const [showSuccess, setShowSuccess] = useState(false);
 
     useEffect(() => {
         const normalized = normalizeApiSettings(settings);
@@ -113,8 +112,6 @@ const RecallModelSettings: React.FC<Props> = ({ settings, onSave }) => {
         const normalized = normalizeApiSettings(form);
         onSave(normalized);
         setForm(normalized);
-        setShowSuccess(true);
-        setTimeout(() => setShowSuccess(false), 2000);
     };
 
     const recallModelValue = (form.featureModelPlaceholder.recallModel || '').trim();
@@ -154,39 +151,43 @@ const RecallModelSettings: React.FC<Props> = ({ settings, onSave }) => {
                     />
                 </label>
 
-                <div className="flex gap-3 items-end">
-                    <div className="flex-1 space-y-1">
-                        <label className="text-xs text-paper-white/80">Mô hình dùng cho Bộ nhớ cốt truyện</label>
-                        <InlineSelect
-                            value={recallModelDisplay}
-                            options={selectOptions.map((model) => ({
-                                value: model,
-                                label: model
-                            }))}
-                            onChange={(model) => updatePlaceholder('recallModel', model)}
-                            disabled={!independentModelEnabled || selectOptions.length === 0}
-                            placeholder={!independentModelEnabled
-                                ? `Theo mô hình cốt truyện chính: ${mainStoryParsingModel || 'Chưa thiết lập'}`
-                                : (selectOptions.length ? 'Vui lòng chọn mô hình' : 'Vui lòng nhấp Lấy danh sách trước')}
-                            buttonClassName={independentModelEnabled
-                                ? 'bg-wuxia-gold/20 border-wuxia-gold/40 hover:bg-wuxia-gold/30 py-2.5'
-                                : 'bg-ink-black/20 border-wuxia-gold/10 py-2.5'}
-                        />
-                    </div>
-                    <GameButton
-                        onClick={handleFetchModels}
-                        variant="secondary"
-                        className="px-4 py-2 text-xs"
-                        disabled={loadingModels}
-                    >
-                        {loadingModels ? '...' : 'Lấy danh sách'}
-                    </GameButton>
-                </div>
+                {activeConfig?.provider !== 'worker' && (
+                    <>
+                        <div className="flex gap-3 items-end">
+                            <div className="flex-1 space-y-1">
+                                <label className="text-xs text-paper-white/80">Mô hình dùng cho Bộ nhớ cốt truyện</label>
+                                <InlineSelect
+                                    value={recallModelDisplay}
+                                    options={selectOptions.map((model) => ({
+                                        value: model,
+                                        label: model
+                                    }))}
+                                    onChange={(model) => updatePlaceholder('recallModel', model)}
+                                    disabled={!independentModelEnabled || selectOptions.length === 0}
+                                    placeholder={!independentModelEnabled
+                                        ? `Theo mô hình cốt truyện chính: ${mainStoryParsingModel || 'Chưa thiết lập'}`
+                                        : (selectOptions.length ? 'Vui lòng chọn mô hình' : 'Vui lòng nhấp Lấy danh sách trước')}
+                                    buttonClassName={independentModelEnabled
+                                        ? 'bg-wuxia-gold/20 border-wuxia-gold/40 hover:bg-wuxia-gold/30 py-2.5'
+                                        : 'bg-ink-black/20 border-wuxia-gold/10 py-2.5'}
+                                />
+                            </div>
+                            <GameButton
+                                onClick={handleFetchModels}
+                                variant="secondary"
+                                className="px-4 py-2 text-xs"
+                                disabled={loadingModels}
+                            >
+                                {loadingModels ? '...' : 'Lấy danh sách'}
+                            </GameButton>
+                        </div>
 
-                {!independentModelEnabled && (
-                    <div className="text-[11px] text-paper-white/40 italic">
-                        Hiện tại: Đồng bộ với mô hình cốt truyện chính {mainStoryParsingModel ? `（${mainStoryParsingModel}）` : '（Chưa thiết lập mô hình cốt truyện chính）'}
-                    </div>
+                        {!independentModelEnabled && (
+                            <div className="text-[11px] text-paper-white/40 italic">
+                                Hiện tại: Đồng bộ với mô hình cốt truyện chính {mainStoryParsingModel ? `（${mainStoryParsingModel}）` : '（Chưa thiết lập mô hình cốt truyện chính）'}
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
 
@@ -236,7 +237,6 @@ const RecallModelSettings: React.FC<Props> = ({ settings, onSave }) => {
                 <ParallelogramSaveButton
                     onClick={handleSave}
                     className="w-full"
-                    label={showSuccess ? 'ĐÃ LƯU CÀI ĐẶT' : 'LƯU CÀI ĐẶT'}
                 />
             </div>
         </div>

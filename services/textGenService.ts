@@ -14,6 +14,7 @@ export interface TextGenOptions {
   model?: string;
   top_p?: number;
   top_k?: number;
+  response_format?: { type: 'json_object' };
 }
 
 export interface TextGenResponse {
@@ -109,7 +110,7 @@ export class TextGenService {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-model': options.model || '@cf/zai-org/glm-4.7-flash',
+            'x-model': options.model || '@cf/nvidia/nemotron-3-120b-a12b',
             ...(options.id ? { 'x-session-affinity': options.id } : {}),
           },
           body: JSON.stringify({
@@ -119,7 +120,8 @@ export class TextGenService {
             top_p: options.top_p,
             top_k: options.top_k,
             id: options.id,
-            model: options.model
+            model: options.model,
+            response_format: options.response_format
           }),
         });
 
@@ -199,7 +201,9 @@ export class TextGenService {
           if (data.error) errorDataFromStream = data;
 
           // Legacy support for wrapped JSON, or fallback to raw text if it's already the content
-          text = data.response || data.result?.response || data.choices?.[0]?.message?.content || responseText;
+          // If the response is a guard response, we'll stringify it to let the caller handle it or use a default property
+          text = data.response || data.result?.response || data.choices?.[0]?.message?.content || 
+                 (typeof data.safe === 'boolean' ? JSON.stringify(data) : responseText);
         } catch (e) {
           // If not valid JSON, it's already the raw text response
           text = responseText;

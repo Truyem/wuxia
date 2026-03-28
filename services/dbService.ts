@@ -1,5 +1,7 @@
 
 import { SaveStructure } from '../types';
+import { stripFence } from '../utils/jsonRepair';
+import { COT_THINKING_FIELD_KEYS, parseStoryRawText } from './aiService';
 
 const DB_NAME = 'WuxiaGameDB';
 const STORE_NAME = 'saves';
@@ -225,13 +227,64 @@ export const getSavesList = async (): Promise<SaveStructure[]> => {
         const request = store.getAll();
         
         request.onsuccess = () => {
-            const list = request.result as SaveStructure[];
+            const list = (request.result as SaveStructure[]).map(s => cleanSaveHistoryMarkers(s));
             // Sort by timestamp desc
             list.sort((a, b) => b.timestamp - a.timestamp);
             resolve(list);
         };
         request.onerror = () => reject(request.error);
     });
+};
+
+const cleanSaveHistoryMarkers = (save: SaveStructure): SaveStructure => {
+    if (!save.history || !Array.isArray(save.history)) return save;
+    
+    save.history = save.history.map(item => {
+        if (item.rawJson) {
+            item.rawJson = stripFence(item.rawJson);
+
+            // Attempt to repair broken structuredResponse
+            // A response is considered "broken" if it's missing or a raw JSON fallback.
+            const isFallback = item.structuredResponse?.logs?.length === 1 && 
+                             (item.structuredResponse.logs[0].text === item.rawJson || 
+                              item.structuredResponse.logs[0].text.includes('{"thinking_pre"') ||
+                              item.structuredResponse.logs[0].text.includes('{"logs"'));
+            
+            const needsRepair = !item.structuredResponse || isFallback;
+
+            if (needsRepair) {
+                try {
+                    const repaired = parseStoryRawText(item.rawJson);
+                    // Only apply if the repair produced meaningful structured data
+                    if (repaired.logs.length > 1 || !repaired.logs[0].text.includes('{"')) {
+                        item.structuredResponse = repaired;
+                    }
+                } catch (e) {
+                    console.warn('[dbService] History item repair failed:', e);
+                }
+            }
+        }
+        
+        if (item.structuredResponse) {
+            const fields = item.structuredResponse;
+            COT_THINKING_FIELD_KEYS.forEach(key => {
+                if (typeof (fields as any)[key] === 'string') {
+                    (fields as any)[key] = stripFence((fields as any)[key]);
+                }
+            });
+            if (typeof fields.thinking_pre === 'string') fields.thinking_pre = stripFence(fields.thinking_pre);
+            if (typeof fields.thinking_post === 'string') fields.thinking_post = stripFence(fields.thinking_post);
+            if (Array.isArray(fields.logs)) {
+                fields.logs.forEach(log => {
+                    if (log && typeof log.text === 'string') {
+                        log.text = stripFence(log.text);
+                    }
+                });
+            }
+        }
+        return item;
+    });
+    return save;
 };
 
 export const getSave = async (id: number): Promise<SaveStructure> => {
@@ -241,7 +294,14 @@ export const getSave = async (id: number): Promise<SaveStructure> => {
         const store = transaction.objectStore(STORE_NAME);
         const request = store.get(id);
         
-        request.onsuccess = () => resolve(request.result);
+        request.onsuccess = () => {
+            const result = request.result;
+            if (result) {
+                resolve(cleanSaveHistoryMarkers(result));
+            } else {
+                resolve(result);
+            }
+        };
         request.onerror = () => reject(request.error);
     });
 };
@@ -491,4 +551,51 @@ export const clearAllData = async (options?: { keepApiKey?: boolean; keepCustomT
 
 export const clearDatabase = async (keepApiKey: boolean): Promise<void> => {
     await clearAllData({ keepApiKey });
+};
+
+export const repairAllSaves = async (): Promise<{ total: number; repaired: number }> => {
+    const db = await initDatabase();
+    const saves = await getSavesList();
+    let repairedCount = 0;
+
+    await new Promise<void>((resolve, reject) => {
+        const transaction = db.transaction([STORE_NAME], 'readwrite');
+        const store = transaction.objectStore(STORE_NAME);
+
+        saves.forEach(save => {
+            let wasSaveRepaired = false;
+            if (save.history && Array.isArray(save.history)) {
+                save.history.forEach(item => {
+                    if (item.rawJson) {
+                        const isFallback = item.structuredResponse?.logs?.length === 1 && 
+                                         (item.structuredResponse.logs[0].text === item.rawJson || 
+                                          item.structuredResponse.logs[0].text.includes('{"thinking_pre"') ||
+                                          item.structuredResponse.logs[0].text.includes('{"logs"'));
+                        
+                        if (!item.structuredResponse || isFallback) {
+                            try {
+                                const repaired = parseStoryRawText(item.rawJson);
+                                if (repaired.logs.length > 1 || !repaired.logs[0].text.includes('{"')) {
+                                    item.structuredResponse = repaired;
+                                    wasSaveRepaired = true;
+                                }
+                            } catch (e) {
+                                // Ignore
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (wasSaveRepaired) {
+                store.put(save);
+                repairedCount++;
+            }
+        });
+
+        transaction.oncomplete = () => resolve();
+        transaction.onerror = () => reject(transaction.error);
+    });
+
+    return { total: saves.length, repaired: repairedCount };
 };

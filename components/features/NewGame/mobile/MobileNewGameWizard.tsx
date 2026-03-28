@@ -9,6 +9,7 @@ import { OrnateBorder } from '../../../ui/decorations/OrnateBorder';
 import InlineSelect from '../../../ui/InlineSelect';
 import ToggleSwitch from '../../../ui/ToggleSwitch';
 import * as dbService from '../../../../services/dbService';
+import { generateSafeUUID } from '../../../../utils/stateHelpers';
 
 interface Props {
     onComplete: (
@@ -681,7 +682,7 @@ const MobileNewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, r
 
         // Construct final character data object mapping to CharacterData interface
         const charData: CharacterData = {
-            id: crypto.randomUUID(),
+            id: generateSafeUUID(),
             name: charName.trim(),
             gender: charGender === 'Male' ? 'Nam' : 'Nữ',
             age: charAge,

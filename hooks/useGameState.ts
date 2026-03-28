@@ -274,7 +274,7 @@ export const useGameState = () => {
     const [generationStartTime, setGenerationStartTime] = useState<number | undefined>(undefined);
     const [generationMetadata, setGenerationMetadata] = useState<{ input: number, output: number } | undefined>(undefined);
 
-    const [activeTab, setActiveTab] = useState<'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'visual' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'realworld'>('api');
+    const [activeTab, setActiveTab] = useState<'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'visual' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'tavern'>('api');
 
     // Status State
     const [isSettingsLoaded, setIsSettingsLoaded] = useState(false);
@@ -326,45 +326,22 @@ export const useGameState = () => {
         return result;
     };
     const defaultGameSettings: GameSettings = {
-        bodyLengthRequirement: 3000,
         narrativePerspective: 'Ngôi thứ hai',
         enableActionOptions: true,
         enablePseudoCotInjection: true,
         enableMultiThinking: false,
-        enablePreventSpeaking: true,
-        enableDisclaimerOutput: true,
-        enableRealWorldMode: false,
         storyStyle: 'Thông thường',
         extraPrompt: defaultExtraSystemPrompt
     };
     const normalizeGameSettings = (raw?: Partial<GameSettings> | null): GameSettings => ({
         ...defaultGameSettings,
         ...(raw || {}),
-        bodyLengthRequirement: (() => {
-            const candidate = raw?.bodyLengthRequirement as unknown;
-            if (typeof candidate === 'number' && Number.isFinite(candidate)) {
-                // Force update from legacy default (10000) to current default
-                if (candidate === 10000) return defaultGameSettings.bodyLengthRequirement;
-                return Math.max(50, Math.floor(candidate));
-            }
-            if (typeof candidate === 'string') {
-                const n = Number(candidate.replace(/[^\d]/g, ''));
-                if (Number.isFinite(n) && n > 0) {
-                    if (n === 10000) return defaultGameSettings.bodyLengthRequirement;
-                    return Math.max(50, Math.floor(n));
-                }
-            }
-            return defaultGameSettings.bodyLengthRequirement;
-        })(),
         narrativePerspective: raw?.narrativePerspective === 'Ngôi thứ nhất' || raw?.narrativePerspective === 'Ngôi thứ hai' || raw?.narrativePerspective === 'Ngôi thứ ba'
             ? raw.narrativePerspective
             : defaultGameSettings.narrativePerspective,
         enableActionOptions: raw?.enableActionOptions !== false,
         enablePseudoCotInjection: raw?.enablePseudoCotInjection !== false,
         enableMultiThinking: raw?.enableMultiThinking === true,
-        enablePreventSpeaking: raw?.enablePreventSpeaking !== false,
-        enableDisclaimerOutput: raw?.enableDisclaimerOutput !== false,
-        enableRealWorldMode: raw?.enableRealWorldMode === true,
         storyStyle: raw?.storyStyle === 'Tu luyện' || raw?.storyStyle === 'Thông thường' || raw?.storyStyle === 'Tu la tràng' || raw?.storyStyle === 'Thuần ái'
             ? raw.storyStyle
             : defaultGameSettings.storyStyle,
@@ -464,8 +441,19 @@ export const useGameState = () => {
 
                 if (promptsRes.status === 'fulfilled') {
                     const loaded = (promptsRes.value as PromptStructure[]) || [];
+                    console.log(`[useGameState] Prompts loaded from DB: ${loaded.length}`);
                     const synced = await PromptSyncService.syncPrompts(loaded);
-                    setPrompts(synced);
+                    console.log(`[useGameState] Prompts synced: ${synced.length}`);
+                    
+                    if (synced.length === 0 && DefaultPrompts.length > 0) {
+                        console.warn('[useGameState] Synced prompts are empty, using DefaultPrompts.');
+                        setPrompts(DefaultPrompts);
+                        dbService.saveSetting('prompts', DefaultPrompts);
+                    } else {
+                        setPrompts(synced);
+                    }
+                } else {
+                    console.error('[useGameState] Failed to load prompts from DB:', (promptsRes as any).reason);
                 }
 
                 if (festivalsRes.status === 'fulfilled' && festivalsRes.value) {

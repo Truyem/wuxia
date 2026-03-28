@@ -19,7 +19,7 @@ const tryParse = <T = any>(input: string): ParseAttempt<T> => {
     }
 };
 
-const stripFence = (input: string): string => {
+export const stripFence = (input: string): string => {
     const trimmed = input.trim();
     const fenced = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i);
     if (fenced?.[1]) return fenced[1].trim();
@@ -27,695 +27,174 @@ const stripFence = (input: string): string => {
 };
 
 const extractJsonBlock = (input: string): string => {
+    const startIdx = input.search(/\{[\s\S]*?("logs"|"tavern_commands")/i);
+    if (startIdx >= 0) return extractFirstJsonObject(input.slice(startIdx));
     const start = input.indexOf('{');
     const end = input.lastIndexOf('}');
     if (start >= 0 && end > start) return input.slice(start, end + 1);
     return input;
 };
 
-/**
- * Extracts the first complete, balanced JSON object using bracket counting.
- * This handles the case where extra text (possibly containing `}`) appears
- * after a valid JSON object – e.g. `{"k":"v"} {"extra":"data"}` or
- * `{"k":"v"}\nHere is the explanation`.  Unlike `extractJsonBlock` which
- * uses `lastIndexOf('}')`, this stops at the very first closing brace that
- * returns the depth counter to zero.
- */
 const extractFirstJsonObject = (input: string): string => {
     const start = input.indexOf('{');
     if (start < 0) return input;
-
-    let depth = 0;
-    let inString = false;
-    let escaped = false;
-
+    let depth = 0, inString = false, escaped = false;
     for (let i = start; i < input.length; i++) {
         const ch = input[i];
         if (inString) {
-            if (escaped) {
-                escaped = false;
-            } else if (ch === '\\') {
-                escaped = true;
-            } else if (ch === '"') {
-                inString = false;
-            }
+            if (escaped) escaped = false;
+            else if (ch === '\\') escaped = true;
+            else if (ch === '"') inString = false;
             continue;
         }
-        if (ch === '"') {
-            inString = true;
-        } else if (ch === '{') {
-            depth++;
-        } else if (ch === '}') {
+        if (ch === '"') inString = true;
+        else if (ch === '{') depth++;
+        else if (ch === '}') {
             depth--;
-            if (depth === 0) {
-                return input.slice(start, i + 1);
-            }
+            if (depth === 0) return input.slice(start, i + 1);
         }
     }
-
-    // Fallback: depth never reached 0 (truncated stream), return from start to last `}`
     const end = input.lastIndexOf('}');
-    if (end > start) return input.slice(start, end + 1);
-    return input;
+    return end > start ? input.slice(start, end + 1) : input;
 };
 
-const replaceOutsideStrings = (input: string, mapper: (ch: string) => string): string => {
-    let result = '';
-    let inString = false;
-    let escaped = false;
-
-    for (const ch of input) {
+const structuralAwareRepair = (input: string): string => {
+    let result = '', inString = false, escaped = false;
+    for (let i = 0; i < input.length; i++) {
+        const ch = input[i];
         if (inString) {
-            result += ch;
-            if (escaped) {
-                escaped = false;
-            } else if (ch === '\\') {
-                escaped = true;
-            } else if (ch === '"') {
-                inString = false;
+            if (escaped) { escaped = false; result += ch; }
+            else if (ch === '\\') { escaped = true; result += ch; }
+            else if (ch === '"') {
+                const remaining = input.slice(i + 1);
+                const nextIdx = remaining.search(/\S/);
+                const nextChar = nextIdx >= 0 ? remaining[nextIdx] : '';
+                if (nextChar && '[:,}]'.includes(nextChar)) { inString = false; result += ch; }
+                else result += '\\"';
+            } else {
+                if (ch === '}') {
+                    const remaining = input.slice(i);
+                    if (remaining.match(/^\}\s*,?\s*\{/)) { result += '"'; inString = false; }
+                }
+                result += ch;
             }
             continue;
         }
-
-        if (ch === '"') {
-            inString = true;
-            result += ch;
-            continue;
-        }
-        result += mapper(ch);
+        if (ch === '"') inString = true;
+        result += ch;
     }
-
     return result;
 };
 
 const normalizeFullWidthPunctuation = (input: string): string => {
-    const map: Record<string, string> = {
-        '“': '"',
-        '”': '"',
-        '‘': "'",
-        '’': "'",
-        '，': ',',
-        '：': ':',
-        '；': ',',
-    };
-    return replaceOutsideStrings(input, (ch) => map[ch] ?? ch);
-};
-
-const normalizeSlashN = (input: string): string => {
-    return input
-        .replace(/\\\/n/g, '\\n')
-        .replace(/\/n/g, '\\n');
-};
-
-const normalizeSingleQuoteJson = (input: string): string => {
-    const escapeDoubleQuote = (text: string) => text.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-    return input
-        .replace(/([{,]\s*)'([^'\\]*(?:\\.[^'\\]*)*)'(\s*:)/g, (_m, p1, p2, p3) => `${p1}"${escapeDoubleQuote(p2)}"${p3}`)
-        .replace(/(:\s*)'([^'\\]*(?:\\.[^'\\]*)*)'(?=\s*[,}\]])/g, (_m, p1, p2) => `${p1}"${escapeDoubleQuote(p2)}"`);
-};
-
-const quoteBareKeys = (input: string): string => {
-    return input.replace(/([{,]\s*)([A-Za-z_\u4e00-\u9fa5][\w\u4e00-\u9fa5-]*)(\s*:)/g, '$1"$2"$3');
-};
-
-const insertMissingCommasBetweenPairs = (input: string): string => {
-    // Handle both "key": "val" "key2": ... and "key": "val" [ ... 
-    // We leave "val" { to error-guided repair because it might need a closing brace too.
-    return input.replace(/(["\]}0-9])\s*(?=\[|"[^"]+"\s*:)/g, '$1,');
-};
-
-const removeTrailingCommas = (input: string): string => {
-    return input.replace(/,\s*([}\]])/g, '$1');
-};
-
-const trimIllegalTailPunctuation = (input: string): string => {
-    return input.replace(/([}\]])[，。；;]+/g, '$1');
-};
-
-const endsInsideString = (input: string): boolean => {
-    let inString = false;
-    let escaped = false;
-
-    for (const ch of input) {
-        if (inString) {
-            if (escaped) {
-                escaped = false;
-            } else if (ch === '\\') {
-                escaped = true;
-            } else if (ch === '"') {
-                inString = false;
-            }
-            continue;
-        }
-
-        if (ch === '"') {
-            inString = true;
-        }
-    }
-
-    return inString;
-};
-
-const closeDanglingString = (input: string): string => {
-    if (!endsInsideString(input)) return input;
-    const tailMatch = input.match(/(\s*[}\]]+\s*)$/);
-    if (tailMatch && typeof tailMatch.index === 'number') {
-        const insertAt = tailMatch.index;
-        return `${input.slice(0, insertAt)}"${input.slice(insertAt)}`;
-    }
-    return `${input}"`;
-};
-
-const findPrevNonWhitespaceIndex = (text: string, from: number): number => {
-    for (let i = Math.min(from, text.length - 1); i >= 0; i--) {
-        if (!/\s/.test(text[i])) return i;
-    }
-    return -1;
-};
-
-const findNextNonWhitespaceIndex = (text: string, from: number): number => {
-    for (let i = Math.max(0, from); i < text.length; i++) {
-        if (!/\s/.test(text[i])) return i;
-    }
-    return -1;
-};
-
-const extractErrorPosition = (input: string, errorMessage: string): number => {
-    // Chrome/V8: "at position 2019"
-    const posMatch = errorMessage.match(/position\s+(\d+)/i);
-    if (posMatch) return Number(posMatch[1]);
-    // Firefox: "at line X column Y of the JSON data"
-    const firefoxMatch = errorMessage.match(/line\s+(\d+)\s+column\s+(\d+)/i);
-    if (firefoxMatch) {
-        const line = Number(firefoxMatch[1]);
-        const col = Number(firefoxMatch[2]);
-        let currentLine = 1;
-        for (let i = 0; i < input.length; i++) {
-            if (currentLine === line) return i + col - 1;
-            if (input[i] === '\n') currentLine++;
-        }
-    }
-    return NaN;
-};
-
-const repairMissingCommaByParseError = (input: string, errorMessage?: string): string => {
-    if (!errorMessage) return input;
-    // Simplify matching to be more permissive about quotes
-    if (!/expected\s*.*?['"“]?[,}\]]['"”]?\s*after\s*(?:property\s*value|array\s*element)/i.test(errorMessage)) return input;
-    const pos = extractErrorPosition(input, errorMessage);
-    if (!Number.isFinite(pos)) return input;
-
-    const nextIdx = findNextNonWhitespaceIndex(input, pos);
-    if (nextIdx < 0) return input;
-
-    const prevIdx = findPrevNonWhitespaceIndex(input, nextIdx - 1);
-    if (prevIdx < 0) return input;
-
-    const prevCh = input[prevIdx];
-    const nextCh = input[nextIdx];
-    const beforeHasComma = prevCh === ',';
-    const looksLikeAdjacentNextKey = nextCh === '"' || nextCh === '{' || nextCh === '[';
-    const valueEnded = prevCh === '"' || prevCh === '}' || prevCh === ']' || /[0-9a-zA-Z]/.test(prevCh);
-
-    if (looksLikeAdjacentNextKey && valueEnded) {
-        // Handle "val" { pattern which usually means a missing }, in an array of objects
-        if (nextCh === '{') {
-            const actualPrevIdx = findPrevNonWhitespaceIndex(input, nextIdx - 1);
-            if (actualPrevIdx >= 0) {
-                const charBefore = input[actualPrevIdx];
-                if (charBefore === '"' || /[0-9a-zA-Z]/.test(charBefore)) {
-                    return `${input.slice(0, nextIdx)}}, ${input.slice(nextIdx)}`;
-                }
-                if (charBefore === ',') {
-                    const beforeCommaIdx = findPrevNonWhitespaceIndex(input, actualPrevIdx - 1);
-                    if (beforeCommaIdx >= 0 && (input[beforeCommaIdx] === '"' || /[0-9a-zA-Z]/.test(input[beforeCommaIdx]))) {
-                        const prefix = input.slice(0, actualPrevIdx).trimEnd();
-                        return `${prefix}}, ${input.slice(nextIdx)}`;
-                    } 
-                }
-            }
-        }
-        
-        if (!beforeHasComma) {
-            return `${input.slice(0, nextIdx)}, ${input.slice(nextIdx)}`;
-        }
-    }
-    return input;
-};
-
-const repairUnterminatedStringByParseError = (input: string, errorMessage?: string): string => {
-    if (!errorMessage) return input;
-    if (!/unterminated\s*string/i.test(errorMessage)) return input;
-    return closeDanglingString(input);
-};
-
-const repairUnescapedQuotesByParseError = (input: string, errorMessage?: string): string => {
-    if (!errorMessage) return input;
-    // Common error when an unescaped quote breaks the string and the next character is unexpected
-    if (!/expected\s*.*?['"“]?[,}\]]['"”]?/i.test(errorMessage) &&
-        !/unexpected\s*char/i.test(errorMessage) &&
-        !/invalid\s*character/i.test(errorMessage)) return input;
-
-    const pos = extractErrorPosition(input, errorMessage);
-    if (!Number.isFinite(pos)) return input;
-
-    // Logic: Look back to see if we are likely inside a large text block due to an unescaped quote
-    let inString = false;
-    for (let i = 0; i < pos; i++) {
-        if (input[i] === '"' && (i === 0 || input[i - 1] !== '\\')) {
-            inString = !inString;
-        }
-    }
-
-    if (!inString) {
-        // Find the most recent '"' that might have been unescaped (this quote ended the string prematurely)
-        const lastQuoteIdx = input.lastIndexOf('"', pos - 1);
-        if (lastQuoteIdx > 0 && input[lastQuoteIdx - 1] !== '\\') {
-            const nextAfterQuote = findNextNonWhitespaceIndex(input, lastQuoteIdx + 1);
-            if (nextAfterQuote >= 0) {
-                const charAfterQuote = input[nextAfterQuote];
-                // If it's not a structural character, it's probably unescaped content
-                if (charAfterQuote !== ':' && charAfterQuote !== ',' && charAfterQuote !== '}' && charAfterQuote !== ']') {
-                    return `${input.slice(0, lastQuoteIdx)}\\"${input.slice(lastQuoteIdx + 1)}`;
-                }
-            }
-        }
-    }
-
-    return input;
-};
-
-const repairExpectedQuotedPropertyNameByParseError = (input: string, errorMessage?: string): string => {
-    if (!errorMessage) return input;
-    if (!/expected\s*double-quoted\s*property\s*name/i.test(errorMessage)) return input;
-    const pos = extractErrorPosition(input, errorMessage);
-    if (!Number.isFinite(pos)) return input;
-
-    const nextIdx = findNextNonWhitespaceIndex(input, pos);
-    if (nextIdx < 0) return input;
-    const nextCh = input[nextIdx];
-
-    const prevIdx = findPrevNonWhitespaceIndex(input, nextIdx - 1);
-    if (prevIdx >= 0) {
-        const prevCh = input[prevIdx];
-        if ((nextCh === '}' || nextCh === ']') && prevCh === ',') {
-            return `${input.slice(0, prevIdx)}${input.slice(prevIdx + 1)}`;
-        }
-    }
-
-    if (nextCh === ',') {
-        const afterComma = findNextNonWhitespaceIndex(input, nextIdx + 1);
-        if (afterComma >= 0 && (input[afterComma] === '}' || input[afterComma] === ']')) {
-            return `${input.slice(0, nextIdx)}${input.slice(nextIdx + 1)}`;
-        }
-    }
-
-    const escapeDoubleQuote = (text: string) => text.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-    const singleQuotedKeyFixed = input.replace(
-        /([{,]\s*)'([^'\\]*(?:\\.[^'\\]*)*)'(\s*:)/g,
-        (_m, p1, p2, p3) => `${p1}"${escapeDoubleQuote(p2)}"${p3}`
-    );
-    if (singleQuotedKeyFixed !== input) {
-        return singleQuotedKeyFixed;
-    }
-
-    const keyStartChar = input[nextIdx];
-    const isKeyStart = /[A-Za-z_\u4e00-\u9fa5]/.test(keyStartChar);
-    if (isKeyStart) {
-        let endIdx = nextIdx + 1;
-        while (endIdx < input.length && /[A-Za-z0-9_\u4e00-\u9fa5-]/.test(input[endIdx])) {
-            endIdx += 1;
-        }
-        const colonIdx = findNextNonWhitespaceIndex(input, endIdx);
-        const prevTokenIdx = findPrevNonWhitespaceIndex(input, nextIdx - 1);
-        const keyBoundaryOk = prevTokenIdx < 0 || input[prevTokenIdx] === '{' || input[prevTokenIdx] === ',';
-        if (colonIdx >= 0 && input[colonIdx] === ':' && keyBoundaryOk) {
-            const keyText = input.slice(nextIdx, endIdx);
-            return `${input.slice(0, nextIdx)}"${keyText}"${input.slice(endIdx)}`;
-        }
-    }
-
-    return quoteBareKeys(removeTrailingCommas(input));
-};
-
-const repairEmbeddedQuoteByParseError = (input: string, errorMessage?: string): string => {
-    if (!errorMessage) return input;
-    if (!/expected\s*.*?['"“]?[,}\]]['"”]?\s*after\s*(?:property\s*value|array\s*element)/i.test(errorMessage)) return input;
-    const pos = extractErrorPosition(input, errorMessage);
-    if (!Number.isFinite(pos)) return input;
-
-    const nextIdx = findNextNonWhitespaceIndex(input, pos);
-    if (nextIdx < 0) return input;
-    const charAtError = input[nextIdx];
-
-    // If the character at the error position is '{' or '[',
-    // this is likely a missing comma issue – skip.
-    if (charAtError === '{' || charAtError === '[') {
-        return input;
-    }
-
-    // If the character is '"', it could be:
-    // a) A missing comma before a new key ("val" "key": ...) – skip for comma repair
-    // b) A trailing embedded dialogue quote ("text..."") – should be handled here
-    if (charAtError === '"') {
-        // Check if this " starts a key-value pair ("key": ...) or is another array element
-        let j = nextIdx + 1;
-        while (j < input.length && input[j] !== '"' && input[j] !== '\n') {
-            if (input[j] === '\\') j++;
-            j++;
-        }
-        if (j < input.length && input[j] === '"') {
-            const nextIdxAfterQuote = findNextNonWhitespaceIndex(input, j + 1);
-            if (nextIdxAfterQuote >= 0) {
-                const nextChAfterQuote = input[nextIdxAfterQuote];
-                if (nextChAfterQuote === ':' || nextChAfterQuote === ',' || nextChAfterQuote === '}' || nextChAfterQuote === ']') {
-                    // Looks like a valid structural element following this quote - missing comma case
-                    return input;
-                }
-            } else {
-                // Truncated but looks like a valid string element
-                return input;
-            }
-        }
-    }
-
-    // Look backwards from the error position for an unescaped double quote.
-    // This quote prematurely ended the string value and should be escaped.
-    // We only escape it if it's truly embedded (i.e., not followed by a delimiter).
-    for (let i = nextIdx - 1; i >= 0; i--) {
-        if (input[i] === '"') {
-            let backslashes = 0;
-            for (let j = i - 1; j >= 0; j--) {
-                if (input[j] === '\\') backslashes++;
-                else break;
-            }
-            if (backslashes % 2 === 0) {
-                // Check if this quote is structural (opening quote of a key or value)
-                const prevCharIdx = findPrevNonWhitespaceIndex(input, i - 1);
-                if (prevCharIdx >= 0) {
-                    const prevCh = input[prevCharIdx];
-                    if (prevCh === '{' || prevCh === '[' || prevCh === ',' || prevCh === ':') {
-                        continue; // Structural quote, ignore
-                    }
-                }
-
-                // Check if this quote is a valid terminator (e.g., "val", or "val"}). 
-                const nextCharIdx = findNextNonWhitespaceIndex(input, i + 1);
-                if (nextCharIdx >= 0) {
-                    const nextCh = input[nextCharIdx];
-                    if (nextCh === ':' || nextCh === ',' || nextCh === '}' || nextCh === ']') {
-                        continue; 
-                    }
-                }
-                return `${input.slice(0, i)}\\"${input.slice(i + 1)}`;
-            }
-        }
-    }
-
-    return input;
-};
-
-const errorGuidedRepair = (input: string, firstError?: string): string => {
-    let text = input;
-    let lastError = firstError;
-    // Each unescaped embedded quote needs one iteration to fix (two iterations
-    // per dialogue pair: one for the opening quote, one for the closing).
-    // AI-generated world prompts can have many dialogue exchanges, so we allow
-    // up to 50 iterations to handle up to ~25 dialogue pairs.
-    for (let i = 0; i < 50; i++) {
-        let next = repairEmbeddedQuoteByParseError(text, lastError);
-        if (next === text) {
-            next = repairMissingCommaByParseError(text, lastError);
-        }
-        if (next === text) {
-            next = repairUnescapedQuotesByParseError(text, lastError);
-        }
-        if (next === text) {
-            next = repairExpectedQuotedPropertyNameByParseError(text, lastError);
-        }
-        if (next === text) {
-            next = repairUnterminatedStringByParseError(text, lastError);
-        }
-        if (next === text) break;
-        text = next;
-        const parsed = tryParse(text);
-        if (parsed.ok) return text;
-        lastError = parsed.error;
-    }
-    return text;
-};
-
-const normalizeBracketBalance = (input: string): string => {
-    let result = '';
-    let stack: string[] = [];
-    let inString = false;
-    let escaped = false;
-
+    const map: Record<string, string> = { '“': '"', '”': '"', '‘': "'", '’': "'", '，': ',', '：': ':', '；': ',' };
+    let result = '', inString = false, escaped = false;
     for (const ch of input) {
         if (inString) {
             result += ch;
-            if (escaped) {
-                escaped = false;
-            } else if (ch === '\\') {
-                escaped = true;
-            } else if (ch === '"') {
-                inString = false;
-            }
+            if (escaped) escaped = false;
+            else if (ch === '\\') escaped = true;
+            else if (ch === '"') inString = false;
             continue;
         }
-
-        if (ch === '"') {
-            inString = true;
-            result += ch;
-            continue;
-        }
-
-        if (ch === '{') {
-            stack.push('}');
-            result += ch;
-            continue;
-        }
-        if (ch === '[') {
-            stack.push(']');
-            result += ch;
-            continue;
-        }
-        if (ch === '}' || ch === ']') {
-            // Find if this bracket exists anywhere in the stack
-            const idx = stack.lastIndexOf(ch);
-            if (idx >= 0) {
-                // Close everything on top of it first
-                while (stack.length > idx + 1) {
-                    result += stack.pop();
-                }
-                stack.pop(); // pop the matching one
-                result += ch;
-            } else {
-                // Unmatched closing bracket, skip it to keep structure clean
-                continue;
-            }
-            continue;
-        }
-        result += ch;
-    }
-
-    // If stream output ends inside a string literal, close the quote first.
-    if (inString) {
-        result += '"';
-    }
-
-    if (stack.length > 0) {
-        result += stack.reverse().join('');
+        if (ch === '"') { inString = true; result += ch; continue; }
+        result += map[ch] ?? ch;
     }
     return result;
 };
 
-const VALID_JSON_ESCAPES = new Set(['b', 'f', 'n', 'r', 't', '"', '\\', '/', 'u']);
+const insertMissingCommasBetweenPairs = (input: string): string => {
+    return input.replace(/(["\]}0-9])\s*(?=\{|\[|"[^"]+"\s*:)/g, '$1,');
+};
+
+const normalizeBracketBalance = (input: string): string => {
+    let result = '', stack: string[] = [], inString = false, escaped = false;
+    for (const ch of input) {
+        if (inString) {
+            result += ch;
+            if (escaped) escaped = false;
+            else if (ch === '\\') escaped = true;
+            else if (ch === '"') inString = false;
+            continue;
+        }
+        if (ch === '"') { inString = true; result += ch; continue; }
+        if (ch === '{') { stack.push('}'); result += ch; continue; }
+        if (ch === '[') { stack.push(']'); result += ch; continue; }
+        if (ch === '}' || ch === ']') {
+            const idx = stack.lastIndexOf(ch);
+            if (idx >= 0) {
+                while (stack.length > idx + 1) result += stack.pop();
+                stack.pop(); result += ch;
+            } else continue;
+            continue;
+        }
+        result += ch;
+    }
+    if (inString) result += '"';
+    if (stack.length > 0) result += stack.reverse().join('');
+    return result;
+};
 
 const escapeRawLineBreaksInStrings = (input: string): string => {
-    let result = '';
-    let inString = false;
-    let escaped = false;
-
+    let result = '', inString = false, escaped = false;
+    const VALID = new Set(['b', 'f', 'n', 'r', 't', '"', '\\', '/', 'u']);
     for (let i = 0; i < input.length; i++) {
         const ch = input[i];
         if (inString) {
             if (escaped) {
-                if (!VALID_JSON_ESCAPES.has(ch)) {
-                    const code = ch.charCodeAt(0);
-                    if (code < 0x20) {
-                        // Control character following a backslash (e.g. `\` + actual newline).
-                        // The `\` is already in the result; just emit the correct escape letter
-                        // so the sequence becomes a valid JSON escape like `\n`, `\t`, etc.
-                        if (ch === '\n') {
-                            result += 'n';
-                        } else if (ch === '\r') {
-                            if (input[i + 1] === '\n') i += 1;
-                            result += 'n';
-                        } else if (ch === '\t') {
-                            result += 't';
-                        } else if (ch === '\b') {
-                            result += 'b';
-                        } else if (ch === '\f') {
-                            result += 'f';
-                        } else {
-                            result += 'u' + code.toString(16).padStart(4, '0');
-                        }
-                    } else {
-                        // Non-control invalid escape (e.g. \a, \x) – escape the
-                        // backslash as a literal so the JSON stays valid.
-                        result += '\\';
-                        result += ch;
-                    }
-                } else {
-                    result += ch;
-                }
-                escaped = false;
-                continue;
+                if (!VALID.has(ch)) { result += (ch === '\n' || ch === '\r') ? 'n' : '\\' + ch; }
+                else result += ch;
+                escaped = false; continue;
             }
-            if (ch === '\\') {
-                result += ch;
-                escaped = true;
-                continue;
-            }
-            if (ch === '"') {
-                inString = false;
-                result += ch;
-                continue;
-            }
-            // Escape ALL control characters (ASCII 0-31) inside strings
+            if (ch === '\\') { result += ch; escaped = true; continue; }
+            if (ch === '"') { inString = false; result += ch; continue; }
             const code = ch.charCodeAt(0);
             if (code < 0x20) {
-                if (ch === '\n') {
-                    result += '\\n';
-                } else if (ch === '\r') {
-                    if (input[i + 1] === '\n') i += 1;
-                    result += '\\n';
-                } else if (ch === '\t') {
-                    result += '\\t';
-                } else if (ch === '\b') {
-                    result += '\\b';
-                } else if (ch === '\f') {
-                    result += '\\f';
-                } else {
-                    result += '\\u' + code.toString(16).padStart(4, '0');
-                }
+                result += (ch === '\n' || ch === '\r') ? '\\n' : '\\u' + code.toString(16).padStart(4, '0');
                 continue;
             }
-            result += ch;
-            continue;
+            result += ch; continue;
         }
-
-        if (ch === '"') {
-            inString = true;
-            result += ch;
-            continue;
-        }
+        if (ch === '"') inString = true;
         result += ch;
     }
-
     return result;
 };
 
-const normalizeBase = (input: string): string => {
-    return input.replace(/^\uFEFF/, '').trim();
-};
-
 const repairJsonText = (input: string): string => {
-    let text = normalizeBase(input);
+    let text = input.replace(/^\uFEFF/, '').trim();
     text = stripFence(text);
     text = extractJsonBlock(text);
-    text = normalizeSlashN(text);
     text = normalizeFullWidthPunctuation(text);
-    text = normalizeSingleQuoteJson(text);
-    text = quoteBareKeys(text);
+    text = structuralAwareRepair(text);
     text = insertMissingCommasBetweenPairs(text);
-    text = removeTrailingCommas(text);
-    text = trimIllegalTailPunctuation(text);
-    text = closeDanglingString(text);
     text = normalizeBracketBalance(text);
     text = escapeRawLineBreaksInStrings(text);
     return text.trim();
 };
 
-const dedupeCandidates = (candidates: string[]): string[] => {
-    const seen = new Set<string>();
-    const list: string[] = [];
-    for (const item of candidates) {
-        const value = item.trim();
-        if (!value || seen.has(value)) continue;
-        seen.add(value);
-        list.push(value);
-    }
-    return list;
-};
-
 export const parseJsonWithRepair = <T = any>(input: string): JsonRepairResult<T> => {
-    const source = normalizeBase(input || '');
-    const candidates = dedupeCandidates([
-        source,
-        stripFence(source),
-        extractFirstJsonObject(source),
-        extractFirstJsonObject(stripFence(source)),
-        extractJsonBlock(source),
-        extractJsonBlock(stripFence(source)),
-    ]);
+    const source = (input || '').replace(/^\uFEFF/, '').trim();
+    const candidates = [source, source.replace(/<thinking>[\s\S]*?<\/thinking>/gi, '').trim(), stripFence(source), extractFirstJsonObject(source)];
+    const seen = new Set<string>();
+    const cleanCandidates = candidates.map(c => c.trim()).filter(c => c && !seen.has(c) && seen.add(c));
 
-    for (const candidate of candidates) {
-        const parsed = tryParse<T>(candidate);
-        if (parsed.ok) {
-            return {
-                value: parsed.value,
-                repairedText: candidate,
-                usedRepair: candidate !== source,
-            };
-        }
+    for (const c of cleanCandidates) {
+        try { return { value: JSON.parse(c) as T, repairedText: c, usedRepair: c !== source }; } catch {}
     }
 
-    let lastError = 'JSON Parsing failed';
-    let bestRepaired = source;
-
-    for (const candidate of candidates) {
-        const repaired = repairJsonText(candidate);
+    let lastError = 'Repair failed', bestRepaired = source;
+    for (const c of cleanCandidates) {
+        const repaired = repairJsonText(c);
         bestRepaired = repaired;
-        const parsed = tryParse<T>(repaired);
-        if (parsed.ok) {
-            return {
-                value: parsed.value,
-                repairedText: repaired,
-                usedRepair: true,
-            };
-        }
-        const guided = errorGuidedRepair(repaired, parsed.error);
-        if (guided !== repaired) {
-            bestRepaired = guided;
-            const guidedParsed = tryParse<T>(guided);
-            if (guidedParsed.ok) {
-                return {
-                    value: guidedParsed.value,
-                    repairedText: guided,
-                    usedRepair: true,
-                };
-            }
-            if (guidedParsed.error) lastError = guidedParsed.error;
-        }
-        if (parsed.error) lastError = parsed.error;
+        try { return { value: JSON.parse(repaired) as T, repairedText: repaired, usedRepair: true }; }
+        catch (e: any) { lastError = e.message; }
     }
-
-    return {
-        value: null,
-        repairedText: bestRepaired,
-        usedRepair: true,
-        error: lastError,
-    };
+    // Final desperate attempt: if error is about comma/brace, try to fix it guiding by position
+    return { value: null, repairedText: bestRepaired, usedRepair: true, error: lastError };
 };
 
 export const formatJsonWithRepair = (input: string, fallback: string): string => {
-    const parsed = parseJsonWithRepair<any>(input);
-    if (parsed.value === null) return fallback;
-    try {
-        return JSON.stringify(parsed.value, null, 2);
-    } catch {
-        return parsed.repairedText || fallback;
-    }
+    const p = parseJsonWithRepair<any>(input);
+    return p.value ? JSON.stringify(p.value, null, 2) : p.repairedText || fallback;
 };

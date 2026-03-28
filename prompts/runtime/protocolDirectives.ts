@@ -23,18 +23,3 @@ export const getActionOptionsPrompt = (
     return getPromptContent(promptPool, 'core_action_options')
         || (typeof CoreActionOptions?.content === 'string' ? CoreActionOptions.content.trim() : '');
 };
-
-export const constructWordCountRequirementPrompt = (minLength: number): string => {
-    const safeValue = Number.isFinite(minLength) ? Math.max(50, Math.floor(minLength)) : 800;
-    return [
-        `<WordCount>Độ dài nội dung <Main Body> mong muốn khoảng **${safeValue} chữ**.</WordCount>`,
-        'Lưu ý: Khuyến khích mô tả chi tiết từng hành động, biểu cảm, bối cảnh và nội tâm NPC.'
-    ].join('\n');
-};
-
-export const constructDisclaimerOutputPrompt = (): string => {
-    return [
-        'Vui lòng xuất thẻ <disclaimer>...</disclaimer> ở cuối hiệp.',
-        'Thông báo miễn trừ trách nhiệm phải được đặt sau thẻ <Command> và không được làm gián đoạn nội dung <Main Body>.'
-    ].join('\n');
-};

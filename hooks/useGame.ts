@@ -22,7 +22,7 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import * as dbService from '../services/dbService';
 import * as aiService from '../services/aiService';
-import { applyStateCommand } from '../utils/stateHelpers';
+import { applyStateCommand, generateSafeUUID } from '../utils/stateHelpers';
 import { estimateTextTokens } from '../utils/tokenEstimate';
 import { useGameState } from './useGameState';
 import { normalizeApiSettings, getMainStoryApiConfig, getRecallApiConfig, isApiConfigUsable, hasAnyAiBackend, getCurrentApiConfig } from '../utils/apiConfig';
@@ -53,15 +53,12 @@ import {
 import { buildAICharacterDeclarationPrompt } from '../prompts/runtime/roleIdentity';
 import { standardizeSingleNPC } from './useGame/stateTransforms';
 import {
-    constructWordCountRequirementPrompt,
-    constructDisclaimerOutputPrompt as constructDisclaimerOutputRequirementsPrompt,
     getOutputProtocolPrompt,
     getActionOptionsPrompt as actionOptionsPrompt
 } from '../prompts/runtime/protocolDirectives';
 import { constructStorylineStyleAssistantPrompt } from '../prompts/runtime/storyStyles';
 import { CoreChainOfThoughtMulti as Core_ChainOfThought_MultiThought } from '../prompts/core/cotMulti';
 import { Core_OutputFormat_MultiThought } from '../prompts/core/formatMulti';
-import { WritingNoControl as Writing_PreventSpeaking } from '../prompts/writing/noControl';
 import { ImageService, ImageCacheService } from '../services/imageService';
 import { WORLD_STRUCTURE, FULL_WORLD_SKELETON } from '../data/worldData';
 import { WorldDataExporter } from '../services/worldDataExporter';
@@ -261,13 +258,28 @@ export const useGame = () => {
 
     // --- Actions ---
     const deepCopy = <T,>(data: T): T => {
-        if (data === undefined || data === null) return data;
         try {
-            return JSON.parse(JSON.stringify(data)) as T;
+            return JSON.parse(JSON.stringify(data));
         } catch (e) {
-            console.error('deepCopy failed', e, data);
+            console.error('[useGame] deepCopy failed:', e);
             return data;
         }
+    };
+
+    const generateSafeUUID = (): string => {
+        if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+            try {
+                return crypto.randomUUID();
+            } catch (e) {
+                console.warn('[useGame] crypto.randomUUID failed, falling back to manual generation:', e);
+            }
+        }
+        // Manual fallback for non-secure contexts
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            const r = Math.random() * 16 | 0;
+            const v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
     };
     const resetAutoSaveStatus = () => {
         recentAutoSaveTimestampRef.current = 0;
@@ -366,58 +378,39 @@ export const useGame = () => {
         });
     }, [environment?.time, environment?.festival, festivals, setEnvironment]);
 
-    const standardizeGameSettings = (raw?: Partial<GameSettings> | null): GameSettings => ({
-        ...(() => {
-            const readBoolean = (value: unknown, fallback: boolean): boolean => (
-                typeof value === 'boolean' ? value : fallback
-            );
-            const fallbackActionOptions = typeof gameConfig?.enableActionOptions === 'boolean' ? gameConfig.enableActionOptions : true;
-            const fallbackCot = typeof gameConfig?.enablePseudoCotInjection === 'boolean' ? gameConfig.enablePseudoCotInjection : true;
-            const fallbackMulti = typeof gameConfig?.enableMultiThinking === 'boolean' ? gameConfig.enableMultiThinking : false;
-            const fallbackNoControl = typeof gameConfig?.enablePreventSpeaking === 'boolean' ? gameConfig.enablePreventSpeaking : true;
-            const fallbackDisclaimer = typeof gameConfig?.enableDisclaimerOutput === 'boolean' ? gameConfig.enableDisclaimerOutput : true;
-            return {
-                enableActionOptions: readBoolean(raw?.enableActionOptions, fallbackActionOptions),
-                enablePseudoCotInjection: readBoolean(raw?.enablePseudoCotInjection, fallbackCot),
-                enableMultiThinking: readBoolean(raw?.enableMultiThinking, fallbackMulti),
-                enablePreventSpeaking: readBoolean(raw?.enablePreventSpeaking, fallbackNoControl),
-                enableDisclaimerOutput: readBoolean(raw?.enableDisclaimerOutput, fallbackDisclaimer),
-                enableExtraPrompt: readBoolean(raw?.enableExtraPrompt, false),
-                enableRealWorldMode: readBoolean(raw?.enableRealWorldMode, false)
-            };
-        })(),
-        bodyLengthRequirement: (() => {
-            const candidate = raw?.bodyLengthRequirement as unknown;
-            if (typeof candidate === 'number' && Number.isFinite(candidate)) return Math.max(50, Math.floor(candidate));
-            if (typeof candidate === 'string') {
-                const n = Number(candidate.replace(/[^\d]/g, ''));
-                if (Number.isFinite(n) && n > 0) return Math.max(50, Math.floor(n));
-            }
-            if (typeof gameConfig?.bodyLengthRequirement === 'number' && Number.isFinite(gameConfig.bodyLengthRequirement)) {
-                return Math.max(50, Math.floor(gameConfig.bodyLengthRequirement));
-            }
-            return 450;
-        })(),
-        narrativePerspective: (raw?.narrativePerspective === 'Ngôi thứ nhất' || raw?.narrativePerspective === 'Ngôi thứ hai' || raw?.narrativePerspective === 'Ngôi thứ ba'
-            ? raw.narrativePerspective
-            : (gameConfig?.narrativePerspective || 'Ngôi thứ hai')) as 'Ngôi thứ nhất' | 'Ngôi thứ hai' | 'Ngôi thứ ba',
-        storyStyle: (raw?.storyStyle === 'Tu luyện' || raw?.storyStyle === 'Thông thường' || raw?.storyStyle === 'Tu la tràng' || raw?.storyStyle === 'Thuần ái'
-            ? raw.storyStyle
-            : (gameConfig?.storyStyle || 'Thông thường')) as any,
-        extraPrompt: typeof raw?.extraPrompt === 'string'
-            ? (() => {
-                const candidate = raw.extraPrompt;
-                const trimmed = candidate.trim();
-                if (!trimmed) return defaultExtraSystemPrompt;
-                return candidate;
-            })()
-            : (() => {
-                const candidate = typeof gameConfig?.extraPrompt === 'string' ? gameConfig.extraPrompt : defaultExtraSystemPrompt;
-                const trimmed = candidate.trim();
-                if (!trimmed) return defaultExtraSystemPrompt;
-                return candidate;
-            })()
-    });
+    const standardizeGameSettings = (raw?: Partial<GameSettings> | null): GameSettings => {
+        const readBoolean = (value: unknown, fallback: boolean): boolean => (
+            typeof value === 'boolean' ? value : fallback
+        );
+        const fallbackActionOptions = typeof gameConfig?.enableActionOptions === 'boolean' ? gameConfig.enableActionOptions : true;
+        const fallbackCot = typeof gameConfig?.enablePseudoCotInjection === 'boolean' ? gameConfig.enablePseudoCotInjection : true;
+        const fallbackMulti = typeof gameConfig?.enableMultiThinking === 'boolean' ? gameConfig.enableMultiThinking : false;
+
+        return {
+            enableActionOptions: readBoolean(raw?.enableActionOptions, fallbackActionOptions),
+            enablePseudoCotInjection: readBoolean(raw?.enablePseudoCotInjection, fallbackCot),
+            enableMultiThinking: readBoolean(raw?.enableMultiThinking, fallbackMulti),
+            narrativePerspective: (raw?.narrativePerspective === 'Ngôi thứ nhất' || raw?.narrativePerspective === 'Ngôi thứ hai' || raw?.narrativePerspective === 'Ngôi thứ ba'
+                ? raw.narrativePerspective
+                : (gameConfig?.narrativePerspective || 'Ngôi thứ hai')) as 'Ngôi thứ nhất' | 'Ngôi thứ hai' | 'Ngôi thứ ba',
+            storyStyle: (raw?.storyStyle === 'Tu luyện' || raw?.storyStyle === 'Thông thường' || raw?.storyStyle === 'Tu la tràng' || raw?.storyStyle === 'Thuần ái'
+                ? raw.storyStyle
+                : (gameConfig?.storyStyle || 'Thông thường')) as any,
+            extraPrompt: typeof raw?.extraPrompt === 'string'
+                ? (() => {
+                    const candidate = raw.extraPrompt;
+                    const trimmed = candidate.trim();
+                    if (!trimmed) return defaultExtraSystemPrompt;
+                    return candidate;
+                })()
+                : (() => {
+                    const candidate = typeof gameConfig?.extraPrompt === 'string' ? gameConfig.extraPrompt : defaultExtraSystemPrompt;
+                    const trimmed = candidate.trim();
+                    if (!trimmed) return defaultExtraSystemPrompt;
+                    return candidate;
+                })()
+        };
+    };
     const buildCotDisguisePrompt = (config: GameSettings): string => {
         if (config?.enableMultiThinking === true) {
             return defaultMultipleReasoningCOTHistoryPrompt.trim();
@@ -1168,43 +1161,16 @@ export const useGame = () => {
         };
 
 
-        const applyPreventSpeakingPromptSwitch = (
-            pool: PromptStructure[],
-            enabled: boolean
-        ): PromptStructure[] => {
-            const hasNoControl = pool.some(p => p.id === 'write_no_control');
-            let nextPool = pool.map(p => {
-                if (p.id === 'write_no_control') return { ...p, enabled: enabled };
-                return p;
-            });
-            if (enabled && !hasNoControl) {
-                nextPool = [...nextPool, { ...Writing_PreventSpeaking, enabled: true }];
-            }
-            return nextPool;
-        };
         let effectivePromptPool = applyMultiThoughtPromptSwitch(
             promptPool,
             normalizedGameConfig.enableMultiThinking === true
-        );
-
-        effectivePromptPool = applyPreventSpeakingPromptSwitch(
-            effectivePromptPool,
-            normalizedGameConfig.enablePreventSpeaking !== false
         );
 
         const playerName = statePayload?.Role?.name || statePayload?.role?.name || statePayload?.character?.name || statePayload?.Role?.['Full Name'] || character?.name || 'Unnamed';
         const renderPromptText = (content: string) => content.replace(/\$\{playerName\}/g, playerName);
         const aiCharacterDeclaration = buildAICharacterDeclarationPrompt(playerName);
         const applyWritingSettings = (promptId: string, content: string) => {
-            if (promptId !== 'write_req') return content;
-            const lengthRule = constructWordCountRequirementPrompt(normalizedGameConfig.bodyLengthRequirement);
-            if (/<Word count>[\s\S]*?<\/Word count>/im.test(content)) {
-                return content.replace(/<Word count>[\s\S]*?<\/Word count>/im, lengthRule);
-            }
-            if (/<Số chữ>[\s\S]*?<\/Số chữ>/m.test(content)) {
-                return content.replace(/<Số chữ>[\s\S]*?<\/Số chữ>/m, lengthRule);
-            }
-            return `${content.trim()}\n${lengthRule}`;
+            return content;
         };
 
         const enabledPrompts = effectivePromptPool.filter(p => p.enabled);
@@ -1240,10 +1206,8 @@ export const useGame = () => {
             .filter(Boolean)
             .join('\n\n');
         const outputProtocolPrompt = renderPromptText(getOutputProtocolPrompt(promptPool));
-        const lengthRequirementPrompt = constructWordCountRequirementPrompt(normalizedGameConfig.bodyLengthRequirement);
-        const disclaimerRequirementPrompt = normalizedGameConfig.enableDisclaimerOutput
-            ? constructDisclaimerOutputRequirementsPrompt()
-            : '';
+        const lengthRequirementPrompt = '';
+        const disclaimerRequirementPrompt = '';
 
         const npcContext = buildNPCContext(socialData || [], memoryConfig);
         const contextMapAndBuilding = constructMapBuildingStateText(statePayload);
@@ -1297,12 +1261,7 @@ export const useGame = () => {
             : '';
         const contextSettings = [
             '【Thiết lập game】',
-            `Yêu cầu số chữ: ${normalizedGameConfig.bodyLengthRequirement} chữ`,
-            `Góc nhìn trần thuật: ${normalizedGameConfig.narrativePerspective}`,
-            `Phong cách câu chuyện: ${normalizedGameConfig.storyStyle}`,
             `Chức năng lựa chọn hành động: ${normalizedGameConfig.enableActionOptions ? 'Mở' : 'Đóng'}`,
-            `Ngăn chặn nói chuyện: ${normalizedGameConfig.enablePreventSpeaking ? 'Mở' : 'Đóng'}`,
-            `Xuất lời cảnh báo: ${normalizedGameConfig.enableDisclaimerOutput ? 'Mở' : 'Đóng'}`,
             `Tiêm giả COT: ${normalizedGameConfig.enablePseudoCotInjection ? 'Mở' : 'Đóng'}`,
             `Chế độ đa suy nghĩ: ${normalizedGameConfig.enableMultiThinking ? 'Mở' : 'Đóng'}`,
 
@@ -1316,13 +1275,7 @@ export const useGame = () => {
                     normalizedGameConfig.extraPrompt
                 ]
                 : []),
-            ...(normalizedGameConfig.enableRealWorldMode
-                ? [
-                    '',
-                    '【Quy tắc thế giới thực - Thiên Đạo Vận Hành】',
-                    normalizedGameConfig.customRealWorldRules?.trim() || 'Thế giới vận hành theo các luật Nhân Quả, Vận Động, Thời Gian và Tương Quan Thực Tế. Mọi diễn biến phải đảm bảo tính chân thực và logic tối cao của một thế giới võ hiệp thực thụ. Mọi cuộc chiến dựa trên thực lực, tu vi, pháp bảo và thiên thời. Sinh linh tuân thủ các quy luật sinh học, lão hóa và giới hạn của bản chất. Tuyệt đối cấm các bước nhảy vọt logic hoặc buff sức mạnh vô căn cứ.'
-                ]
-                : []),
+
 
             '',
             '【Gợi ý ngôi kể tương ứng】',
@@ -1410,9 +1363,12 @@ export const useGame = () => {
         mode: 'all' | 'step',
         openingStreaming: boolean = true
     ) => {
+        console.log('[useGame] handleGenerateWorld starting...', { mode, openingStreaming, worldConfig, charData });
         const currentApi = getMainStoryApiConfig(apiConfig);
         const workerUrl = visualConfig?.textGenWorkerUrl;
+        
         if (!hasAnyAiBackend(currentApi, workerUrl)) {
+            console.error('[useGame] No AI backend found', { currentApi, workerUrl });
             alert("Vui lòng cấu hình API hoặc sử dụng Worker mặc định trong Cài đặt.");
             setShowSettings(true);
             return;
@@ -1425,7 +1381,9 @@ export const useGame = () => {
         });
         clearRollSnapshot();
         resetAutoSaveStatus();
-        setStoryId(crypto.randomUUID());
+        const currentGeneratedStoryId = generateSafeUUID();
+        console.log('[useGame] Generated storyId:', currentGeneratedStoryId);
+        setStoryId(currentGeneratedStoryId);
 
         // Sync NSFW and Female Protagonist settings to global game config
         setGameConfig(prev => ({
@@ -1436,6 +1394,8 @@ export const useGame = () => {
         const openingBase = createStartingBasicStatus(charData, worldConfig);
 
         if (openingStreaming) {
+            console.log('[useGame] Setting initial streaming view/history');
+            console.log('[handleGenerateWorld] Start', { worldName: worldConfig.worldName, difficulty: worldConfig.difficulty, useStreaming: openingStreaming });
             const worldStreamMarker = Date.now();
             setView('game');
             setHistory([
@@ -1452,6 +1412,29 @@ export const useGame = () => {
             ]);
         }
 
+        setStory({
+            currentChapter: {
+                id: generateSafeUUID(),
+                index: 0,
+                title: 'Intro',
+                summary: 'Khởi đầu hành trình',
+                backgroundStory: '',
+                mainConflict: '',
+                endConditions: [],
+                foreshadowingList: []
+            },
+            nextChapterPreview: { title: '', outline: '' },
+            historicalArchives: [],
+            shortTermPlanning: '',
+            mediumTermPlanning: '',
+            longTermPlanning: '',
+            pendingEvents: [],
+            worldQuestList: [],
+            promiseList: [],
+            storyVariables: {},
+            actionCountSinceLastChapter: 0
+        });
+
         setLoading(true);
         setIsGenerating(true);
         setGenerationStartTime(Date.now());
@@ -1460,6 +1443,7 @@ export const useGame = () => {
         let worldStreamHeartbeat: ReturnType<typeof setInterval> | null = null;
         let worldDeltaReceived = false;
         try {
+            console.log('[handleGenerateWorld] Initiating world generation...');
             // 1. Build worldview seed prompt (for world-prompt generation only)
             const worldPromptSeed = constructWorldviewSeedPrompt(worldConfig, charData);
 
@@ -1563,7 +1547,9 @@ export const useGame = () => {
                         }
                     }
                     : undefined,
-                workerUrl
+                workerUrl,
+                undefined,
+                currentGeneratedStoryId
             );
             if (worldStreamHeartbeat) clearInterval(worldStreamHeartbeat);
 
@@ -1574,7 +1560,8 @@ export const useGame = () => {
                 charData,
                 FULL_WORLD_SKELETON,
                 currentApi,
-                workerUrl
+                workerUrl,
+                { id: currentGeneratedStoryId }
             );
 
             // 4. Update state with filtered world skeleton data (we still transform full skeleton but with discovery filtering later)
@@ -1628,7 +1615,7 @@ export const useGame = () => {
                 alert("Worldview prompt written. Please input commands in the chat box to start initialization.");
             } else {
                 // We pass genData explicitly because state updates might be async/batched
-                await generateOpeningStory(openingBase, finalPrompts, openingStreaming, currentApi, startingLocation.reason);
+                await generateOpeningStory(openingBase, finalPrompts, openingStreaming, currentApi, currentGeneratedStoryId, startingLocation.reason);
                 // Trigger Visual Summary review step
             }
         } catch (error: any) {
@@ -1673,6 +1660,7 @@ export const useGame = () => {
         promptSnapshot: PromptStructure[],
         useStreaming: boolean,
         apiForOpening: ApiConfig,
+        currentStoryId: string,
         startingReason?: string
     ) => {
         const initialHistory: ChatHistory[] = [
@@ -1746,8 +1734,8 @@ export const useGame = () => {
             }
 
             const openingGameConfig = normalizeGameSettings(gameConfig);
-            const openingLengthRequirementPrompt = constructWordCountRequirementPrompt(10000);
-            const openingDisclaimerRequirementPrompt = openingContext.contextPieces.disclaimerOutputPrompt || undefined;
+            const openingLengthRequirementPrompt = '';
+            const openingDisclaimerRequirementPrompt = '';
             const openingOutputProtocolPrompt = openingContext.contextPieces.outputProtocolPrompt;
             const combinedExtraPrompt = openingGameConfig.extraPrompt || '';
 
@@ -1772,7 +1760,8 @@ export const useGame = () => {
                                 }
                                 return item;
                             }));
-                        }
+                        },
+                        id: currentStoryId
                     }
                     : undefined,
                 combinedExtraPrompt,
@@ -1783,7 +1772,8 @@ export const useGame = () => {
                     outputProtocolPrompt: openingOutputProtocolPrompt,
                     cotPseudoHistoryPrompt: buildCotDisguisePrompt(openingGameConfig),
                     lengthRequirementPrompt: openingLengthRequirementPrompt,
-                    disclaimerRequirementPrompt: openingDisclaimerRequirementPrompt
+                    disclaimerRequirementPrompt: openingDisclaimerRequirementPrompt,
+                    id: currentStoryId
                 },
                 visualConfig?.textGenWorkerUrl
             );
@@ -1844,6 +1834,7 @@ export const useGame = () => {
                 timestamp: Date.now(),
                 gameTime: openingTime
             };
+
             if (useStreaming) {
                 setHistory(prev => prev.map(item => {
                     if (
@@ -1859,6 +1850,28 @@ export const useGame = () => {
                 setHistory([...initialHistory, newAiMsg]);
             }
 
+            setStory({
+                currentChapter: {
+                    id: generateSafeUUID(),
+                    index: 0,
+                    title: 'Intro',
+                    summary: 'Khởi đầu hành trình',
+                    backgroundStory: '',
+                    mainConflict: '',
+                    endConditions: [],
+                    foreshadowingList: []
+                },
+                nextChapterPreview: { title: '', outline: '' },
+                historicalArchives: [],
+                shortTermPlanning: '',
+                mediumTermPlanning: '',
+                longTermPlanning: '',
+                pendingEvents: [],
+                worldQuestList: [],
+                promiseList: [],
+                storyVariables: {},
+                actionCountSinceLastChapter: 0
+            });
             // Trigger auto-save after full opening response — pass latest state snapshot
             void performAutoSave({
                 history: [...initialHistory, newAiMsg],
@@ -2031,6 +2044,11 @@ export const useGame = () => {
             content: "Parsed Content Updated"
         };
         setHistory(newHistory);
+        // FIX: Sync state if this is the latest assistant message
+        const isLatestAssistant = index === newHistory.length - 1 && newHistory[index].role === 'assistant';
+        if (isLatestAssistant) {
+            processResponseCommands(parsed);
+        }
     };
 
     const handleStop = () => {
@@ -2181,7 +2199,8 @@ export const useGame = () => {
                         onDelta: (_delta, accumulated) => {
                             options?.onRecallProgress?.({ phase: 'stream', text: accumulated });
                         },
-                        workerUrl
+                        workerUrl,
+                        id: storyId
                     }
                 );
                 if (!recalled) {
@@ -2349,7 +2368,8 @@ export const useGame = () => {
                     disclaimerRequirementPrompt,
                     errorDetailLimit: Number.POSITIVE_INFINITY,
                     enableClaudeMode: (runtimeGameConfig as any).enableClaudeMode === true,
-                    enableTagIntegrityCheck: (runtimeGameConfig as any).enableTagIntegrityCheck === true
+                    enableTagIntegrityCheck: (runtimeGameConfig as any).enableTagIntegrityCheck === true,
+                    id: storyId
                 },
                 workerUrl
             );
@@ -2513,26 +2533,36 @@ YÊU CẦU ĐỊNH DẠNG JSON (BẮT BUỘC):
                 undefined,
                 undefined,
                 undefined,
-                { enableCotInjection: false },
+                { enableCotInjection: false, id: storyId }, // Added storyId here
                 workerUrl
             );
 
             const summary = formatNarrative(aiResult.response?.story?.narrative || aiResult.rawText || "Cốt truyện tiếp diễn...");
 
             setStory(prev => {
-                const updatedCurrent = { ...prev.currentChapter, summary };
-                const newArchive = [...prev.historicalArchives, updatedCurrent];
+                // Ensure the archived chapter has the required epilogue field
+                const archivedChapter = {
+                    title: prev.currentChapter.title,
+                    summary: prev.currentChapter.summary,
+                    backgroundStory: prev.currentChapter.backgroundStory,
+                    epilogue: summary // Use the summary as epilogue
+                };
+                
+                const newArchive = [...prev.historicalArchives, archivedChapter];
                 const nextIndex = newArchive.length + 1;
 
                 return {
                     ...prev,
                     historicalArchives: newArchive,
                     currentChapter: {
+                        id: generateSafeUUID(),
                         index: nextIndex,
                         title: `Hồi ${nextIndex}`,
                         backgroundStory: summary,
+                        mainConflict: '',
                         summary: '',
-                        events: []
+                        endConditions: [],
+                        foreshadowingList: []
                     },
                     actionCountSinceLastChapter: 0
                 };
@@ -2601,7 +2631,7 @@ YÊU CẦU ĐỊNH DẠNG JSON (BẮT BUỘC):
             setGenerationStartTime(Date.now());
             setGenerationMetadata(undefined);
             try {
-                await generateOpeningStory(openingBase, prompts, openingStreaming, currentApi);
+                await generateOpeningStory(openingBase, prompts, openingStreaming, currentApi, storyId!);
             } catch (error: any) {
                 console.error('Initial story regeneration failed', error);
                 alert(`Tạo lại cốt truyện mở đầu thất bại: ${error?.message || 'Lỗi không rõ'}`);

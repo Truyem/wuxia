@@ -253,6 +253,18 @@ const StorageManager: React.FC<Props> = ({ requestConfirm }) => {
         });
     };
 
+    const handleRepairHistory = async () => {
+        await runWithConfirm('repair_history', {
+            title: 'Sửa lỗi hội thoại',
+            message: 'Tính năng này sẽ quét tất cả các bản lưu và cố gắng sửa các đoạn hội thoại bị lỗi hiển thị JSON (thường gặp khi dùng mô hình có suy nghĩ như DeepSeek R1). Bạn có muốn tiếp tục?',
+            confirmText: 'Sửa lỗi ngay',
+            onRun: async () => {
+                const result = await dbService.repairAllSaves();
+                pushNotice('success', `Đã sửa: ${result.repaired}/${result.total} bản lưu có thay đổi.`);
+            }
+        });
+    };
+
     // Helpers for Progress Bar
     const getPercent = (val: number) => Math.min((val / (info.usage || 1)) * 100, 100);
 
@@ -313,34 +325,50 @@ const StorageManager: React.FC<Props> = ({ requestConfirm }) => {
 
             {/* Archive Migration Section */}
             <div className="bg-ink-black/20 p-5 border border-wuxia-gold/20 rounded-xl space-y-4 backdrop-blur-sm">
-                <h4 className="text-wuxia-gold font-serif font-bold italic tracking-wider">Di chuyển lưu game</h4>
+                <h4 className="text-wuxia-gold font-serif font-bold italic tracking-wider">Di chuyển & Sửa lỗi</h4>
                 <p className="text-[11px] text-paper-white/50 leading-relaxed font-medium">
-                    Hỗ trợ nhập file JSON lưu game được xuất từ dự án này, phù hợp để chuyển thiết bị.
+                    Hỗ trợ nhập file JSON lưu game và sửa lỗi hiển thị hội thoại do mô hình AI.
                 </p>
 
-                <div className="flex items-center justify-between py-1">
-                    <div className="flex flex-col gap-0.5">
-                        <label className="text-sm text-paper-white/70">Ghi đè lưu game hiện có khi nhập.</label>
-                        <span className="text-[10px] text-paper-white/30">
-                            {overwriteOnImport ? 'Khi bật: Xóa lưu game trước khi nhập (theo tùy chọn bảo vệ lưu game).' : 'Khi tắt: Hợp nhất và tự động loại bỏ trùng lặp.'}
-                        </span>
-                    </div>
-                    <ToggleSwitch
-                        checked={overwriteOnImport}
-                        onChange={setOverwriteOnImport}
-                        ariaLabel="Chuyển sang chế độ ghi đè khi nhập"
+                <div className="grid grid-cols-1 gap-3">
+                    <button
+                        type="button"
+                        className="w-full py-3 border border-wuxia-cyan/30 hover:border-wuxia-cyan/50 bg-wuxia-cyan/5 hover:bg-wuxia-cyan/10 text-wuxia-cyan text-xs tracking-[0.1em] font-serif transition-all disabled:opacity-30 flex items-center justify-center gap-2"
+                        onClick={handleRepairHistory}
                         disabled={Boolean(runningAction)}
-                    />
-                </div>
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.83-5.83m0 0a2.978 2.978 0 01-3.07-3.07m7.388-3.17a3.921 3.921 0 00-5.417 5.417L17.5 5.5l-3.352 3.352m0 0A4.409 4.409 0 0115.5 10.5l-3.958 3.958" />
+                        </svg>
+                        <span>Sửa lỗi hiển thị JSON hội thoại</span>
+                    </button>
 
-                <button
-                    type="button"
-                    className="w-full py-3 border border-wuxia-gold/30 hover:border-wuxia-gold/50 bg-wuxia-gold/5 hover:bg-wuxia-gold/10 text-paper-white text-xs tracking-[0.2em] font-serif transition-all disabled:opacity-30 flex items-center justify-center gap-2"
-                    onClick={handleImportJson}
-                    disabled={Boolean(runningAction)}
-                >
-                    <span className="text-sm">Nhập file JSON lưu game</span>
-                </button>
+                    <div className="border-t border-wuxia-gold/10 my-1" />
+
+                    <div className="flex items-center justify-between py-1">
+                        <div className="flex flex-col gap-0.5">
+                            <label className="text-sm text-paper-white/70">Ghi đè lưu game hiện có khi nhập.</label>
+                            <span className="text-[10px] text-paper-white/30">
+                                {overwriteOnImport ? 'Khi bật: Xóa lưu game trước khi nhập.' : 'Khi tắt: Hợp nhất và tự động loại bỏ trùng lặp.'}
+                            </span>
+                        </div>
+                        <ToggleSwitch
+                            checked={overwriteOnImport}
+                            onChange={setOverwriteOnImport}
+                            ariaLabel="Chuyển sang chế độ ghi đè khi nhập"
+                            disabled={Boolean(runningAction)}
+                        />
+                    </div>
+
+                    <button
+                        type="button"
+                        className="w-full py-3 border border-wuxia-gold/30 hover:border-wuxia-gold/50 bg-wuxia-gold/5 hover:bg-wuxia-gold/10 text-paper-white text-xs tracking-[0.2em] font-serif transition-all disabled:opacity-30 flex items-center justify-center gap-2"
+                        onClick={handleImportJson}
+                        disabled={Boolean(runningAction)}
+                    >
+                        <span>Nhập file JSON lưu game</span>
+                    </button>
+                </div>
             </div>
 
             {/* Actions */}

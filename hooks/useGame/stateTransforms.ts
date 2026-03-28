@@ -1,4 +1,4 @@
-import { CharacterData, EnvironmentData, EquipmentSlot } from '../../types';
+import { CharacterData, EnvironmentData, EquipmentSlot, StoryEndCondition } from '../../types';
 import { normalizeCanonicalGameTime } from './timeUtils';
 
 const deepCopy = <T,>(data: T): T => JSON.parse(JSON.stringify(data)) as T;
@@ -1029,17 +1029,41 @@ const normalizeCombatStatus = (raw?: any): any => {
 const normalizeStoryStatus = (raw?: any, env?: any): any => {
     const story = raw && typeof raw === 'object' ? raw : {};
     const currentChapter = story.currentChapter && typeof story.currentChapter === 'object' ? story.currentChapter : {};
+    
+    // Normalize end conditions properly
+    const normalizeEndConditions = (conditions: any): StoryEndCondition[] => {
+        if (!Array.isArray(conditions)) return [];
+        return conditions.map(c => {
+            if (typeof c === 'string') return { 
+                id: generateAnonymousId(),
+                type: 'Sự kiện', 
+                description: c,
+                currentValue: 0,
+                isAchieved: false
+            };
+            return {
+                id: c.id || generateAnonymousId(),
+                type: (c.type === 'Thời gian' || c.type === 'Sự kiện' || c.type === 'Biến số') ? c.type : 'Sự kiện',
+                description: coerceToString(c.description || c.content || c),
+                targetValue: c.targetValue,
+                currentValue: c.currentValue || 0,
+                isAchieved: !!c.isAchieved,
+                correspondingVariableKey: c.correspondingVariableKey
+            };
+        });
+    };
+
     return {
         ...story,
         currentChapter: {
             ...currentChapter,
-            id: typeof currentChapter.id === 'string' ? currentChapter.id : 'ch_0',
+            id: typeof currentChapter.id === 'string' ? currentChapter.id : generateAnonymousId(),
             index: Number(currentChapter.index) || 0,
             title: coerceToString(currentChapter.title) || 'Intro',
             summary: coerceToString(currentChapter.summary),
             backgroundStory: coerceToString(currentChapter.backgroundStory),
             mainConflict: coerceToString(currentChapter.mainConflict),
-            endConditions: Array.isArray(currentChapter.endConditions) ? currentChapter.endConditions.map(coerceToString) : [],
+            endConditions: normalizeEndConditions(currentChapter.endConditions),
             foreshadowingList: Array.isArray(currentChapter.foreshadowingList) ? currentChapter.foreshadowingList.map(coerceToString) : []
         },
         nextChapterPreview: story.nextChapterPreview && typeof story.nextChapterPreview === 'object' 
@@ -1048,7 +1072,12 @@ const normalizeStoryStatus = (raw?: any, env?: any): any => {
                 outline: coerceToString(story.nextChapterPreview.outline) 
               } 
             : { title: '', outline: '' },
-        historicalArchives: Array.isArray(story.historicalArchives) ? story.historicalArchives : [],
+        historicalArchives: Array.isArray(story.historicalArchives) ? story.historicalArchives.map((a: any) => ({
+            title: coerceToString(a.title),
+            summary: coerceToString(a.summary),
+            backgroundStory: coerceToString(a.backgroundStory),
+            epilogue: coerceToString(a.epilogue)
+        })) : [],
         shortTermPlanning: typeof story.shortTermPlanning === 'string' ? story.shortTermPlanning : '',
         mediumTermPlanning: typeof story.mediumTermPlanning === 'string' ? story.mediumTermPlanning : '',
         longTermPlanning: typeof story.longTermPlanning === 'string' ? story.longTermPlanning : '',
@@ -1066,20 +1095,12 @@ const normalizeGameSettings = (raw?: any): any => {
     //                `=== true`  means "false by default when undefined (opt-in flag)".
     const result: any = {
         ...settings,
-        // 450 tokens ≈ a balanced turn length for wuxia narrative
-        bodyLengthRequirement: (() => {
-            const val = Number(settings.bodyLengthRequirement);
-            if (val === 1500) return 3000;
-            return val || 3000;
-        })(),
         // Default to 2nd-person (Ngôi thứ hai) — most immersive for interactive fiction
         narrativePerspective: typeof settings.narrativePerspective === 'string' ? settings.narrativePerspective : 'Ngôi thứ hai',
         jsonMode: typeof settings.jsonMode === 'string' ? settings.jsonMode : 'auto',
         // Opt-out flags (enabled by default)
         enableActionOptions: settings.enableActionOptions !== false,
-        enablePreventSpeaking: settings.enablePreventSpeaking !== false,
         enablePseudoCotInjection: settings.enablePseudoCotInjection !== false,
-        enableDisclaimerOutput: settings.enableDisclaimerOutput !== false,
         // Opt-in flags (disabled by default)
         enableMultiThinking: settings.enableMultiThinking === true,
 

@@ -71,105 +71,107 @@ const WorldEvolutionSettings: React.FC<Props> = ({ settings, onSave }) => {
                     />
                 </div>
 
-                <div className="space-y-4">
-                    <div className="mb-4">
-                        <label className="text-sm font-bold text-wuxia-red/80 font-serif tracking-wide uppercase mb-3 block">
-                            Chọn mẫu API nhanh
-                        </label>
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                            {API_PRESET_TEMPLATES.map((preset) => {
-                                const isActive = fmp.worldEvolutionIndependentApiUrl === preset.baseUrl && fmp.worldEvolutionModel === preset.model;
-                                return (
-                                    <button
-                                        key={preset.label}
-                                        type="button"
-                                        onClick={() => onSave({
-                                            ...settings,
-                                            featureModelPlaceholder: {
-                                                ...fmp,
-                                                worldEvolutionModel: preset.model,
-                                                worldEvolutionIndependentApiUrl: preset.baseUrl
-                                            }
-                                        })}
-                                        className={`flex flex-col items-center gap-1 p-3 rounded-lg border transition-all group ${isActive
-                                            ? 'border-wuxia-gold bg-wuxia-gold/10 text-wuxia-gold shadow-[0_0_15px_rgba(255,215,0,0.15)]'
-                                            : 'border-wuxia-gold/20 bg-black/30 hover:border-wuxia-gold/60 hover:bg-wuxia-gold/10'
-                                            }`}
-                                    >
-                                        <span className={`text-sm font-bold ${isActive ? 'text-wuxia-gold' : 'text-wuxia-gold/80 group-hover:text-wuxia-gold'}`}>{preset.label}</span>
-                                        <span className="text-[10px] text-paper-white/40 truncate max-w-full">{preset.model}</span>
-                                    </button>
-                                );
-                            })}
-                        </div>
-                        <p className="text-[10px] text-paper-white/40 ml-1 mt-2">Chọn mẫu sẽ tự động điền Base URL và mô hình. Bạn vẫn cần nhập API Key bên dưới.</p>
-                    </div>
-
-                    <div className="mb-4">
-                        <div className="flex items-center justify-between gap-3 mb-3">
-                            <label className="text-sm font-bold text-wuxia-gold font-serif tracking-wide uppercase">
-                                Chọn mô hình
+                {activeMainConfig?.provider !== 'worker' && (
+                    <div className="space-y-4">
+                        <div className="mb-4">
+                            <label className="text-sm font-bold text-wuxia-red/80 font-serif tracking-wide uppercase mb-3 block">
+                                Chọn mẫu API nhanh
                             </label>
-                            <GameButton
-                                onClick={fetchModels}
-                                variant="secondary"
-                                className="px-4 py-1 text-[10px] h-auto min-h-0 border-wuxia-gold/30 shadow-[0_0_10px_rgba(255,215,0,0.1)]"
-                                disabled={isFetchingModels}
-                            >
-                                {isFetchingModels ? '...' : 'LẤY DANH SÁCH'}
-                            </GameButton>
+                            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                                {API_PRESET_TEMPLATES.map((preset) => {
+                                    const isActive = fmp.worldEvolutionIndependentApiUrl === preset.baseUrl && fmp.worldEvolutionModel === preset.model;
+                                    return (
+                                        <button
+                                            key={preset.label}
+                                            type="button"
+                                            onClick={() => onSave({
+                                                ...settings,
+                                                featureModelPlaceholder: {
+                                                    ...fmp,
+                                                    worldEvolutionModel: preset.model,
+                                                    worldEvolutionIndependentApiUrl: preset.baseUrl
+                                                }
+                                            })}
+                                            className={`flex flex-col items-center gap-1 p-3 rounded-lg border transition-all group ${isActive
+                                                ? 'border-wuxia-gold bg-wuxia-gold/10 text-wuxia-gold shadow-[0_0_15px_rgba(255,215,0,0.15)]'
+                                                : 'border-wuxia-gold/20 bg-black/30 hover:border-wuxia-gold/60 hover:bg-wuxia-gold/10'
+                                                }`}
+                                        >
+                                            <span className={`text-sm font-bold ${isActive ? 'text-wuxia-gold' : 'text-wuxia-gold/80 group-hover:text-wuxia-gold'}`}>{preset.label}</span>
+                                            <span className="text-[10px] text-paper-white/40 truncate max-w-full">{preset.model}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                            <p className="text-[10px] text-paper-white/40 ml-1 mt-2">Chọn mẫu sẽ tự động điền Base URL và mô hình. Bạn vẫn cần nhập API Key bên dưới.</p>
                         </div>
-                        <div className="space-y-3">
-                            <InlineSelect
-                                options={allModelOptions}
-                                value={fmp.worldEvolutionModel || ''}
-                                onChange={(val) => onSave({ ...settings, featureModelPlaceholder: { ...fmp, worldEvolutionModel: val } })}
-                                placeholder="-- Chọn mô hình tiến hóa --"
-                                buttonClassName="bg-black/40 border-wuxia-gold/20 hover:border-wuxia-gold/50 py-3 text-wuxia-gold text-xs font-mono"
-                                panelClassName="max-w-full"
-                            />
-                            <input
-                                type="text"
-                                value={fmp.worldEvolutionModel || ''}
-                                onChange={(e) => onSave({ ...settings, featureModelPlaceholder: { ...fmp, worldEvolutionModel: e.target.value } })}
-                                className="w-full bg-transparent border border-wuxia-gold/20 rounded-lg px-4 py-3 text-paper-white focus:outline-none focus:border-wuxia-gold/40 transition-all placeholder:text-paper-white/20 font-mono text-sm"
-                                placeholder="Hoặc nhập tên mô hình tùy chỉnh..."
-                            />
-                        </div>
-                    </div>
 
-                    <div className="mb-4">
-                        <label className="block text-sm font-bold text-wuxia-gold mb-2 font-serif tracking-wide uppercase">
-                            API Key riêng (Tùy chọn)
-                        </label>
-                        <div className="relative group">
-                            <input
-                                type={showKey ? "text" : "password"}
-                                value={fmp.worldEvolutionIndependentApiKey || ''}
-                                onChange={(e) => onSave({ ...settings, featureModelPlaceholder: { ...fmp, worldEvolutionIndependentApiKey: e.target.value } })}
-                                className="w-full bg-transparent border border-wuxia-gold/20 rounded-lg px-4 py-3 pr-12 text-paper-white focus:outline-none focus:border-wuxia-gold/40 transition-all placeholder:text-paper-white/20 text-sm"
-                                placeholder="Nhập API Key..."
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowKey(!showKey)}
-                                className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-wuxia-gold/50 hover:text-wuxia-gold transition-colors"
-                            >
-                                {showKey ? 'Ẩn' : 'Hiện'}
-                            </button>
+                        <div className="mb-4">
+                            <div className="flex items-center justify-between gap-3 mb-3">
+                                <label className="text-sm font-bold text-wuxia-gold font-serif tracking-wide uppercase">
+                                    Chọn mô hình
+                                </label>
+                                <GameButton
+                                    onClick={fetchModels}
+                                    variant="secondary"
+                                    className="px-4 py-1 text-[10px] h-auto min-h-0 border-wuxia-gold/30 shadow-[0_0_10px_rgba(255,215,0,0.1)]"
+                                    disabled={isFetchingModels}
+                                >
+                                    {isFetchingModels ? '...' : 'LẤY DANH SÁCH'}
+                                </GameButton>
+                            </div>
+                            <div className="space-y-3">
+                                <InlineSelect
+                                    options={allModelOptions}
+                                    value={fmp.worldEvolutionModel || ''}
+                                    onChange={(val) => onSave({ ...settings, featureModelPlaceholder: { ...fmp, worldEvolutionModel: val } })}
+                                    placeholder="-- Chọn mô hình tiến hóa --"
+                                    buttonClassName="bg-black/40 border-wuxia-gold/20 hover:border-wuxia-gold/50 py-3 text-wuxia-gold text-xs font-mono"
+                                    panelClassName="max-w-full"
+                                />
+                                <input
+                                    type="text"
+                                    value={fmp.worldEvolutionModel || ''}
+                                    onChange={(e) => onSave({ ...settings, featureModelPlaceholder: { ...fmp, worldEvolutionModel: e.target.value } })}
+                                    className="w-full bg-transparent border border-wuxia-gold/20 rounded-lg px-4 py-3 text-paper-white focus:outline-none focus:border-wuxia-gold/40 transition-all placeholder:text-paper-white/20 font-mono text-sm"
+                                    placeholder="Hoặc nhập tên mô hình tùy chỉnh..."
+                                />
+                            </div>
                         </div>
-                        <p className="text-[10px] text-paper-white/40 ml-1">Để trống sẽ dùng lại API Key chính. Sau khi điền, tiến hóa thế giới sẽ ưu tiên dùng API key này.</p>
-                    </div>
 
-                    <div className="text-xs text-paper-white/40 pt-2 border-t border-wuxia-gold/10 italic">
-                        Trạng thái hiện tại: <span className="text-wuxia-red font-bold">
-                            {fmp.worldEvolutionIndependentModelToggle ? 'Đã bật mô hình tiến hóa thế giới' : 'Chưa bật mô hình tiến hóa thế giới'}
-                        </span>
-                        {fmp.worldEvolutionIndependentApiUrl && (
-                            <span className="ml-2 text-wuxia-gold/60">· API: {fmp.worldEvolutionIndependentApiUrl}</span>
-                        )}
+                        <div className="mb-4">
+                            <label className="block text-sm font-bold text-wuxia-gold mb-2 font-serif tracking-wide uppercase">
+                                API Key riêng (Tùy chọn)
+                            </label>
+                            <div className="relative group">
+                                <input
+                                    type={showKey ? "text" : "password"}
+                                    value={fmp.worldEvolutionIndependentApiKey || ''}
+                                    onChange={(e) => onSave({ ...settings, featureModelPlaceholder: { ...fmp, worldEvolutionIndependentApiKey: e.target.value } })}
+                                    className="w-full bg-transparent border border-wuxia-gold/20 rounded-lg px-4 py-3 pr-12 text-paper-white focus:outline-none focus:border-wuxia-gold/40 transition-all placeholder:text-paper-white/20 text-sm"
+                                    placeholder="Nhập API Key..."
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowKey(!showKey)}
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-wuxia-gold/50 hover:text-wuxia-gold transition-colors"
+                                >
+                                    {showKey ? 'Ẩn' : 'Hiện'}
+                                </button>
+                            </div>
+                            <p className="text-[10px] text-paper-white/40 ml-1">Để trống sẽ dùng lại API Key chính. Sau khi điền, tiến hóa thế giới sẽ ưu tiên dùng API key này.</p>
+                        </div>
+
+                        <div className="text-xs text-paper-white/40 pt-2 border-t border-wuxia-gold/10 italic">
+                            Trạng thái hiện tại: <span className="text-wuxia-red font-bold">
+                                {fmp.worldEvolutionIndependentModelToggle ? 'Đã bật mô hình tiến hóa thế giới' : 'Chưa bật mô hình tiến hóa thế giới'}
+                            </span>
+                            {fmp.worldEvolutionIndependentApiUrl && (
+                                <span className="ml-2 text-wuxia-gold/60">· API: {fmp.worldEvolutionIndependentApiUrl}</span>
+                            )}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
 
 

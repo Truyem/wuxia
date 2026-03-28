@@ -6,6 +6,7 @@ import { OrnateBorder } from '../../ui/decorations/OrnateBorder';
 import InlineSelect from '../../ui/InlineSelect';
 import ToggleSwitch from '../../ui/ToggleSwitch';
 import * as dbService from '../../../services/dbService';
+import { generateSafeUUID } from '../../../utils/stateHelpers';
 import { Dices, Save, Download, LogOut, X, Plus, Minus, Users, Swords, Check } from 'lucide-react';
 import { RadarChart, RadarData } from '../../shared/RadarChart';
 import { StatBar } from '../../shared/StatBar';
@@ -685,7 +686,7 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
         const charData: CharacterData = {
             // Format birthday string from state
             birthDate: `${birthMonth}Tháng${birthDay}Ngày`,
-            id: crypto.randomUUID(),
+            id: generateSafeUUID(),
 
             ...stats, // Strength, agility, constitution, rootBone, intelligence, luck, tamTinh
             name: charName.trim(),

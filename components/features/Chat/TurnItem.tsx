@@ -4,6 +4,7 @@ import { GameResponse } from '../../../types';
 import { NarratorRenderer, CharacterRenderer, InnerThoughtRenderer, FlashbackRenderer, SystemRenderer, SceneryRenderer } from './MessageRenderers';
 import GameButton from '../../ui/GameButton';
 import { parseStoryRawText } from '../../../services/aiService';
+import { formatJsonWithRepair, stripFence } from '../../../utils/jsonRepair';
 
 interface Props {
     response: GameResponse;
@@ -25,36 +26,18 @@ const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, raw
     const formatRawJson = (raw?: string) => {
         if (!raw) return '（Văn bản gốc của vòng này chưa được lưu.）';
         
-        try {
-            // Find JSON part if wrapped in tags (like <thinking>)
-            const jsonMatch = raw.match(/\{[\s\S]*\}/);
-            if (!jsonMatch) return raw;
-
-            const originalJsonString = jsonMatch[0];
-            const parsed = JSON.parse(originalJsonString);
-
-            if (parsed.logs && Array.isArray(parsed.logs)) {
-                parsed.logs = parsed.logs.filter((log: any) => {
-                    const sender = (log.sender || '').trim();
-                    const text = (log.text || '').trim();
-                    const isJudgment = (
-                        sender === 'Judgment' || 
-                        sender === '【Judgment】' || 
-                        sender.includes('Judgment') ||
-                        text.startsWith('【Judgment】') || 
-                        text.startsWith('【Phán đoán】')
-                    );
-                    return !isJudgment;
-                });
-                
-                const filteredJsonString = JSON.stringify(parsed, null, 2);
-                return raw.replace(originalJsonString, filteredJsonString);
+        // Use the common utility which is much more robust
+        const formatted = formatJsonWithRepair(raw, raw);
+        
+        // Re-inject thinking tags if they were stripped by the formatter but present in original
+        if (raw.includes('<thinking>') && !formatted.includes('<thinking>')) {
+            const thinkingMatch = raw.match(/<thinking>[\s\S]*?<\/thinking>/i);
+            if (thinkingMatch) {
+                return `${thinkingMatch[0]}\n\n${formatted}`;
             }
-        } catch (e) {
-            // If parsing fails, just return original string as a safe fallback
-            return raw;
         }
-        return raw;
+        
+        return formatted;
     };
 
     const [showThinking, setShowThinking] = useState(false);
@@ -224,6 +207,28 @@ const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, raw
         setParseError(null);
     };
 
+    const handleDebugRepair = () => {
+        if (!rawJson) return;
+        try {
+            const repaired = parseStoryRawText(rawJson);
+            // Re-stringify the repaired object to create a "clean" rawJson
+            const cleanJson = JSON.stringify(repaired, null, 2);
+            
+            // Re-apply thinking tags if they were in the original but extracted
+            const thinkingMatch = rawJson.match(/<thinking>[\s\S]*?<\/thinking>/i);
+            const finalValue = thinkingMatch 
+                ? `${thinkingMatch[0]}\n\n${cleanJson}`
+                : cleanJson;
+
+            onSaveEdit(finalValue);
+            // Show a temporary success state if possible, or just let it refresh
+            alert('Đã tự động sửa lỗi cấu trúc cho vòng này!');
+        } catch (e) {
+            console.error('Repair failed:', e);
+            alert('Không thể tự động sửa lỗi cho vòng này. Vui lòng thử sửa thủ công.');
+        }
+    };
+
     if (isEditing) {
         return (
             <div className="w-full /80 border border-wuxia-gold p-4 my-4 relative z-50">
@@ -314,6 +319,16 @@ const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, raw
                     )}
 
                     <button
+                        onClick={handleDebugRepair}
+                        className="p-1.5 rounded-full border border-gray-700 text-gray-500 hover:text-wuxia-cyan hover:border-wuxia-cyan transition-all"
+                        title="Tự động sửa lỗi JSON (Debug)"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-wuxia-cyan/70">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.83-5.83m0 0a2.978 2.978 0 01-3.07-3.07m7.388-3.17a3.921 3.921 0 00-5.417 5.417L17.5 5.5l-3.352 3.352m0 0A4.409 4.409 0 0115.5 10.5l-3.958 3.958" />
+                        </svg>
+                    </button>
+
+                    <button
                         onClick={() => {
                             setEditValue(formatRawJson(rawJson));
                             setIsEditing(true);
@@ -399,6 +414,8 @@ const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, raw
                                 personality={npcInfo?.corePersonalityTraits || npcInfo?.personality}
                                 relationStatus={npcInfo?.relationStatus}
                                 favorability={npcInfo?.favorability}
+                                status={npcInfo?.status}
+                                lifeStatus={npcInfo?.lifeStatus}
                             />
                         );
                     }

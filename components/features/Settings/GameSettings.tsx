@@ -103,21 +103,6 @@ const GameSettings: React.FC<Props> = ({ settings, onSave }) => {
 
             <div className="grid grid-cols-2 gap-x-8 gap-y-6 mb-8">
                 <div className="space-y-2">
-                    <label className="text-sm text-wuxia-gold font-bold tracking-wide">Yêu cầu số từ</label>
-                    <input
-                        type="number"
-                        min={50}
-                        step={10}
-                        value={form.bodyLengthRequirement}
-                        onChange={(e) => {
-                            const n = Number(e.target.value);
-                            realTimeUpdates({ bodyLengthRequirement: Number.isFinite(n) && n > 0 ? Math.max(50, Math.floor(n)) : 3000 });
-                        }}
-                        className="w-full bg-transparent border border-wuxia-gold/10 focus:border-wuxia-gold p-3 text-paper-white text-sm outline-none rounded-md transition-all font-medium"
-                    />
-                </div>
-
-                <div className="space-y-2">
                     <label className="text-sm text-wuxia-gold font-bold tracking-wide">Góc nhìn trần thuật</label>
                     <InlineSelect
                         value={form.narrativePerspective}
@@ -149,29 +134,12 @@ const GameSettings: React.FC<Props> = ({ settings, onSave }) => {
                     onChange={(next) => realTimeUpdates({ enableActionOptions: next })}
                 />
                 <ToggleCard
-                    title="Ngăn nói thay (NoControl)"
-                    desc="Khi bật, thêm Prompt 'Ngăn nói thay / Ranh giới nhân vật', cấm viết thay lời thoại và hành động của người chơi."
-                    checked={form.enablePreventSpeaking !== false}
-                    onChange={(next) => realTimeUpdates({ enablePreventSpeaking: next })}
-                />
-                <ToggleCard
                     title="Tiêm lịch sử COT giả"
                     desc="Khi bật, sẽ tiêm một tin nhắn lịch sử ngụy trang sau lệnh `user:Bắt đầu nhiệm vụ`, nhằm củng cố thói quen xuất đoạn suy nghĩ."
                     checked={form.enablePseudoCotInjection !== false}
                     onChange={(next) => realTimeUpdates({ enablePseudoCotInjection: next })}
                 />
-                <ToggleCard
-                    title="Chế độ Claude"
-                    desc="Khi bật, tải ngữ cảnh theo thứ tự thông thường; ngoại trừ 'Đầu vào mới nhất' dùng nhận dạng `user`, tất cả còn lại dùng `system`; đồng thời xóa các prompt yêu cầu bổ sung."
-                    checked={form.enableClaudeMode === true}
-                    onChange={(next) => realTimeUpdates({ enableClaudeMode: next })}
-                />
-                <ToggleCard
-                    title="Yêu cầu xuất tuyên bố miễn trách"
-                    desc="Khi bật, AI sẽ thêm một đoạn tuyên bố miễn trách độc lập ở cuối vòng này; sẽ không được chèn vào giữa nội dung."
-                    checked={form.enableDisclaimerOutput !== false}
-                    onChange={(next) => realTimeUpdates({ enableDisclaimerOutput: next })}
-                />
+
                 <ToggleCard
                     title="Kiểm tra toàn vẹn thẻ"
                     desc="Khi bật, hệ thống kiểm tra xem 3 thẻ `<Main Body>`/`<Short-term memory>`/`<Command>` có đầy đủ không; dữ liệu không đầy đủ sẽ báo lỗi và ngừng ghi."

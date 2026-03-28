@@ -9,6 +9,7 @@ interface Props {
     onToggleMajorRole?: (npcId: string, nextIsMajor: boolean) => void;
     allAvatars: Record<string, string>;
     initialSelectedId?: string | null;
+    playerName?: string;
 }
 
 const Tag: React.FC<{ label: string }> = ({ label }) => (
@@ -110,21 +111,21 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName, onTogg
         return '';
     };
 
-    const readAppearance = (npc: NpcStructure): string => getFirstNonEmptyText(
+    const readAppearance = (npc: NpcStructure): string => npc.appearance || getFirstNonEmptyText(
         (npc as any)['Appearance description'],
         (npc as any)['Appearance'],
-        (npc as any).Archive?.['Appearance points'],
-        (npc as any).Archive?.['Appearance description']
+        (npc as any).Archive?.['Appearance description'],
+        (npc as any).Archive?.['Appearance points']
     );
 
-    const readBuildBody = (npc: NpcStructure): string => getFirstNonEmptyText(
+    const readBuildBody = (npc: NpcStructure): string => npc.bodyDescription || getFirstNonEmptyText(
         (npc as any)['Body description'],
         (npc as any)['Stature'],
-        (npc as any).Archive?.['Body points'],
-        (npc as any).Archive?.['Body description']
+        (npc as any).Archive?.['Body description'],
+        (npc as any).Archive?.['Body points']
     );
 
-    const readClothing = (npc: NpcStructure): string => getFirstNonEmptyText(
+    const readClothing = (npc: NpcStructure): string => npc.clothingStyle || getFirstNonEmptyText(
         (npc as any)['Clothing style'],
         (npc as any)['Clothing'],
         (npc as any).Archive?.['Clothing style'],
@@ -157,7 +158,7 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName, onTogg
                 {/* Header */}
                 <div className="h-12 shrink-0 border-b border-wuxia-gold/20 bg-ink-black/60 flex items-center justify-between px-4">
                     <h3 className="text-wuxia-gold font-serif font-bold text-base tracking-[0.3em] flex items-center gap-2">
-                        <IconGlyph name="scroll" className="w-4 h-4" />
+                        <IconGlyph name="book" className="w-4 h-4" />
                         {t('social.title')}
                     </h3>
                     <button
@@ -247,7 +248,8 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName, onTogg
                                 <div className="mt-3 flex flex-wrap gap-2">
                                     <Tag label={tValue(currentNPC.identity)} />
                                     <Tag label={`${tValue(currentNPC.gender)} · ${currentNPC.age} ${t('social.labels.age')}`} />
-                                    <Tag label={currentNPC.isPresent ? t('social.status.present') : t('social.status.leave')} />
+                                    <Tag label={currentNPC.lifeStatus ? (currentNPC.lifeStatus === 'Dead' ? 'Đã chết' : 'Còn sống') : (currentNPC.isPresent ? t('social.status.present') : t('social.status.leave'))} />
+                                    {currentNPC.status && <Tag label={currentNPC.status} />}
                                     <Tag label={currentNPC.isTeammate ? t('social.status.teammate') : t('social.status.nonTeammate')} />
                                 </div>
                                 
@@ -279,7 +281,7 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName, onTogg
                             <div className="bg-ink-black/30 border border-wuxia-cyan/30 rounded-none p-4 space-y-3">
                                 <div className="flex items-center justify-between border-b border-wuxia-cyan/20 pb-2">
                                     <div className="text-wuxia-cyan font-serif font-bold text-sm tracking-widest uppercase flex items-center gap-2">
-                                        <IconGlyph name="scroll" className="w-3.5 h-3.5" />
+                                        <IconGlyph name="book" className="w-3.5 h-3.5" />
                                         {t('social.sections.fateInteraction')}
                                     </div>
                                     <span className="text-[10px] text-wuxia-cyan/80 tracking-[0.2em]">{t('social.sections.dynamicStatus')}</span>
@@ -386,7 +388,7 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName, onTogg
                             {/* Shared Memories */}
                             <div className="bg-ink-black/30 border border-wuxia-gold/10 rounded-none p-4">
                                 <div className="text-[10px] text-wuxia-gold/60 tracking-[0.3em] mb-3 uppercase flex items-center gap-2">
-                                    <IconGlyph name="scroll" className="w-3 h-3" />
+                                    <IconGlyph name="book" className="w-3 h-3" />
                                     {t('social.sections.sharedPath')}
                                 </div>
                                 <div className="space-y-3 max-h-56 overflow-y-auto custom-scrollbar pr-2">
@@ -405,7 +407,7 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName, onTogg
                         </>
                     ) : (
                         <div className="flex flex-col items-center justify-center h-48 text-gray-600 font-serif gap-3">
-                            <IconGlyph name="scroll" className="w-10 h-10 opacity-10" />
+                            <IconGlyph name="book" className="w-10 h-10 opacity-10" />
                             <span className="tracking-widest uppercase text-xs opacity-50">{t('social.labels.selectNpc')}</span>
                         </div>
                     )}
