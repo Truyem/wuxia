@@ -1,3 +1,4 @@
+// prompts/index.ts — Đã tích hợp bộ Hardcore World (硬核通用世界)
 
 import { PromptStructure } from '../types';
 
@@ -48,8 +49,14 @@ import { WritingNsfw } from './writing/nsfw';
 import { REFINEMENT_SYSTEM_PROMPT_OBJ, WORLD_REFINEMENT_SYSTEM_PROMPT_OBJ } from './runtime/refinement';
 import { JSON_CONSTRAINTS_PROMPT_OBJ, JSON_SYSTEM_PROMPT_OBJ, CONNECTION_TEST_PROMPT_OBJ } from './runtime/defaults';
 
+// ═══════════════════════════════════════════════════════════════
+// 🆕 HARDCORE WORLD (硬核通用世界) — Tích hợp từ bộ prompt SillyTavern
+// Tất cả disabled theo mặc định — người dùng bật thủ công trong Cài đặt > Prompt
+// ═══════════════════════════════════════════════════════════════
+import { HardcoreWorldPrompts } from './hardcore';
+
 export const DefaultPrompts: PromptStructure[] = [
-    // Core
+    // ── Core System ──
     coreWorldview,
     CoreAncientRealism,
     Core_OutputFormat,
@@ -67,8 +74,8 @@ export const DefaultPrompts: PromptStructure[] = [
     coreWorldMechanics,
     coreRealWorld,
     PostCombatRules,
-    // Stats
 
+    // ── Stats ──
     StatCharacter,
     StatItem,
     ItemExtractionPrompt,
@@ -85,20 +92,27 @@ export const DefaultPrompts: PromptStructure[] = [
     StatRecovery,
     StatItemWeight,
 
-    // Difficulty (Arrays)
+    // ── Difficulty (Arrays) ──
     ...Difficulty_Game,
     ...Difficulty_Physiology,
 
-    // Writing
+    // ── Writing ──
     WritingPerspectiveFirst,
     WritingPerspectiveSecond,
     WritingPerspectiveThird,
     WritingStyle,
     WritingNsfw,
-    // New Runtime Prompts
+
+    // ── Runtime ──
     REFINEMENT_SYSTEM_PROMPT_OBJ,
     WORLD_REFINEMENT_SYSTEM_PROMPT_OBJ,
     JSON_CONSTRAINTS_PROMPT_OBJ,
     JSON_SYSTEM_PROMPT_OBJ,
-    CONNECTION_TEST_PROMPT_OBJ
+    CONNECTION_TEST_PROMPT_OBJ,
+
+    // ── 🆕 Hardcore World (硬核通用世界) — Mặc định TẮT ──
+    // Nhóm: 5 module mô phỏng thế giới khắc nghiệt, tâm lý NPC, không plot armor.
+    // Bật từng module riêng lẻ trong Cài đặt > Prompt nếu muốn kích hoạt.
+    ...HardcoreWorldPrompts,
+
 ].map(p => ({ ...p, isSystem: true }));
