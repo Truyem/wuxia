@@ -80,6 +80,7 @@ import {
 type RoundSnapshot = {
     playerInput: string;
     gameTime: string;
+    isOpening?: boolean;
     stateBeforeRollback: {
         character: CharacterData;
         environment: EnvironmentData;
@@ -1671,6 +1672,27 @@ export const useGame = () => {
             }
         ];
         setHistory(initialHistory);
+
+        // Push initial snapshot to allow reroll for opening story
+        pushRollSnapshot({
+            playerInput: '__OPENING__',
+            gameTime: normalizeCanonicalGameTime(contextData?.environment?.time) || '1:01:01:06:00',
+            isOpening: true,
+            stateBeforeRollback: {
+                character: deepCopy(contextData.character || character),
+                environment: normalizeEnvironment(deepCopy(contextData.environment || environment)),
+                social: deepCopy(contextData.social || social),
+                world: deepCopy(contextData.world || world),
+                battle: deepCopy(contextData.battle || battle),
+                playerSect: deepCopy(contextData.playerSect || playerSect),
+                taskList: deepCopy(contextData.taskList || taskList),
+                appointmentList: deepCopy(contextData.appointmentList || appointmentList),
+                story: normalizeStoryStatus(deepCopy(contextData.story || story), contextData.environment || environment),
+                memorySystem: { recallArchives: [], instantMemory: [], shortTermMemory: [], midTermMemory: [], longTermMemory: [] }
+            },
+            historyBeforeRollback: deepCopy(initialHistory)
+        });
+
         let openingStreamHeartbeat: ReturnType<typeof setInterval> | null = null;
         let openingDeltaReceived = false;
 
@@ -2584,6 +2606,13 @@ YÊU CẦU ĐỊNH DẠNG JSON (BẮT BUỘC):
         const snapshot = popRollSnapshot();
         if (!snapshot) return null;
         rollBackToSnapshot(snapshot);
+        
+        // Handle Opening Story Reroll
+        if (snapshot.playerInput === '__OPENING__') {
+            void handleQuickRestart('opening_only');
+            return ""; 
+        }
+
         return snapshot.playerInput;
     };
 

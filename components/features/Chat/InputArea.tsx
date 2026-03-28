@@ -192,7 +192,7 @@ const InputArea: React.FC<Props> = ({
 
     const handleReroll = () => {
         const restoredInput = onRegenerate();
-        if (!restoredInput) return;
+        if (restoredInput === null) return;
         setContent(restoredInput);
         setLastSentContent(restoredInput);
     };

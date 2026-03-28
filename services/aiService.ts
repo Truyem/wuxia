@@ -145,15 +145,15 @@ export /**
  * Strips technical/system tags from AI responses to ensure a clean UI.
  * Handles tags like <thinking>, <Main Body>, t_ tags, etc.
  */
-const stripSystemTags = (text: string | null | undefined): string => {
-    if (!text) return '';
-    return text
-        .replace(/<(?:thinking|Thinking|Main Body|Nội dung chính|Nghiệm|suy nghĩ|t_[a-z]+)[^>]*>([\s\S]*?)<\/\1>/gi, '$1') // Extract content from paired tags
-        .replace(/<\/?(?:thinking|Thinking|Main Body|Nội dung chính|Nghiệm|suy nghĩ|Lệnh|Tùy chọn hành động|Trí nhớ ngắn hạn|Short-term memory|Narrative|Truyện|t_[a-z]+|Main Body|Body)[^>]*>/gi, '') // Remove leftover or single tags
-        .replace(/<[^>]+>/g, ' ') // Remove any remaining unknown XML-like tags
-        .replace(/\s+/g, ' ') // Optional: normalize whitespace
-        .trim();
-};
+    const stripSystemTags = (text: string | null | undefined): string => {
+        if (!text) return '';
+        return text
+            .replace(/<(?:thinking|Thinking|Main Body|Nội dung chính|Nghiệm|suy nghĩ|t_[a-z]+)[^>]*>([\s\S]*?)<\/\1>/gi, '$1') // Extract content from paired tags
+            .replace(/<\/?(?:thinking|Thinking|Main Body|Nội dung chính|Nghiệm|suy nghĩ|Lệnh|Tùy chọn hành động|Trí nhớ ngắn hạn|Short-term memory|Narrative|Truyện|t_[a-z]+|Main Body|Body)[^>]*>/gi, '') // Remove leftover or single tags
+            .replace(/<[^>]+>/g, ' ') // Remove any remaining unknown XML-like tags
+            .replace(/\s+/g, ' ') // Optional: normalize whitespace
+            .trim();
+    };
 
 const addJsonOutputConstraints = (messages: GeneralMessage[]): GeneralMessage[] => {
     const lastMsg = messages[messages.length - 1];
@@ -2111,15 +2111,12 @@ const NORMAL_STORY_MODEL = '@cf/openai/gpt-oss-120b';
 const REFINEMENT_MODEL = '@cf/qwen/qwq-32b';
 
 const REFINEMENT_SYSTEM_PROMPT = `
-【Tối ưu Chính văn Võ Hiệp Cổ Trang】
+【Tối ưu Trau Chuốt Chính Văn】
 Nhiệm vụ: Trau chuốt văn phong cổ trang, đảm bảo 100% đúng quy tắc xưng hô.
 Cấm: 1. Viết thêm hành động, tâm lý, lời thoại mới. 2. Thay đổi kết quả phán định. 3. Vượt POV người chơi.
-
-QUY TẮC BẮT BUỘC:
-- Tuyệt đối KHÔNG BAO GIỜ xưng bản thân là "Cô". Phải dùng "Ta" (mặc định) hoặc các từ tự xưng phù hợp (Tại hạ, Tiểu nữ, Lão nương...).
-- Loại bỏ 100% từ hiện đại: Anh, Em, Cô, Tôi, Bạn, Ok, Hello...
-- Dùng từ ngữ giang hồ: Đa tạ, Cáo từ, Đắc tội, Hừ, To gan...
-- Nhấn mạnh Tên/Võ công bằng dấu *.
+- Ngôn ngữ: Hán Việt cổ điển, giàu hình ảnh ẩn dụ (Phong, Vũ, Kiếm, Đao).
+Mỗi câu chữ phải được trau chuốt. TRÁNH lặp từ, lặp ý. Sử dụng các cấu trúc câu đa dạng và các biện pháp tu từ để làm cho câu chuyện hấp dẫn.
+KHÔNG BAO GIỜ được sai chính tả, gõ thiếu chữ, hoặc dùng từ sai. Quy tắc này áp dụng cho cả tên riêng. Ví dụ: 'Ánh nắng' (đúng) thay vì 'Áh nắng' (sai), 'vội vàng' (đúng) thay vì 'ội vàng' (sai).
 - Xuất kết quả duy nhất là JSON object hợp lệ.
 `.trim();
 

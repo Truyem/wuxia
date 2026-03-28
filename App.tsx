@@ -518,7 +518,7 @@ const App: React.FC = () => {
                                 }}
                                 onReroll={() => {
                                     const input = actions.handleRegenerate();
-                                    if (input) actions.handleSend(input, true);
+                                    if (input !== null) setPendingInputToPreload(input);
                                 }}
                             />
                             <InputArea
