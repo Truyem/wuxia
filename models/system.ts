@@ -235,6 +235,7 @@ export interface SaveStructure {
     memoryConfig?: MemoryConfig;
     tavernSettings?: TavernSettingsStructure;
     visualConfig?: VisualSettings;
+    musicSettings?: MusicSettings;
 
 
     storyId?: string; // Unique identifier for the playthrough/story part
@@ -252,6 +253,22 @@ export interface PromptStructure {
     role?: string;
     enabled: boolean;
     isSystem?: boolean;
+}
+
+export interface Song {
+    id: string;
+    title: string;
+    url: string;
+    duration?: string;
+}
+
+export interface MusicSettings {
+    volume: number;
+    shuffle: boolean;
+    loopPlaylist: boolean;
+    singleLoop: boolean;
+    playlist: Song[];
+    currentSongId: string | null;
 }
 
 export interface FestivalStructure {

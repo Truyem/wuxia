@@ -38,7 +38,7 @@ export class PromptSyncService {
         // 3. Detect changes to decide whether to save
         // We simplified the logic: we always rebuild the list.
         // To be efficient, we check if the result is different from currentPrompts.
-        const hash = (plist: PromptStructure[]) => plist.map(p => `${p.id}-${p.content.length}`).join('|');
+        const hash = (plist: PromptStructure[]) => plist.map(p => `${p.id}-${(p.content || '').length}`).join('|');
         const hasChanges = hash(synced) !== hash(currentPrompts);
 
         if (hasChanges) {

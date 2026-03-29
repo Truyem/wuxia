@@ -68,8 +68,8 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
     };
 
     return (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-3xl z-[200] flex items-center justify-center p-4 animate-fadeIn font-sans">
-            <div className="glass-panel-square border border-white/10 w-full max-w-4xl h-[85vh] flex flex-col shadow-[0_0_80px_rgba(0,0,0,0.95)] relative overflow-hidden rounded-none">
+        <div className="fixed inset-0 bg-black/95 backdrop-blur-3xl z-[200] flex items-center justify-center p-4 md:p-8 animate-fadeIn font-sans">
+            <div className="glass-panel border border-white/10 w-full max-w-5xl h-[90vh] flex flex-col shadow-[0_0_100px_rgba(0,0,0,0.95)] relative overflow-hidden rounded-[2.5rem]">
                 {/* Wuxia Decorative Corners */}
                 <div className="wuxia-corner wuxia-corner-tl"></div>
                 <div className="wuxia-corner wuxia-corner-tr"></div>
@@ -81,12 +81,12 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
                 {/* Header */}
                 <div className="h-14 shrink-0 border-b border-white/10 bg-white/5 flex items-center justify-between px-5">
                     <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-none border border-wuxia-gold/40 bg-gradient-to-br from-wuxia-gold/15 to-transparent flex items-center justify-center text-wuxia-gold font-serif font-bold text-base shadow-inner shadow-wuxia-gold/10">
+                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl border border-wuxia-gold/40 bg-gradient-to-br from-wuxia-gold/15 to-transparent flex items-center justify-center text-wuxia-gold font-serif font-bold text-lg md:text-xl shadow-inner shadow-wuxia-gold/10">
                             Ức
                         </div>
                         <div>
-                            <div className="text-wuxia-gold font-serif font-bold text-base tracking-[0.2em]">Ký ức cung điện</div>
-                            <div className="text-[9px] text-gray-500 uppercase tracking-widest font-mono mt-0.5">Memory Palace System</div>
+                            <div className="text-wuxia-gold font-serif font-bold text-lg md:text-2xl tracking-[0.2em] uppercase">Ký ức cung điện</div>
+                            <div className="text-[10px] md:text-[11px] text-gray-500 uppercase tracking-[0.3em] font-mono mt-1 font-bold">HỆ THỐNG LIÊN KẾT THẦN THỨC</div>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -96,9 +96,9 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
                         </div>
                         <button
                             onClick={onClose}
-                            className="w-8 h-8 flex items-center justify-center rounded-none bg-ink-black/50 border border-gray-700/50 text-gray-400 hover:text-wuxia-red hover:border-wuxia-red/60 hover:bg-ink-black/80 transition-all group"
+                            className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-ink-black/50 border border-gray-700/50 text-gray-400 hover:text-wuxia-red hover:border-wuxia-red/60 hover:bg-ink-black/80 transition-all group"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 group-hover:rotate-90 transition-transform duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6 group-hover:rotate-90 transition-transform duration-300">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
@@ -108,23 +108,23 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
                 {/* Tab bar */}
                 <div className="border-b border-gray-800/60 bg-ink-black/20 flex px-5 gap-0.5 pt-1">
                     {([
-                        { id: 'context', label: 'Tức thời', icon: 'lightning' },
-                        { id: 'short', label: 'Ngắn hạn', icon: 'pin' },
-                        { id: 'medium', label: 'Trung hạn', icon: 'book' },
-                        { id: 'long', label: 'Dài hạn', icon: 'temple' }
+                        { id: 'context', label: 'TỨC THỜI', icon: 'lightning' },
+                        { id: 'short', label: 'NGẮN HẠN', icon: 'pin' },
+                        { id: 'medium', label: 'TRUNG HẠN', icon: 'book' },
+                        { id: 'long', label: 'DÀI HẠN', icon: 'temple' }
                     ] as const).map(tab => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as TabType)}
                             aria-label={tab.label}
                             aria-pressed={activeTab === tab.id}
-                            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-medium transition-all relative border-b-2 ${
+                            className={`flex items-center gap-2 px-6 py-4 text-xs md:text-sm font-bold transition-all relative border-b-2 uppercase tracking-widest ${
                                 activeTab === tab.id
                                     ? 'text-wuxia-gold border-wuxia-gold bg-wuxia-gold/5'
                                     : 'text-gray-500 border-transparent hover:text-gray-300 hover:bg-ink-black/30'
                             }`}
                         >
-                            <IconGlyph name={tab.icon as any} className="w-3 h-3" />
+                            <IconGlyph name={tab.icon as any} className="w-4 h-4" />
                             {tab.label}
                         </button>
                     ))}
@@ -137,7 +137,7 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
                             {currentData.map((mem, idx) => (
                                 <div
                                     key={`${activeTab}-${(mem as any).id ?? idx}`}
-                                    className="group relative bg-white/[0.02] border border-white/5 hover:border-wuxia-gold/20 rounded-none p-4 transition-all duration-200"
+                                    className="group relative bg-white/[0.03] border border-white/5 hover:border-wuxia-gold/20 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:translate-x-1"
                                 >
                                     {/* Left accent bar */}
                                     <div className={`absolute top-3 left-0 w-0.5 h-[calc(100%-24px)] rounded-r-full transition-colors duration-200 ${tabAccentClass[activeTab]}`} />
@@ -156,7 +156,7 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
                                     </div>
 
                                     {/* Main content */}
-                                    <p className="text-gray-300/90 font-serif leading-relaxed text-sm whitespace-pre-wrap pl-2">
+                                    <p className="text-gray-200 font-serif leading-relaxed text-base md:text-xl whitespace-pre-wrap pl-4 border-l-2 border-white/5 italic group-hover:border-wuxia-gold/30 transition-colors">
                                         {mem.content}
                                     </p>
 
@@ -184,14 +184,14 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
                 </div>
 
                 {/* Footer */}
-                <div className="h-8 shrink-0 bg-ink-black/60 border-t border-gray-900/80 px-5 flex items-center justify-between text-[9px] text-gray-600 font-mono tracking-tight uppercase">
-                    <div className="flex items-center gap-2">
-                        <span>Tổng:</span>
-                        <span className="text-wuxia-gold/50">{currentData.length} mục</span>
+                <div className="h-10 md:h-12 shrink-0 bg-ink-black/80 border-t border-gray-900/80 px-6 md:px-10 flex items-center justify-between text-[10px] md:text-[12px] text-gray-500 font-mono tracking-widest uppercase">
+                    <div className="flex items-center gap-4">
+                        <span className="opacity-50 font-bold">TỔNG CỘNG:</span>
+                        <span className="text-wuxia-gold font-black">{currentData.length} MỤC KÝ ỨC</span>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-800" />
-                        <span className="text-green-900">Đã đồng bộ</span>
+                    <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+                        <span className="text-green-500/80 font-bold">LIÊN KẾT ỔN ĐỊNH</span>
                     </div>
                 </div>
             </div>

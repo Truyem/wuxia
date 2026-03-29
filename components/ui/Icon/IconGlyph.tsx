@@ -66,7 +66,18 @@ export type IconName =
     | 'pin'
     | 'temple'
     | 'gem'
-    | 'check';
+    | 'check'
+    | 'music'
+    | 'play'
+    | 'pause'
+    | 'skip-back'
+    | 'skip-forward'
+    | 'volume'
+    | 'volume-x'
+    | 'repeat'
+    | 'shuffle'
+    | 'plus'
+    | 'trash';
 
 interface Props {
     name: IconName;
@@ -241,6 +252,28 @@ const IconGlyph: React.FC<Props> = ({ name, className, strokeWidth = 1.8 }) => {
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
             );
+        case 'music':
+            return <svg viewBox="0 0 24 24" className={svgClass} fill="none" stroke="currentColor" strokeWidth={strokeWidth}><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>;
+        case 'play':
+            return <svg viewBox="0 0 24 24" className={svgClass} fill="currentColor" stroke="none"><path d="M8 5v14l11-7z" /></svg>;
+        case 'pause':
+            return <svg viewBox="0 0 24 24" className={svgClass} fill="currentColor" stroke="none"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>;
+        case 'skip-back':
+            return <svg viewBox="0 0 24 24" className={svgClass} fill="currentColor" stroke="none"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>;
+        case 'skip-forward':
+            return <svg viewBox="0 0 24 24" className={svgClass} fill="currentColor" stroke="none"><path d="M6 18l8.5-6L6 6zM16 6h2v12h-2z" /></svg>;
+        case 'volume':
+            return <svg viewBox="0 0 24 24" className={svgClass} fill="none" stroke="currentColor" strokeWidth={strokeWidth}><path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.08" /></svg>;
+        case 'volume-x':
+            return <svg viewBox="0 0 24 24" className={svgClass} fill="none" stroke="currentColor" strokeWidth={strokeWidth}><path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6" /></svg>;
+        case 'repeat':
+            return <svg viewBox="0 0 24 24" className={svgClass} fill="none" stroke="currentColor" strokeWidth={strokeWidth}><path d="m17 1 4 4-4 4" /><path d="M3 11V9a4 4 0 0 1 4-4h14" /><path d="m7 23-4-4 4-4" /><path d="M21 13v2a4 4 0 0 1-4 4H3" /></svg>;
+        case 'shuffle':
+            return <svg viewBox="0 0 24 24" className={svgClass} fill="none" stroke="currentColor" strokeWidth={strokeWidth}><path d="M16 3h5v5M4 20l17-17M20 16l-4 4 4 4M4 4l5 5M12 12l9 9" /></svg>;
+        case 'plus':
+            return <svg viewBox="0 0 24 24" className={svgClass} fill="none" stroke="currentColor" strokeWidth={strokeWidth}><path d="M12 5v14M5 12h14" /></svg>;
+        case 'trash':
+            return <svg viewBox="0 0 24 24" className={svgClass} fill="none" stroke="currentColor" strokeWidth={strokeWidth}><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6" /></svg>;
         case 'grid':
         default:
             return <svg viewBox="0 0 24 24" className={svgClass} fill="none" stroke="currentColor" strokeWidth={strokeWidth}><rect x="5" y="5" width="5.5" height="5.5" /><rect x="13.5" y="5" width="5.5" height="5.5" /><rect x="5" y="13.5" width="5.5" height="5.5" /><rect x="13.5" y="13.5" width="5.5" height="5.5" /></svg>;

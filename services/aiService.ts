@@ -846,10 +846,11 @@ export const parseCommandBlock = (commandBlock: string): Array<{ action: 'add' |
 
     for (const line of lines) {
         const normalized = line.replace(/^[\-*]\s+/, '').trim();
+        
+        // Transform Chinese paths if present in the raw command
+        const mappedLine = mapChinesePathToGamePath(normalized);
 
-        // Use a regex that supports spaces in keys when followed by '='
-        // Group 1: action, Group 2: key (can contain spaces if followed by '='), Group 3: value
-        const eqMatch = normalized.match(/^(add|set|push|delete|sub)\s*([^=]+?)\s*=\s*([\s\S]*)$/i);
+        const eqMatch = mappedLine.match(/^(add|set|push|delete|sub)\s*([^=]+?)\s*=\s*([\s\S]*)$/i);
 
         if (eqMatch) {
             const action = eqMatch[1].toLowerCase() as 'add' | 'set' | 'push' | 'delete' | 'sub';
@@ -862,23 +863,10 @@ export const parseCommandBlock = (commandBlock: string): Array<{ action: 'add' |
         }
 
         // Fallback for delete without '='
-        if (normalized.toLowerCase().startsWith('delete')) {
-            const key = normalized.substring(6).trim();
+        if (mappedLine.toLowerCase().startsWith('delete')) {
+            const key = mappedLine.substring(6).trim();
             if (key) {
                 commands.push({ action: 'delete', key, value: null });
-                continue;
-            }
-        }
-
-        // Fallback for old format: add|set|push key value
-        // Support spaces in gameState keys if followed by a value-start character ({, [, digit, or quote)
-        const legacyMatch = normalized.match(/^(add|set|push|sub)\s*(gameState\.(?:[^\s]|\s+(?![{\[\d"']))+)\s+([\s\S]+)$/i);
-        if (legacyMatch) {
-            const [_, action, key, rawValue] = legacyMatch;
-            const actionType = action.toLowerCase() as 'add' | 'set' | 'push' | 'delete' | 'sub';
-            const value = parseJsonWithRepair<any>(rawValue).value ?? parseCommandValue(rawValue);
-            if (key) {
-                commands.push({ action: actionType, key: key.trim(), value });
                 continue;
             }
         }
@@ -898,36 +886,145 @@ const parsingActionOptionsBlock = (optionsBlock: string): string[] => {
         .map(line => line.replace(/^[-*]\s*/, '').replace(/^\d+\.\s*/, '').trim())
         .filter(Boolean);
 };
+/**
+ * HARDCORE WORLD SYSTEM PROMPT (Translated from promt.json)
+ * This is the consolidated logic for the "Truyem/wuxia-v2" world.
+ * It contains zero Chinese characters and maps directly to the gameState.
+ */
+export const HARDCORE_PROMPT_SYSTEM = `
+# MARTIAL ARTS WORLD CORE LOGIC (HARDCORE MODE - v2.0)
+
+## 1. Worldview: Ten Thousand Realms
+The world is a vast expanse of "Realms" connected by mystical passages. It is a time of peak martial arts conflict.
+- Order: The Imperial Court maintains surface order.
+- Chaos: Sects, clans, and hidden evil factions fight for legacy and treasures.
+- Philosophy: Might makes right. Confucianism, Buddhism, and Taoism are the foundations of cultivation.
+
+## 2. Power System: The Nine Realms of Martial Arts
+Strict martial realism. No flight, no immortals, no magic.
+- Levels: Opening Pulse (1-10) -> Breath Accumulation -> Return to Origin -> Strength Mastery -> Qi Transformation -> Mysterious Insight -> Divine Reflection -> Return to Truth -> Heavenly Being.
+- Heavenly Beings are myths. Return to Truth/Divine Reflection are grandmasters. Opening Pulse are beginners.
+
+## 3. Ancient Realism Logic
+- Rituals & Status: Social interactions follow strict hierarchy (Ruler-Subject, Master-Disciple, Age, Gender).
+- Reputation: Every action counts. Betrayal or murder has immediate and long-term consequences.
+- Limited Power: Imperial power has latency. Local officials handle small cases.
+- Economics: Resources (food, silver, stamina) are finite and must be managed.
+
+## 4. STRICT Output Protocol (Tag-Based)
+You MUST use these tags in every response:
+- <Narrative>: The main story content.
+  - Use 【Narrator】 for descriptions (no quotes).
+  - Use 【Character Name】 "Dialogue" for speech (speech only).
+  - Use 【Verdict】 Action | Success/Fail | Trigger for dice rolls.
+- <Memory>: GOD's eye view summary of the current turn (under 100 words). Use full names, no pronouns.
+- <Commands>: Mandatory state updates ONLY.
+  - FORMAT: \`set key = value\`, \`add key = value\`, \`push key = value\`, \`delete key\`.
+  - NO JSON in <Commands>. One command per line.
+- <Options>: 3-5 martial-arts style action suggestions.
+- <think>: Mandatory Chain-of-Thought reasoning.
+
+## 5. Data Schema & Synchronization (ENGLISH ONLY)
+All state updates must use the following English keys. NEVER use Chinese keys in <Commands>.
+- Root Keys: character, environment, social, world, battle, story, playerSect, taskList, appointmentList.
+- Character Attributes:
+  - currentEnergy (Stamina), currentMp (Internal Qi), currentFullness (Hunger), currentThirst (Thirst).
+  - strength (Power), agility (Movement), constitution (Defense), rootBone (Talent), intelligence (Wits), luck (Fortune).
+- Body Parts: head, chest, abdomen, leftArm, rightArm, leftLeg, rightLeg.
+- Time: environment.Year, environment.Month, environment.Day, environment.Hour, environment.Minute.
+
+## 6. Combat & Injury Logic
+- Combat: Attack -> Defense/Parry -> Damage Calculation.
+- Body Heatmap: 7 parts. Injury to legs -> -Agility. Injury to arms -> -Strength. Head/Chest injury -> Death/Coma.
+- Stamina/Energy exhaustion -> Qi deviation or weakened attacks.
+
+## 7. Writing Style: Classic Wuxia (Gu Long Style)
+- Sharp, concise sentences. Focus on atmosphere and micro-details.
+- Camera: Moon, wine cups, eyes, blood drops - then the big picture.
+- Dialogue: Short, sharp, meaningful.
+- NO modern slang. NO "spirit world" magic terms.
+`;
+
+const HARDCORE_TAGS = {
+    NARRATIVE: 'Narrative',
+    COMMANDS: 'Commands',
+    MEMORY: 'Memory',
+    OPTIONS: 'Options',
+    THINK: 'think',
+    JUDGE: 'judge'
+};
+
+const DATA_PATH_MAPPING: Record<string, string> = {
+    '角色': 'character',
+    '环境': 'environment',
+    '社交': 'social',
+    '世界': 'world',
+    '战斗': 'battle',
+    '剧情': 'story',
+    '玩家门派': 'playerSect',
+    '任务列表': 'taskList',
+    '约定列表': 'appointmentList',
+    // Sub-keys for character
+    '当前精力': 'currentEnergy',
+    '当前内力': 'currentMp',
+    '当前饱腹': 'currentFullness',
+    '当前口渴': 'currentThirst',
+    '力量': 'strength',
+    '敏捷': 'agility',
+    '体质': 'constitution',
+    '根骨': 'rootBone',
+    '悟性': 'intelligence',
+    '福源': 'luck',
+    '当前经验': 'currentExp',
+    '升级经验': 'levelUpExp',
+    '当前负重': 'currentWeight',
+    // Body parts
+    '头': 'head',
+    '胸': 'chest',
+    '腹': 'abdomen',
+    '左手': 'leftArm',
+    '右手': 'rightArm',
+    '左脚': 'leftLeg',
+    '右脚': 'rightLeg',
+    // Environment
+    '年': 'Year',
+    '月': 'Month',
+    '日': 'Day',
+    '时': 'Hour',
+    '分': 'Minute'
+};
+
+const mapChinesePathToGamePath = (path: string): string => {
+    let result = path;
+    Object.entries(DATA_PATH_MAPPING).forEach(([cn, en]) => {
+        const regex = new RegExp(cn, 'g');
+        result = result.replace(regex, en);
+    });
+    return result;
+};
 
 const parseTagProtocolResponse = (content: string): GameResponse | null => {
     const text = (content || '').trim();
     if (!text) return null;
 
     const thinkingParts = [
+        ...extractTagContentList(text, HARDCORE_TAGS.THINK),
         ...extractTagContentList(text, 'thinking'),
-        ...extractTagContentList(text, 'thinking_pre'),
-        ...extractTagContentList(text, 't_thinking'),
-        ...extractTagContentList(text, 'Suy nghĩ')
+        ...extractTagContentList(text, 'thinking_pre')
     ];
-    const bodyBlock = extractFirstTagContent(text, 'Main Body')
-        || extractFirstTagContent(text, 'Nội dung chính')
-        || extractFirstTagContent(text, 'Narrative')
-        || extractFirstTagContent(text, 'Truyện')
-        || extractFirstTagContent(text, 'Lời dẫn');
 
-    const shortTerm = extractFirstTagContent(text, 'Short-term memory', { fixTagClosingErrors: true })
-        || extractFirstTagContent(text, 'Trí nhớ ngắn hạn', { fixTagClosingErrors: true })
-        || extractFirstTagContent(text, 'Ghi nhớ ngắn hạn', { fixTagClosingErrors: true })
-        || extractFirstTagContent(text, 'Memory', { fixTagClosingErrors: true });
+    const bodyBlock = extractFirstTagContent(text, HARDCORE_TAGS.NARRATIVE)
+        || extractFirstTagContent(text, 'Main Body')
+        || extractFirstTagContent(text, 'Nội dung chính');
 
-    const commandBlock = extractFirstTagContent(text, 'Command')
-        || extractFirstTagContent(text, 'Lệnh')
-        || extractFirstTagContent(text, 'Commands');
+    const shortTerm = extractFirstTagContent(text, HARDCORE_TAGS.MEMORY, { fixTagClosingErrors: true })
+        || extractFirstTagContent(text, 'Short-term memory', { fixTagClosingErrors: true });
 
-    const actionOptionsBlock = extractFirstTagContent(text, 'Action options')
-        || extractFirstTagContent(text, 'Tùy chọn hành động')
-        || extractFirstTagContent(text, 'Options')
-        || extractFirstTagContent(text, 'Hành động');
+    const commandBlock = extractFirstTagContent(text, HARDCORE_TAGS.COMMANDS)
+        || extractFirstTagContent(text, 'Command');
+
+    const actionOptionsBlock = extractFirstTagContent(text, HARDCORE_TAGS.OPTIONS)
+        || extractFirstTagContent(text, 'Action options');
 
     let logs = parsingBodyLog(bodyBlock || '');
 
@@ -2217,6 +2314,7 @@ export const generateStoryResponse = async (
         // Supplementary non-core prompts (length, style, disclaimer, outputProtocol, extra) are
         // merged into the system block to avoid interleaved user/assistant turns that Claude dislikes.
         const systemParts: string[] = [];
+        systemParts.push(HARDCORE_PROMPT_SYSTEM); // Primary Hardcore Logic
         if (finalSystemPrompt) systemParts.push(finalSystemPrompt);
         if (normalizedContext) systemParts.push(normalizedContext);
         if (leadingSystemPrompt) systemParts.push(leadingSystemPrompt);
@@ -2230,6 +2328,9 @@ export const generateStoryResponse = async (
         if (mergedSystem) apiMessages.push({ role: 'system', content: mergedSystem });
         apiMessages.push({ role: 'user', content: normalizedPlayerInput });
     } else {
+        // Hardcore Multi-Voucher System Prompt
+        apiMessages.push({ role: 'system', content: HARDCORE_PROMPT_SYSTEM });
+
         if (finalSystemPrompt) {
             apiMessages.push({ role: 'system', content: finalSystemPrompt });
         }
@@ -2318,7 +2419,7 @@ export const generateStoryResponse = async (
     }
 
     // Apply Refinement for high-quality prose (Only for normal story chat)
-    if (!isNSFWContent) {
+    if (!isNSFWContent && targetModel === REFINEMENT_MODEL) {
         rawText = await refineStoryProse(rawText, effectiveWorkerUrl);
     }
 

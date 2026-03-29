@@ -11,6 +11,7 @@ import HistoryViewer from '../HistoryViewer';
 import ContextViewer from '../ContextViewer';
 import RecallModelSettings from '../RecallModelSettings';
 import ArticleOptimizationSettings from '../ArticleOptimizationSettings';
+import MusicSettings from '../MusicSettings';
 import WorldEvolutionSettings from '../WorldEvolutionSettings';
 
 import type {
@@ -34,8 +35,8 @@ type ContextSnapshot = {
 };
 
 interface Props {
-    activeTab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution';
-    onTabChange: (tab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution') => void;
+    activeTab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'music';
+    onTabChange: (tab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'music') => void;
     onClose: () => void;
     apiConfig: InterfaceSettingsStructure;
     gameConfig?: GameSettingsType;
@@ -64,6 +65,7 @@ const MobileSettingsModal: React.FC<Props> = ({
     onReturnToHome, isHome, requestConfirm
 }) => {
     const tabItems = [
+        { id: 'music', label: 'Âm nhạc & Âm thanh' },
         { id: 'game', label: 'Cài đặt game' },
         { id: 'world', label: 'Cài đặt thế giới' },
 
@@ -160,6 +162,7 @@ const MobileSettingsModal: React.FC<Props> = ({
                     )}
                     {activeTab === 'article_optimization' && <ArticleOptimizationSettings settings={apiConfig} onSave={onSaveApi} />}
                     {activeTab === 'world_evolution' && <WorldEvolutionSettings settings={apiConfig} onSave={onSaveApi} />}
+                    {activeTab === 'music' && <MusicSettings />}
 
                 </div>
             </div>

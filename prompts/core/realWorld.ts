@@ -1,15 +1,24 @@
 import { PromptStructure } from '../../types';
 
 export const coreRealWorld: PromptStructure = {
-    id: 'core_realworld',
-    title: 'Thế giới thực (Thiên Đạo)',
-    content: `【QUY TẮC THẾ GIỚI THỰC - THIÊN ĐẠO VẬN HÀNH】
-I. LUẬT NHÂN QUẢ: Mọi kết quả phải bắt nguồn từ hành động cụ thể. Không cho phép sự kiện phát sinh từ hư vô.
-II. LUẬT VẬN ĐỘNG: Duy trì quỹ đạo và quán tính của sự vật. Tuyệt đối cấm các bước nhảy vọt logic hoặc tình tiết phi lý.
-III. LUẬT THỜI GIAN: Dòng chảy thời gian là một chiều và không khoan nhượng. Kẻ yếu sẽ bị đào thải bởi quy luật tự nhiên.
-IV. LUẬT TƯƠNG QUAN: Sức mạnh phải tương xứng với cái giá phải trả. Tuân thủ nghiêm ngặt giới hạn của bản chất sinh linh.
-V. HIỆN THỰC CHIẾN ĐẤU: Kết quả giao tranh dựa trên thực lực, tu vi, thiên thời và địa lợi. Tuyệt đối cấm các loại buff sức mạnh vô căn cứ hoặc hào quang nhân vật chính phi logic.
-VI. SINH LÃO BỆNH TỬ: Mọi sinh linh phải tuân thủ các quy luật sinh học, lão hóa và giới hạn thể chất cơ bản.`,
-    enabled: false,
-    type: 'core setting'
+  id: 'core_realworld',
+  title: 'Thế giới thực (Thiên Đạo)',
+  content: `
+<Thế giới thực (Thiên Đạo)>
+# Quy luật Tự nhiên và Nhân quả
+
+## 1. Luật Bảo toàn Năng lượng
+- Sức mạnh không tự nhiên sinh ra. Mọi sự thăng tiến đều đòi hỏi sự đánh đổi (Thời gian, Tài nguyên, hoặc Sự nguy hiểm).
+
+## 2. Luật Nhân quả (Cause and Effect)
+- "Gieo nhân nào gặt quả nấy". Hành động trong quá khứ sẽ quyết định cơ hội và hiểm họa trong tương lai.
+
+## 3. Luật Sinh tồn
+- Thế giới không xoay quanh người chơi. Thú dữ, thiên tai và kẻ thù sẽ tấn công nếu người chơi không có sự chuẩn bị hoặc xâm phạm lãnh thổ của chúng.
+
+## 4. Luật Thời gian (Entropy)
+- Vạn vật đều có vòng đời. Vũ khí bị hỏng, thức ăn bị ôi thiu, và con người sẽ già đi theo thời gian.
+    `.trim(),
+  type: 'core setting',
+  enabled: true
 };

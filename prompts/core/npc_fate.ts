@@ -1,27 +1,26 @@
-
 import { PromptStructure } from '../../types';
 
 export const coreNpcFate: PromptStructure = {
-    id: 'core_npc_fate',
-    title: 'Hệ Thống Cơ Duyên NPC',
-    content: `
-# Quy Tắc Cốt Lõi: Hệ Thống Cơ Duyên Động Cho NPC
-[System Note: Đây là pháp tắc cốt lõi để vận hành sự diễn hóa hậu đài của thế giới. Khi câu chuyện đi vào giai đoạn ngắt quãng, hoặc khi hành động của nhân vật chính {{user}} tạo ra "khoảng trắng" trên dòng thời gian vĩ mô (như bế quan, du lịch đường dài), AI sẽ kích hoạt hệ thống này để tạo ngẫu nhiên các sự kiện trưởng thành cho các NPC không quan trọng (đặc biệt là các nhân vật ở dã ngoại, bí cảnh hoặc vùng hẻo lánh), giúp thế giới duy trì sự năng động và chân thực.]
+  id: 'core_npc_fate',
+  title: 'Vận mệnh NPC',
+  content: `
+<Vận mệnh NPC>
+# Giao thức Quản lý NPC không quan trọng
 
-## I. Điều Kiện Kích Hoạt (Cần thỏa mãn đồng thời)
-1. Cốt truyện xuất hiện khoảng nghỉ tự sự (nhảy cóc thời gian, bế quan, du lịch xa - tối thiểu 1 tuần trong game hoặc 5000 chữ dẫn dắt).
-2. NPC mục tiêu đang không ở trong "Vùng An Toàn" (Thành thị lớn, Tông môn bảo hộ) hoặc đang thực hiện nhiệm vụ dã ngoại.
+## 1. Bản chất NPC
+- NPC không chỉ là phông nền. Họ có cuộc sống, mục tiêu và sự phát triển riêng biệt ngay cả khi không có sự hiện diện của người chơi.
 
-## II. Cơ Chế Diễn Hóa (Roll d100 ngầm cho mỗi NPC liên quan)
-- **01-50: Tầm Thường (Common Fate)**: NPC sinh hoạt bình thường, tu vi tiến triển chậm, không có biến động đặc biệt.
-- **51-80: Tiểu Cơ Duyên (Minor Fate)**: Nhặt được linh thảo, tìm thấy hang động của tu sĩ cấp thấp, học được một kỹ năng mới hoặc đổi vũ khí tốt hơn. (Cập nhật 1 trait mới).
-- **81-95: Đại Cơ Duyên (Great Fate)**: Đột phá đại cảnh giới, nhặt được công pháp tàn thiên đỉnh cấp, gia nhập phe phái bí ẩn hoặc trở thành đệ tử nội môn. (Cập nhật 2-3 trait mới, thay đổi căn cốt).
-- **96-100: Nghịch Thiên Cơ Duyên (Heaven-defying Fate)**: Thức tỉnh huyết thống cổ đại, được đại năng tàn hồn truyền thừa, sở hữu Tiên khí hoặc phát hiện ra đại bí mật của thế giới. (Biến thành "Nhân Vật Quan Trọng", thay đổi hoàn toàn identity).
+## 2. Quy tắc Ngẫu nhiên (Fate Roll)
+- Khi người chơi rời khỏi một khu vực trong thời gian dài, AI sẽ "đổ xúc xắc" để quyết định vận mệnh của các NPC tại đó.
+- Kết quả có thể là: Thăng tiến địa vị, Đột phá tu vi, Gặp nạn, hoặc Thay đổi tính cách do biến cố.
 
-## III. Cách Thể Hiện
-- AI không thông báo "Đang roll cơ duyên". Thay vào đó, khi {{user}} gặp lại NPC, hãy mô tả sự thay đổi qua ngoại hình, khí thái và hành vi.
-- Nếu NPC đạt "Nghịch Thiên Cơ Duyên", họ có thể trở thành đối thủ hoặc đồng minh cực mạnh của {{user}} trong tương lai.
-`.trim(),
-    type: 'core',
-    enabled: true
+## 3. Tương tác với Cốt truyện
+- Vận mệnh của NPC có thể tạo ra các nhánh cốt truyện mới (Side-quests).
+- Sự thay đổi của NPC phải được phản ánh qua: Ngoại hình, Trang bị và Thái độ khi gặp lại người chơi.
+
+## 4. NPC quan trọng (Heroines/Villains)
+- Các nhân vật này có logic phát triển phức tạp hơn, tuân theo các "Kế hoạch Nữ chính" hoặc "Kế hoạch Phản diện" riêng biệt.
+    `.trim(),
+  type: 'core',
+  enabled: true
 };

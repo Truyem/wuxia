@@ -1,30 +1,28 @@
 import { PromptStructure } from '../../types';
 
 export const CoreAncientRealism: PromptStructure = {
-    id: 'core_ancient_realism',
-    title: 'Logic cơ bản hiện thực cổ đại',
-    content: `
-<Logic cơ bản hiện thực cổ đại (Wuxia World Framework)>
+  id: 'core_ancient_realism',
+  title: 'Logic Thực Tế Cổ Đại',
+  content: `
+<Logic Thực Tế Cổ Đại>
+# Quy tắc Xã hội và Văn hóa
 
-# 1. LỄ NGHI & TRẬT TỰ (Social Hierarchy)
-- **Sai biệt thân phận**: Vua-tôi, Quan-dân, Tôn-ti, Sư-đồ... Hành lễ, xưng hô, chỗ ngồi phải khớp với thân phận.
-- **Giá trị trật tự**: Bình dân thất lễ quan viên/cao thủ = Cảnh cáo, tổn hại danh tiếng, hoặc bị trị tội (tùy hoàn cảnh).
-- **Phản hồi**: Hệ thống Danh tiết/Tín nhiệm/Uy tín. Hành vi thất đức = Hồ sơ thế giới bị ghi lại.
+## 1. Tôn ti trật tự
+- Xã hội phong kiến coi trọng: Quân - Sư - Phụ.
+- Xưng hô phải phù hợp với địa vị: Tiểu nhân, Tại hạ, Lão phu, Bổn tọa, Trẫm.
+- NPC cấp thấp phải hành lễ với cấp cao, trừ khi là kẻ thù hoặc kẻ điên.
 
-# 2. QUYỀN LỰC & PHÁP ĐỘ (Political/Legal Causal Flow)
-- **Hoàng quyền**: Tối cao trên danh nghĩa nhưng thực thi qua hệ thống quan liêu (Quân chính, Tài chính, Giám sát).
-- **Cơ quan**: Trung ương (Pháp lệnh, Thuế, Biên phòng) > Địa phương (Trị an, Kiện tụng). 
-- **Độ trễ**: Lệnh từ trên xuống có độ trễ/hao hụt. Không có "vạn năng tức thời".
-- **Hình phạt**: Phân lớp Trị an, Dân sự, Trọng tội. Trừng phạt dựa trên chứng cứ và cán cân lực lượng.
+## 2. Danh tiết và Uy tín (Reputation)
+- "Tiếng lành đồn xa, tiếng dữ đồn nghìn dặm". Hành động hiệp nghĩa tăng Uy danh, hành động tà ác tăng Hung danh.
+- Danh tiết ảnh hưởng đến giá cả mua bán và thái độ của quan phủ.
 
-# 3. KINH TẾ & TÀI NGUYÊN (Resource Reality)
-- **Hữu hạn**: Nhân lực, lương thảo, tiền bạc, tình báo, vận tải đều tốn phí tổn.
-- **Hao mòn**: Hành động lớn (xuất quân, vây quét) tiêu hao tài nguyên chính trị/ngân sách. 
-- **Địa lý**: Chiến loạn, thiên tai làm thay đổi vật giá và rủi ro trật tự.
-- **Axiom**: Toàn bộ nhân vật bị thúc đẩy bởi lợi ích/thân phận; cấm "tư duy hiện đại" đồng nhất.
+## 3. Luật pháp và Hình phạt
+- Giết người đền mạng, nợ tiền trả bạc. Quan phủ có quyền lực tuyệt đối với dân thường nhưng kiêng dè võ lâm cao thủ.
+- Hình phạt: Đánh gậy, tịch thu tài sản, phát vãng biên thùy, trảm quyết.
 
-</Logic cơ bản hiện thực cổ đại>
-`.trim(),
-    type: 'core setting',
-    enabled: true
+## 4. Đời sống thường nhật
+- Mô tả chi tiết về: Trang phục (Lụa là, vải thô), Ẩm thực (Rượu nồng, bánh bao), và Kiến trúc (Nhà ngói, vách đất).
+    `.trim(),
+  type: 'core setting',
+  enabled: true
 };

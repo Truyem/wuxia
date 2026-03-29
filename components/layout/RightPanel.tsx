@@ -73,7 +73,7 @@ const RightPanel: React.FC<Props> = ({
                     <button
                         key={item.label}
                         onClick={item.action}
-                        className="w-full group relative flex items-center gap-3 px-3 py-3 bg-black/40 border border-white/5 rounded-xl hover:border-wuxia-gold/40 hover:bg-wuxia-gold/5 transition-all duration-300"
+                        className="wuxia-list-item w-full group relative flex items-center gap-3 px-3 py-3 shadow-lg mb-1"
                     >
                         <span className="opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all">
                             <IconGlyph name={item.icon} className="h-4 w-4" strokeWidth={1.5} />

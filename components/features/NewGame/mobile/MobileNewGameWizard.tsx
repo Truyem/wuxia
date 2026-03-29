@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import GameButton from '../../../ui/GameButton';
 import { WorldGenConfig, CharacterData, Talent, Background, GameDifficulty, StoryStyleType, TalentRank } from '../../../../types';
-import { Plus, Minus, Dices, X, Save, Download, LogOut, Users, Swords, Check } from 'lucide-react';
+import { Plus, Minus, Dices, X, Save, Download, Users, Swords, Check } from 'lucide-react';
 import { RadarChart, RadarData } from '../../../shared/RadarChart';
 import { StatBar } from '../../../shared/StatBar';
 import { PresetTalent, PresetBackground } from '../../../../data/presets';
@@ -1477,12 +1477,7 @@ const MobileNewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, r
                     ) : null}
                 </div>
                 <div className="md:hidden border-t border-wuxia-gold/10 bg-black/60 px-3 py-2 pb-[calc(env(safe-area-inset-bottom)+8px)]">
-                    {/* Exit row */}
-                    <div className="flex items-center justify-center gap-3 mb-2">
-                        <button onClick={onCancel} className="flex items-center gap-1 text-[10px] text-red-400/60 hover:text-red-400 active:text-red-300 transition-colors px-2 py-1 rounded-md border border-red-500/10 hover:border-red-500/30 bg-black/30">
-                            <LogOut className="w-3 h-3" /> Thoát
-                        </button>
-                    </div>
+
                     {/* Toast message */}
                     {saveLoadMsg && (
                         <div className="text-center text-[10px] text-emerald-400 font-mono mb-1.5 animate-pulse">{saveLoadMsg}</div>

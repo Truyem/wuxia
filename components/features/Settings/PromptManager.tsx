@@ -130,14 +130,19 @@ const PromptManager: React.FC<Props> = ({ prompts, onUpdate, requestConfirm, api
 
     // Grouping logic
     const filteredPrompts = useMemo(() => {
-        if (activeCategory === 'ALL') return prompts;
-        return prompts.filter(p => {
-            // Migration support for legacy types
-            if (activeCategory === 'core setting' && p.type === ('core' as any)) return true;
-            if (activeCategory === 'num' && p.type === ('stats' as any)) return true;
-            if (activeCategory === 'diff' && p.type === ('difficulty' as any)) return true;
-            return p.type === activeCategory;
-        });
+        let result = prompts;
+        if (activeCategory !== 'ALL') {
+            result = prompts.filter(p => {
+                // Migration support for legacy types
+                if (activeCategory === 'core setting' && p.type === ('core' as any)) return true;
+                if (activeCategory === 'num' && p.type === ('stats' as any)) return true;
+                if (activeCategory === 'diff' && p.type === ('difficulty' as any)) return true;
+                return p.type === activeCategory;
+            });
+        }
+        
+        // Hide specific runtime prompts from UI
+        return result.filter(p => !['runtime_json_constraints', 'runtime_json_system', 'runtime_connection_test'].includes(p.id));
     }, [prompts, activeCategory]);
 
     if (editingId && editForm) {
@@ -219,13 +224,21 @@ const PromptManager: React.FC<Props> = ({ prompts, onUpdate, requestConfirm, api
                 {filteredPrompts.map(p => (
                     <div key={p.id} className={`flex justify-between items-center bg-transparent py-1 px-3 border-l-2 transition-all group ${p.enabled ? 'border-wuxia-gold bg-wuxia-gold/5' : 'border-paper-white/10 opacity-60 hover:opacity-100 hover:bg-white/10'}`}>
                         <div className="flex items-center gap-2">
-                            <ToggleSwitch
-                                checked={p.enabled}
-                                onChange={() => handleToggleEnable(p.id)}
-                                ariaLabel={`${p.enabled ? 'Disable' : 'Enable'} Prompt ${p.title}`}
-                            />
+                            {['writing_perspective_first', 'writing_perspective_second', 'writing_perspective_third', 'write_perspective_first', 'write_perspective_second', 'write_perspective_third', 'runtime_json_constraints', 'runtime_json_system', 'runtime_connection_test'].includes(p.id) ? (
+                                <div className="w-8 h-4 flex items-center justify-center">
+                                    <span className="text-[7px] px-1 border border-wuxia-gold/30 bg-wuxia-gold/5 text-wuxia-gold/60 uppercase whitespace-nowrap">
+                                        Cố định
+                                    </span>
+                                </div>
+                            ) : (
+                                <ToggleSwitch
+                                    checked={p.enabled}
+                                    onChange={() => handleToggleEnable(p.id)}
+                                    ariaLabel={`${p.enabled ? 'Disable' : 'Enable'} Prompt ${p.title}`}
+                                />
+                            )}
                             <div>
-                                <div className={`font-bold font-serif text-sm transition-colors flex items-center gap-2 ${p.enabled ? 'text-wuxia-gold group-hover:text-paper-white' : 'text-paper-white/50'}`}>
+                                <div className={`font-bold font-serif text-sm transition-all duration-300 ease-out flex items-center gap-2 ${p.enabled ? 'text-wuxia-gold group-hover:text-paper-white' : 'text-paper-white/50'} group-hover:translate-x-3`}>
                                     {p.title}
                                     {p.isSystem && (
                                         <span className="text-[8px] px-1 py-0.5 border border-wuxia-gold/30 bg-wuxia-gold/10 text-wuxia-gold/80 rounded-sm uppercase tracking-tighter">
@@ -237,7 +250,9 @@ const PromptManager: React.FC<Props> = ({ prompts, onUpdate, requestConfirm, api
                             </div>
                         </div>
                         <div className="flex gap-2">
-                            <button onClick={() => handleEdit(p)} className="text-[10px] text-wuxia-gold hover:text-paper-white transition-colors">Edit</button>
+                            {!['runtime_json_constraints', 'runtime_json_system', 'runtime_connection_test', 'writing_perspective_first', 'writing_perspective_second', 'writing_perspective_third', 'write_perspective_first', 'write_perspective_second', 'write_perspective_third'].includes(p.id) && (
+                                <button onClick={() => handleEdit(p)} className="text-[10px] text-wuxia-gold hover:text-paper-white transition-colors">Edit</button>
+                            )}
                             {!p.isSystem && (
                                 <button onClick={() => handleDelete(p.id)} className="text-[10px] text-wuxia-red hover:text-paper-white transition-colors">Delete</button>
                             )}

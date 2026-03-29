@@ -63,13 +63,13 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
         const colors = item ? getQualityColor(item.quality) : null;
 
         return (
-            <div className={`group relative p-2.5 min-w-0 flex items-start gap-3 border ${
+            <div className={`group relative p-4 md:p-6 min-w-0 flex items-start gap-5 border rounded-[1.5rem] transition-all duration-300 hover:scale-[1.02] ${
                 item
                     ? `${colors!.bg} ${colors!.border} ${colors!.glow} border-opacity-60`
-                    : 'bg-black/20 border-white/5 hover:border-white/10'
+                    : 'bg-black/25 border-white/5 hover:border-white/10'
             }`}>
                 {/* Image/Icon Container */}
-                <div className={`w-12 h-12 shrink-0 border flex items-center justify-center relative overflow-hidden ${
+                <div className={`w-14 h-14 md:w-16 md:h-16 shrink-0 border flex items-center justify-center relative overflow-hidden rounded-xl ${
                     item ? 'border-white/20 bg-black/40' : 'border-white/5 bg-black/20'
                 }`}>
                     {item?.image ? (
@@ -91,7 +91,7 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                             {label}
                         </span>
                         {item && (
-                             <span className={`text-[8px] px-1 border border-current opacity-60 ${colors!.text}`}>
+                             <span className={`text-[8px] px-1 border border-current opacity-60 rounded ${colors!.text}`}>
                                 {item.quality}
                             </span>
                         )}
@@ -99,7 +99,7 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
 
                     {item ? (
                         <>
-                            <div className={`text-xs font-serif font-bold truncate ${colors!.text}`}>
+                            <div className={`text-base md:text-lg font-serif font-bold truncate ${colors!.text}`}>
                                 {item.name}
                             </div>
                             <div className="flex items-center gap-2">
@@ -116,9 +116,9 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                             </div>
                             {/* Durability bar */}
                             <div className="flex items-center gap-1.5 pt-0.5">
-                                <div className="flex-1 h-0.5 bg-black/60 overflow-hidden">
+                                <div className="flex-1 h-0.5 bg-black/60 rounded-full overflow-hidden">
                                     <div
-                                        className={`h-full ${
+                                        className={`h-full rounded-full ${
                                             (item.currentDurability / item.maxDurability) < 0.3 ? 'bg-wuxia-red' : 'bg-wuxia-gold/40'
                                         }`}
                                         style={{ width: `${(item.currentDurability / item.maxDurability) * 100}%` }}
@@ -151,13 +151,13 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
 
                 <div className="relative flex flex-col items-center gap-2 z-10">
                     {/* Head Circle */}
-                    <div className="w-14 h-14 border border-wuxia-cyan/20 bg-black/40 flex items-center justify-center shadow-[inset_0_0_15px_rgba(68,170,170,0.15)] relative overflow-hidden group rounded-none">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-wuxia-cyan/10 to-transparent"></div>
-                        <User className="w-7 h-7 text-wuxia-cyan/40" strokeWidth={1} />
+                    <div className="w-16 h-16 md:w-20 md:h-20 border-2 border-wuxia-cyan/30 bg-black/50 flex items-center justify-center shadow-[0_0_25px_rgba(68,170,170,0.2)] relative overflow-hidden group rounded-full">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-wuxia-cyan/20 to-transparent"></div>
+                        <User className="w-8 h-8 md:w-10 md:h-10 text-wuxia-cyan/60" strokeWidth={1} />
                     </div>
                     
                     {/* Body Bar */}
-                    <div className="w-16 h-48 border border-wuxia-cyan/10 bg-gradient-to-b from-wuxia-cyan/[0.05] to-transparent relative flex flex-col items-center justify-center overflow-hidden">
+                    <div className="w-20 h-56 border border-wuxia-cyan/20 bg-gradient-to-b from-wuxia-cyan/[0.08] to-transparent relative flex flex-col items-center justify-center overflow-hidden rounded-[2rem]">
                         <div className="absolute top-0 w-full h-1/2 bg-gradient-to-b from-wuxia-cyan/10 to-transparent"></div>
                         <div className="text-[10px] text-wuxia-cyan/40 text-center leading-relaxed font-serif tracking-[0.5em] vertical-text select-none">
                             身法如風
@@ -169,10 +169,10 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
 
                     {/* Legs - Dual Bars */}
                     <div className="flex gap-3">
-                        <div className="w-6 h-20 border border-wuxia-cyan/10 bg-gradient-to-b from-black/40 to-black/20 relative overflow-hidden">
+                        <div className="w-6 h-20 border border-wuxia-cyan/10 bg-gradient-to-b from-black/40 to-black/20 relative overflow-hidden rounded-lg">
                             <div className="absolute top-0 inset-x-0 h-4 bg-wuxia-cyan/5"></div>
                         </div>
-                        <div className="w-6 h-20 border border-wuxia-cyan/10 bg-gradient-to-b from-black/40 to-black/20 relative overflow-hidden">
+                        <div className="w-6 h-20 border border-wuxia-cyan/10 bg-gradient-to-b from-black/40 to-black/20 relative overflow-hidden rounded-lg">
                             <div className="absolute top-0 inset-x-0 h-4 bg-wuxia-cyan/5"></div>
                         </div>
                     </div>
@@ -190,15 +190,15 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                         {character.currentWeight} / {character.maxWeight}
                     </span>
                 </div>
-                <div className="h-1.5 bg-white/[0.03] overflow-hidden border border-white/5 p-[1px] relative shadow-inner">
+                <div className="h-1.5 bg-white/[0.03] overflow-hidden border border-white/5 p-[1px] relative shadow-inner rounded-full">
                     <div
-                        className={`h-full shadow-[0_0_10px_rgba(68,170,170,0.3)] ${
+                        className={`h-full shadow-[0_0_100px_rgba(68,170,170,0.3)] rounded-full ${
                             character.currentWeight > character.maxWeight ? 'bg-wuxia-red' : 'bg-wuxia-cyan/60'
                         }`}
                         style={{ width: `${Math.min(((character.currentWeight || 0) / (character.maxWeight || 1)) * 100, 100)}%` }}
                     />
                     {/* Glass reflection */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent pointer-events-none"></div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent pointer-events-none rounded-full"></div>
                 </div>
             </div>
         </div>
@@ -264,7 +264,7 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                     </>
                 )}
 
-                <div className="glass-panel-square border border-white/10 w-full h-full md:h-auto md:max-h-[90vh] flex flex-col shadow-[0_0_100px_rgba(0,0,0,1)] relative overflow-hidden rounded-none">
+                <div className="glass-panel border border-white/10 w-full h-full md:h-auto md:max-h-[90vh] flex flex-col shadow-[0_0_100px_rgba(0,0,0,1)] relative overflow-hidden rounded-[2.5rem]">
                 
                 {/* Decorative Accents */}
                 <div className="absolute top-0 left-0 w-full h-px bg-white/10"></div>
@@ -278,15 +278,15 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                                 <ChevronLeft className="w-6 h-6" />
                             </button>
                         )}
-                        <div className="w-10 h-10 md:w-12 md:h-12 bg-white/[0.02] border border-white/10 flex items-center justify-center">
+                        <div className="w-10 h-10 md:w-12 md:h-12 bg-white/[0.02] border border-white/10 flex items-center justify-center rounded-xl">
                             <Sword className="w-5 h-5 md:w-6 md:h-6 text-wuxia-gold opacity-80" />
                         </div>
                         <div>
                             <h3 className="text-wuxia-gold font-serif font-bold text-lg md:text-2xl tracking-[0.2em] uppercase">Trang Bị</h3>
-                            <div className="hidden md:flex items-center gap-3 mt-1">
-                                <div className="flex items-center gap-1.5 bg-white/[0.03] px-2 py-0.5 border border-white/5">
-                                    <div className="w-1.5 h-1.5 bg-wuxia-cyan shadow-[0_0_8px_#44aaaa]"></div>
-                                    <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Active Status</span>
+                            <div className="hidden md:flex items-center gap-3 mt-1.5">
+                                <div className="flex items-center gap-2 bg-white/[0.05] px-3 py-1 border border-white/10 rounded-full">
+                                    <div className="w-2 h-2 bg-wuxia-cyan shadow-[0_0_10px_#44aaaa] rounded-full animate-pulse"></div>
+                                    <span className="text-[10px] md:text-[11px] text-gray-400 font-black uppercase tracking-[0.2em]">TRẠNG THÁI HIỆN TẠI</span>
                                 </div>
                             </div>
                         </div>
@@ -294,7 +294,7 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                     {!isMobile && (
                         <button 
                             onClick={onClose} 
-                            className="group w-10 h-10 flex items-center justify-center hover:bg-white/5 border border-white/10 text-gray-500 hover:text-white transition-colors"
+                            className="group w-10 h-10 flex items-center justify-center hover:bg-white/5 border border-white/10 text-gray-500 hover:text-white transition-colors rounded-xl"
                         >
                             <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
                         </button>
@@ -352,8 +352,8 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                 </div>
 
                 {/* Footer Quote */}
-                <div className="h-10 md:h-12 shrink-0 bg-white/[0.01] border-t border-white/10 flex items-center justify-center px-8 relative overflow-hidden">
-                    <span className="text-[8px] md:text-[9px] text-gray-700 font-mono tracking-[0.5em] uppercase z-10">Forged in Shadow • Tempered in Blood</span>
+                <div className="h-12 md:h-14 shrink-0 bg-white/[0.02] border-t border-white/10 flex items-center justify-center px-8 relative overflow-hidden">
+                    <span className="text-[9px] md:text-[11px] text-gray-600 font-mono tracking-[0.6em] uppercase z-10 font-bold">LUYỆN TRONG BÓNG TỐI • RÈN TRONG MÁU LỬA</span>
                 </div>
             </div>
         </div>

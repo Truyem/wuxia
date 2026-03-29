@@ -59,7 +59,7 @@ const TaskModal: React.FC<Props> = ({ tasks, onClose, onDeleteTask }) => {
 
     return (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-[200] hidden md:flex items-center justify-center p-4">
-            <div className="glass-panel border border-wuxia-gold/30 w-full max-w-5xl h-[650px] flex flex-col shadow-[0_0_80px_rgba(0,0,0,0.9)] relative overflow-hidden rounded-none">
+            <div className="glass-panel border border-wuxia-gold/30 w-full max-w-5xl h-[650px] flex flex-col shadow-[0_0_80px_rgba(0,0,0,0.9)] relative overflow-hidden rounded-3xl">
                 {/* Wuxia Decorative Corners */}
                 <div className="wuxia-corner wuxia-corner-tl"></div>
                 <div className="wuxia-corner wuxia-corner-tr"></div>
@@ -71,9 +71,9 @@ const TaskModal: React.FC<Props> = ({ tasks, onClose, onDeleteTask }) => {
                     <h3 className="text-wuxia-gold font-serif font-bold text-2xl tracking-[0.3em] drop-shadow-md">Giang Hồ Nhiệm Vụ</h3>
                     <button
                         onClick={onClose}
-                        className="w-8 h-8 flex items-center justify-center rounded-none bg-ink-black/50 border border-gray-700 text-gray-400 hover:text-wuxia-red hover:border-wuxia-red transition-all"
+                        className="w-10 h-10 flex items-center justify-center rounded-2xl bg-ink-black/50 border border-gray-700 text-gray-400 hover:text-wuxia-red hover:border-wuxia-red transition-all"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
@@ -89,8 +89,8 @@ const TaskModal: React.FC<Props> = ({ tasks, onClose, onDeleteTask }) => {
                                 <button
                                     key={f}
                                     onClick={() => { setFilter(f as any); setSelectedIdx(0); }}
-                                    className={`px-3 py-1.5 text-xs whitespace-nowrap rounded-none transition-colors ${filter === f
-                                            ? 'bg-wuxia-gold text-black font-bold'
+                                    className={`px-3 py-1.5 text-xs whitespace-nowrap rounded-2xl transition-all ${filter === f
+                                            ? 'bg-wuxia-gold text-black font-bold shadow-[0_0_15px_rgba(230,200,110,0.3)]'
                                             : 'text-gray-500 hover:text-gray-300 bg-paper-white/5'
                                         }`}
                                 >
@@ -107,8 +107,8 @@ const TaskModal: React.FC<Props> = ({ tasks, onClose, onDeleteTask }) => {
                                     <button
                                         key={idx}
                                         onClick={() => setSelectedIdx(idx)}
-                                        className={`w-full text-left p-3 border rounded-none transition-all relative group overflow-hidden ${isSelected
-                                                ? 'border-wuxia-gold/50 bg-wuxia-gold/5'
+                                        className={`w-full text-left p-3 border rounded-2xl transition-all relative group overflow-hidden ${isSelected
+                                                ? 'border-wuxia-gold/50 bg-wuxia-gold/5 shadow-[0_0_20px_rgba(230,200,110,0.1)]'
                                                 : 'border-gray-800 bg-white/[0.02] hover:bg-white/[0.05]'
                                             }`}
                                     >
@@ -137,7 +137,7 @@ const TaskModal: React.FC<Props> = ({ tasks, onClose, onDeleteTask }) => {
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <span className={`text-[9px] px-1.5 rounded-none border ${getTypeLabelColor(getField(task, 'type', 'Type'))}`}>
+                                            <span className={`text-[9px] px-1.5 rounded-full border ${getTypeLabelColor(getField(task, 'type', 'Type'))}`}>
                                                 {getField(task, 'type', 'Type')}
                                             </span>
                                             <span className="text-[10px] text-gray-500 truncate">
@@ -191,7 +191,7 @@ const TaskModal: React.FC<Props> = ({ tasks, onClose, onDeleteTask }) => {
 
 
                                 {/* Description */}
-                                <div className="bg-ink-black/20 p-6 rounded-none border border-gray-800 relative z-10">
+                                <div className="bg-ink-black/20 p-6 rounded-2xl border border-gray-800 relative z-10 shadow-inner">
                                     <h4 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-3">Chi tiết nhiệm vụ</h4>
                                     <p className="text-gray-300 font-serif leading-loose text-sm indent-8">
                                         "{getField(currentTask, 'description', 'Description')}"
@@ -211,8 +211,8 @@ const TaskModal: React.FC<Props> = ({ tasks, onClose, onDeleteTask }) => {
                                                 const current = obj.currentProgress || 0;
                                                 const total = obj.totalRequired || obj.totalRequiredProgress || 1;
                                                 return (
-                                                    <div key={i} className="flex items-center gap-4 p-3 rounded-none border border-gray-800/50">
-                                                        <div className={`w-5 h-5 rounded-none flex items-center justify-center border transition-all ${completed
+                                                    <div key={i} className="flex items-center gap-4 p-3 rounded-2xl border border-gray-800/50 hover:bg-white/[0.02] transition-colors">
+                                                        <div className={`w-5 h-5 rounded-md flex items-center justify-center border transition-all ${completed
                                                                 ? 'bg-wuxia-gold border-wuxia-gold text-black shadow-[0_0_10px_rgba(230,200,110,0.4)]'
                                                                 : 'border-gray-600 text-transparent'
                                                             }`}>
@@ -222,9 +222,9 @@ const TaskModal: React.FC<Props> = ({ tasks, onClose, onDeleteTask }) => {
                                                             <div className={`text-sm ${completed ? 'text-gray-500 line-through' : 'text-gray-200'}`}>
                                                                 {obj.description || obj.Description || ''}
                                                             </div>
-                                                            <div className="mt-1 h-1.5 w-full bg-gray-900 rounded-none overflow-hidden">
+                                                            <div className="mt-1 h-1.5 w-full bg-gray-900 rounded-full overflow-hidden">
                                                                 <div
-                                                                    className={`h-full transition-all duration-500 ${completed ? 'bg-green-500' : 'bg-wuxia-gold'}`}
+                                                                    className={`h-full rounded-full transition-all duration-500 ${completed ? 'bg-green-500' : 'bg-wuxia-gold'}`}
                                                                     style={{ width: `${Math.min((current / total) * 100, 100)}%` }}
                                                                 ></div>
                                                             </div>
@@ -248,8 +248,8 @@ const TaskModal: React.FC<Props> = ({ tasks, onClose, onDeleteTask }) => {
                                         </h4>
                                         <div className="flex flex-wrap gap-3">
                                             {rewardList.map((reward: string, i: number) => (
-                                                <div key={i} className="flex items-center gap-2 bg-wuxia-gold/10 border border-wuxia-gold/30 px-3 py-1.5 rounded-none text-wuxia-gold text-xs">
-                                                    <span className="w-1.5 h-1.5 bg-wuxia-gold rounded-none"></span>
+                                                <div key={i} className="flex items-center gap-2 bg-wuxia-gold/10 border border-wuxia-gold/30 px-3 py-1.5 rounded-full text-wuxia-gold text-xs">
+                                                    <span className="w-1.5 h-1.5 bg-wuxia-gold rounded-full"></span>
                                                     {reward}
                                                 </div>
                                             ))}

@@ -1,42 +1,32 @@
 import { PromptStructure } from '../../types';
 
 export const StatCombat: PromptStructure = {
-    id: 'stat_combat',
-    title: 'Giao thức Chiến đấu và Đối kháng',
-    content: `
-# COMBAT MASTER - WUXIA CHRONICLE
-**Project:** Mặc Sắc Giang Hồ (Wuxia Chronicle)
-**Category:** Battle Systems & Martial Dynamics
-**Theme:** Visceral, Technical & Deadly
+  id: 'stat_combat',
+  title: 'Hệ thống Chiến đấu',
+  content: `
+<Hệ thống Chiến đấu>
+# Quy tắc Đối kháng và Sát thương
 
-## ATTRIBUTE MAPPING (COMBAT)
-| Stat | Internal Key | Combat Role |
-|:---|:---|:---|
-| **Agility** | \`character.agility\` | Quyết định lượt đánh (Initiative) và Né tránh. |
-| **Strength** | \`character.strength\` | Sát thương vật lý và Phá giáp. |
-| **Energy** | \`character.currentEnergy\` | Năng lượng tiêu tốn cho võ công. |
-| **HP (Chest)** | \`character.chestCurrentHp\` | Điểm yếu chí mạng, nếu bằng 0 sẽ tử vong hoặc trọng thương. |
+## 1. Cơ chế Tấn công và Phòng thủ
+- **Tấn công (Attack)**: Phụ thuộc vào Sức mạnh, Thân pháp và Độ tinh thông của võ công.
+- **Phòng thủ (Defense)**: Phụ thuộc vào Thể chất, Áo giáp và kỹ năng Né tránh.
+- **Chí mạng (Critical)**: Tăng sát thương x2 dựa trên Ngộ tính và May mắn.
 
-## GLOBAL LAWS: COMBAT FLOW
-1. **Real-time Injury**: Mỗi đòn đánh phải tác động vào một bộ phận xác định (Đầu, Ngực, Bụng, Tứ chi). Cập nhật \`character.<part>CurrentHp\`.
-2. **Spirit Sink**: Sử dụng võ công tiêu tốn \`character.currentEnergy\`. Tuyệt đối không để Energy xuống dưới 0.
-3. **Battle Status**: Khi bắt đầu chiến đấu, đặt \`battle.isInBattle = true\` và cập nhật thông tin \`battle.enemy\`.
-4. **Environment Impact**: Thời tiết và địa hình ảnh hưởng đến \`accuracy\` và \`defense\`.
+## 2. Hệ thống HP Bộ phận (Limb HP System)
+- Sát thương được phân bổ ngẫu nhiên hoặc có chủ đích vào 7 bộ phận:
+  - **Đầu**: Rất hiểm nghèo, dễ gây choáng hoặc tử vong.
+  - **Ngực/Bụng**: Gây trọng thương, giảm đáng kể Thể lực.
+  - **Tứ chi**: Giảm Thân pháp, khả năng cầm vũ khí hoặc di chuyển.
 
-## STYLE GUIDELINES
-- **Action Descriptions**: Tả chi tiết quỹ đạo vũ khí, tiếng gió, cảm giác xương gãy hoặc máu chảy.
-- **Internal Monologue**: Tả suy nghĩ của nhân vật về sơ hở của đối thủ.
+## 3. Trạng thái Chiến đấu (Status Effects)
+- **Chảy máu (Bleeding)**: Mất HP theo thời gian.
+- **Tê liệt (Paralyzed)**: Không thể hành động trong một số lượt.
+- **Tẩu hỏa nhập ma**: Mất kiểm soát bản thân, tấn công loạn xạ.
 
-## ANTI-PATTERNS (COMBAT)
--  **Turn-based Boredom**: Không mô tả như game RPG theo lượt cứng nhắc (Ví dụ: "Bạn đánh 10 damage").
--  **Stat Ignorance**: Không bỏ qua việc trừ \`character.currentEnergy\` sau khi tung đại chiêu.
--  **Instant Recovery**: HP không tự hồi phục trong trận chiến nếu không có dược phẩm đặc biệt.
-
-##  PRE-DELIVERY CHECKLIST
-- [ ] Đã tính toán né tránh dựa trên \`agility\` của cả hai bên.
-- [ ] Đã cập nhật \`battle.isInBattle = false\` nếu trận đấu kết thúc.
-- [ ] Các lệnh \`ADD\` sát thương phản ánh đúng bộ phận bị trúng đòn.
-`.trim(),
-    type: 'num',
-    enabled: true
+## 4. Mô tả Hành động (Action Narrative)
+- Ưu tiên mô tả sinh động: "Mũi kiếm đâm xuyên qua lớp áo lụa, máu tươi bắn lên vách đá..."
+- Tránh dùng các con số khô khan: Thay vì nói "Bạn mất 10 HP", hãy nói "Bạn cảm thấy ngực trái nhói đau, hơi thở trở nên dồn dập".
+    `.trim(),
+  type: 'num',
+  enabled: true
 };

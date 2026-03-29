@@ -30,6 +30,7 @@ import MobileTask from './components/features/Task/MobileTask';
 import AgreementModal from './components/features/Agreement/AgreementModal';
 import StoryModal from './components/features/Story/StoryModal';
 import MobileStory from './components/features/Story/MobileStory';
+import { MusicPlayer } from './components/features/MusicPlayer/MusicPlayer';
 
 import MemoryModal from './components/features/Memory/MemoryModal';
 import MobileMemory from './components/features/Memory/MobileMemory';
@@ -64,6 +65,7 @@ const App: React.FC = () => {
     const [generatingNpcs, setGeneratingNpcs] = React.useState<Set<string>>(new Set());
     const generatingProtagonistFor = React.useRef<string | null>(null);
     const [pendingInputToPreload, setPendingInputToPreload] = React.useState<string>('');
+    const lastImageGenTimeRef = React.useRef<number>(0);
 
     const requestConfirm = React.useCallback((options: ConfirmOptions) => {
         return new Promise<boolean>((resolve) => {
@@ -210,6 +212,9 @@ const App: React.FC = () => {
     // Global Auto-generation logic for character and NPCs
     React.useEffect(() => {
         const checkAndGenerate = async () => {
+            const now = Date.now();
+            if (now - lastImageGenTimeRef.current < 5000) return;
+
             const visualConfig = state.visualConfig;
             const workerUrl = visualConfig.imageGenWorkerUrl;
             if (!workerUrl) return;
@@ -229,6 +234,7 @@ const App: React.FC = () => {
                         if (Role.avatar !== existingImage) {
                             state.setCharacter({ ...Role, avatar: existingImage });
                         }
+                        lastImageGenTimeRef.current = Date.now();
                     } else {
                         generatingProtagonistFor.current = Role.name;
                         setIsGeneratingProtagonist(true);
@@ -237,6 +243,7 @@ const App: React.FC = () => {
                             const dataUrl = await ImageService.generateAndCache(workerUrl, { prompt, model: visualConfig.imageGenModel }, cacheKey);
                             if (dataUrl) {
                                 state.setCharacter(prev => ({ ...prev, avatar: dataUrl }));
+                                lastImageGenTimeRef.current = Date.now();
                             }
                         } catch (error) {
                             console.warn('Character auto-generation failed after all retries.');
@@ -263,6 +270,7 @@ const App: React.FC = () => {
 
                         if (existingNpcImage) {
                             state.setSocial(prev => prev.map(n => n.name === npc.name ? { ...n, avatar: existingNpcImage } : n));
+                            lastImageGenTimeRef.current = Date.now();
                         } else {
                             setGeneratingNpcs(prev => new Set(prev).add(npc.name));
                             try {
@@ -273,6 +281,7 @@ const App: React.FC = () => {
                                         if (!npc.id && n.name === npc.name) return { ...n, avatar: dataUrl };
                                         return n;
                                     }));
+                                    lastImageGenTimeRef.current = Date.now();
 /*
                                     state.setHistory(prev => [...prev, {
                                         role: 'system',
@@ -638,6 +647,8 @@ const App: React.FC = () => {
                             【V0.0.1】
                         </div>
                     </div>
+                    
+                    <MusicPlayer />
                 </div>
             )}
 

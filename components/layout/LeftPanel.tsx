@@ -9,6 +9,7 @@ import { ImageService } from '../../services/imageService';
 import { TextGenService } from '../../services/textGenService';
 import { Sparkles } from 'lucide-react';
 import { OrnateBorder } from '../ui/decorations/OrnateBorder';
+import { PremiumBar, MiniBodyPart } from '../shared/ProfileComponents';
 
 interface Props {
     Role: CharacterData;
@@ -71,68 +72,6 @@ const STAT_LABELS: Record<string, string> = {
     luck: 'Phúc duyên',
     tamTinh: 'Tâm tính',
 };
-
-// Custom very thin bar for Vitals to match the mockup
-const PremiumBar: React.FC<{ label: string; current: number; max: number; colorClass: string; icon?: any }> = ({ label, current, max, colorClass, icon }) => {
-    const pct = Math.min((current / (max || 1)) * 100, 100);
-
-    return (
-        <div className="mb-3 group relative">
-            <div className="flex justify-between items-end mb-1 px-1">
-                <div className="flex items-center gap-2">
-                    {icon && <span className="text-[10px] text-paper-white/40">
-                        {typeof icon === 'string' ? icon : <IconGlyph name={icon.name} className="h-3 w-3" />}
-                    </span>}
-                    <span className="tracking-[0.2em] font-serif text-[9px] text-paper-white/60 font-black uppercase">{label}</span>
-                </div>
-                <span className="font-mono text-[8px] text-paper-white/40 font-black">
-                    {Math.round(current)}<span className="opacity-20 mx-0.5">/</span>{max}
-                </span>
-            </div>
-            {/* Very thin progress bar */}
-            <div className="h-[2px] w-full bg-white/5 rounded-full overflow-hidden">
-                <div
-                    className={`h-full ${colorClass} transition-all duration-1000 ease-out`}
-                    style={{ width: `${pct}%` }}
-                ></div>
-            </div>
-        </div>
-    );
-};
-
-// Mini Body Part with Liquid Glass look
-const MiniBodyPart: React.FC<{ name: string; current: number; max: number; status?: string }> = ({ name, current, max, status }) => {
-    const pct = (current / (max || 1)) * 100;
-    const s = status?.trim().toLowerCase();
-    const isHealthy = !s || s === 'khỏe mạnh' || s === 'bình thường' || s === 'ổn định' || s === 'tốt' || s === 'khỏe' || s === 'bình thường';
-    const isInjured = pct < 99.5 || !isHealthy;
-    const isCritical = pct < 30;
-    
-    return (
-        <div className="flex items-center gap-4 w-full group transition-all py-[2px]">
-            <span className={`font-serif text-[9px] w-12 shrink-0 uppercase tracking-widest font-black ${isCritical ? 'text-wuxia-red animate-pulse' : 'text-wuxia-red/80'}`}>
-                {name}
-            </span>
-            <div className="flex-1 h-[3px] bg-white/5 rounded-full overflow-hidden border border-white/5">
-                <div
-                    className={`h-full transition-all duration-1000 ${isCritical ? 'bg-wuxia-red shadow-[0_0_8px_rgba(239,68,68,0.6)]' : 'bg-wuxia-red'}`}
-                    style={{ width: `${pct}%` }}
-                ></div>
-            </div>
-            {/* Conditional icon: X for injury, dot for healthy */}
-            <div className="w-3 h-3 flex items-center justify-center">
-                {isInjured ? (
-                    <svg className={`w-2.5 h-2.5 ${isCritical ? 'text-wuxia-red' : 'text-wuxia-red/70'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                ) : (
-                    <div className="w-1 h-1 rounded-full bg-wuxia-gold/40 shadow-[0_0_4px_rgba(230,200,110,0.4)]" />
-                )}
-            </div>
-        </div>
-    );
-};
-
 
 // NPC Slot Miniature
 const NpcSlot: React.FC<{ npc: NpcStructure; visualConfig: VisualSettings; isGenerating?: boolean; allAvatars?: Record<string, string>; onClick: (id: string) => void; isSelected: boolean }> = ({ npc, visualConfig, isGenerating, allAvatars, onClick, isSelected }) => {

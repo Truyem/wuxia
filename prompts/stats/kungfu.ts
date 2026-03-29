@@ -1,65 +1,53 @@
 import { PromptStructure } from '../../types';
 
 export const StatKungfu: PromptStructure = {
-    id: 'stat_kf',
-    title: 'Giao thức Võ công và Kỹ năng',
-    content: `
-# KUNGFU MASTER - WUXIA CHRONICLE
-**Project:** Mặc Sắc Giang Hồ (Wuxia Chronicle)
-**Category:** Martial Arts & Skill Growth
-**Theme:** Discipline & Mastery
+  id: 'stat_kf',
+  title: 'Hệ thống Võ học',
+  content: `
+<Hệ thống Võ học>
+# Phân loại và Tấn thăng Công pháp
 
-##  ATTRIBUTE MAPPING (SKILLS)
-| Category | Growth Factor | Mastery Effect |
-|:---|:---|:---|
-| **External** | Luyện thể | Tăng damage vật lý, giảm delay |
-| **Internal** | Thiền định | Tăng Energy Max, tăng hộ thể |
-| **Movement** | Thân pháp | Tăng né tránh, tăng tầm di chuyển |
-| **Support** | Tần suất dùng | Tăng hiệu quả buff, giảm cost |
+## 1. Phân loại Công pháp
+- **Nội công (Internal)**: Tăng cường linh lực, khả năng hồi phục và sức mạnh căn bản.
+- **Ngoại công (External)**: Các chiêu thức tấn công trực tiếp bằng vũ khí hoặc tay không.
+- **Bộ pháp (Movement)**: Tăng khả năng né tránh và tốc độ di chuyển trong chiến đấu.
+- **Tâm pháp (Mental)**: Các kỹ năng bị động tăng cường ngộ tính hoặc kháng trạng thái.
 
-##  GLOBAL LAWS: KUNGFU GROWTH
-1. **Mastery Law**: \`currentProficiency\` tăng sau mỗi lần sử dụng thành công. Tuyệt đối không tăng cấp (currentLevel) mà không đủ Proficiency.
-2. **Cost Reality**: Mọi chiêu thức phải tiêu tốn \`consumptionValue\` (Energy). Nếu cạn kiệt, nhân vật rơi vào trạng thái kiệt sức.
-3. **Breakthrough**: Tại các cấp độ [3, 6, 9], yêu cầu người chơi thực hiện "Đột phá" (Phán đoán độ khó cao).
-4. **Sect Identity**: Võ công môn phái phải có ID theo môn phái trong \`character.kungfuList\`.
+## 2. Cấp độ và Tinh thông (Level & Mastery)
+- **Cấp độ (Level)**: Từ 1 đến 10 (hoặc cao hơn tùy phẩm cấp). Tăng cấp yêu cầu điểm Tinh thông.
+- **Tinh thông (Mastery)**: Tăng lên sau mỗi lần sử dụng thành công trong thực chiến hoặc luyện tập.
+- **Đột phá (Breakthrough)**: Cần điều kiện đặc biệt (Đan dược, Địa điểm, Tâm cảnh) để vượt qua các tầng cổ chai.
 
-##  STYLE GUIDELINES
-- **Skill Usage**: Mô tả hoa mỹ, mang tính triết lý võ học (Như rồng bay, như nước chảy).
-- **Impact Flow**: Tả cảm giác kình lực va chạm và phản ứng của đối thủ.
+## 3. Uy lực và Tiêu hao
+- **Uy lực (Power)**: Sát thương hoặc hiệu ứng gây ra, phụ thuộc vào cấp độ và thuộc tính liên quan.
+- **Tiêu hao (Cost)**: Lượng Linh lực hoặc Thể chất tiêu tốn mỗi khi thi triển.
 
-##  ANTI-PATTERNS (KUNGFU)
--  **One-Hit Wonder**: Không cho phép học chiêu thức cấp cao khi chưa đủ cảnh giới.
--  **Free Usage**: Không bỏ qua việc trừ \`character.currentEnergy\` sau khi dùng chiêu.
--  **Generic Keys**: Dùng các key không tồn tại như \`gameState.Kungfu\` (Dùng \`character.kungfuList\`).
-
-##  PRE-DELIVERY CHECKLIST
-- [ ] Lệnh \`ADD\` Proficiency đã được tính toán dựa trên mức độ khó của hành động.
-- [ ] Lệnh \`SUB\` Energy đã được thực hiện chính xác.
-- [ ] Trạng thái "Đột phá" được kích hoạt nếu đạt ngưỡng Level.
-`.trim(),
-    type: 'num',
-    enabled: true
+## 4. Mô tả Chiêu thức
+- Khuyến khích mô tả mang tính hình tượng: "Kiếm khí như rồng bay phượng múa, kình lực xé toạc hư không...".
+    `.trim(),
+  type: 'num',
+  enabled: true
 };
 
 export const SkillExtractionPrompt: PromptStructure = {
-    id: 'skill_extraction',
-    title: 'Trích xuất Thông tin Võ học chuyên sâu',
-    content: `
-# KUNGFU EXTRACTION PROTOCOL
-**Task:** Phân tích yêu cầu và tạo ra bộ võ học/kỹ năng tương ứng.
+  id: 'skill_extraction',
+  title: 'Trích xuất Võ học',
+  content: `
+<Trích xuất Võ học>
+# Quy trình Khởi tạo Võ công từ Ý tưởng
 
-## INPUT FORMAT:
-"Ta muốn sáng tạo một tầng võ công dựa trên sóng biển."
+## 1. Phân tích Thuộc tính
+- Xác định loại công pháp và thuộc tính ngũ hành (nếu có) từ mô tả của người chơi.
+- Đánh giá phẩm cấp (Hoàng, Huyền, Địa, Thiên) dựa trên uy lực mô tả.
 
-## EXTRACTION REQUIREMENTS:
-1. **Type Classification**: Thuộc loại Internal (Nội công) hay External (Ngoại công)?
-2. **Progression Path**: Thiết lập \`maxLevel\` và \`maxMastery\` phù hợp với độ hiếm.
-3. **Power Scaling**: Định giá \`power\` và \`cost\` theo sự cân bằng của game.
-4. **Lore Integration**: Viết 1 đoạn description ngắn gọn mang tính kiếm hiệp.
+## 2. Thiết lập Thông số
+- Định nghĩa các chỉ số \`power_scale\`, \`cost_per_use\`, và \`max_level\`.
+- Tạo tên chiêu thức hào hùng, đậm chất kiếm hiệp.
 
-## OUTPUT FORMAT:
-Trả về đối tượng JSON với cấu trúc chuẩn của \`gameState.Kungfu\`.
-`.trim(),
-    type: 'custom',
-    enabled: true
+## 3. Đồng bộ Hệ thống
+- Tạo object JSON chuẩn để \`ADD\` vào \`kungfu_list\` của nhân vật.
+- Đảm bảo các ràng buộc về cấp độ và cảnh giới được thực thi.
+    `.trim(),
+  type: 'custom',
+  enabled: true
 };

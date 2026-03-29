@@ -63,6 +63,7 @@ import { ImageService, ImageCacheService } from '../services/imageService';
 import { WORLD_STRUCTURE, FULL_WORLD_SKELETON } from '../data/worldData';
 import { WorldDataExporter } from '../services/worldDataExporter';
 import { MapService } from '../services/mapService';
+import { audioService } from '../services/audioService';
 
 import {
     normalizeEnvironment,
@@ -208,12 +209,108 @@ export const useGame = () => {
         gameConfig, setGameConfig,
         memoryConfig, setMemoryConfig,
         tavernSettings, setTavernSettings,
+        musicSettings, setMusicSettings,
         prompts, setPrompts,
         festivals, setFestivals,
         currentTheme, setCurrentTheme,
         contextSize, setContextSize,
         scrollRef, abortControllerRef
     } = gameState;
+
+    // Music Effects
+    useEffect(() => {
+        audioService.setVolume(musicSettings.volume);
+    }, [musicSettings.volume]);
+
+    useEffect(() => {
+        const currentSong = musicSettings.playlist.find(s => s.id === musicSettings.currentSongId);
+        if (currentSong) {
+            audioService.setSrc(currentSong.url);
+        } else {
+            audioService.stop();
+        }
+    }, [musicSettings.currentSongId]);
+
+    useEffect(() => {
+        audioService.setOnEnded(() => {
+            handleNextSong();
+        });
+    }, [musicSettings.playlist, musicSettings.currentSongId, musicSettings.shuffle, musicSettings.loopPlaylist, musicSettings.singleLoop]);
+
+    const handleTogglePlay = () => {
+        if (audioService.isPlaying) {
+            audioService.pause();
+        } else {
+            if (!musicSettings.currentSongId && musicSettings.playlist.length > 0) {
+                setMusicSettings(prev => ({ ...prev, currentSongId: prev.playlist[0].id }));
+            }
+            audioService.play();
+        }
+    };
+
+    const handleNextSong = () => {
+        if (musicSettings.playlist.length === 0) return;
+        
+        if (musicSettings.singleLoop) {
+            audioService.currentTime = 0;
+            audioService.play();
+            return;
+        }
+
+        let nextId: string | null = null;
+        const currentIndex = musicSettings.playlist.findIndex(s => s.id === musicSettings.currentSongId);
+        
+        if (musicSettings.shuffle) {
+            const otherSongs = musicSettings.playlist.filter(s => s.id !== musicSettings.currentSongId);
+            if (otherSongs.length > 0) {
+                nextId = otherSongs[Math.floor(Math.random() * otherSongs.length)].id;
+            } else {
+                nextId = musicSettings.currentSongId;
+            }
+        } else {
+            if (currentIndex < musicSettings.playlist.length - 1) {
+                nextId = musicSettings.playlist[currentIndex + 1].id;
+            } else if (musicSettings.loopPlaylist) {
+                nextId = musicSettings.playlist[0].id;
+            }
+        }
+
+        if (nextId) {
+            setMusicSettings(prev => {
+                const updated = { ...prev, currentSongId: nextId };
+                dbService.saveSetting('music_settings', updated);
+                return updated;
+            });
+        }
+    };
+
+    const handlePrevSong = () => {
+        if (musicSettings.playlist.length === 0) return;
+        const currentIndex = musicSettings.playlist.findIndex(s => s.id === musicSettings.currentSongId);
+        let prevId: string | null = null;
+
+        if (currentIndex > 0) {
+            prevId = musicSettings.playlist[currentIndex - 1].id;
+        } else if (musicSettings.loopPlaylist) {
+            prevId = musicSettings.playlist[musicSettings.playlist.length - 1].id;
+        }
+
+        if (prevId) {
+            setMusicSettings(prev => {
+                const updated = { ...prev, currentSongId: prevId };
+                dbService.saveSetting('music_settings', updated);
+                return updated;
+            });
+        }
+    };
+
+    const handleUpdateMusicSettings = (updates: Partial<typeof musicSettings>) => {
+        setMusicSettings(prev => {
+            const next = { ...prev, ...updates };
+            dbService.saveSetting('music_settings', next);
+            return next;
+        });
+    };
 
     const currentApi = getCurrentApiConfig(apiConfig);
     const workerUrl = visualConfig.textGenWorkerUrl;
@@ -2751,6 +2848,52 @@ YÊU CẦU ĐỊNH DẠNG JSON (BẮT BUỘC):
         const normalized = normalizeGameSettings(newConfig);
         setGameConfig(normalized);
         await dbService.saveSetting('game_settings', normalized);
+
+        // Synchronize narrative perspective prompts
+        const perspectiveSuffixMap: Record<string, string> = {
+            'Ngôi thứ nhất': 'first',
+            'Ngôi thứ hai': 'second',
+            'Ngôi thứ ba': 'third'
+        };
+
+        const targetSuffix = perspectiveSuffixMap[normalized.narrativePerspective];
+        if (targetSuffix) {
+            const perspectivePromptIds = [
+                'writing_perspective_first',
+                'writing_perspective_second',
+                'writing_perspective_third',
+                'write_perspective_first',
+                'write_perspective_second',
+                'write_perspective_third'
+            ];
+
+            const targetIdPrefixes = ['writing_perspective_', 'write_perspective_'];
+            const targetIds = targetIdPrefixes.map(prefix => prefix + targetSuffix);
+
+            const mandatoryEnabledIds = [
+                'runtime_json_constraints',
+                'runtime_json_system',
+                'runtime_connection_test'
+            ];
+
+            setPrompts(prevPrompts => {
+                const updated = prevPrompts.map(p => {
+                    // Enforce mandatory prompts
+                    if (mandatoryEnabledIds.includes(p.id)) {
+                        return { ...p, enabled: true };
+                    }
+                    // Sync perspective prompts
+                    if (perspectivePromptIds.includes(p.id)) {
+                        return { ...p, enabled: targetIds.includes(p.id) };
+                    }
+                    return p;
+                });
+                
+                // Save to DB asynchronously
+                void dbService.saveSetting('prompts', updated);
+                return updated;
+            });
+        }
     }
     const saveMemorySettings = async (newConfig: MemoryConfig) => {
         const normalized = standardizeMemoryConfig(newConfig);
@@ -2979,7 +3122,8 @@ YÊU CẦU ĐỊNH DẠNG JSON (BẮT BUỘC):
             updateNpcMajorRole,
 
             handleSummarizeChapter,
-            getContextSnapshot: buildContextSnapshot
+            getContextSnapshot: buildContextSnapshot,
+            handleTogglePlay, handleNextSong, handlePrevSong, handleUpdateMusicSettings
         }
     };
 };

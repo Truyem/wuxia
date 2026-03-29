@@ -457,8 +457,8 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
                     </div>
                 </div>
             ) : (
-                <div className="grid gap-4 md:grid-cols-[220px_minmax(0,1fr)]">
-                    <div className="space-y-2 max-h-[320px] overflow-y-auto custom-scrollbar pr-1">
+                <div className="grid gap-10 md:grid-cols-[240px_minmax(0,1fr)]">
+                    <div className="space-y-2 pb-2">
                         {filteredConfigs.map(cfg => (
                             <button
 
@@ -469,13 +469,13 @@ const ApiSettings: React.FC<Props> = ({ settings, onSave }) => {
                                     setFeatureModelOptions(initFeatureModelList());
                                     setFeatureModelLoading(initFeatureLoadStatus());
                                 }}
-                                className={`w-full text-left rounded-md border px-3 py-2 transition-colors ${activeConfig?.id === cfg.id
-                                        ? 'border-wuxia-gold bg-wuxia-gold/10 text-wuxia-gold shadow-[0_0_15px_rgba(255,215,0,0.1)]'
-                                        : 'border-wuxia-gold/20 bg-ink-black/20 text-paper-white/80 hover:border-wuxia-gold/50 hover:bg-ink-black/40'
+                                className={`w-full text-left rounded-md border px-3 py-2 transition-all duration-300 ease-out group ${activeConfig?.id === cfg.id
+                                        ? 'border-wuxia-gold bg-wuxia-gold/10 text-wuxia-gold shadow-[0_0_15px_rgba(255,215,0,0.1)] translate-x-3'
+                                        : 'border-wuxia-gold/20 bg-ink-black/20 text-paper-white/80 hover:border-wuxia-gold/50 hover:bg-ink-black/40 hover:translate-x-3'
                                     }`}
                             >
-                                <div className="font-bold truncate">{cfg.name || 'Cấu hình không tên'}</div>
-                                <div className="text-[11px] opacity-80 mt-1">{PROVIDER_LABELS[cfg.provider]}</div>
+                                <div className="font-bold truncate transition-all duration-300 ease-out">{cfg.name || 'Cấu hình không tên'}</div>
+                                <div className="text-[11px] opacity-80 mt-1 transition-all duration-300 ease-out">{PROVIDER_LABELS[cfg.provider]}</div>
                             </button>
                         ))}
                     </div>

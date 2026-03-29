@@ -65,7 +65,7 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
           className="fixed inset-0 z-[1000] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-0 md:p-8"
        >
           {/* Decorative Border Layer */}
-          <div className="absolute inset-4 border border-wuxia-gold/10 rounded-3xl pointer-events-none opacity-40"></div>
+          <div className="absolute inset-4 border border-wuxia-gold/10 rounded-[2rem] pointer-events-none opacity-40"></div>
           
           {/* Close Button UI */}
           <div className="absolute top-4 md:top-8 right-4 md:right-8 z-[1001]">
@@ -80,7 +80,7 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
           </div>
 
           {/* Main Map Content Area */}
-          <div className="w-full h-full max-w-7xl max-h-screen md:max-h-[90vh] relative bg-[#0a0a0a] rounded-none md:rounded-2xl border border-white/5 shadow-2xl overflow-hidden flex flex-col md:flex-row">
+          <div className="w-full h-full max-w-7xl max-h-screen md:max-h-[80vh] relative bg-[#0a0a0a] rounded-3xl md:rounded-[2rem] border border-white/5 shadow-2xl overflow-hidden flex flex-col md:flex-row shadow-[0_0_100px_rgba(0,0,0,0.8)]">
               
               {/* Location List Toggle Button (Mobile Only) */}
               <div className="absolute top-4 left-4 z-[1001] md:hidden">
@@ -97,7 +97,7 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
 
               {/* Left Sidebar / Mobile Popup */}
               <AnimatePresence>
-                {(isListOpen || typeof window !== 'undefined' && window.innerWidth >= 768) && (
+                {(isListOpen || (typeof window !== 'undefined' && window.innerWidth >= 768)) && (
                   <motion.div 
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -112,7 +112,7 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
                   >
                     <div className={`
                       bg-black/90 md:bg-black/60 backdrop-blur-md flex flex-col w-full h-full md:h-full 
-                      ${isListOpen ? 'max-w-xs max-h-[80vh] rounded-2xl border border-wuxia-gold/30 shadow-2xl overflow-hidden' : ''}
+                      ${isListOpen ? 'max-w-xs max-h-[80vh] rounded-3xl border border-wuxia-gold/30 shadow-2xl overflow-hidden' : ''}
                     `}>
                       <div className="p-4 border-b border-white/5 flex flex-col gap-4">
                           <div className="flex justify-between items-center">
@@ -138,13 +138,13 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
                           </div>
 
                       {/* Search Bar */}
-                      <div className="relative mb-4">
+                      <div className="relative">
                         <input 
                           type="text" 
                           placeholder="Tìm kiếm địa danh..."
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-xs text-white placeholder:text-white/20 focus:outline-none focus:border-wuxia-gold/50 transition-colors pl-8"
+                          className="w-full bg-white/5 border border-white/10 rounded-2xl px-3 py-2 text-xs text-white placeholder:text-white/20 focus:outline-none focus:border-wuxia-gold/50 transition-colors pl-8"
                         />
                         <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -152,14 +152,14 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
                       </div>
                       <div className="flex gap-2">
                           <button 
-                            onClick={() => setActiveTab('fixed')}
-                            className={`flex-1 py-2 text-[10px] tracking-widest uppercase transition-all border ${activeTab === 'fixed' ? 'border-wuxia-gold bg-wuxia-gold/10 text-wuxia-gold' : 'border-white/10 text-white/50 hover:bg-white/5'}`}
+                              onClick={() => setActiveTab('fixed')}
+                              className={`flex-1 py-2 text-[10px] tracking-widest uppercase transition-all border rounded-2xl ${activeTab === 'fixed' ? 'border-wuxia-gold bg-wuxia-gold/10 text-wuxia-gold' : 'border-white/10 text-white/50 hover:bg-white/5'}`}
                           >
                               Cố Định
                           </button>
                           <button 
                             onClick={() => setActiveTab('dynamic')}
-                            className={`flex-1 py-2 text-[10px] tracking-widest uppercase transition-all border ${activeTab === 'dynamic' ? 'border-wuxia-gold bg-wuxia-gold/10 text-wuxia-gold' : 'border-white/10 text-white/50 hover:bg-white/5'}`}
+                            className={`flex-1 py-2 text-[10px] tracking-widest uppercase transition-all border rounded-2xl ${activeTab === 'dynamic' ? 'border-wuxia-gold bg-wuxia-gold/10 text-wuxia-gold' : 'border-white/10 text-white/50 hover:bg-white/5'}`}
                           >
                               Tạm Thời
                           </button>
@@ -177,17 +177,17 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
                                       </div>
                                       <div className="flex flex-col gap-1">
                                           {nodes.map(n => (
-                                              <button
-                                                key={n.id}
-                                                onClick={() => {
-                                                  setFocalNodeName(n.name);
-                                                  if (isListOpen) setIsListOpen(false);
-                                                }}
-                                                className={`text-left px-3 py-2 rounded text-xs transition-colors group flex items-center justify-between ${focalNodeName === n.name || currentLocation === n.name ? 'bg-wuxia-gold/20 text-wuxia-gold' : 'hover:bg-white/5 text-white/70'}`}
-                                              >
-                                                <span>{n.name}</span>
-                                                <span className="text-[9px] opacity-40 uppercase tracking-wider">{n.type}</span>
-                                              </button>
+                                                <button
+                                                  key={n.id}
+                                                  onClick={() => {
+                                                    setFocalNodeName(n.name);
+                                                    if (isListOpen) setIsListOpen(false);
+                                                  }}
+                                                  className={`text-left px-3 py-2 rounded-2xl text-xs transition-colors group flex items-center justify-between ${focalNodeName === n.name || currentLocation === n.name ? 'bg-wuxia-gold/20 text-wuxia-gold' : 'hover:bg-white/5 text-white/70'}`}
+                                                >
+                                                  <span>{n.name}</span>
+                                                  <span className="text-[9px] opacity-40 uppercase tracking-wider">{n.type}</span>
+                                                </button>
                                           ))}
                                       </div>
                                   </div>
@@ -205,14 +205,14 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
                                       const hoursLeft = Math.floor(timeLeft / 60);
 
                                       return (
-                                          <button
-                                            key={n.id}
-                                            onClick={() => {
-                                              setFocalNodeName(n.name);
-                                              if (isListOpen) setIsListOpen(false);
-                                            }}
-                                            className="text-left p-3 rounded bg-white/5 border border-white/5 hover:border-wuxia-gold/50 transition-all group relative overflow-hidden"
-                                          >
+                                            <button
+                                              key={n.id}
+                                              onClick={() => {
+                                                setFocalNodeName(n.name);
+                                                if (isListOpen) setIsListOpen(false);
+                                              }}
+                                              className="text-left p-3 rounded-2xl bg-white/5 border border-white/5 hover:border-wuxia-gold/50 transition-all group relative overflow-hidden"
+                                            >
                                               <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-white/10 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                               <div className="text-wuxia-gold font-bold text-sm mb-1">{n.name}</div>
                                               <div className="flex justify-between items-center">

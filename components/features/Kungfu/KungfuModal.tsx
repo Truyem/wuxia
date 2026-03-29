@@ -135,7 +135,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
     };
 
     const StatItem = ({ icon: Icon, label, value, colorClass = "text-stone-400" }: { icon: any, label: string, value: string | number, colorClass?: string }) => (
-        <div className="flex flex-col gap-1 p-3 rounded-lg bg-stone-900/40 border border-stone-800/50 hover:bg-stone-900/60 transition-colors">
+        <div className="flex flex-col gap-1 p-3 rounded-2xl bg-stone-900/40 border border-stone-800/50 hover:bg-stone-900/60 transition-colors">
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-stone-500 font-bold">
                 <Icon className="w-3 h-3" />
                 <span>{label}</span>
@@ -149,7 +149,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
     return (
         <div className={`fixed inset-0 bg-black/95 backdrop-blur-3xl z-[220] flex items-center justify-center ${isMobile ? 'p-0' : 'p-4 md:p-8'} font-sans`}>
             {/* Main Modal Container */}
-            <div className={`glass-panel-square border border-white/10 w-full ${isMobile ? 'h-full' : 'max-w-7xl h-full max-h-[850px]'} flex flex-col shadow-2xl rounded-none overflow-hidden relative text-stone-300`}>
+            <div className={`glass-panel border border-white/10 w-full ${isMobile ? 'h-full' : 'max-w-7xl h-full max-h-[850px]'} flex flex-col shadow-2xl rounded-3xl overflow-hidden relative text-stone-300`}>
                 {/* Wuxia Decorative Corners */}
                 <div className="wuxia-corner wuxia-corner-tl"></div>
                 <div className="wuxia-corner wuxia-corner-tr"></div>
@@ -172,7 +172,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                         <div className="flex items-center gap-4">
                             {!isMobile && (
                                 <div className="relative">
-                                    <div className="w-10 h-10 rounded-none bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                                    <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
                                         <Trophy className="w-5 h-5" />
                                     </div>
                                 </div>
@@ -193,7 +193,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                         {isMobile && viewMode === 'detail' && (
                             <button 
                                 onClick={() => setViewMode('list')}
-                                className="flex items-center gap-2 text-amber-500 text-[10px] font-black uppercase tracking-widest bg-amber-500/10 px-3 py-1.5 border border-amber-500/20"
+                                className="flex items-center gap-2 text-amber-500 text-[10px] font-black uppercase tracking-widest bg-amber-500/10 px-3 py-1.5 border border-amber-500/20 rounded-xl"
                             >
                                 <ChevronRight className="w-4 h-4 rotate-180" />
                                 QUAY LẠI
@@ -209,13 +209,13 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                 placeholder="Tìm kiếm công pháp..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className={`bg-white/5 border border-white/10 rounded-none pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/20 ${isMobile ? 'w-full' : 'w-64'} transition-all`}
+                                className={`bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/20 ${isMobile ? 'w-full' : 'w-64'} transition-all`}
                             />
                         </div>
                         {!isMobile && (
                             <button
                                 onClick={onClose}
-                                className="p-2.5 rounded-none bg-white/5 border border-white/10 hover:border-amber-500/50 text-stone-500 hover:text-amber-500 transition-all duration-300 group"
+                                className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-amber-500/50 text-stone-500 hover:text-amber-500 transition-all duration-300 group"
                             >
                                 <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
                             </button>
@@ -242,9 +242,9 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                         <button
                                             key={skill['ID']}
                                             onClick={() => handleSelectSkill(skill['ID'])}
-                                            className={`w-full text-left rounded-none border p-4 transition-all duration-300 relative group overflow-hidden ${
+                                            className={`w-full text-left rounded-xl border p-4 transition-all duration-300 relative group overflow-hidden ${
                                                 isSelected 
-                                                    ? `${style.border} ${style.bg} shadow-lg ring-1 ring-inset ${style.accent}/20` 
+                                                    ? `${style.border} ${style.bg} shadow-lg ring-1 ring-inset ${style.accent}/20 shadow-[inset_0_0_20px_rgba(245,158,11,0.05)]` 
                                                     : "border-white/5 bg-white/[0.02] hover:border-white/10 hover:bg-white/[0.05]"
                                             }`}
                                         >
@@ -252,7 +252,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                                 <span className={`font-bold tracking-wide transition-colors ${isSelected ? 'text-stone-100' : 'text-stone-400 group-hover:text-stone-300'}`}>
                                                     {skill['Name']}
                                                 </span>
-                                                <span className={`text-[9px] px-2 py-0.5 rounded-none uppercase font-black tracking-tighter border ${style.text} ${style.border}`}>
+                                                <span className={`text-[9px] px-2 py-0.5 rounded-xl uppercase font-black tracking-tighter border ${style.text} ${style.border}`}>
                                                     {skill['Quality']}
                                                 </span>
                                             </div>
@@ -274,7 +274,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                                     <span>TIẾN ĐỘ</span>
                                                     <span>{Math.round((skill['Current proficiency'] / skill['Level-up experience']) * 100)}%</span>
                                                 </div>
-                                                <div className="h-1 bg-black/40 rounded-none overflow-hidden border border-stone-800">
+                                                <div className="h-1 bg-black/40 rounded-full overflow-hidden border border-stone-800">
                                                     <div 
                                                         className={`h-full transition-all duration-700 ease-out ${isSelected ? style.accent : 'bg-stone-700'}`}
                                                         style={{ width: `${Math.min((skill['Current proficiency'] / skill['Level-up experience']) * 100, 100)}%` }}
@@ -313,21 +313,21 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                                     <h1 className={`${isMobile ? 'text-2xl' : 'text-4xl'} font-black uppercase tracking-tighter text-stone-100`}>
                                                         {currentSkill['Name']}
                                                     </h1>
-                                                    <div className={`w-fit px-3 py-1 rounded-none text-[10px] font-black uppercase tracking-[0.2em] border ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).text} ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).border} ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).bg}`}>
+                                                    <div className={`w-fit px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).text} ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).border} ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).bg}`}>
                                                         {currentSkill['Quality']}
                                                     </div>
                                                 </div>
 
                                                 <div className="flex flex-wrap gap-2 md:gap-4">
-                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded text-stone-400 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em]">
+                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded-xl text-stone-400 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em]">
                                                         {getTypeIcon(currentSkill['Type'])}
                                                         <span>{currentSkill['Type']}</span>
                                                     </div>
-                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded text-stone-100 text-[9px] md:text-[10px] font-mono font-bold tracking-[0.1em]">
+                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded-xl text-stone-100 text-[9px] md:text-[10px] font-mono font-bold tracking-[0.1em]">
                                                         <span className="text-amber-500 text-[8px]">LV.</span>
                                                         {currentSkill['Current level/tier']}
                                                     </div>
-                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded text-stone-400 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em]">
+                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded-lg text-stone-400 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em]">
                                                         <BookOpen className="w-3 h-3 text-stone-500" />
                                                         <span>Nguồn: {currentSkill['Source'] || 'Vô Danh'}</span>
                                                     </div>
@@ -335,7 +335,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
 
                                                 <div className="relative group">
                                                     <div className="absolute -left-2 md:-left-4 top-0 bottom-0 w-[2px] bg-amber-500/30" />
-                                                    <p className="text-stone-400 text-xs md:text-sm leading-relaxed font-medium italic pl-4 py-2 border-l border-amber-500/10 bg-amber-500/5 rounded-none">
+                                                    <p className="text-stone-400 text-xs md:text-sm leading-relaxed font-medium italic pl-4 py-2 border-l border-amber-500/10 bg-amber-500/5 rounded-xl">
                                                         "{currentSkill['Description']}"
                                                     </p>
                                                 </div>
@@ -359,9 +359,9 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="bg-stone-900/40 border border-stone-800 p-4 rounded-none flex justify-between items-center group hover:bg-stone-900/60 transition-all">
+                                            <div className="bg-stone-900/40 border border-stone-800 p-4 rounded-xl flex justify-between items-center group hover:bg-stone-900/60 transition-all">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 rounded-none bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-500">
+                                                    <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-500">
                                                         <Zap className="w-5 h-5" />
                                                     </div>
                                                     <div>
@@ -371,9 +371,9 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                                 </div>
                                                 <div className="text-2xl font-mono font-bold text-rose-500">{currentSkill['Consumption value'] || 0}</div>
                                             </div>
-                                            <div className="bg-stone-900/40 border border-stone-800 p-4 rounded-none flex justify-between items-center group hover:bg-stone-900/60 transition-all">
+                                            <div className="bg-stone-900/40 border border-stone-800 p-4 rounded-xl flex justify-between items-center group hover:bg-stone-900/60 transition-all">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 rounded-none bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-500">
+                                                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-500">
                                                         <Target className="w-5 h-5" />
                                                     </div>
                                                     <div>
@@ -391,7 +391,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                 )}
 
                                 {/* Training Section */}
-                                <section className="p-6 rounded-none bg-stone-900/40 border border-stone-800 relative overflow-hidden group">
+                                <section className="p-6 rounded-2xl bg-stone-900/40 border border-stone-800 relative overflow-hidden group">
                                     <div className="flex justify-between items-end mb-4 relative z-10">
                                         <div>
                                             <h4 className="text-stone-100 font-bold text-lg uppercase tracking-tight flex items-center gap-2">
@@ -407,9 +407,9 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                             <span className="text-[8px] text-stone-600 uppercase font-black tracking-widest">Kinh nghiệm hiện tại</span>
                                         </div>
                                     </div>
-                                    <div className="w-full h-2 bg-black rounded-none overflow-hidden border border-stone-800 p-[1px] relative z-10">
+                                    <div className="w-full h-2 bg-black rounded-full overflow-hidden border border-stone-800 p-[1px] relative z-10">
                                         <div 
-                                            className="h-full bg-amber-500 rounded-none transition-all duration-1000 ease-out relative"
+                                            className="h-full bg-amber-500 rounded-full transition-all duration-1000 ease-out relative"
                                             style={{ width: `${Math.min((currentSkill['Current proficiency'] / currentSkill['Level-up experience']) * 100, 100)}%` }}
                                         >
                                             {/* Removed shimmer highlight */}
@@ -417,7 +417,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                     </div>
 
                                     {currentSkill['Breakthrough condition'] && currentSkill['Breakthrough condition'] !== "None" && (
-                                        <div className="mt-4 flex items-center gap-3 p-3 bg-rose-500/5 border border-rose-500/20 rounded-none relative z-10">
+                                        <div className="mt-4 flex items-center gap-3 p-3 bg-rose-500/5 border border-rose-500/20 rounded-xl relative z-10">
                                             <Lock className="w-4 h-4 text-rose-500" />
                                             <div className="text-xs text-rose-400">
                                                 <span className="font-black uppercase tracking-widest mr-2 text-[9px]">Điểu kiện đột phá:</span>
@@ -442,7 +442,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                             </h4>
                                             <div className="space-y-3">
                                                 {currentSkill['Side effect'].map((eff: any, i: number) => (
-                                                    <div key={i} className="p-4 rounded-none bg-stone-900/40 border-l-2 border-l-emerald-500 border-y border-r border-stone-800 hover:bg-stone-900/60 transition-all">
+                                                    <div key={i} className="p-4 rounded-xl bg-stone-900/40 border-l-2 border-l-emerald-500 border-y border-r border-stone-800 hover:bg-stone-900/60 transition-all">
                                                         <div className="flex justify-between items-start mb-2">
                                                             <h5 className="text-emerald-400 font-bold text-sm uppercase tracking-wide">{eff['Tên'] || eff['name'] || 'Hiệu ứng'}</h5>
                                                             <div className="px-2 py-0.5 rounded-none bg-emerald-500/10 border border-emerald-500/20 text-[9px] font-black text-emerald-500">
@@ -475,7 +475,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                                 <span>Thuộc Tính Cộng Thêm</span>
                                                 <div className="h-[1px] flex-1 bg-stone-800" />
                                             </h4>
-                                            <div className="p-4 rounded-none bg-stone-900/40 border border-stone-800 space-y-3">
+                                            <div className="p-4 rounded-xl bg-stone-900/40 border border-stone-800 space-y-3">
                                                 {currentSkill['Passive correction'].map((mod: any, i: number) => (
                                                     <div key={i} className="flex justify-between items-center py-1 group/stat">
                                                         <span className="text-stone-400 text-xs font-bold uppercase tracking-widest group-hover/stat:text-stone-200 transition-colors">
@@ -509,7 +509,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                                 return (
                                                     <div 
                                                         key={i}
-                                                        className={`p-5 rounded-none border flex gap-5 transition-all duration-500 relative overflow-hidden ${
+                                                        className={`p-5 rounded-xl border flex gap-5 transition-all duration-500 relative overflow-hidden ${
                                                             isUnlocked 
                                                                 ? "bg-amber-500/5 border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.05)]" 
                                                                 : "bg-stone-900/10 border-stone-800/50 opacity-40"
@@ -545,9 +545,9 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                             </div>
                         ) : (
                             <div className="flex-1 flex flex-col items-center justify-center text-stone-600 space-y-4">
-                                <div className="p-8 rounded-none bg-stone-900/20 border border-stone-800/50 relative">
+                                <div className="p-8 rounded-2xl bg-stone-900/20 border border-stone-800/50 relative">
                                     <Info className="w-12 h-12 stroke-1 opacity-20" />
-                                    <div className="absolute inset-0 rounded-none border border-amber-500/10" />
+                                    <div className="absolute inset-0 rounded-2xl border border-amber-500/10" />
                                 </div>
                                 <div className="text-center space-y-1">
                                     <h4 className="text-sm font-black uppercase tracking-[0.3em] text-stone-500">Thông tin võ học</h4>
@@ -564,7 +564,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                     <div className="flex items-center gap-6 text-[9px] font-black uppercase tracking-[0.2em] text-stone-500">
 
                         <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-none bg-amber-500" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                             <span>Trạng thái: Ổn định</span>
                         </div>
                         {!isMobile && (
@@ -586,9 +586,9 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                         </div>
                     ) : (
                         <div className="w-full pt-2 border-t border-stone-800">
-                            <button 
+                             <button 
                                 onClick={onClose}
-                                className="w-full bg-amber-500/10 hover:bg-amber-500 hover:text-black text-amber-500 py-3 text-xs font-black uppercase tracking-[0.3em] border border-amber-500/20 flex items-center justify-center gap-2 transition-all"
+                                className="w-full bg-amber-500/10 hover:bg-amber-500 hover:text-black text-amber-500 py-3 text-xs font-black uppercase tracking-[0.3em] border border-amber-500/20 flex items-center justify-center gap-2 transition-all rounded-xl"
                             >
                                 <X className="w-4 h-4" />
                                 ĐÓNG VÕ HỌC

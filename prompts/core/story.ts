@@ -1,40 +1,28 @@
 import { PromptStructure } from '../../types';
 
 export const coreStoryProgression: PromptStructure = {
-    id: 'core_story',
-    title: 'Thúc đẩy Cốt truyện',
-    content: `
-<Story Progression Protocol (Strict gameState.Story Alignment)>
+  id: 'core_story',
+  title: 'Thúc đẩy Cốt truyện',
+  content: `
+<Thúc đẩy Cốt truyện>
+# Quy tắc vận hành Cốt truyện
 
-# 0. NARRATIVE TARGETS
-- **Volume 1 (Beginner)**: Detailed (min 6000 words/chapter). Concise Summary (<100 words).
-- **Pacing**: Flow [Relax -> Build -> High -> Low]. No forced crisis.
-- **Teaser**: Prepare Book 2 Title/Outline (Problem, Faction, Trigger). No rỗng placeholders.
+## 1. Mục tiêu tường thuật
+- Phân chia chương hồi rõ ràng. Mỗi chương có: Tiêu đề, Tóm tắt, Xâm nhập (Hook), Cao trào và Kết thúc.
+- Luôn duy trì sự tò mò của người chơi bằng các "Hố" (Foreshadowing) và "Kỳ ngộ" (Random Events).
 
-# 1. STATE PATHS (Data Only)
-- **Whitelist**: \`gameState.Story\` (Current chapter, History, Planning, Pending events, Variables).
-- **Fields (Mandatory)**: ID, Title, Summary, Background, Main conflict, End condition, Foreshadowing.
-- **Cấm**: Writing to non-existent fields like \`Event pool\` or \`Progression control\`.
+## 2. Biến số cốt truyện (Story Variables)
+- Sử dụng các biến logic để theo dõi tiến độ: \`Giai đoạn\`, \`Lựa chọn quan trọng\`, \`Số lần gặp mặt\`, \`Xu hướng tính cách\`.
+- Chỉ cập nhật biến khi có sự kiện thực sự thay đổi cục diện.
 
-# 2. END CONDITIONS & STORY VARIABLES
-- **End Conditions**: 1-3 rules [Time, Variable, Event]. Sync with current plot shifts.
-- **Story Variables**: Logic Gates only [Phase (String), Choice (Boolean), Count (Number), Tendency (Number)].
-- **Naming**: Use persistent English keys. No descriptive names (e.g. "tense plot").
+## 3. Sự kiện ngẫu nhiên và Kỳ ngộ
+- Tạo ra các tình huống bất ngờ không nằm trong dự tính của người chơi: Phục kích, Nhặt được tàn diệp, Gặp cao nhân ẩn thế.
+- Mọi kỳ ngộ đều phải đi kèm với cái giá phải trả hoặc thử thách sinh tử.
 
-# 3. OPERATION FLOW (Turn Analysis)
-1. **Analyze Type**: [Routine, Exploration, Main Quest, Conflict].
-2. **Routine**: Keep chapter stable. Update persona/env/social.
-3. **Quest**: Update Variables (Gates) -> Narrative text -> End conditions.
-4. **Historical**: Update \`Historical dossiers\` ONLY after chapter concludes. Close \`Pending events\` once triggered.
-
-# 4. NSFW TWIST GENERATOR (Objective: Surprise)
-- **Task**: Create clandestine, taboo NSFW relationships between NPCs. 
-- **Scope**: Not bound by original lore or morality (Master-disciple, Sibling, Betrayal...). 
-- **Implementation**: Drop "Hooks" in player actions (e.g. "Hear strange sounds", "Warning: NSFW Secret"). 
-- **Anatomy**: Strictly based on NPC \`gender\`. No irrational anatomy unless lore-specified.
-
-</Story Progression Protocol>
-`.trim(),
-    type: 'core setting',
-    enabled: true
+## 4. Phát triển quan hệ (Nâng cao)
+- Xây dựng mạng lưới quan hệ phức tạp giữa các NPC (Yêu hận tình thù, Phản bội, Liên minh ngầm).
+- Người chơi có thể can thiệp nhưng không thể kiểm soát hoàn toàn ý chí của NPC.
+    `.trim(),
+  type: 'core setting',
+  enabled: true
 };

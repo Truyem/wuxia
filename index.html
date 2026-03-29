@@ -146,21 +146,49 @@
       }
     </script>
     <style>
-      /* Custom Scrollbar */
+      /* Global Scrollbar Refinement */
       ::-webkit-scrollbar {
-        width: 4px;
-        height: 4px;
+        width: 6px;
+        height: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: rgba(0,0,0,0.1);
+        background: rgba(0,0,0,0.2);
       }
       ::-webkit-scrollbar-thumb {
-        background: rgb(var(--c-wuxia-gold) / 0.2);
+        background: rgb(var(--c-wuxia-gold));
         border-radius: 10px;
-        transition: all 0.3s;
+        border: 1px solid rgba(0, 0, 0, 0.4);
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: rgb(var(--c-wuxia-gold) / 0.5);
+        background: #f0d58e;
+      }
+
+      /* Custom Scrollbar Utility - High Visibility Golden Bar */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 8px !important;
+        height: 8px !important;
+        display: block !important;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.4) !important;
+        border-radius: 4px !important;
+        margin: 2px !important;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #E6C86E !important; /* Solid gold */
+        border-radius: 4px !important;
+        border: 2px solid rgba(0, 0, 0, 0.6) !important;
+        box-shadow: 0 0 10px rgba(230, 200, 110, 0.4) !important;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #FFD700 !important; /* Brighter gold on hover */
+        box-shadow: 0 0 15px rgba(230, 200, 110, 0.6) !important;
+      }
+
+      /* Firefox Support */
+      .custom-scrollbar {
+        scrollbar-width: thin !important;
+        scrollbar-color: #E6C86E rgba(0, 0, 0, 0.4) !important;
       }
 
       .no-scrollbar::-webkit-scrollbar {

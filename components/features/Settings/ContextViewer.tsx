@@ -173,7 +173,7 @@ const ContextViewer: React.FC<Props> = ({ snapshot, memoryConfig, onSaveMemory }
                 {!canSaveContextConfiguration && <span className="text-[11px] text-paper-white/30 italic">Phiên hiện tại không thể chỉnh sửa</span>}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-0 h-[600px] max-h-[70vh]">
                 <div className="bg-white/5 border border-wuxia-gold/20 rounded-lg overflow-hidden flex flex-col min-h-0 backdrop-blur-sm shadow-inner">
                     <div className="px-4 py-2 border-b border-wuxia-gold/20 text-[11px] text-paper-white/50 font-serif italic flex items-center justify-between">
                         <span>Thứ tự ngữ cảnh</span>

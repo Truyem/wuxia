@@ -30,7 +30,7 @@ export const RadarChart: React.FC<RadarChartProps> = ({
     maxValue = 30,
     className = ""
 }) => {
-    const padding = 50;
+    const padding = 35;
     const center = size / 2;
     const radius = (size - padding * 2) / 2;
     const angleStep = (Math.PI * 2) / data.length;
@@ -165,19 +165,26 @@ export const RadarChart: React.FC<RadarChartProps> = ({
                 {/* Labels */}
                 {data.map((d, i) => {
                     const angle = i * angleStep - Math.PI / 2;
-                    const labelRadius = radius + 30;
+                    const labelRadius = radius + 25; // Compact spacing
                     const x = center + labelRadius * Math.cos(angle);
                     const y = center + labelRadius * Math.sin(angle);
                     
+                    const cosA = Math.cos(angle);
+                    const sinA = Math.sin(angle);
+                    
                     let textAnchor = "middle";
-                    if (Math.cos(angle) > 0.1) textAnchor = "start";
-                    else if (Math.cos(angle) < -0.1) textAnchor = "end";
+                    if (cosA > 0.2) textAnchor = "start";
+                    else if (cosA < -0.2) textAnchor = "end";
+
+                    let verticalOffset = 0;
+                    if (sinA > 0.5) verticalOffset = 10; // Push down for bottom labels
+                    else if (sinA < -0.5) verticalOffset = -15; // Pull up for top labels
 
                     return (
                         <g key={i}>
                             <text
                                 x={x}
-                                y={y - 5}
+                                y={y + verticalOffset}
                                 textAnchor={textAnchor}
                                 className="fill-wuxia-gold font-serif font-bold text-[12px] tracking-wider"
                                 style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))' }}
@@ -186,11 +193,11 @@ export const RadarChart: React.FC<RadarChartProps> = ({
                             </text>
                             <text
                                 x={x}
-                                y={y + 10}
+                                y={y + verticalOffset + 14}
                                 textAnchor={textAnchor}
                                 className="fill-gray-400 font-mono text-[11px]"
                             >
-                                {d.value} <tspan className="text-[9px] opacity-50">({d.base || d.value})</tspan>
+                                {d.value} <tspan className="text-[9px] opacity-50" dy="-1">({d.base || d.value})</tspan>
                             </text>
                         </g>
                     );

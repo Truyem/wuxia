@@ -71,6 +71,7 @@ export interface Background {
     name: string;
     description: string;
     effect: string;
+    longTerm?: string;
     rank: 'Dễ' | 'Bình thường' | 'Khó' | 'Cực khó';
     origin?: string; // Links to map node origins
 }

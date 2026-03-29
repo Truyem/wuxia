@@ -7,7 +7,7 @@ import InlineSelect from '../../ui/InlineSelect';
 import ToggleSwitch from '../../ui/ToggleSwitch';
 import * as dbService from '../../../services/dbService';
 import { generateSafeUUID } from '../../../utils/stateHelpers';
-import { Dices, Save, Download, LogOut, X, Plus, Minus, Users, Swords, Check } from 'lucide-react';
+import { Dices, Save, Download, LogOut, X, Plus, Minus, Users, Swords, Check, Zap } from 'lucide-react';
 import { RadarChart, RadarData } from '../../shared/RadarChart';
 import { StatBar } from '../../shared/StatBar';
 
@@ -404,7 +404,7 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
     const [talentFilter, setTalentFilter] = useState<'all' | TalentRank>('all');
     const [showCustomTalent, setShowCustomTalent] = useState(false);
     const [showCustomDebuff, setShowCustomDebuff] = useState(false);
-    const [customBackground, setCustomBackground] = useState<Background>({ name: '', description: '', effect: '', rank: 'Bình thường' });
+    const [customBackground, setCustomBackground] = useState<Background>({ name: '', description: '', effect: '', longTerm: '', rank: 'Bình thường' });
     const [showCustomBackground, setShowCustomBackground] = useState(false);
     const [openingStreaming, setOpeningStreaming] = useState(true);
     const [saveMsg, setSaveMsg] = useState('');
@@ -658,15 +658,16 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
         const name = customBackground.name.trim();
         const description = customBackground.description.trim();
         const effect = customBackground.effect.trim();
+        const longTerm = customBackground.longTerm?.trim() || '';
         if (!name || !description || !effect) {
             alert("Vui lòng điền đầy đủ thân thế tùy chỉnh (Tên/Mô tả/Hiệu ứng)");
             return;
         }
-        const nextBg: Background = { name, description, effect, rank: 'Bình thường' };
+        const nextBg: Background = { name, description, effect, longTerm, rank: 'Bình thường' };
         const nextCustomBackgroundList = mergeAndDeduplicateBackgrounds([...customBackgroundList, nextBg]);
         setCustomBackgroundList(nextCustomBackgroundList);
         setSelectedBackground(nextBg);
-        setCustomBackground({ name: '', description: '', effect: '', rank: 'Bình thường' });
+        setCustomBackground({ name: '', description: '', effect: '', longTerm: '', rank: 'Bình thường' });
         setShowCustomBackground(false);
         try {
             await dbService.saveSetting(CUSTOM_BACKGROUND_STORAGE_KEY, nextCustomBackgroundList);
@@ -1068,6 +1069,71 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
                                 </button>
                             </div>
 
+                            {selectedBackground.name && (
+                                <div className="mb-10 animate-in fade-in slide-in-from-top-4 duration-500">
+                                    <div className="text-[10px] text-wuxia-gold/50 font-bold mb-4 uppercase tracking-[0.2em] flex items-center gap-3">
+                                        <div className="h-[1px] w-8 bg-wuxia-gold/30"></div>
+                                        <span>Thân thế đang chọn</span>
+                                        <div className="h-[1px] flex-1 bg-wuxia-gold/30"></div>
+                                    </div>
+                                    
+                                    <div className="relative p-8 rounded-3xl border-2 border-wuxia-gold/60 bg-gradient-to-br from-wuxia-gold/15 to-transparent shadow-[0_0_40px_rgba(230,200,110,0.15)] overflow-hidden group">
+                                        {/* Decoration */}
+                                        <div className="absolute top-[-20%] right-[-5%] opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-1000">
+                                            <Swords className="w-64 h-64 text-wuxia-gold rotate-12" />
+                                        </div>
+
+                                        <div className="relative z-10 flex flex-col md:flex-row gap-8 items-start">
+                                            <div className="flex-1 space-y-4">
+                                                <div className="flex flex-wrap items-center gap-3">
+                                                    <h4 className="text-3xl font-serif font-bold text-wuxia-gold drop-shadow-sm">{selectedBackground.name}</h4>
+                                                    <span className={`text-[10px] uppercase font-bold px-3 py-1 rounded-full border tracking-widest ${selectedBackground.rank === 'Cực khó' ? 'border-red-500/50 text-red-400 bg-red-400/10' : selectedBackground.rank === 'Khó' ? 'border-orange-500/50 text-orange-400 bg-orange-400/10' : 'border-green-500/50 text-green-400 bg-green-400/10'}`}>
+                                                        Cấp độ: {selectedBackground.rank}
+                                                    </span>
+                                                </div>
+                                                
+                                                <p className="text-sm text-gray-300 font-serif italic leading-relaxed max-w-2xl border-l-2 border-wuxia-gold/20 pl-4 py-1">
+                                                    "{selectedBackground.description}"
+                                                </p>
+
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                                                    <div className="p-4 bg-black/40 border border-wuxia-gold/20 rounded-xl space-y-2">
+                                                        <div className="text-[10px] text-wuxia-gold/50 font-bold uppercase tracking-widest flex items-center gap-2">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-wuxia-gold/40"></div>
+                                                            <span>Hiệu ứng hiện tại</span>
+                                                        </div>
+                                                        <div className="text-sm text-white leading-relaxed">{selectedBackground.effect}</div>
+                                                    </div>
+
+                                                    {selectedBackground.longTerm && (
+                                                        <div className="p-4 bg-amber-950/20 border border-amber-500/30 rounded-xl space-y-2 relative overflow-hidden">
+                                                            <div className="absolute -right-2 -bottom-2 opacity-5">
+                                                                <Zap className="w-12 h-12 text-amber-400" />
+                                                            </div>
+                                                            <div className="text-[10px] text-amber-400/80 font-bold uppercase tracking-widest flex items-center gap-2">
+                                                                <Zap className="w-3.5 h-3.5" />
+                                                                <span>Tác động về lâu dài</span>
+                                                            </div>
+                                                            <div className="text-sm text-amber-200 leading-relaxed italic">{selectedBackground.longTerm}</div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="w-full md:w-auto flex md:flex-col gap-3">
+                                                <div className="flex-1 md:w-40 p-4 bg-wuxia-gold/10 border border-wuxia-gold/30 rounded-2xl flex flex-col items-center justify-center text-center animate-pulse-slow">
+                                                    <div className="text-[10px] text-wuxia-gold uppercase tracking-tighter mb-1">Trạng thái</div>
+                                                    <div className="text-xs font-bold text-wuxia-gold flex items-center gap-1">
+                                                        <Check className="w-3 h-3" />
+                                                        <span>Đã thiết lập</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
                             {showCustomBackground && (
                                 <div className="bg-black/40 border border-wuxia-gold/30 p-8 mb-8 rounded-xl space-y-6 shadow-glow-sm relative animate-in fade-in slide-in-from-top-4 duration-500">
                                     <button onClick={() => setShowCustomBackground(false)} className="absolute top-4 right-4 text-wuxia-gold/50 hover:text-red-400 transition-colors">
@@ -1102,6 +1168,15 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
                                             className="w-full h-24 bg-black/60 border border-wuxia-gold/30 focus:border-wuxia-gold p-3 text-sm text-wuxia-gold outline-none rounded-lg transition-all resize-none font-serif leading-relaxed"
                                         />
                                     </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] text-amber-400/60 uppercase tracking-widest ml-1 font-bold">Tác động về lâu dài (Cực phẩm)</label>
+                                        <textarea
+                                            placeholder="VD: Có tỷ lệ nhận được vật phẩm hiếm khi đánh quái tại Huyết Hải..."
+                                            value={customBackground.longTerm}
+                                            onChange={e => setCustomBackground({ ...customBackground, longTerm: e.target.value })}
+                                            className="w-full h-20 bg-amber-950/20 border border-amber-500/30 focus:border-amber-400 p-3 text-sm text-amber-200 outline-none rounded-lg transition-all resize-none font-serif leading-relaxed italic"
+                                        />
+                                    </div>
                                     <div className="flex gap-4">
                                         <GameButton onClick={() => setShowCustomBackground(false)} variant="secondary" className="flex-1">Hủy</GameButton>
                                         <GameButton onClick={addCustomBackground} variant="primary" className="flex-[2]">Khai mở kỳ ngộ</GameButton>
@@ -1124,9 +1199,24 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
                                         </div>
                                         <p className="text-xs text-gray-400 mb-4 line-clamp-2 h-8 font-serif italic">"{bg.description}"</p>
                                         <div className="pt-3 border-t border-wuxia-gold/10">
-                                            <div className="text-[10px] text-wuxia-gold/50 font-bold mb-1 uppercase tracking-widest">Hiệu ứng</div>
+                                            <div className="text-[10px] text-wuxia-gold/50 font-bold mb-1 uppercase tracking-widest flex items-center gap-1">
+                                                <span>Hiệu ứng</span>
+                                            </div>
                                             <div className="text-xs text-gray-300 line-clamp-2 min-h-[32px]">{bg.effect}</div>
                                         </div>
+
+                                        {bg.longTerm && (
+                                            <div className="mt-3 p-3 bg-amber-950/20 border border-amber-500/30 rounded-lg relative overflow-hidden group-hover:border-amber-400/50 transition-colors">
+                                                <div className="absolute top-0 right-0 p-1 opacity-10">
+                                                    <Zap className="w-8 h-8 text-amber-400" />
+                                                </div>
+                                                <div className="text-[9px] text-amber-400/80 font-bold mb-1 uppercase tracking-tighter flex items-center gap-1">
+                                                    <Zap className="w-3 h-3" />
+                                                    <span>Về lâu dài</span>
+                                                </div>
+                                                <div className="text-[11px] text-amber-200/90 leading-relaxed italic">{bg.longTerm}</div>
+                                            </div>
+                                        )}
                                         {selectedBackground.name === bg.name && (
                                             <div className="absolute -top-2 -right-2 bg-wuxia-gold text-black rounded-full p-1 shadow-lg border border-black animate-scale-in">
                                                 <Check className="w-4 h-4" />

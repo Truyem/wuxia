@@ -143,7 +143,7 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
 
     return (
         <div className="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[200] flex items-center justify-center p-4">
-            <div className="w-full max-w-7xl h-[90vh] flex flex-col relative overflow-hidden rounded-none glass-panel border border-white/10 shadow-[0_0_150px_rgba(0,0,0,1)]">
+            <div className="w-full max-w-7xl h-[90vh] flex flex-col relative overflow-hidden rounded-3xl glass-panel border border-white/10 shadow-[0_0_150px_rgba(0,0,0,1)]">
                 {/* Wuxia Decorative Corners */}
                 <div className="wuxia-corner wuxia-corner-tl"></div>
                 <div className="wuxia-corner wuxia-corner-tr"></div>
@@ -169,7 +169,7 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                         </div>
                         <button
                             onClick={onClose}
-                            className="w-12 h-12 flex items-center justify-center rounded-none bg-wuxia-red/10 border border-wuxia-red/20 text-wuxia-red shadow-xl"
+                            className="w-12 h-12 flex items-center justify-center rounded-xl bg-wuxia-red/10 border border-wuxia-red/20 text-wuxia-red shadow-xl transition-all hover:bg-wuxia-red/20"
                         >
                             <IconGlyph name="close" className="w-6 h-6" strokeWidth={3} />
                         </button>
@@ -189,12 +189,12 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                                     <button
                                         key={npc.id}
                                         onClick={() => setSelectedId(npc.id)}
-                                        className={`w-full group relative p-4 rounded-none border overflow-hidden flex items-center gap-4 ${isSelected
-                                                ? 'border-wuxia-gold/40 bg-wuxia-gold/10'
-                                                : 'border-white/5 bg-white/5'
+                                        className={`wuxia-list-item w-full group relative p-4 mb-2 flex items-center gap-4 ${isSelected
+                                                ? 'active border-wuxia-gold/40'
+                                                : ''
                                             }`}
                                     >
-                                        <div className={`w-12 h-12 rounded-none flex items-center justify-center font-serif font-black text-xl border overflow-hidden relative ${npc.gender === 'Female' || npc.gender === 'Nữ' ? 'border-pink-500/30 bg-pink-500/10 text-pink-400' : 'border-wuxia-cyan/30 bg-wuxia-cyan/10 text-wuxia-cyan'} ${isSelected ? 'shadow-lg' : ''}`}>
+                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-serif font-black text-xl border overflow-hidden relative ${npc.gender === 'Female' || npc.gender === 'Nữ' ? 'border-pink-500/30 bg-pink-500/10 text-pink-400' : 'border-wuxia-cyan/30 bg-wuxia-cyan/10 text-wuxia-cyan'} ${isSelected ? 'shadow-lg' : ''}`}>
                                             {resolveAvatar(npc) ? (
                                                 <img src={resolveAvatar(npc)} alt={npc.name} className="w-full h-full object-cover object-top" />
                                             ) : (
@@ -228,12 +228,12 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                                                  <IconGlyph name="heart" className="w-2.5 h-2.5" /> {npc.favorability}
                                              </span>
                                             {npc.isMainCharacter && (
-                                                <div className="mt-1 w-1.5 h-1.5 rounded-none bg-wuxia-gold"></div>
+                                                <div className="mt-1 w-1.5 h-1.5 rounded-full bg-wuxia-gold"></div>
                                             )}
                                         </div>
                                         
                                         {/* Liquid Edge */}
-                                        {isSelected && <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-wuxia-gold shadow-[0_0_10px_rgba(230,200,110,1)]"></div>}
+                                        {isSelected && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-wuxia-gold rounded-full shadow-[0_0_10px_rgba(230,200,110,1)]"></div>}
                                     </button>
                                 );
                             })}
@@ -246,7 +246,7 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                             <div className="flex-1 overflow-y-auto no-scrollbar p-10">
                                         {/* NPC image banner at 16:9 aspect ratio */}
                                         {resolveAvatar(currentNPC) && (
-                                            <div className="mb-8 rounded-none border border-wuxia-gold/20 overflow-hidden shadow-2xl relative group/img cursor-pointer aspect-video">
+                                            <div className="mb-8 rounded-2xl border border-wuxia-gold/20 overflow-hidden shadow-2xl relative group/img cursor-pointer aspect-video">
                                                 <img 
                                                     src={resolveAvatar(currentNPC)} 
                                                     alt={currentNPC.name} 
@@ -260,7 +260,7 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                                         )}
 
                                         {/* NPC BANNER DETAIL */}
-                                        <div className={`relative mb-8 p-6 rounded-none border border-white/5 overflow-hidden group/banner ${currentNPC.gender === 'Female' || currentNPC.gender === 'Nữ' ? 'glass-jade' : 'glass-ink'}`}>
+                                        <div className={`relative mb-8 p-6 rounded-2xl border border-white/5 overflow-hidden group/banner ${currentNPC.gender === 'Female' || currentNPC.gender === 'Nữ' ? 'glass-jade' : 'glass-ink'}`}>
                                     <div className="absolute inset-0 bg-ink-wash opacity-10 pointer-events-none"></div>
                                     <div className="absolute -right-6 -bottom-6 text-[140px] font-serif font-black text-white/5 select-none pointer-events-none">
                                         {currentNPC.name[0]}
@@ -316,7 +316,7 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                                 </div>
 
                                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-                                    <div className={`lg:col-span-2 p-8 rounded-none border border-white/5 relative group/bio overflow-hidden ${currentNPC.gender === 'Female' || currentNPC.gender === 'Nữ' ? 'bg-pink-900/10' : 'bg-black/40'}`}>
+                                    <div className={`lg:col-span-2 p-8 rounded-2xl border border-white/5 relative group/bio overflow-hidden ${currentNPC.gender === 'Female' || currentNPC.gender === 'Nữ' ? 'bg-pink-900/10' : 'bg-black/40'}`}>
                                         {/* Decorative Ink Pattern */}
                                         <div className="absolute inset-0 bg-liquid-glass opacity-30 pointer-events-none"></div>
                                         <div className="flex items-center gap-3 mb-6">
@@ -479,7 +479,7 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                             </div>
                         ) : (
                              <div className="flex flex-col items-center justify-center h-full opacity-20">
-                                 <div className="w-40 h-40 rounded-none border border-dashed border-white/20 flex items-center justify-center">
+                                 <div className="w-40 h-40 rounded-3xl border border-dashed border-white/20 flex items-center justify-center">
                                      <IconGlyph name="user" className="w-24 h-24" />
                                  </div>
                                  <h4 className="text-2xl font-serif font-black text-paper-white/30 tracking-[0.4em] mt-8">{t('social.labels.selectNpc') || "CHƯA CHỌN NHÂN VẬT"}</h4>

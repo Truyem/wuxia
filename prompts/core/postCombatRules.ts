@@ -1,35 +1,28 @@
 import { PromptStructure } from '../../types';
 
 export const PostCombatRules: PromptStructure = {
-    id: 'post_combat_rules',
-    title: 'Quy Tắc Đồng Bộ Dữ Liệu Sau Chiến Đấu',
-    content: `
-# BỘ LUẬT SAU CHIẾN ĐẤU (PART 2)
+  id: 'post_combat_rules',
+  title: 'Hậu Chiến và Thu hoạch',
+  content: `
+<Hậu Chiến và Thu hoạch>
+# Giao thức Kết thúc Chiến đấu
 
-## ĐIỀU 1: TÍNH NHẤT QUÁN CỦA VẾT THƯƠNG
-1. Nếu trong chiến đấu người chơi bị thương ở một bộ phận (ví dụ: gãy tay, trọng thương ngực), thì trong phần Narrative sau chiến đấu, vết thương đó PHẢI hiện hữu.
-2. AI PHẢI cập nhật trạng thái cơ thể vào \`character\` data.
+## 1. Trạng thái sau trận chiến
+- Mô tả tình trạng thương tật, kiệt sức hoặc sự hưng phấn sau khi thắng lợi.
+- Các vết thương nghiêm trọng phải được nhắc lại trong dẫn truyện cho đến khi được chữa trị.
 
-## ĐIỀU 2: ĐỒNG BỘ TRẠNG THÁI (BÁO CÁO SAU CÙNG)
-Sau khi kết thúc một trận chiến, AI BẮT BUỘC chèn đoạn tag sau vào cuối phản hồi để hệ thống ghi nhận:
+## 2. Thu hoạch (Looting)
+- Liệt kê các vật phẩm thu giữ được từ kẻ thù: Vũ khí, tiền bạc, bí kíp, hoặc vật phẩm nhiệm vụ.
+- Tỷ lệ rơi đồ hiếm phụ thuộc vào độ khó của kẻ thù và chỉ số May mắn của người chơi.
 
-[CHIẾN_BÁO]: Tóm tắt kết quả (Thắng/Hòa/Bại/Chạy thoát).
-[CHARACTER_UPDATE]: {
-  "headCurrentHp": number,
-  "chestCurrentHp": number,
-  "abdomenCurrentHp": number,
-  "leftArmCurrentHp": number,
-  "rightArmCurrentHp": number,
-  "leftLegCurrentHp": number,
-  "rightLegCurrentHp": number,
-  "currentEnergy": number,
-  "playerBuffs": ["Vết thương sâu", "Gãy xương", "Chấn thương sọ não", v.v...]
-}
+## 3. Kinh nghiệm và Tu vi
+- Cập nhật điểm kinh nghiệm (EXP) và độ thuần thục của võ công đã sử dụng trong trận chiến.
+- Nếu đạt đủ điều kiện, AI gợi ý người chơi tiến hành "Đột phá" hoặc "Củng cố tu vi".
 
-## ĐIỀU 3: QUY TẮC RƠI ĐỒ (LOOT)
-1. Nếu thắng: Phải liệt kê rõ vật phẩm thu được vào \`character.itemList\`.
-2. Nếu bại: AI có quyền quyết định người chơi bị mất vật phẩm hoặc bị bắt làm tù binh.
-`.trim(),
-    type: 'core',
-    enabled: true
+## 4. Hậu quả xã hội
+- Giết người sẽ tăng Hung danh và sự truy cứu của thân nhân kẻ quá cố hoặc quan phủ.
+- Tha mang cho kẻ thù có thể dẫn đến sự cảm kích (tăng quan hệ) hoặc hiểm họa khôn lường về sau.
+    `.trim(),
+  type: 'core',
+  enabled: true
 };

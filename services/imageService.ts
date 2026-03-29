@@ -132,8 +132,10 @@ export class ImageService {
     }
 
     let lastErrorMessage = "";
-    
-    for (let i = 0; i < urls.length; i++) {
+    let i = 0;
+
+    // Use a while loop similar to TextGenService for cleaner fallback logic
+    while (i < urls.length) {
         let normalizedUrl = urls[i];
 
         // Node Discovery: If the URL is a discovery endpoint, resolve the actual worker URL
@@ -148,6 +150,7 @@ export class ImageService {
             }
           } catch (e) {
             console.warn(`[ImageService] Lỗi discovery tại ${normalizedUrl}, chuyển sang link tiếp theo...`, e);
+            i++;
             continue;
           }
         }
@@ -155,50 +158,59 @@ export class ImageService {
         console.log(`[ImageService] Đang thử kết nối tới Worker tạo ảnh: ${normalizedUrl} (${i + 1}/${urls.length})`);
 
         const MAX_RETRIES = 2;
-        const INITIAL_RETRY_DELAY = 1500;
+        const RETRY_DELAY = 5000; // Mandatory 5s cooldown as requested by user
 
         for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
             if (attempt > 0) {
-                const backoffDelay = INITIAL_RETRY_DELAY * Math.pow(2, attempt - 1);
-                console.log(`[ImageService] Đang thử lại lần ${attempt}/${MAX_RETRIES} cho ${normalizedUrl} sau ${backoffDelay}ms...`);
-                await new Promise(resolve => setTimeout(resolve, backoffDelay));
+                console.log(`[ImageService] Đang thử lại lần ${attempt}/${MAX_RETRIES} cho ${normalizedUrl} sau ${RETRY_DELAY}ms cooldown...`);
+                await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
             }
 
             try {
-              const formData = new FormData();
-              formData.append('prompt', options.prompt);
-              if (options.num_steps) formData.append('num_steps', String(options.num_steps));
-              if (options.width) formData.append('width', String(options.width));
-              if (options.height) formData.append('height', String(options.height));
-              if (options.model) formData.append('model', options.model);
-              
+              // Switch from FormData to JSON for better cross-origin stability
               const response = await fetch(normalizedUrl, {
                 method: 'POST',
                 headers: {
+                  'Content-Type': 'application/json',
                   'x-model': options.model || '@cf/black-forest-labs/flux-2-klein-4b'
                 },
-                body: formData,
+                body: JSON.stringify({
+                  prompt: options.prompt,
+                  num_steps: options.num_steps,
+                  width: options.width,
+                  height: options.height,
+                  model: options.model
+                }),
               });
 
               if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                const errorMessage = String(errorData.error || `HTTP error! status: ${response.status}`);
+                const errorText = await response.text().catch(() => "Unknown error");
+                let errorMessage = `HTTP ${response.status}: ${errorText}`;
                 
-                // Check if this error is transient or quota-related
+                try {
+                  const errorData = JSON.parse(errorText);
+                  errorMessage = String(errorData.error || errorMessage);
+                } catch(e) {}
+                
+                const is4006 = errorMessage.includes('4006') || 
+                               errorMessage.toLowerCase().includes('daily free allocation') ||
+                               errorMessage.toLowerCase().includes('neurons');
+                               
+                // Handle Cloudflare specific transient errors
+                const isCapacityError = errorMessage.includes('3040') || errorMessage.toLowerCase().includes('capacity temporarily exceeded');
+                const isRoutingError = errorMessage.includes('4002') || errorMessage.toLowerCase().includes('could not route request');
+                
                 const isRetryable = response.status >= 500 || 
                                    response.status === 429 ||
-                                   errorMessage.includes('4006') || 
-                                   errorMessage.toLowerCase().includes('daily free allocation') ||
-                                   errorMessage.toLowerCase().includes('neurons');
+                                   is4006 || isCapacityError || isRoutingError;
 
                 if (isRetryable && (attempt < MAX_RETRIES || i < urls.length - 1)) {
-                    // If it's 4006 or 429, we might want to skip to the next URL sooner
-                    // but for general 500s, we retry on the SAME URL first.
-                    if ((errorMessage.includes('4006') || response.status === 429) && i < urls.length - 1) {
-                        console.warn(`[ImageService] Worker ${normalizedUrl} đã hết hạn mức hoặc bận (4006/429). Đang chuyển sang URL kế tiếp...`);
+                    if ((is4006 || isCapacityError || response.status === 429) && i < urls.length - 1) {
+                        console.warn(`[ImageService] Worker ${normalizedUrl} bận hoặc hết hạn mức (${errorMessage.slice(0, 50)}). Chờ 5s rồi chuyển sang URL kế tiếp...`);
+                        await new Promise(r => setTimeout(r, RETRY_DELAY)); // Cooldown before trying next URL
                         break; // Break the attempt loop to move to next URL
                     }
-                    console.warn(`[ImageService] Lỗi tạm thời từ ${normalizedUrl} (Lần ${attempt + 1}): ${errorMessage}. Đang chuẩn bị thử lại...`);
+                    console.warn(`[ImageService] Lỗi tạm thời từ ${normalizedUrl} (Lần ${attempt + 1}): ${errorMessage.slice(0, 50)}. Đang chuẩn bị thử lại...`);
                     continue; // Continue to next attempt for this URL
                 }
                 
@@ -215,19 +227,24 @@ export class ImageService {
             } catch (error: any) {
               lastErrorMessage = error?.message || String(error);
               
-              // If it's a fetch/connection error, retry on same URL or move to next
               if (attempt < MAX_RETRIES) {
-                  console.warn(`[ImageService] Lỗi kết nối "${lastErrorMessage}" cho ${normalizedUrl} (Lần ${attempt + 1}). Thử lại...`);
-                  continue; 
+                  const isNetworkError = lastErrorMessage.includes("fetch") || lastErrorMessage.includes("network");
+                  if (isNetworkError) {
+                      console.warn(`[ImageService] Lỗi kết nối "${lastErrorMessage}" cho ${normalizedUrl} (Lần ${attempt + 1}). Thử lại sau 5s...`);
+                      await new Promise(r => setTimeout(r, RETRY_DELAY));
+                      continue; 
+                  }
               }
               
               if (i < urls.length - 1) {
-                  console.warn(`[ImageService] Đã thử hết số lần cho ${normalizedUrl}. Chuyển sang URL tiếp theo...`);
+                  console.warn(`[ImageService] Đã thử hết số lần cho ${normalizedUrl}. Chờ 5s rồi chuyển sang URL tiếp theo...`);
+                  await new Promise(r => setTimeout(r, RETRY_DELAY));
                   break; 
               }
               throw new Error(lastErrorMessage);
             }
         }
+        i++; // Move to next URL
     }
 
     throw new Error(lastErrorMessage || "Không thể tạo ảnh sau khi đã thử tất cả các Worker URLs.");

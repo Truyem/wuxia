@@ -41,7 +41,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
     );
 
     const StatBox: React.FC<{ label: string; value: number | string; color: string; icon: React.ReactNode }> = ({ label, value, color, icon }) => (
-        <div className={`flex-1 bg-black/40 border border-white/5 p-3 rounded-none flex flex-col items-center group/stat hover:border-${color}/30 transition-all duration-500`}>
+        <div className={`flex-1 bg-black/40 border border-white/5 p-3 rounded-xl flex flex-col items-center group/stat hover:border-${color}/30 transition-all duration-500`}>
             <span className={`text-[8px] uppercase tracking-[0.2em] mb-1 font-black text-paper-white/30 group-hover/stat:text-${color}/60 flex items-center gap-1`}>
                 {icon} {label}
             </span>
@@ -52,7 +52,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
     return (
         <div className="fixed inset-0 bg-black/95 md:bg-black/85 backdrop-blur-2xl z-[200] flex items-center justify-center p-2 md:p-8">
             {/* Main fellowship scroll container */}
-            <div className="w-full max-w-4xl h-[95vh] md:h-[80vh] flex flex-col relative overflow-hidden glass-panel border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.8)] rounded-none">
+            <div className="w-full max-w-4xl h-[95vh] md:h-[80vh] flex flex-col relative overflow-hidden glass-panel border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.8)] rounded-3xl">
                 {/* Wuxia Decorative Corners */}
                 <div className="wuxia-corner wuxia-corner-tl"></div>
                 <div className="wuxia-corner wuxia-corner-tr"></div>
@@ -78,7 +78,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
 
                     <div className="flex items-center gap-4 md:gap-8">
                         {/* Player Preview */}
-                        <div className="hidden lg:flex items-center gap-4 bg-white/5 border border-white/10 px-6 py-3 rounded-none backdrop-blur-md">
+                        <div className="hidden lg:flex items-center gap-4 bg-white/5 border border-white/10 px-6 py-3 rounded-xl backdrop-blur-md">
                             <div className="flex flex-col items-end">
                                 <span className="text-[8px] text-paper-white/30 uppercase font-black tracking-widest">Đội trưởng</span>
                                 <span className="text-sm font-serif font-black text-wuxia-gold">{character.name}</span>
@@ -87,7 +87,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
 
                         <button 
                             onClick={onClose}
-                            className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-none bg-wuxia-red/10 border border-wuxia-red/20 text-wuxia-red hover:bg-wuxia-red hover:text-white transition-all duration-500 shadow-xl"
+                            className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl bg-wuxia-red/10 border border-wuxia-red/20 text-wuxia-red hover:bg-wuxia-red hover:text-white transition-all duration-500 shadow-xl"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -119,7 +119,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                                 const name = getName(npc);
 
                                 return (
-                                    <div key={npc.id} className="group relative bg-black/40 border border-white/5 rounded-none p-6 md:p-8 hover:border-wuxia-gold/30 hover:bg-black/60 transition-all duration-700 shadow-2xl overflow-hidden">
+                                    <div key={npc.id} className="group relative bg-black/40 border border-white/5 rounded-2xl p-6 md:p-8 hover:border-wuxia-gold/30 hover:bg-black/60 transition-all duration-700 shadow-2xl overflow-hidden">
                                         {/* Liquid Edge Decor */}
                                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-wuxia-gold/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                         
@@ -130,14 +130,14 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
 
                                         {/* NPC Top Info Card */}
                                         <div className="flex items-center gap-6 mb-8 relative z-10">
-                                            <div className={`w-20 h-20 rounded-none border-2 flex items-center justify-center font-serif font-black text-3xl shadow-2xl transition-all duration-700 group-hover:scale-105 ${gender === 'Female' ? 'border-pink-500/30 bg-pink-500/5 text-pink-400' : 'border-wuxia-cyan/30 bg-wuxia-cyan/5 text-wuxia-cyan'}`}>
+                                            <div className={`w-20 h-20 rounded-2xl border-2 flex items-center justify-center font-serif font-black text-3xl shadow-2xl transition-all duration-700 group-hover:scale-105 ${gender === 'Female' ? 'border-pink-500/30 bg-pink-500/5 text-pink-400' : 'border-wuxia-cyan/30 bg-wuxia-cyan/5 text-wuxia-cyan'}`}>
                                                 {name[0]}
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <h5 className="text-xl md:text-2xl font-black font-serif text-paper-white group-hover:text-wuxia-gold transition-colors tracking-tight truncate">{name}</h5>
                                                 <div className="flex items-center gap-2 mt-2">
                                                     <span className="text-[10px] text-paper-white/40 font-bold uppercase tracking-widest">{getIdentity(npc)}</span>
-                                                    <span className="w-1 h-1 rounded-none bg-white/20"></span>
+                                                    <span className="w-1 h-1 rounded-full bg-white/20"></span>
                                                     <span className="text-[10px] text-wuxia-cyan font-black uppercase tracking-widest">{getRealm(npc)}</span>
                                                 </div>
                                             </div>
@@ -151,7 +151,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                                                     <span className="text-[8px] font-black uppercase tracking-widest text-wuxia-red/60">Sinh Mệnh</span>
                                                     <span className="text-[9px] font-mono text-paper-white/40">{Math.round(hpCur)} <span className="opacity-30">/</span> {hpMax}</span>
                                                 </div>
-                                                <div className="h-1.5 w-full bg-black/60 rounded-none overflow-hidden border border-white/5">
+                                                <div className="h-1.5 w-full bg-black/60 rounded-full overflow-hidden border border-white/5">
                                                     <div 
                                                         className="h-full bg-gradient-to-r from-wuxia-red/50 to-wuxia-red shadow-[0_0_8px_rgba(239,68,68,0.4)] transition-all duration-1000"
                                                         style={{ width: `${hpPct}%` }}
@@ -164,7 +164,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                                                     <span className="text-[8px] font-black uppercase tracking-widest text-wuxia-cyan/60">Nội Lực</span>
                                                     <span className="text-[9px] font-mono text-paper-white/40">{Math.round(spCur)} <span className="opacity-30">/</span> {spMax}</span>
                                                 </div>
-                                                <div className="h-1.5 w-full bg-black/60 rounded-none overflow-hidden border border-white/5">
+                                                <div className="h-1.5 w-full bg-black/60 rounded-full overflow-hidden border border-white/5">
                                                     <div 
                                                         className="h-full bg-gradient-to-r from-wuxia-cyan/50 to-wuxia-cyan shadow-[0_0_8px_rgba(68,170,170,0.4)] transition-all duration-1000"
                                                         style={{ width: `${spPct}%` }}
@@ -180,7 +180,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                                         </div>
 
                                         {/* Equipment Section */}
-                                        <div className="bg-black/60 p-6 rounded-none border border-white/5 relative z-10">
+                                        <div className="bg-black/60 p-6 rounded-2xl border border-white/5 relative z-10">
                                             <h6 className="text-[9px] text-paper-white/20 uppercase tracking-[0.4em] mb-4 font-black">Vật phẩm & Trang bị</h6>
                                             <div className="space-y-1">
                                                 <PremiumEquipItem label="Chính" value={npc['Current equipment']?.['Vũ khí chính']} icon={<IconGlyph name="dagger" className="w-2.5 h-2.5" />} />
@@ -193,7 +193,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                                                     <div className="flex flex-wrap gap-2">
                                                         {npc.Inventory && npc.Inventory.length > 0 ? (
                                                             npc.Inventory.slice(0, 4).map((item, i) => (
-                                                                <span key={i} className="text-[9px] bg-white/5 border border-white/10 px-2.5 py-1 rounded-none text-paper-white/60 font-serif italic">
+                                                                <span key={i} className="text-[9px] bg-white/5 border border-white/10 px-2.5 py-1 rounded-lg text-paper-white/60 font-serif italic">
                                                                     {item}
                                                                 </span>
                                                             ))
@@ -212,8 +212,8 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                             })}
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-20 md:py-40 border-2 border-dashed border-white/5 rounded-none bg-white/[0.01]">
-                            <div className="w-16 h-16 md:w-24 md:h-24 rounded-none border border-wuxia-gold/20 flex items-center justify-center text-3xl md:text-4xl grayscale opacity-20 mb-6 md:mb-8 text-wuxia-gold/40">
+                        <div className="flex flex-col items-center justify-center py-20 md:py-40 border-2 border-dashed border-white/5 rounded-3xl bg-white/[0.01]">
+                            <div className="w-16 h-16 md:w-24 md:h-24 rounded-2xl border border-wuxia-gold/20 flex items-center justify-center text-3xl md:text-4xl grayscale opacity-20 mb-6 md:mb-8 text-wuxia-gold/40">
                                 <IconGlyph name="team" className="w-8 h-8 md:w-12 md:h-12" />
                             </div>
                             <h4 className="text-xl md:text-3xl font-serif font-black text-paper-white/10 tracking-[0.2em] md:tracking-[0.6em] uppercase text-center px-4">Độc Hành Giang Hồ</h4>

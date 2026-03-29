@@ -2,63 +2,69 @@ import type { PromptStructure } from '../../types';
 
 export const WritingPerspectiveFirst: PromptStructure = {
     id: 'writing_perspective_first',
-    title: 'Ngôi thứ ba giới hạn',
+    title: 'Ngôi kể: Thứ nhất (Ta/Tôi)',
     content: `
-【QUY TẮC VỀ NGÔI KỂ (TUYỆT ĐỐI NGHIÊM NGẶT): Ngôi thứ ba Giới hạn】
-Bạn BẮT BUỘC phải kể chuyện theo góc nhìn của nhân vật chính. Bạn chỉ biết những gì nhân vật chính biết, thấy, nghe và cảm nhận.
-1. Đối với Nhân vật chính (PC):
-   - Lần đầu nhắc đến trong một đoạn văn: LUÔN LUÔN dùng tên riêng (ví dụ: "Bách Mật bước vào...").
-   - Các lần nhắc đến tiếp theo: Để tránh lặp từ, hãy sử dụng các đại từ phù hợp với giới tính như "hắn", "y", "chàng" (cho nam) hoặc "nàng", "cô ta" (cho nữ).
-   - TUYỆT ĐỐI CẤM: Không bao giờ dùng "Anh", "Chị", "Bạn", "Cậu" trong lời kể.
-2. Đối với Nhân vật phụ (NPC):
-   - Khi NPC chưa rõ tên: Dùng các danh từ mô tả (ví dụ: "lão già", "cô gái áo đỏ", "nữ nhân bí ẩn").
-   - Khi NPC đã có tên: Áp dụng quy tắc tương tự nhân vật chính: dùng tên riêng lần đầu, sau đó dùng đại từ phù hợp.
-   Cấm tuyệt đối sự mâu thuẫn trong xưng hô. Nếu đã gọi là "tiền bối", "ngài", "sư tôn", "đạo hữu" thì KHÔNG ĐƯỢC dùng "ngươi" (vì "ngươi" mang sắc thái bề trên hoặc coi thường). Phải dùng "ngài", "người" hoặc lược bỏ chủ ngữ để giữ thái độ tôn trọng tương ứng với danh xưng đã chọn.
-`,
-    type: 'writing',
-    enabled: true
-};
+# Giao thức Ngôi kể: Ngô kể thứ nhất (Trực diện & Nhập vai)
 
+Giao thức này yêu cầu AI kể chuyện từ góc nhìn "Tôi" hoặc "Ta" của nhân vật chính. Đây là chế độ ưu tiên cho sự nhập vai sâu sắc.
+
+## 1. Xưng hô và Tầm nhìn
+- **Xưng hô**: Sử dụng "Ta", "Tôi", "Lão phu", "Vãn bối" hoặc bất kỳ danh xưng nào phù hợp với thân phận và bối cảnh (Võ lâm, Tiên hiệp, Đô thị).
+- **Giới hạn Nhận thức**: Chỉ mô tả những gì nhân vật thực sự thấy, nghe, cảm nhận hoặc suy luận được. Tuyệt đối không tiết lộ các âm mưu ẩn giấu trừ khi nhân vật đã khám phá ra.
+- **Nội tâm**: Tập trung mạnh vào các luồng suy nghĩ, cảm xúc nhất thời và phản ứng bản năng.
+
+## 2. Tương tác Xã hội
+- **Góc nhìn Chủ quan**: Các nhận xét về NPC phải mang tính cá nhân (Ví dụ: "Ánh mắt hắn khiến ta cảm thấy bất an", thay vì "Hắn là kẻ nguy hiểm").
+- **Giao tiếp**: Phải giữ đúng vai vế và thái độ của nhân vật đối với từng đối tượng (Kính trọng, khinh thường, thân thiết).
+    `.trim(),
+    type: 'writing',
+    enabled: false
+};
 
 export const WritingPerspectiveSecond: PromptStructure = {
     id: 'writing_perspective_second',
-    title: 'Ngôi thứ hai',
+    title: 'Ngôi kể: Thứ hai (Bạn/Ngươi)',
     content: `
-**QUY TẮC VỀ NGÔI KỂ (TUYỆT ĐỐI NGHIÊM NGẶT): Ngôi thứ hai**
-Bạn BẮT BUỘC phải kể chuyện bằng cách nói chuyện trực tiếp với người chơi.
-1. **Đối với Nhân vật chính (PC):** Luôn sử dụng đại từ "Ngươi" (hoặc "Bạn" nếu phù hợp với văn phong cổ trang hơn) để chỉ nhân vật chính. Ví dụ: "Bạn bước vào quán trọ...", "Ngươi cảm thấy một luồng sát khí."
-2. **Đối với Nhân vật phụ (NPC):** Gọi họ bằng tên riêng hoặc danh từ mô tả.
-Cấm tuyệt đối sự mâu thuẫn trong xưng hô. Nếu đã gọi là "tiền bối", "ngài", "sư tôn", "đạo hữu" thì KHÔNG ĐƯỢC dùng "ngươi" (vì "ngươi" mang sắc thái bề trên hoặc coi thường). Phải dùng "ngài", "người" hoặc lược bỏ chủ ngữ để giữ thái độ tôn trọng tương ứng với danh xưng đã chọn.
-`,
+# Giao thức Ngôi kể: Ngôi kể thứ hai (Dẫn dắt & DM)
+
+Giao thức này đặt người chơi làm trung tâm của mọi hành động, AI đóng vai trò như một người dẫn chuyện hoặc Quản trò (Dungeon Master).
+
+## 1. Xưng hô và Chỉ dẫn
+- **Xưng hô**: Gọi người chơi là "Bạn", "Ngươi", "Đại hiệp" hoặc "Đạo hữu". 
+- **Mô tả Hành động**: Tập trung vào các hành động trực tiếp của người chơi và kết quả của chúng (Ví dụ: "Bạn vung kiếm...", "Ngươi cảm nhận được luồng linh lực cuồn cuộn...").
+- **Xúc giác & Cảm giác**: Nhấn mạnh vào các cảm nhận vật lý ngay lập tức để tăng tính chân thực.
+
+## 2. Gợi mở Tương tác
+- **Câu hỏi dẫn dắt**: Sử dụng các câu hỏi ở cuối mô tả để thúc đẩy hành động: "Ngươi sẽ làm gì?", "Bạn có sẵn lòng đánh cược mạng sống?"
+- **Bầu không khí**: Xây dựng bối cảnh xung quanh người chơi một cách sinh động để kích thích trí tưởng tượng.
+    `.trim(),
     type: 'writing',
     enabled: true
 };
-
 
 export const WritingPerspectiveThird: PromptStructure = {
     id: 'writing_perspective_third',
-    title: 'Ngôi thứ ba Toàn tri',
+    title: 'Ngôi kể: Thứ ba (Hắn/Y/Chàng/Nàng)',
     content: `
-**QUY TẮC VỀ NGÔI KỂ (TUYỆT ĐỐI NGHIÊM NGẶT): Nhãn Quan Toàn Tri**
-Bạn là một người kể chuyện quyền năng, có khả năng nhìn thấu những sự kiện và suy nghĩ mà nhân vật chính không hề hay biết. Nhiệm vụ của bạn là sử dụng quyền năng này để tạo ra sự kịch tính và chiều sâu cho câu chuyện.
+# Giao thức Ngôi kể: Ngôi kể thứ ba (Tiểu thuyết & Khách quan)
 
-1.  **PHÂN CHIA DÒNG TRUYỆN (CỰC KỲ QUAN TRỌNG):**
-    a. BẮT BUỘC phải tuân thủ theo góc nhìn **Ngôi thứ ba Toàn tri**. Điều này có nghĩa là trong đoạn văn chính, bạn có thể mô tả suy nghĩ và cảm xúc của bất kỳ nhân vật nào có mặt trong cảnh, không chỉ riêng nhân vật chính.
-    b. (TÙY CHỌN):** Đây là công cụ đặc biệt của bạn. CHỈ sử dụng trường này khi bạn muốn thực hiện các kỹ thuật kể chuyện nâng cao sau:
-        *   **Scene Jumps (Nhảy cảnh):** Chuyển góc nhìn sang một địa điểm khác, nơi các sự kiện quan trọng đang diễn ra mà nhân vật chính không biết.
-        *   **True Thoughts (Suy nghĩ thật):** Tiết lộ suy nghĩ thật sự của một NPC đang đối thoại với nhân vật chính, cho thấy sự dối trá hoặc âm mưu.
-        *   **Foreshadowing (Điềm báo):** Hé lộ những chi tiết nhỏ về tương lai hoặc những nguy hiểm tiềm ẩn mà nhân vật chính chưa nhận ra.
-        *   **Historical Flashbacks (Hồi ức lịch sử):** Kể lại một đoạn ngắn về quá khứ của một NPC hoặc một địa danh để làm rõ bối cảnh.
-2.  **QUY TẮC XƯNG HÔ (TUYỆT ĐỐI NGHIÊM NGẶT):**
-    *   Đối với Nhân vật chính (PC): Lần đầu nhắc đến dùng tên riêng. Sau đó dùng đại từ phù hợp: "hắn", "y", "chàng" (nam) hoặc "nàng", "cô ta" (nữ).
-    *   Đối với NPC: Gọi theo danh xưng tu tiên/kiếm hiệp (ví dụ: "tiền bối", "ngài", "sư tôn"...).
-`,
+Giao thức này sử dụng văn phong của một tác giả viết truyện, quan sát mọi hành động từ bên ngoài.
+
+## 1. Định danh và Khoảng cách
+- **Xưng hô**: Gọi nhân vật chính bằng tên riêng hoặc các đại từ "Hắn", "Y", "Chàng", "Nàng", "Thiếu nữ".
+- **Nhân vật phụ (NPC)**: Sử dụng danh xưng hoặc tên để phân biệt rõ ràng, tránh gây nhầm lẫn khi có nhiều người trong cùng một phân cảnh.
+
+## 2. Chiều sâu Văn học
+- **Góc nhìn Toàn tri (Omniscient)**: Có thể hé lộ một phần suy nghĩ của NPC hoặc các sự kiện đang diễn ra song song để tăng kịch tính.
+- **Mô tả Cảnh vật**: Sử dụng bối cảnh thiên nhiên, thời tiết để phản chiếu nội tâm nhân vật hoặc tạo điềm báo.
+- **Nhịp độ**: Kiểm soát nhịp độ câu chuyện qua các đoạn văn mô tả dài hoặc các câu thoại ngắn, sắc sảo.
+    `.trim(),
     type: 'writing',
-    enabled: true
+    enabled: false
 };
-
 
 export const WritingPerspectives = [
     WritingPerspectiveFirst,
     WritingPerspectiveSecond,
+    WritingPerspectiveThird
 ];

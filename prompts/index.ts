@@ -1,11 +1,11 @@
-// prompts/index.ts — Đã tích hợp bộ Hardcore World (硬核通用世界)
+// prompts/index.ts — Đã tích hợp bộ Hardcore World (Thế giới Hardcore)
 
 import { PromptStructure } from '../types';
 
 // Core
 import { Core_OutputFormat } from './core/format';
 import { CoreRules } from './core/rules';
-import { coreDataFormat } from './core/data';
+import { coreDataFormat } from './core/world_repository'; // Switch to new file
 import { coreMemoryLaws } from './core/memory';
 import { coreWorldview } from './core/world';
 import { CoreChainOfThought } from './core/cot';
@@ -20,6 +20,11 @@ import { coreUserFate } from './core/user_fate';
 import { coreWorldMechanics } from './core/world_mechanics';
 import { coreRealWorld } from './core/realWorld';
 import { PostCombatRules } from './core/postCombatRules';
+
+// World, Social, Combat Modules
+import { WorldPrompts } from './world';
+import { SocialPrompts } from './social';
+import { CombatPrompts } from './combat';
 
 // Stats
 import { StatCharacter } from './stats/character';
@@ -50,7 +55,7 @@ import { REFINEMENT_SYSTEM_PROMPT_OBJ, WORLD_REFINEMENT_SYSTEM_PROMPT_OBJ } from
 import { JSON_CONSTRAINTS_PROMPT_OBJ, JSON_SYSTEM_PROMPT_OBJ, CONNECTION_TEST_PROMPT_OBJ } from './runtime/defaults';
 
 // ═══════════════════════════════════════════════════════════════
-// 🆕 HARDCORE WORLD (硬核通用世界) — Tích hợp từ bộ prompt SillyTavern
+// 🆕 HARDCORE WORLD (Thế giới Hardcore) — Tích hợp từ bộ prompt SillyTavern
 // Tất cả disabled theo mặc định — người dùng bật thủ công trong Cài đặt > Prompt
 // ═══════════════════════════════════════════════════════════════
 import { HardcoreWorldPrompts } from './hardcore';
@@ -74,6 +79,11 @@ export const DefaultPrompts: PromptStructure[] = [
     coreWorldMechanics,
     coreRealWorld,
     PostCombatRules,
+
+    // ── Modules ──
+    ...WorldPrompts,
+    ...SocialPrompts,
+    ...CombatPrompts,
 
     // ── Stats ──
     StatCharacter,
@@ -104,15 +114,13 @@ export const DefaultPrompts: PromptStructure[] = [
     WritingNsfw,
 
     // ── Runtime ──
-    REFINEMENT_SYSTEM_PROMPT_OBJ,
-    WORLD_REFINEMENT_SYSTEM_PROMPT_OBJ,
     JSON_CONSTRAINTS_PROMPT_OBJ,
     JSON_SYSTEM_PROMPT_OBJ,
     CONNECTION_TEST_PROMPT_OBJ,
+    REFINEMENT_SYSTEM_PROMPT_OBJ,
+    WORLD_REFINEMENT_SYSTEM_PROMPT_OBJ,
 
-    // ── 🆕 Hardcore World (硬核通用世界) — Mặc định TẮT ──
-    // Nhóm: 5 module mô phỏng thế giới khắc nghiệt, tâm lý NPC, không plot armor.
-    // Bật từng module riêng lẻ trong Cài đặt > Prompt nếu muốn kích hoạt.
+    // ── 🆕 Hardcore World (Thế giới Hardcore) — Mặc định TẮT ──
     ...HardcoreWorldPrompts,
 
 ].map(p => ({ ...p, isSystem: true }));

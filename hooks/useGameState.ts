@@ -20,7 +20,9 @@ import {
     MemorySystem,
     BattleStatus,
     TavernSettingsStructure,
-    CoreStats
+    CoreStats,
+    MusicSettings,
+    Song
 } from '../types';
 import { DefaultPrompts } from '../prompts';
 import { defaultMidToLongMemoryPrompt, defaultShortToMidMemoryPrompt, defaultExtraSystemPrompt } from '../prompts/runtime/defaults';
@@ -377,6 +379,33 @@ export const useGameState = () => {
         presets: []
     });
 
+    const defaultMusicSettings: MusicSettings = {
+        volume: 0.5,
+        shuffle: false,
+        loopPlaylist: true,
+        singleLoop: false,
+        playlist: [],
+        currentSongId: null
+    };
+
+    const normalizeMusicSettings = (raw?: Partial<MusicSettings> | null): MusicSettings => {
+        const result = {
+            ...defaultMusicSettings,
+            ...(raw || {}),
+            playlist: Array.isArray(raw?.playlist) ? raw.playlist : defaultMusicSettings.playlist,
+        };
+
+        // Migrate volume if it is still using the 0-100 scale
+        if (typeof result.volume === 'number' && result.volume > 1) {
+            console.log(`[useGameState] Migrating music volume: ${result.volume} -> ${result.volume / 100}`);
+            result.volume = result.volume / 100;
+        }
+
+        return result;
+    };
+
+    const [musicSettings, setMusicSettings] = useState<MusicSettings>(defaultMusicSettings);
+
     const [prompts, setPrompts] = useState<PromptStructure[]>(DefaultPrompts);
     // Removed legacy syncPrompts, now using PromptSyncService
     const [festivals, setFestivals] = useState<FestivalStructure[]>(festivalList);
@@ -410,7 +439,8 @@ export const useGameState = () => {
                     visualRes,
                     gameRes,
                     memoryRes,
-                    tavernRes
+                    tavernRes,
+                    musicRes
                 ] = await Promise.allSettled([
                     dbService.getSetting('app_theme'),
                     dbService.getSetting('api_settings'),
@@ -419,7 +449,8 @@ export const useGameState = () => {
                     dbService.getSetting('visual_settings'),
                     dbService.getSetting('game_settings'),
                     dbService.getSetting('memory_settings'),
-                    dbService.getSetting('tavern_settings')
+                    dbService.getSetting('tavern_settings'),
+                    dbService.getSetting('music_settings')
                 ]);
 
                 if (themeRes.status === 'fulfilled' && themeRes.value) {
@@ -474,6 +505,10 @@ export const useGameState = () => {
 
                 if (tavernRes.status === 'fulfilled' && tavernRes.value) {
                     setTavernSettings(normalizeTavernSettings(tavernRes.value as Partial<TavernSettingsStructure>));
+                }
+
+                if (musicRes.status === 'fulfilled' && musicRes.value) {
+                    setMusicSettings(normalizeMusicSettings(musicRes.value as Partial<MusicSettings>));
                 }
 
                 console.log('[useGameState] Settings initialization complete.');
@@ -550,6 +585,7 @@ export const useGameState = () => {
         gameConfig, setGameConfig,
         memoryConfig, setMemoryConfig,
         tavernSettings, setTavernSettings,
+        musicSettings, setMusicSettings,
 
         prompts, setPrompts,
         festivals, setFestivals,

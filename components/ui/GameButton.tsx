@@ -9,7 +9,7 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 const GameButton: React.FC<Props> = ({ children, variant = 'primary', active = false, skewed = false, className = '', ...props }) => {
     // Base styles
     const baseStyle = `group relative px-6 py-2.5 font-serif font-bold uppercase transition-all duration-500 transform cursor-pointer outline-none overflow-hidden flex items-center justify-center gap-2 ${
-        skewed ? '-skew-x-[12deg]' : 'rounded-sm'
+        skewed ? '-skew-x-[12deg]' : 'rounded-xl'
     }`;
 
     let variantClasses = "";

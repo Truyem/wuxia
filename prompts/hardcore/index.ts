@@ -1,5 +1,5 @@
 // prompts/hardcore/index.ts
-// Bộ Prompt "Thế giới Cứng" (硬核通用世界) — Tích hợp từ bộ prompt SillyTavern gốc
+// Bộ Prompt "Thế giới Hardcore" (Thế giới Hardcore) — Tích hợp từ bộ prompt SillyTavern gốc
 // Điều chỉnh cho thể loại Tiên Hiệp / Kiếm Hiệp Võ Công — Mặc Sắc Giang Hồ
 // Tất cả prompts trong folder này mặc định DISABLED, người dùng bật thủ công.
 
@@ -7,7 +7,7 @@ import { PromptStructure } from '../../types';
 
 // ─────────────────────────────────────────────────────────────
 // MODULE I — CORE: Giao thức Tương tác Cốt lõi & Định nghĩa Vai trò AI
-// Nguồn: I.核心交互协议 + I.7 单向流 + I.8 动态切片
+// Nguồn: I. Giao thức Tương tác Cốt lõi + I.7 Luồng Một chiều + I.8 Cắt lát Động
 // ─────────────────────────────────────────────────────────────
 export const HardcoreCore: PromptStructure = {
     id: 'hardcore_core',
@@ -65,7 +65,7 @@ AI **tuyệt đối cấm** thay thế người chơi để thực hiện bất 
 
 // ─────────────────────────────────────────────────────────────
 // MODULE II — WORLD ENGINE: Động cơ Thế giới Tự chủ
-// Nguồn: II.世界优先 + II.3 反剧情护甲 + II.4-6 + II.7 时间税
+// Nguồn: II. Ưu tiên Thế giới + II.3 Chống Giáp Cốt truyện + II.4-6 + II.7 Thuế Thời gian
 // ─────────────────────────────────────────────────────────────
 export const HardcoreWorldEngine: PromptStructure = {
     id: 'hardcore_world_engine',
@@ -96,7 +96,7 @@ Thế giới khắc nghiệt, không có sự chăm sóc đặc biệt hay bảo
 
 ## 4. Hậu quả Hệ thống & Mô phỏng Ngoài màn hình
 
-- **Hậu quả Hệ thống**: Các hệ thống võ lâm (thế lực, kinh tế, sinh thái) phản ứng với các sự kiện một cách tàn nhẫn, thực tế và logic nhất quán. Hành động của người chơi sẽ tạo ra hậu quả thực sự.
+- **Hậu quả Hệ thống**: Các hệ thống võ lâm (thế lực, kinh tế, sinh thái) phản ứng with các sự kiện một cách tàn nhẫn, thực tế và logic nhất quán. Hành động của người chơi sẽ tạo ra hậu quả thực sự.
 - **Mô phỏng Ngoài màn hình**: AI liên tục mô phỏng trạng thái toàn bộ thế giới, kể cả các sự kiện ở khu vực người chơi không biết.
 - **Động cơ Macro**: Các thế lực lớn (tông môn, vương triều, ma đạo), thiên tai, biến động kinh tế phải tự phát triển theo logic đã định.
 - **Bất đối xứng Thông tin**: AI trình bày "cảm quan của nhân vật người chơi". Nếu người chơi bị lừa dối, ảo giác, hoặc nhận thức sai, AI nên mô tả vẻ bề ngoài sai lầm, không phải sự thật khách quan.
@@ -308,7 +308,7 @@ Mọi nội dung trình bày, mục đích duy nhất là phản ánh chính xá
 
 // ─────────────────────────────────────────────────────────────
 // MODULE V — WORLD LOG: Giao thức Theo dõi Trạng thái & Format Đầu ra
-// Nguồn: V.1 输出格式 + V.2 世界状态追踪 + VI.初始化协议
+// Nguồn: V.1 Định dạng Đầu ra + V.2 Theo dõi Trạng thái Thế giới + VI. Giao thức Khởi tạo
 // ─────────────────────────────────────────────────────────────
 export const HardcoreWorldLog: PromptStructure = {
     id: 'hardcore_world_log',
@@ -328,7 +328,7 @@ AI phải trong mỗi lần trả lời bao gồm một "Nhật ký Trạng thá
 T: <Thời gian hiện tại (chính xác đến phút)> | Weather: <Thời tiết/Ánh sáng/Bầu không khí>
 Loc: <Địa điểm cụ thể (tương ứng gameState.Environment)>
 Global_Event: <Mô tả ngắn sự kiện vĩ mô ngoài màn hình (như: tiếng binh khí xa/giá linh thảo tăng/giang hồ dậy sóng)>
-User_Status: <Theo dõi sinh lý: Độ no/Tinh lực/Nội lực/Mức độ tỉnh táo/Thương tích cụ thể>
+User_Status: <Theo dõi sinh lý: No bụng/Tinh lực/Nội lực/Mức độ tỉnh táo/Thương tích cụ thể>
 ---
 [NPC: <Tên nhân vật>]
 Mask (Bề mặt): <Thái độ xã hội hiện tại (như: cung kính lịch sự/sợ hãi phục tùng)>
@@ -359,7 +359,7 @@ Khi sử dụng cùng với Wuxia Chronicle, [WORLD_LOG] phải ánh xạ chính
 - \`gameState.Environment.time\` → Trường T
 - \`gameState.Environment.specificLocation\` → Trường Loc  
 - \`gameState.World.ongoingEvents\` → Trường Global_Event
-- \`gameState.Character.spiritCurrent / hungerCurrent\` → Trường User_Status
+- \`gameState.Character.currentEnergy / currentFullness\` → Trường User_Status
 - \`gameState.Social[i].favorability + corePersonalityTraits\` → NPC Mask/Core/Relation
 
 </Giao thức Theo dõi Trạng thái Thế giới>

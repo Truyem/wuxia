@@ -1,45 +1,32 @@
 import { PromptStructure } from '../../types';
 
 export const StatBodyHealth: PromptStructure = {
-    id: 'stat_body',
-    title: 'Giao thức HP Bộ phận Cơ thể',
-    content: `
-<body_part_hp_protocol>
-# 【Hệ thống HP 7 Bộ phận (Ánh xạ vào từng bộ phận trong gameState.Character)】
+  id: 'stat_body',
+  title: 'Hệ thống Trạng thái Cơ thể',
+  content: `
+<Hệ thống Trạng thái Cơ thể>
+# Quản lý Sinh mệnh và Thương tích Bộ phận
 
-## 1. Định danh Bộ phận (BẮT BUỘC sử dụng các khóa Tiếng Anh này)
-Mỗi bộ phận có: \`currentHp / maxHp / status\`
-- \`head\` (Đầu)
-- \`chest\` (Ngực)
-- \`abdomen\` (Bụng)
-- \`leftArm\` (Tay trái)
-- \`rightArm\` (Tay phải)
-- \`leftLeg\` (Chân trái)
-- \`rightLeg\` (Chân phải)
+## 1. Các bộ phận Cơ thể (Body Parts)
+- **Đầu (Head)**: Cực kỳ chí mạng. Về 0 dẫn đến chết ngay hoặc hôn mê sâu.
+- **Ngực (Chest)**: Chí mạng. Ảnh hưởng đến nội lực và hơi thở.
+- **Bụng (Abdomen)**: Nguy hiểm. Dễ dẫn đến sốc và mất máu liên tục.
+- **Tứ chi (Arms/Legs)**: Ảnh hưởng đến khả năng tấn công, thủ thế và di chuyển.
 
-## 2. Ngưỡng Trạng thái và Hình phạt
-- **Khỏe mạnh (>90% HP)**: Không có hình phạt.
-- **Tổn thương nhẹ (60%-90% HP)**: Đau nhức, giảm nhẹ tinh thần.
-- **Trung thương (30%-60% HP)**: Giảm 20% Thân pháp (\`agility\`) hoặc Sức mạnh (\`strength\`).
-- **Trọng thương (10%-30% HP)**: Giảm 50% chỉ số liên quan, nguy cơ ngất xỉu.
-- **Tàn phế/Chết (<=0% HP)**: Mất chức năng bộ phận. Nếu là Đầu/Ngực/Bụng, nhân vật tử vong.
+## 2. Các trạng thái Thương tổn
+- **Khỏe mạnh**: Hoạt động bình thường.
+- **Bị thương nhẹ**: Đau nhức, giảm nhẹ tốc độ hồi phục.
+- **Trọng thương**: Giảm mạnh các chỉ số chiến đấu, cần điều trị khẩn cấp.
+- **Tàn phế**: Mất hoàn toàn chức năng của bộ phận đó.
 
-## 3. Hệ quả Đặc thù theo Bộ phận
-- **Tay (Arm)**: Không thể cầm vũ khí hoặc sử dụng chiêu thức ngoại công.
-- **Chân (Leg)**: Giảm mạnh khả năng né tránh và không thể trốn chạy.
-- **Đầu (Head)**: Ảnh hưởng đến \`comprehension\` và gây trạng thái choáng váng.
+## 3. Hệ thống Mất máu và Hồi phục
+- **Mất máu (Bleeding)**: Trừ HP bộ phận theo thời gian nếu không cầm máu.
+- **Nghiệm trọng (Critical)**: Khi HP của Đầu hoặc Ngực xuống mức báo động.
+- **Hồi phục (Recovery)**: Phụ thuộc vào đan dược, nội công và môi trường nghỉ ngơi.
 
-## 4. Kỷ luật Thực thi
-- Mọi sát thương trong chiến đấu PHẢI được phân bổ vào các bộ phận cụ thể.
-- Kiểm tra \`currentHp\` sau mỗi lượt để cập nhật \`status\`.
-
-## 5. Ví dụ Lệnh (Hợp lệ)
-- \`{"action": "ADD", "key": "gameState.Character.leftArm.currentHp", "value": -30}\`
-- \`{"action": "SET", "key": "gameState.Character.leftArm.status", "value": "Trọng thương"}\`
-- \`{"action": "SET", "key": "gameState.Character.head.status", "value": "Phê vật"}\`
-
-</body_part_hp_protocol>
-`,
-    type: 'num',
-    enabled: true
+## 4. Ràng buộc Tự sự
+- AI phải mô tả cảm giác đau đớn và sự hạn chế của cơ thể khi bị thương (Ví dụ: "Cánh tay trái tê dại, không còn đủ sức để cầm vững thanh kiếm...").
+    `.trim(),
+  type: 'num',
+  enabled: true
 };

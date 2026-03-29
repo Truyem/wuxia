@@ -95,9 +95,9 @@ const BattleOverlay: React.FC<Props> = ({ state, onAction, onClose }) => {
                 
                 {/* Player Character Panel */}
                 <div className="lg:col-span-4 flex flex-col gap-4">
-                    <div className="bg-stone-950/60 border border-blue-500/30 rounded-xl p-6 relative overflow-hidden group">
+                    <div className="bg-stone-950/60 border border-blue-500/30 rounded-3xl p-6 relative overflow-hidden group">
                         {/* Avatar Wrapper */}
-                        <div className="relative mb-4 aspect-square max-w-[200px] mx-auto overflow-hidden rounded-lg border-2 border-blue-500/20 shadow-[0_0_30px_rgba(37,99,235,0.1)] bg-stone-900 group">
+                        <div className="relative mb-4 aspect-square max-w-[200px] mx-auto overflow-hidden rounded-2xl border-2 border-blue-500/20 shadow-[0_0_30px_rgba(37,99,235,0.1)] bg-stone-900 group">
                             {character.avatar ? (
                                 <img src={character.avatar} alt={character.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[3000ms] ease-out" />
                             ) : (
@@ -162,7 +162,7 @@ const BattleOverlay: React.FC<Props> = ({ state, onAction, onClose }) => {
                 {/* Central Action Area & Battle Log */}
                 <div className="lg:col-span-4 flex flex-col gap-6 h-full min-h-[400px]">
                     {/* Log Container */}
-                    <div className="flex-1 bg-black/60 border border-stone-800 rounded-xl overflow-hidden flex flex-col relative">
+                    <div className="flex-1 bg-black/60 border border-stone-800 rounded-3xl overflow-hidden flex flex-col relative">
                         <div className="px-4 py-2 bg-stone-900/80 border-b border-stone-800 flex items-center justify-between">
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-500 flex items-center gap-2">
                                 <Activity className="w-3 h-3" />
@@ -230,9 +230,9 @@ const BattleOverlay: React.FC<Props> = ({ state, onAction, onClose }) => {
 
                 {/* Enemy Panel */}
                 <div className="lg:col-span-4 flex flex-col gap-4">
-                    <div className="bg-stone-950/60 border border-red-500/30 rounded-xl p-6 relative overflow-hidden group">
+                    <div className="bg-stone-950/60 border border-red-500/30 rounded-3xl p-6 relative overflow-hidden group">
                         {/* Avatar Wrapper (Placeholder icon for enemy since we don't have separate enemy avatars easily yet) */}
-                        <div className="relative mb-4 aspect-square max-w-[200px] mx-auto overflow-hidden rounded-lg border-2 border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)] bg-stone-900 flex items-center justify-center text-red-500/20">
+                        <div className="relative mb-4 aspect-square max-w-[200px] mx-auto overflow-hidden rounded-2xl border-2 border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)] bg-stone-900 flex items-center justify-center text-red-500/20">
                             <Bot className="w-24 h-24" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                             <div className="absolute bottom-2 left-2 right-2 flex flex-col items-center">

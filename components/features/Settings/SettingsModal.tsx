@@ -10,6 +10,7 @@ import HistoryViewer from './HistoryViewer';
 import ContextViewer from './ContextViewer';
 import RecallModelSettings from './RecallModelSettings';
 import ArticleOptimizationSettings from './ArticleOptimizationSettings';
+import MusicSettings from './MusicSettings';
 import WorldEvolutionSettings from './WorldEvolutionSettings';
 
 import IconGlyph, { IconName } from '../../ui/Icon/IconGlyph';
@@ -35,8 +36,8 @@ type ContextSnapshot = {
 };
 
 interface Props {
-    activeTab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution';
-    onTabChange: (tab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution') => void;
+    activeTab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'music';
+    onTabChange: (tab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'music') => void;
     onClose: () => void;
 
     // Config Props
@@ -76,6 +77,7 @@ const SettingsModal: React.FC<Props> = ({
     onReturnToHome, isHome, requestConfirm, currentEnvironment
 }) => {
     const tabItems: { id: string; label: string; icon: IconName }[] = [
+        { id: 'music', label: 'Âm nhạc & Âm thanh', icon: 'atmosphere' },
         { id: 'article_optimization', label: 'Tối ưu hóa văn bản', icon: 'agreement' },
         { id: 'world_evolution', label: 'Tiến hóa thế giới', icon: 'memory' },
         { id: 'game', label: 'Cài đặt trò chơi', icon: 'gameplay' },
@@ -97,7 +99,7 @@ const SettingsModal: React.FC<Props> = ({
             <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none" />
 
             <div className="w-full h-full md:w-[95vw] md:h-[90vh] md:max-w-6xl flex items-center justify-center p-0 md:p-6">
-                <div className="bg-modal-gradient w-full h-full flex shadow-[0_0_80px_rgba(var(--c-ink-black),0.8),0_0_40px_rgb(var(--c-wuxia-gold)/0.1)] p-0 overflow-hidden backdrop-blur-2xl rounded-none border border-wuxia-gold/10">
+                <div className="bg-modal-gradient w-full h-full flex shadow-[0_0_80px_rgba(var(--c-ink-black),0.8),0_0_40px_rgb(var(--c-wuxia-gold)/0.1)] p-0 overflow-hidden backdrop-blur-2xl rounded-3xl border border-wuxia-gold/10">
 
                     <div className="flex w-full h-full min-h-0 relative">
                         {/* Decorative background element */}
@@ -129,28 +131,22 @@ const SettingsModal: React.FC<Props> = ({
                                     <button
                                         key={item.id}
                                         onClick={() => onTabChange(item.id as any)}
-                                        className={`relative w-full px-4 py-3 flex items-center gap-3 group rounded-none ${activeTab === item.id
-                                            ? 'text-wuxia-gold'
+                                        className={`wuxia-list-item relative w-full px-4 py-3 flex items-center gap-3 group transition-all mb-1 rounded-2xl ${activeTab === item.id
+                                            ? 'active text-wuxia-gold shadow-[0_4px_15px_rgba(0,0,0,0.3)]'
                                             : 'text-paper-white/40 hover:text-paper-white/80'
                                             }`}
-                                        style={activeTab === item.id ? {
-                                            background: 'linear-gradient(90deg, rgb(var(--c-wuxia-gold)/0.1), transparent)',
-                                            boxShadow: 'inset 1px 0 0 rgb(var(--c-wuxia-gold)/0.3)',
-                                        } : undefined}
                                     >
-                                        {/* Active/Hover Glow */}
-                                        <div className={`absolute inset-0 bg-wuxia-gold/5 opacity-0 group-hover:opacity-100 rounded-none ${activeTab === item.id ? 'opacity-100' : ''}`} />
 
-                                        <span className={`${activeTab === item.id ? 'scale-110 rotate-3' : 'group-hover:scale-110'}`}>
+                                        <span className={`transition-all duration-300 ease-out ${activeTab === item.id ? 'scale-110 rotate-3 text-wuxia-gold' : 'group-hover:scale-110'}`}>
                                             <IconGlyph name={item.icon} className="w-5 h-5" strokeWidth={1.5} />
                                         </span>
 
-                                        <span className={`relative z-10 font-sans font-bold text-[13px] tracking-[0.1em] ${activeTab === item.id ? 'translate-x-1' : 'group-hover:translate-x-0.5 opacity-80 group-hover:opacity-100'}`}>
+                                        <span className={`relative z-10 font-sans font-bold text-[13px] tracking-[0.1em] transition-all duration-300 ease-out ${activeTab === item.id ? 'translate-x-3 text-wuxia-gold' : 'group-hover:translate-x-3 opacity-80 group-hover:opacity-100'}`}>
                                             {item.label}
                                         </span>
 
                                         {activeTab === item.id && (
-                                            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-none bg-wuxia-gold shadow-[0_0_10px_rgb(var(--c-wuxia-gold))]" />
+                                            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-wuxia-gold shadow-[0_0_10px_rgb(var(--c-wuxia-gold))]" />
                                         )}
                                     </button>
                                 ))}
@@ -160,9 +156,9 @@ const SettingsModal: React.FC<Props> = ({
                             <div className="p-6 mt-auto">
                                 <button
                                     onClick={onClose}
-                                    className="w-full py-3.5 px-4 bg-ink-black/40 border border-wuxia-gold/20 hover:border-wuxia-gold/50 text-wuxia-gold font-bold text-[11px] tracking-[0.3em] rounded-none flex items-center justify-center gap-2 group overflow-hidden relative"
+                                    className="w-full py-3.5 px-4 bg-ink-black/40 border border-wuxia-gold/20 hover:border-wuxia-gold/50 text-wuxia-gold font-bold text-[11px] tracking-[0.3em] rounded-2xl flex items-center justify-center gap-2 group overflow-hidden relative transition-all"
                                 >
-                                    <div className="absolute inset-0 bg-wuxia-gold/10 -translate-x-full group-hover:translate-x-0" />
+                                    <div className="absolute inset-0 bg-wuxia-gold/10 -translate-x-full group-hover:translate-x-0 transition-transform duration-300" />
                                     <span className="relative z-10 flex items-center gap-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                                         ĐÓNG CỬA SỔ
@@ -179,7 +175,7 @@ const SettingsModal: React.FC<Props> = ({
                                     <h2 className="text-lg text-wuxia-gold font-serif font-black tracking-[0.2em] flex items-center gap-2">
                                         <IconGlyph name="settings" className="w-5 h-5" /> CÀI ĐẶT
                                     </h2>
-                                    <button onClick={onClose} className="p-2 text-wuxia-gold bg-wuxia-gold/10 rounded-none">
+                                    <button onClick={onClose} className="p-2 text-wuxia-gold bg-wuxia-gold/10 rounded-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                                     </button>
                                 </div>
@@ -189,11 +185,11 @@ const SettingsModal: React.FC<Props> = ({
                                             <button
                                                 key={`m-${item.id}`}
                                                 onClick={() => onTabChange(item.id as any)}
-                                                className={`px-4 py-2 rounded-none text-[12px] whitespace-nowrap font-bold border ${activeTab === item.id
+                                                className={`px-4 py-2 rounded-2xl text-[12px] whitespace-nowrap font-bold border transition-all ${activeTab === item.id
                                                     ? 'bg-wuxia-gold text-ink-black border-wuxia-gold'
                                                     : 'text-paper-white/60 border-wuxia-gold/10 bg-paper-white/5'
                                                     }`}
-                                                style={activeTab === item.id ? { boxShadow: '0 4px 12px rgb(var(--c-wuxia-gold)/0.3)' } : undefined}
+                                                style={activeTab === item.id ? { boxShadow: '0 4px 15px rgb(var(--c-wuxia-gold)/0.4)' } : undefined}
                                             >
                                                 <span className="flex items-center gap-1.5">
                                                     <IconGlyph name={item.icon} className="w-4 h-4" /> {item.label}
@@ -225,6 +221,7 @@ const SettingsModal: React.FC<Props> = ({
                                     )}
                                     {activeTab === 'article_optimization' && <ArticleOptimizationSettings settings={apiConfig} onSave={onSaveApi} />}
                                     {activeTab === 'world_evolution' && <WorldEvolutionSettings settings={apiConfig} onSave={onSaveApi} />}
+                                    {activeTab === 'music' && <MusicSettings />}
 
                                 </div>
                             </div>
@@ -264,6 +261,7 @@ const SettingsModal: React.FC<Props> = ({
                                         )}
                                         {activeTab === 'article_optimization' && <ArticleOptimizationSettings settings={apiConfig} onSave={onSaveApi} />}
                                         {activeTab === 'world_evolution' && <WorldEvolutionSettings settings={apiConfig} onSave={onSaveApi} />}
+                                        {activeTab === 'music' && <MusicSettings />}
 
                                     </div>
 

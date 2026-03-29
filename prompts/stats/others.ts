@@ -12,7 +12,7 @@ export const StatOtherSettings: PromptStructure = {
 - Chi tiêu lớn trong khu vực có thể kích hoạt \`worldEvents\` (Ví dụ: Trở thành mục tiêu của cướp).
 
 ## 2. Liên kết Môi trường và Sinh tồn
-- Thời tiết khắc nghiệt (\`weather\`) làm tăng tốc độ tiêu hao \`hungerCurrent\` và \`thirstCurrent\`.
+- Thời tiết khắc nghiệt (\`weather\`) làm tăng tốc độ tiêu hao \`currentFullness\` và \`currentThirst\`.
 - Địa hình hiểm trở yêu cầu kiểm tra \`agility\` để tránh chấn thương bộ phận (\`status\`).
 
 ## 3. Liên kết Thế giới và Cốt truyện
@@ -27,12 +27,12 @@ export const StatOtherSettings: PromptStructure = {
 - Giới hạn các chỉ số cực đoan trong giai đoạn đầu game.
 - Các kỳ ngộ tăng mạnh thuộc tính phải đi kèm với rủi ro tử vong tương xứng.
 
-## 6. Ví dụ Lệnh (Hợp lệ)
+## 6. Ví dụ Mệnh lệnh (Hợp lệ)
 - \`{"action": "SET", "key": "gameState.Environment.temperature", "value": -10}\`
 - \`{"action": "ADD", "key": "gameState.NPCs.Master.favorability", "value": -5}\`
 
 </stat_interlink_protocol>
-`,
+    `.trim(),
     type: 'num',
     enabled: true
 };

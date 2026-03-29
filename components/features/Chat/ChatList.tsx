@@ -88,7 +88,7 @@ const ChatList: React.FC<Props> = ({
 
     return (
         <div
-            className="flex-1 overflow-y-auto px-4 md:px-12 py-6 space-y-8 scroll-smooth custom-scrollbar /20"
+            className="flex-1 overflow-y-auto px-4 md:px-12 py-6 space-y-8 scroll-smooth custom-scrollbar"
             ref={scrollRef}
         >
 

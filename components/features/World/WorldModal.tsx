@@ -13,7 +13,7 @@ type TabType = 'overview' | 'events' | 'npcs';
 
 // Premium Glass Card Component - Refactored for Square Glassmorphism
 const GlassCard: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = "" }) => (
-    <div className={`relative overflow-hidden rounded-none border border-wuxia-gold/20 bg-black/40 backdrop-blur-md shadow-2xl group ${className}`}>
+    <div className={`relative overflow-hidden rounded-3xl border border-wuxia-gold/20 bg-black/40 backdrop-blur-md shadow-2xl group ${className}`}>
         <div className="relative z-10">{children}</div>
     </div>
 );
@@ -58,7 +58,7 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                 <div className="absolute -bottom-1/4 -right-1/4 w-full h-1/2 bg-wuxia-gold/5 blur-[160px]"></div>
             </div>
 
-            <div className={`glass-panel w-full ${isMobile ? 'h-full' : 'max-w-6xl h-[85vh]'} flex flex-col shadow-[0_0_150px_rgba(0,0,0,1)] relative overflow-hidden rounded-none border-x-0 lg:border-x border-wuxia-gold/20`}>
+            <div className={`glass-panel w-full ${isMobile ? 'h-full' : 'max-w-6xl h-[85vh]'} flex flex-col shadow-[0_0_150px_rgba(0,0,0,1)] relative overflow-hidden rounded-3xl border-x-0 lg:border-x border-wuxia-gold/20`}>
                 {/* Wuxia Decorative Corners - Only on Desktop */}
                 {!isMobile && (
                     <>
@@ -72,7 +72,7 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                 {/* Header */}
                 <div className={`${isMobile ? 'h-auto py-4' : 'h-24'} shrink-0 border-b border-wuxia-gold/20 bg-ink-black/80 flex items-center justify-between px-6 lg:px-10 relative z-50 backdrop-blur-md`}>
                     <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-none border border-wuxia-gold/40 flex items-center justify-center bg-gradient-to-b from-wuxia-gold/20 to-transparent shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                        <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-2xl border border-wuxia-gold/40 flex items-center justify-center bg-gradient-to-b from-wuxia-gold/20 to-transparent shadow-[0_0_20px_rgba(212,175,55,0.2)]">
                             <span className="text-xl lg:text-2xl font-serif text-wuxia-gold drop-shadow-sm">武</span>
                         </div>
                         <div>
@@ -92,7 +92,7 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                         </div>
                         <button
                             onClick={onClose}
-                            className="group relative w-10 h-10 flex items-center justify-center rounded-none border border-wuxia-gold/20 bg-black/40 overflow-hidden shadow-lg active:scale-95 transition-transform"
+                            className="group relative w-10 h-10 flex items-center justify-center rounded-2xl border border-wuxia-gold/20 bg-black/40 overflow-hidden shadow-lg active:scale-95 transition-transform"
                         >
                             <div className="absolute inset-0 bg-wuxia-gold/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-wuxia-gold relative z-10 transition-transform group-hover:rotate-90">
@@ -137,14 +137,14 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id as TabType)}
-                                    className={`group relative px-6 py-5 rounded-none border text-left transition-all ${
+                                    className={`wuxia-list-item group relative px-6 py-5 mb-2 !rounded-2xl text-left transition-all ${
                                         activeTab === tab.id
-                                            ? 'bg-wuxia-gold/10 border-wuxia-gold/30 shadow-[inset_0_0_20px_rgba(212,175,55,0.1)]'
-                                            : 'bg-transparent border-transparent opacity-60 hover:opacity-100 hover:bg-white/5'
+                                            ? 'active'
+                                            : ''
                                     }`}
                                 >
                                     {activeTab === tab.id && (
-                                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-wuxia-gold shadow-[0_0_15px_rgba(212,175,55,0.5)]"></div>
+                                        <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-wuxia-gold rounded-full shadow-[0_0_15px_rgba(212,175,55,0.5)]"></div>
                                     )}
                                     <div className="relative z-10">
                                         <span className={`block font-serif font-bold tracking-[0.15em] text-xl ${
@@ -169,7 +169,7 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                             {activeTab === 'events' && (
                                 <div className="space-y-6 lg:space-y-8">
                                     <div className="flex items-center gap-3 border-b border-wuxia-gold/10 pb-4">
-                                        <div className="w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-none bg-wuxia-gold"></div>
+                                        <div className="w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full bg-wuxia-gold"></div>
                                         <h4 className="text-wuxia-gold/70 font-bold uppercase tracking-[0.2em] lg:tracking-[0.3em] text-[10px] lg:text-xs">Thiên hạ phong vân xuất ngã bối</h4>
                                     </div>
 
@@ -177,8 +177,8 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                         <div className={`relative space-y-6 lg:space-y-8 ${isMobile ? 'pl-4' : 'pl-8'} border-l border-dashed border-wuxia-gold/20 ml-2 lg:ml-4`}>
                                             {events.map((evt: any, idx: number) => (
                                                 <div key={evt.ID || idx} className="relative group">
-                                                    <div className={`absolute ${isMobile ? '-left-[21px] w-4 h-4' : '-left-[41px] w-6 h-6'} top-6 lg:top-8 rounded-none bg-black border border-wuxia-gold/40 flex items-center justify-center shadow-xl z-20`}>
-                                                        <div className="w-1/2 h-1/2 rounded-none bg-wuxia-gold shadow-[0_0_10px_rgba(212,175,55,0.8)]"></div>
+                                                    <div className={`absolute ${isMobile ? '-left-[21px] w-4 h-4' : '-left-[41px] w-6 h-6'} top-6 lg:top-8 rounded-full bg-black border border-wuxia-gold/40 flex items-center justify-center shadow-xl z-20`}>
+                                                        <div className="w-1/2 h-1/2 rounded-full bg-wuxia-gold shadow-[0_0_10px_rgba(212,175,55,0.8)]"></div>
                                                     </div>
 
                                                     <GlassCard className={`${isMobile ? 'p-4 lg:p-6' : 'p-8'}`}>
@@ -186,7 +186,7 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                                             <div className="space-y-2">
                                                                 <div className="flex flex-wrap items-center gap-2 lg:gap-4">
                                                                     <h4 className="text-wuxia-gold font-serif text-xl lg:text-3xl font-bold tracking-wide">{evt.title}</h4>
-                                                                    <span className="px-2 py-0.5 lg:px-3 lg:py-1 rounded-none bg-wuxia-gold/10 text-wuxia-gold text-[8px] lg:text-[10px] font-bold border border-wuxia-gold/20 uppercase tracking-wider">{evt.type}</span>
+                                                                    <span className="px-2 py-0.5 lg:px-3 lg:py-1 rounded-lg bg-wuxia-gold/10 text-wuxia-gold text-[8px] lg:text-[10px] font-bold border border-wuxia-gold/20 uppercase tracking-wider">{evt.type}</span>
                                                                 </div>
                                                                 <div className="flex items-center gap-2 text-wuxia-cyan/70 text-[9px] lg:text-[11px] font-mono tracking-widest uppercase">
                                                                     <svg className="w-3 h-3 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -194,14 +194,14 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                                                 </div>
                                                             </div>
                                                             <div className="flex lg:flex-col items-center lg:items-end gap-2 lg:gap-0 lg:text-right w-full lg:w-auto">
-                                                                <div className="px-2 py-1 lg:px-3 lg:py-1 rounded-none bg-black/50 border border-wuxia-gold/10 text-[8px] lg:text-[10px] text-gray-400 font-mono w-full lg:w-auto">
+                                                                <div className="px-2 py-1 lg:px-3 lg:py-1 rounded-lg bg-black/50 border border-wuxia-gold/10 text-[8px] lg:text-[10px] text-gray-400 font-mono w-full lg:w-auto">
                                                                     <div className="text-wuxia-gold/60">{evt.startTime}</div>
                                                                     <div className="opacity-40 italic">ETA: {evt.estimatedEndTime}</div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         
-                                                        <div className="bg-black/40 border-l-2 lg:border-l-4 border-wuxia-gold/60 p-4 lg:p-6 rounded-none relative overflow-hidden">
+                                                        <div className="bg-black/40 border-l-2 lg:border-l-4 border-wuxia-gold/60 p-4 lg:p-6 rounded-2xl relative overflow-hidden">
                                                             <p className="relative z-10 text-gray-300 text-sm lg:text-base leading-relaxed font-serif italic">
                                                                 "{evt.content || evt.description || evt.summary || 'Hành trình vạn dặm, khởi đầu từ đây...'}"
                                                             </p>
@@ -211,7 +211,7 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                                             <div className="flex items-center gap-2">
                                                                 <span className="relative flex h-2 w-2">
                                                                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                                                  <span className="relative inline-flex rounded-none h-2 w-2 bg-green-500"></span>
+                                                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                                                                 </span>
                                                                 <span className="text-[10px] text-green-500 font-bold uppercase tracking-[0.2em]">{evt.currentStatus}</span>
                                                             </div>
@@ -237,12 +237,12 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                             <div className="p-4 lg:p-5 flex-1 relative z-10">
                                                 <div className="flex gap-3 lg:gap-4 items-start mb-4">
                                                     <div className="relative shrink-0">
-                                                        <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-none border border-wuxia-gold/30 bg-black/40 overflow-hidden p-1">
+                                                        <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-xl border border-wuxia-gold/30 bg-black/40 overflow-hidden p-1">
                                                             <div className="w-full h-full bg-gradient-to-tr from-gray-900 to-gray-800 flex items-center justify-center text-xl lg:text-2xl font-serif text-wuxia-gold font-bold">
                                                                 {npc['Full Name']?.[0] || npc.name?.[0]}
                                                             </div>
                                                         </div>
-                                                        <div className="absolute -bottom-1 -right-1 lg:-bottom-2 lg:-right-2 bg-wuxia-gold text-black text-[7px] lg:text-[9px] font-black px-1.5 py-0.5 rounded-none shadow-lg uppercase">
+                                                        <div className="absolute -bottom-1 -right-1 lg:-bottom-2 lg:-right-2 bg-wuxia-gold text-black text-[7px] lg:text-[9px] font-black px-1.5 py-0.5 rounded-lg shadow-lg uppercase">
                                                             {npc['Kingdom'] || 'Giang Hồ'}
                                                         </div>
                                                     </div>
@@ -253,7 +253,7 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                                                 <h4 className="text-gray-100 font-serif text-base lg:text-xl font-bold tracking-wide group-hover/npc:text-wuxia-gold truncate">{npc.name || npc['Full Name']}</h4>
                                                                 <div className="text-wuxia-gold/70 text-[8px] lg:text-[10px] font-bold uppercase tracking-widest mt-0.5 truncate">{npc.title}</div>
                                                             </div>
-                                                            <div className="px-1.5 py-0.5 rounded-none border border-wuxia-cyan/30 text-wuxia-cyan text-[8px] lg:text-[10px] font-bold bg-wuxia-cyan/10 shrink-0">
+                                                            <div className="px-2 py-0.5 rounded-xl border border-wuxia-cyan/30 text-wuxia-cyan text-[8px] lg:text-[10px] font-bold bg-wuxia-cyan/10 shrink-0">
                                                                 {npc['Realm']}
                                                             </div>
                                                         </div>
@@ -272,7 +272,7 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                                         </div>
                                                     </div>
 
-                                                    <div className="bg-black/30 rounded-none p-3 border border-white/5 group-hover/npc:bg-black/50 transition-colors">
+                                                    <div className="bg-black/30 rounded-2xl p-3 border border-white/5 group-hover/npc:bg-black/50 transition-colors">
                                                         <p className="text-gray-400 text-[11px] lg:text-xs leading-relaxed italic line-clamp-2">
                                                             {npc.currentActionDescription || npc.description || npc.status || 'Đang bận bịu với thế giới riêng...'}
                                                         </p>
@@ -308,7 +308,7 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                             { label: 'Kiến Trúc Đã Mở', val: `${visitedNodes.length} / ${allNodes.length}`, color: 'text-wuxia-gold' },
                                             { label: 'Khu Vực Đã Mở', val: `${unlockedRegions.size} / 30`, color: 'text-gray-200' },
                                         ].map((stat, i) => (
-                                            <div key={i} className="bg-white/5 border border-white/10 p-4 lg:p-5 rounded-none backdrop-blur-sm relative group overflow-hidden">
+                                            <div key={i} className="bg-white/5 border border-white/10 p-4 lg:p-5 rounded-3xl backdrop-blur-sm relative group overflow-hidden">
                                                 <div className="text-[8px] lg:text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em] mb-1 lg:mb-2">{stat.label}</div>
                                                 <div className={`text-xl lg:text-3xl font-serif font-black ${stat.color}`}>{stat.val}</div>
                                             </div>
@@ -325,12 +325,12 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                         <div className="relative space-y-8 lg:space-y-10 pl-6 lg:pl-10 border-l border-wuxia-gold/10 ml-2 lg:ml-5 py-5">
                                             {Array.isArray(world.worldHistory) && world.worldHistory.length > 0 ? world.worldHistory.map((hist: any, i: number) => (
                                                 <div key={i} className="relative group">
-                                                    <div className={`absolute ${isMobile ? '-left-[27px] w-3 h-3' : '-left-[48px] w-4 h-4'} top-1.5 rounded-none bg-black border border-wuxia-gold/20 flex items-center justify-center p-0.5 group-hover:border-wuxia-gold transition-colors`}>
-                                                        <div className="w-full h-full rounded-none bg-gray-700 group-hover:bg-wuxia-gold"></div>
+                                                    <div className={`absolute ${isMobile ? '-left-[27px] w-3 h-3' : '-left-[48px] w-4 h-4'} top-1.5 rounded-lg bg-black border border-wuxia-gold/20 flex items-center justify-center p-0.5 group-hover:border-wuxia-gold transition-colors`}>
+                                                        <div className="w-full h-full rounded-lg bg-gray-700 group-hover:bg-wuxia-gold"></div>
                                                     </div>
                                                     
                                                     <div className="space-y-2">
-                                                        <div className="inline-block px-2 py-0.5 rounded-none bg-wuxia-gold/10 text-wuxia-gold font-mono text-[8px] lg:text-[10px] font-bold border border-wuxia-gold/20">
+                                                        <div className="inline-block px-2 py-0.5 rounded-2xl bg-wuxia-gold/10 text-wuxia-gold font-mono text-[8px] lg:text-[10px] font-bold border border-wuxia-gold/20">
                                                             Năm {hist.startTime?.split(':')[0] || '??'}
                                                         </div>
                                                         <h4 className="text-gray-200 font-serif font-bold text-base lg:text-xl group-hover:text-wuxia-gold transition-colors">{hist.title}</h4>

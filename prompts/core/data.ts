@@ -51,7 +51,7 @@ export const coreDataFormat: PromptStructure = {
 - \`time\`: \`YYYY:MM:DD:HH:MM\`
 - \`gameDays\`: Number (Total days passed)
 - \`majorLocation\`, \`mediumLocation\`, \`minorLocation\`, \`specificLocation\`
-- \`x\`, \`y\`: Number (Global Coordinates 0-1000)
+- \`x\`, \`y\`: Number (Global Coordinates 0-3000)
 - \`biomeId\`, \`regionId\`: String (Permanent identifiers)
 - \`weather\`: { \`type\`, \`description\`, \`endDate\` }
 - \`karma\`: Number (World karma value)
@@ -61,8 +61,8 @@ export const coreDataFormat: PromptStructure = {
               type: "Thành trì" | "Tông môn" | "Bí cảnh" | "Thôn trang" | "Di tích" | "Hang động" | "Rừng rậm",
               faction: string,
               description: string,
-              x: number (0-1000),
-              y: number (0-1000),
+              x: number (0-3000),
+              y: number (0-3000),
               possibleOrigins: string[], // Danh sách các xuất thân tiềm năng tại đây
               typicalPersonalities: string[] // Các loại tính cách đặc trưng của nhân vật tại đây
             }
