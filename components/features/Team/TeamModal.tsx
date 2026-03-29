@@ -50,9 +50,9 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
     );
 
     return (
-        <div className="fixed inset-0 bg-black/85 backdrop-blur-2xl z-[200] flex items-center justify-center p-4 md:p-8">
+        <div className="fixed inset-0 bg-black/95 md:bg-black/85 backdrop-blur-2xl z-[200] flex items-center justify-center p-2 md:p-8">
             {/* Main fellowship scroll container */}
-            <div className="w-full max-w-4xl h-[80vh] flex flex-col relative overflow-hidden glass-panel border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.8)] rounded-none">
+            <div className="w-full max-w-4xl h-[95vh] md:h-[80vh] flex flex-col relative overflow-hidden glass-panel border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.8)] rounded-none">
                 {/* Wuxia Decorative Corners */}
                 <div className="wuxia-corner wuxia-corner-tl"></div>
                 <div className="wuxia-corner wuxia-corner-tr"></div>
@@ -63,20 +63,20 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                 <div className="absolute inset-0 bg-ink-wash opacity-10 mix-blend-overlay pointer-events-none"></div>
                 
                 {/* --- HEADER --- */}
-                <div className="h-24 shrink-0 border-b border-wuxia-gold/10 bg-black/60 flex items-center justify-between px-10 relative z-50">
-                    <div className="flex items-center gap-8">
+                <div className="h-20 md:h-24 shrink-0 border-b border-wuxia-gold/10 bg-black/60 flex items-center justify-between px-4 md:px-10 relative z-50">
+                    <div className="flex items-center gap-4 md:gap-8">
                         <div className="flex flex-col">
-                            <h3 className="text-wuxia-gold font-serif font-black text-3xl tracking-[0.4em] drop-shadow-2xl uppercase">
+                            <h3 className="text-wuxia-gold font-serif font-black text-xl md:text-3xl tracking-[0.2em] md:tracking-[0.4em] drop-shadow-2xl uppercase">
                                 ĐỒNG HÀNH LUÂN
                             </h3>
-                            <div className="flex items-center gap-4 mt-1">
-                                <span className="text-[10px] text-paper-white/30 uppercase tracking-[0.5em] font-bold">Hành trình vạn dặm có nhau</span>
-                                <div className="h-[1px] w-12 bg-wuxia-gold/20 rounded-full" />
+                            <div className="flex items-center gap-2 md:gap-4 mt-1">
+                                <span className="text-[8px] md:text-[10px] text-paper-white/30 uppercase tracking-[0.3em] md:tracking-[0.5em] font-bold">Hành trình vạn dặm có nhau</span>
+                                <div className="hidden sm:block h-[1px] w-8 md:w-12 bg-wuxia-gold/20 rounded-full" />
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-8">
+                    <div className="flex items-center gap-4 md:gap-8">
                         {/* Player Preview */}
                         <div className="hidden lg:flex items-center gap-4 bg-white/5 border border-white/10 px-6 py-3 rounded-none backdrop-blur-md">
                             <div className="flex flex-col items-end">
@@ -87,9 +87,9 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
 
                         <button 
                             onClick={onClose}
-                            className="w-12 h-12 flex items-center justify-center rounded-none bg-wuxia-red/10 border border-wuxia-red/20 text-wuxia-red hover:bg-wuxia-red hover:text-white transition-all duration-500 shadow-xl"
+                            className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-none bg-wuxia-red/10 border border-wuxia-red/20 text-wuxia-red hover:bg-wuxia-red hover:text-white transition-all duration-500 shadow-xl"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-6 h-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
@@ -97,16 +97,16 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                 </div>
 
                 {/* --- MAIN CONTENT --- */}
-                <div className="flex-1 overflow-y-auto no-scrollbar p-10 relative z-10">
+                <div className="flex-1 overflow-y-auto no-scrollbar p-6 md:p-10 relative z-10">
                     
-                    <div className="flex items-center gap-4 mb-10">
-                        <div className="w-2 h-2 rounded-full bg-wuxia-gold shadow-[0_0_10px_rgba(230,200,110,1)]"></div>
-                        <h4 className="text-[11px] text-paper-white/40 font-black uppercase tracking-[0.5em]">Đội ngũ hiện tại ({activeTeammates.length})</h4>
+                    <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-10">
+                        <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-wuxia-gold shadow-[0_0_10px_rgba(230,200,110,1)]"></div>
+                        <h4 className="text-[9px] md:text-[11px] text-paper-white/40 font-black uppercase tracking-[0.3em] md:tracking-[0.5em]">Đội ngũ hiện tại ({activeTeammates.length})</h4>
                         <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent"></div>
                     </div>
 
                     {activeTeammates.length > 0 ? (
-                        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-10">
                             {activeTeammates.map(npc => {
                                 const hpCur = getSafeVal(npc, ['Current HP', 'currentHp']);
                                 const hpMax = getSafeVal(npc, ['Max HP', 'maxHp']) || 1;
@@ -119,7 +119,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                                 const name = getName(npc);
 
                                 return (
-                                    <div key={npc.id} className="group relative bg-black/40 border border-white/5 rounded-none p-8 hover:border-wuxia-gold/30 hover:bg-black/60 transition-all duration-700 shadow-2xl overflow-hidden">
+                                    <div key={npc.id} className="group relative bg-black/40 border border-white/5 rounded-none p-6 md:p-8 hover:border-wuxia-gold/30 hover:bg-black/60 transition-all duration-700 shadow-2xl overflow-hidden">
                                         {/* Liquid Edge Decor */}
                                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-wuxia-gold/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                         
@@ -134,7 +134,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                                                 {name[0]}
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <h5 className="text-2xl font-black font-serif text-paper-white group-hover:text-wuxia-gold transition-colors tracking-tight truncate">{name}</h5>
+                                                <h5 className="text-xl md:text-2xl font-black font-serif text-paper-white group-hover:text-wuxia-gold transition-colors tracking-tight truncate">{name}</h5>
                                                 <div className="flex items-center gap-2 mt-2">
                                                     <span className="text-[10px] text-paper-white/40 font-bold uppercase tracking-widest">{getIdentity(npc)}</span>
                                                     <span className="w-1 h-1 rounded-none bg-white/20"></span>
@@ -212,25 +212,25 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                             })}
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-40 border-2 border-dashed border-white/5 rounded-none bg-white/[0.01]">
-                            <div className="w-24 h-24 rounded-none border border-wuxia-gold/20 flex items-center justify-center text-4xl grayscale opacity-20 mb-8 text-wuxia-gold/40">
-                                <IconGlyph name="team" className="w-12 h-12" />
+                        <div className="flex flex-col items-center justify-center py-20 md:py-40 border-2 border-dashed border-white/5 rounded-none bg-white/[0.01]">
+                            <div className="w-16 h-16 md:w-24 md:h-24 rounded-none border border-wuxia-gold/20 flex items-center justify-center text-3xl md:text-4xl grayscale opacity-20 mb-6 md:mb-8 text-wuxia-gold/40">
+                                <IconGlyph name="team" className="w-8 h-8 md:w-12 md:h-12" />
                             </div>
-                            <h4 className="text-3xl font-serif font-black text-paper-white/10 tracking-[0.6em] uppercase">Độc Hành Giang Hồ</h4>
-                            <p className="text-[11px] text-paper-white/20 uppercase tracking-[0.3em] font-bold mt-4 italic">Huynh đệ bốn bể, chưa gặp tri kỷ</p>
+                            <h4 className="text-xl md:text-3xl font-serif font-black text-paper-white/10 tracking-[0.2em] md:tracking-[0.6em] uppercase text-center px-4">Độc Hành Giang Hồ</h4>
+                            <p className="text-[9px] md:text-[11px] text-paper-white/20 uppercase tracking-[0.2em] md:tracking-[0.3em] font-bold mt-3 md:mt-4 italic text-center px-6">Huynh đệ bốn bể, chưa gặp tri kỷ</p>
                         </div>
                     )}
                 </div>
 
                 {/* --- FOOTER DECO --- */}
-                <div className="h-6 bg-black/80 border-t border-wuxia-gold/5 flex items-center justify-center gap-10 relative z-[100]">
-                    <div className="w-1/4 h-[1px] bg-gradient-to-r from-transparent via-wuxia-gold/10 to-transparent"></div>
-                    <div className="flex items-center gap-4">
+                <div className="h-6 shrink-0 bg-black/80 border-t border-wuxia-gold/5 flex items-center justify-center gap-4 md:gap-10 relative z-[100]">
+                    <div className="w-1/6 md:w-1/4 h-[1px] bg-gradient-to-r from-transparent via-wuxia-gold/10 to-transparent"></div>
+                    <div className="flex items-center gap-2 md:gap-4">
                         <div className="w-1.5 h-1.5 border border-wuxia-gold/30 rotate-45"></div>
-                        <span className="text-[8px] text-paper-white/10 uppercase tracking-[0.8em] font-black">Wuxia Fellowship Matrix</span>
+                        <span className="text-[7px] md:text-[8px] text-paper-white/10 uppercase tracking-[0.4em] md:tracking-[0.8em] font-black whitespace-nowrap">Wuxia Fellowship Matrix</span>
                         <div className="w-1.5 h-1.5 border border-wuxia-gold/30 rotate-45"></div>
                     </div>
-                    <div className="w-1/4 h-[1px] bg-gradient-to-l from-transparent via-wuxia-gold/10 to-transparent"></div>
+                    <div className="w-1/6 md:w-1/4 h-[1px] bg-gradient-to-l from-transparent via-wuxia-gold/10 to-transparent"></div>
                 </div>
             </div>
         </div>

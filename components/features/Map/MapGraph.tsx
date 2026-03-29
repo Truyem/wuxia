@@ -207,7 +207,7 @@ export const MapGraph: React.FC<MapGraphProps> = ({
     >
       <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/parchment.png')]"></div>
       
-      <div className="absolute top-6 md:top-10 left-6 md:left-10 z-20 pointer-events-none">
+      <div className="absolute top-16 md:top-10 left-6 md:left-10 z-20 pointer-events-none">
         <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}

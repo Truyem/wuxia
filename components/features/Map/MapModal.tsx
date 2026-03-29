@@ -17,6 +17,7 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
   const [activeTab, setActiveTab] = useState<'fixed' | 'dynamic'>('fixed');
   const [focalNodeName, setFocalNodeName] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isListOpen, setIsListOpen] = useState(false);
 
   const currentTimeMinutes = env?.gameDays ? (env.gameDays * 24 * 60 + env?.Hour * 60 + env?.Minute) : 0;
 
@@ -80,20 +81,61 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
 
           {/* Main Map Content Area */}
           <div className="w-full h-full max-w-7xl max-h-screen md:max-h-[90vh] relative bg-[#0a0a0a] rounded-none md:rounded-2xl border border-white/5 shadow-2xl overflow-hidden flex flex-col md:flex-row">
-              {/* Left Sidebar */}
-              <div className="w-full md:w-72 h-48 md:h-full border-b md:border-b-0 md:border-r border-white/5 bg-black/60 backdrop-blur-md flex flex-col relative z-30 flex-shrink-0">
-                  <div className="p-4 border-b border-white/5">
-                      <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-wuxia-gold font-bold tracking-widest uppercase text-sm">Danh sách Địa danh</h2>
-                        {searchQuery && (
-                          <button 
-                            onClick={() => setSearchQuery('')}
-                            className="text-[10px] text-white/30 hover:text-white transition-colors uppercase tracking-widest"
-                          >
-                            Clear
-                          </button>
-                        )}
-                      </div>
+              
+              {/* Location List Toggle Button (Mobile Only) */}
+              <div className="absolute top-4 left-4 z-[1001] md:hidden">
+                <button 
+                  onClick={() => setIsListOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-black/80 backdrop-blur-md border border-wuxia-gold/30 rounded-full text-wuxia-gold shadow-lg active:scale-95 transition-transform"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                  <span className="text-[10px] font-bold uppercase tracking-widest">Địa danh</span>
+                </button>
+              </div>
+
+              {/* Left Sidebar / Mobile Popup */}
+              <AnimatePresence>
+                {(isListOpen || typeof window !== 'undefined' && window.innerWidth >= 768) && (
+                  <motion.div 
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className={`
+                      ${isListOpen ? 'fixed inset-0 z-[2000] p-4 flex items-center justify-center bg-black/40 backdrop-blur-sm' : 'hidden md:flex relative'} 
+                      w-full md:w-72 h-full border-r border-white/5 flex-shrink-0
+                    `}
+                    onClick={(e) => {
+                      if (e.target === e.currentTarget && isListOpen) setIsListOpen(false);
+                    }}
+                  >
+                    <div className={`
+                      bg-black/90 md:bg-black/60 backdrop-blur-md flex flex-col w-full h-full md:h-full 
+                      ${isListOpen ? 'max-w-xs max-h-[80vh] rounded-2xl border border-wuxia-gold/30 shadow-2xl overflow-hidden' : ''}
+                    `}>
+                      <div className="p-4 border-b border-white/5 flex flex-col gap-4">
+                          <div className="flex justify-between items-center">
+                            <h2 className="text-wuxia-gold font-bold tracking-widest uppercase text-sm">Danh sách Địa danh</h2>
+                            <div className="flex items-center gap-3">
+                              {searchQuery && (
+                                <button 
+                                  onClick={() => setSearchQuery('')}
+                                  className="text-[10px] text-white/30 hover:text-white transition-colors uppercase tracking-widest"
+                                >
+                                  Clear
+                                </button>
+                              )}
+                              {isListOpen && (
+                                <button 
+                                  onClick={() => setIsListOpen(false)}
+                                  className="text-wuxia-gold/60 text-lg md:hidden"
+                                >
+                                  ×
+                                </button>
+                              )}
+                            </div>
+                          </div>
 
                       {/* Search Bar */}
                       <div className="relative mb-4">
@@ -126,7 +168,7 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
                   <div className="flex-1 overflow-y-auto wuxia-scrollbar p-2">
                       {activeTab === 'fixed' && (
                           <div className="flex flex-col gap-4">
-                              {Object.entries(groupedFixedNodes).map(([region, nodes]) => (
+                              {(Object.entries(groupedFixedNodes) as [string, MapNode[]][]).map(([region, nodes]) => (
                                   <div key={region} className="px-2">
                                       <div className="text-[9px] text-white/30 tracking-[0.2em] uppercase mb-2 flex items-center gap-2">
                                           <div className="h-px flex-1 bg-white/5"></div>
@@ -137,7 +179,10 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
                                           {nodes.map(n => (
                                               <button
                                                 key={n.id}
-                                                onClick={() => setFocalNodeName(n.name)}
+                                                onClick={() => {
+                                                  setFocalNodeName(n.name);
+                                                  if (isListOpen) setIsListOpen(false);
+                                                }}
                                                 className={`text-left px-3 py-2 rounded text-xs transition-colors group flex items-center justify-between ${focalNodeName === n.name || currentLocation === n.name ? 'bg-wuxia-gold/20 text-wuxia-gold' : 'hover:bg-white/5 text-white/70'}`}
                                               >
                                                 <span>{n.name}</span>
@@ -162,7 +207,10 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
                                       return (
                                           <button
                                             key={n.id}
-                                            onClick={() => setFocalNodeName(n.name)}
+                                            onClick={() => {
+                                              setFocalNodeName(n.name);
+                                              if (isListOpen) setIsListOpen(false);
+                                            }}
                                             className="text-left p-3 rounded bg-white/5 border border-white/5 hover:border-wuxia-gold/50 transition-all group relative overflow-hidden"
                                           >
                                               <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-white/10 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -178,7 +226,10 @@ export const MapModal: React.FC<MapModalProps> = ({ onClose, onUpdateEnv, env, w
                           </div>
                       )}
                   </div>
-              </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
               {/* Right Side: Map Graph + Legend */}
               <div className="flex-1 flex flex-col relative bg-[#0a0a0a] min-w-0">
