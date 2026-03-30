@@ -746,6 +746,7 @@ const standardizedLogSender = (senderRaw: string): string => {
     if (!sender) return 'Narrator';
     return sender;
 };
+const LEGACY_BRACKETED_LOG_PATTERN = /^【\s*([^】]+?)\s*】\s*(.*)$/;
 
 const parsingBodyLog = (body: string): Array<{ sender: string; text: string }> => {
     if (!body || !body.trim()) return [];
@@ -757,7 +758,7 @@ const parsingBodyLog = (body: string): Array<{ sender: string; text: string }> =
         const line = rawLine.trim();
         if (!line) continue;
 
-        const match = line.match(/^【\s*([^】]+?)\s*】\s*(.*)$/);
+        const match = line.match(LEGACY_BRACKETED_LOG_PATTERN);
         if (match) {
             const sender = standardizedLogSender(match[1]);
             const text = (match[2] || '').trim();
@@ -1104,7 +1105,7 @@ const normalizationJsonStructureResponse = (raw: any): GameResponse => {
         .map((item: any) => {
             if (typeof item === 'string') {
                 const trimmed = item.trim();
-                const prefixed = trimmed.match(/^【\s*([^】]+?)\s*】\s*(.*)$/);
+                const prefixed = trimmed.match(LEGACY_BRACKETED_LOG_PATTERN);
                 if (prefixed) {
                     return {
                         sender: standardizedLogSender(prefixed[1]),
@@ -1115,7 +1116,7 @@ const normalizationJsonStructureResponse = (raw: any): GameResponse => {
             }
             if (item && typeof item === 'object') {
                 const rawText = typeof item.text === 'string' ? item.text : String(item.text ?? '');
-                const prefixed = rawText.trim().match(/^【\s*([^】]+?)\s*】\s*(.*)$/);
+                const prefixed = rawText.trim().match(LEGACY_BRACKETED_LOG_PATTERN);
                 return {
                     sender: standardizedLogSender(
                         prefixed?.[1] || (typeof item.sender === 'string' ? item.sender : 'Narrator')
