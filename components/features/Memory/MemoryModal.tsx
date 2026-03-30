@@ -12,6 +12,8 @@ interface Props {
 
 type TabType = 'context' | 'short' | 'medium' | 'long';
 const INSTANT_SHORT_TERM_SEPARATOR = '\n<<SHORT_TERM_SYNC>>\n';
+const THEME_CYAN = 'rgba(var(--c-wuxia-cyan), 1)';
+const THEME_CYAN_GLOW = 'rgba(var(--c-wuxia-cyan), 0.5)';
 
 const parseRealTimeMemory = (raw: string) => {
     const text = (raw || '').trim();
@@ -66,8 +68,6 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
         medium: 'bg-purple-500/40 group-hover:bg-purple-400/70',
         long: 'bg-blue-500/30 group-hover:bg-blue-400/60',
     };
-    const themeLinkColor = 'rgb(var(--c-wuxia-cyan))';
-    const themeLinkGlow = 'rgba(var(--c-wuxia-cyan), 0.5)';
 
     return (
         <div className="fixed inset-0 bg-black/95 backdrop-blur-3xl z-[200] flex items-center justify-center p-4 md:p-8 animate-fadeIn font-sans">
@@ -194,11 +194,11 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
                     <div className="flex items-center gap-2">
                         <span
                             className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: themeLinkColor, boxShadow: `0 0 8px ${themeLinkGlow}` }}
+                            style={{ backgroundColor: THEME_CYAN, boxShadow: `0 0 8px ${THEME_CYAN_GLOW}` }}
                         />
                         <span
                             className="font-bold"
-                            style={{ color: themeLinkColor, textShadow: `0 0 8px ${themeLinkGlow}` }}
+                            style={{ color: THEME_CYAN, textShadow: `0 0 8px ${THEME_CYAN_GLOW}` }}
                         >
                             LIÊN KẾT ỔN ĐỊNH
                         </span>

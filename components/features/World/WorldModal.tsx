@@ -10,6 +10,8 @@ interface Props {
 }
 
 type TabType = 'overview' | 'events' | 'npcs';
+const THEME_STATUS_COLOR = 'rgba(var(--c-wuxia-cyan), 1)';
+const THEME_STATUS_GLOW = 'rgba(var(--c-wuxia-cyan), 0.45)';
 
 // Premium Glass Card Component - Refactored for Square Glassmorphism
 const GlassCard: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = "" }) => (
@@ -21,8 +23,6 @@ const GlassCard: React.FC<{ children: React.ReactNode; className?: string }> = (
 const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
     const [activeTab, setActiveTab] = useState<TabType>('events');
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 1024 : false);
-    const themeAccentColor = 'rgb(var(--c-wuxia-cyan))';
-    const themeAccentGlow = 'rgba(var(--c-wuxia-cyan), 0.45)';
 
     React.useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 1024);
@@ -209,21 +209,21 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                                         </p>
                                                     </div>
 
-                                                    <div className="mt-4 flex items-center justify-between">
+                                                        <div className="mt-4 flex items-center justify-between">
                                                         <div className="flex items-center gap-2">
                                                             <span className="relative flex h-2 w-2">
                                                               <span
                                                                 className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-                                                                style={{ backgroundColor: themeAccentColor }}
+                                                                style={{ backgroundColor: THEME_STATUS_COLOR }}
                                                               ></span>
                                                               <span
                                                                 className="relative inline-flex rounded-full h-2 w-2"
-                                                                style={{ backgroundColor: themeAccentColor, boxShadow: `0 0 6px ${themeAccentGlow}` }}
+                                                                style={{ backgroundColor: THEME_STATUS_COLOR, boxShadow: `0 0 6px ${THEME_STATUS_GLOW}` }}
                                                               ></span>
                                                             </span>
                                                             <span
                                                                 className="text-[10px] font-bold uppercase tracking-[0.2em]"
-                                                                style={{ color: themeAccentColor, textShadow: `0 0 8px ${themeAccentGlow}` }}
+                                                                style={{ color: THEME_STATUS_COLOR, textShadow: `0 0 8px ${THEME_STATUS_GLOW}` }}
                                                             >
                                                                 {evt.currentStatus}
                                                             </span>
