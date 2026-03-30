@@ -166,7 +166,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                                                 </div>
                                                 <div className="h-1.5 w-full bg-black/60 rounded-full overflow-hidden border border-white/5">
                                                     <div 
-                                                        className="h-full bg-gradient-to-r from-wuxia-gold/50 to-wuxia-gold shadow-[0_0_8px_rgba(68,170,170,0.4)] transition-all duration-1000"
+                                                        className="h-full bg-gradient-to-r from-wuxia-gold/50 to-wuxia-gold shadow-[0_0_8px_rgba(217,184,106,0.4)] transition-all duration-1000"
                                                         style={{ width: `${spPct}%` }}
                                                     ></div>
                                                 </div>
@@ -238,5 +238,4 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
 };
 
 export default TeamModal;
-
 

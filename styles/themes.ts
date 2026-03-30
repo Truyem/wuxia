@@ -32,6 +32,7 @@ function generateThemeVars(colors: string[]): Record<string, string> {
     const bg1 = colors[0] || '#050505';
     const bg2 = colors[1] || '#1A1A1A';
     const accent1 = colors[2] || '#E6C86E';
+    // Single warm accent across the UI to keep theme accents consistent.
     const isLightBg = getLuminance(bg1) > 0.5;
     return {
         '--c-ink-black': hexToRgbStr(bg1),
