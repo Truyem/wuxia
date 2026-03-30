@@ -3,8 +3,10 @@
 :root {
   /* Wuxia Chronicle Master Palette */
   --c-ink-black: 8 12 22;
+  --c-ink-black-rgb: 8, 12, 22;
   --c-ink-gray: 20 28 44;
   --c-wuxia-gold: 217 184 106;
+  --c-wuxia-gold-rgb: 217, 184, 106;
   --c-wuxia-gold-dark: 138 106 47;
   --c-wuxia-red: 222 94 94;
   --c-wuxia-cyan: 122 236 255;
@@ -26,6 +28,10 @@
   --space-md: 1rem;
   --space-lg: 1.5rem;
   --space-xl: 2rem;
+
+  /* Accents */
+  --status-glow-blur: 8px;
+  --status-glow-opacity: 0.5;
 }
 
 body {
@@ -159,11 +165,11 @@ h1, h2, h3, h4, .font-wuxia {
 .text-wuxia-cyan { color: rgb(var(--c-wuxia-cyan)); }
 .status-accent-dot {
   background-color: rgb(var(--c-wuxia-gold));
-  box-shadow: 0 0 8px rgba(var(--c-wuxia-gold-rgb), 0.5);
+  box-shadow: 0 0 var(--status-glow-blur) rgba(var(--c-wuxia-gold-rgb), var(--status-glow-opacity));
 }
 .status-accent-text {
   color: rgb(var(--c-wuxia-gold));
-  text-shadow: 0 0 8px rgba(var(--c-wuxia-gold-rgb), 0.5);
+  text-shadow: 0 0 var(--status-glow-blur) rgba(var(--c-wuxia-gold-rgb), var(--status-glow-opacity));
 }
 .status-accent-ping {
   background-color: rgb(var(--c-wuxia-gold));
