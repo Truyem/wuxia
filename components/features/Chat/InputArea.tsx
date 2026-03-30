@@ -314,7 +314,7 @@ const InputArea: React.FC<Props> = ({
                         </div>
 
                         {recallProgress && (
-                            <div className="text-[11px] text-wuxia-cyan/90 font-medium animate-in fade-in slide-in-from-top-1">
+                            <div className="text-[11px] text-wuxia-gold/90 font-medium animate-in fade-in slide-in-from-top-1">
                                 <span className="mr-2">◈</span>
                                 {recallProgress.phase === 'start' && 'Bắt đầu truy xuất ký ức...'}
                                 {recallProgress.phase === 'stream' && 'Đang đồng bộ hóa dòng thời gian...'}
@@ -395,7 +395,7 @@ const InputArea: React.FC<Props> = ({
                     <div className={`grid grid-cols-3 gap-1.5 ${normalizedOptions.length > 0 ? 'pt-1' : ''}`}>
                         {[
                             { text: 'Tiếp tục diễn biến', icon: '▶', color: 'border-wuxia-gold/20 hover:border-wuxia-gold/50' },
-                            { text: 'Chuyển cảnh nhanh', icon: '⟳', color: 'border-wuxia-cyan/20 hover:border-wuxia-cyan/50' },
+                            { text: 'Chuyển cảnh nhanh', icon: '⟳', color: 'border-wuxia-gold/20 hover:border-wuxia-gold/50' },
                             { text: 'Hành động bất ngờ', icon: '✦', color: 'border-wuxia-red/20 hover:border-wuxia-red/50' }
                         ].map((btn, i) => (
                              <button
@@ -463,7 +463,7 @@ const InputArea: React.FC<Props> = ({
                     {/* Stream Toggle */}
                     <button
                         onClick={() => setIsStreaming(!isStreaming)}
-                        className={`w-10 h-full rounded-lg flex items-center justify-center transition-all ${isStreaming ? 'text-wuxia-cyan bg-wuxia-cyan/10' : 'text-gray-600 hover:text-gray-400 opacity-50 cursor-not-allowed'}`}
+                        className={`w-10 h-full rounded-lg flex items-center justify-center transition-all ${isStreaming ? 'text-wuxia-gold bg-wuxia-gold/10' : 'text-gray-600 hover:text-gray-400 opacity-50 cursor-not-allowed'}`}
                         title="Đã tắt phát trực tiếp (Tạm khóa)"
                         disabled={true}
                     >

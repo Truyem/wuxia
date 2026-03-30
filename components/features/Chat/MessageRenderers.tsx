@@ -49,38 +49,38 @@ export const InnerThoughtRenderer: React.FC<{ text: string; speaker?: string }> 
             className="relative rounded-xl overflow-hidden"
             style={{
                 background: 'linear-gradient(135deg, rgba(15,20,30,0.75) 0%, rgba(10,35,40,0.65) 50%, rgba(15,20,30,0.75) 100%)',
-                border: '1px dashed rgba(68,170,170,0.45)',
+                border: '1px dashed rgba(217,184,106,0.45)',
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(68,170,170,0.1)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(217,184,106,0.1)',
             }}
         >
             {/* Top shimmer line */}
-            <div className="absolute top-0 left-0 right-0 h-[1px]" style={{background:'linear-gradient(to right, transparent, rgba(68,170,170,0.5), transparent)'}} />
+            <div className="absolute top-0 left-0 right-0 h-[1px]" style={{background:'linear-gradient(to right, transparent, rgba(217,184,106,0.5), transparent)'}} />
 
             {/* Watermark 心 */}
-            <div className="absolute -right-2 -bottom-4 text-[90px] font-serif text-wuxia-cyan select-none pointer-events-none" style={{opacity:0.04, lineHeight:1}}>心</div>
+            <div className="absolute -right-2 -bottom-4 text-[90px] font-serif text-wuxia-gold select-none pointer-events-none" style={{opacity:0.04, lineHeight:1}}>心</div>
 
             {/* Header Row */}
             <div className="flex items-center gap-2.5 px-4 pt-3 pb-0">
                 {/* Icon */}
-                <div className="w-5 h-5 shrink-0 text-wuxia-cyan/70">
+                <div className="w-5 h-5 shrink-0 text-wuxia-gold/70">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                 </div>
-                <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-wuxia-cyan/60">Nội tâm</span>
+                <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-wuxia-gold/60">Nội tâm</span>
                 {speaker && (
                     <>
-                        <div className="w-px h-3 bg-wuxia-cyan/20 mx-0.5" />
-                        <span className="text-[11px] font-serif text-wuxia-cyan/80 tracking-wider">{speaker}</span>
+                        <div className="w-px h-3 bg-wuxia-gold/20 mx-0.5" />
+                        <span className="text-[11px] font-serif text-wuxia-gold/80 tracking-wider">{speaker}</span>
                     </>
                 )}
             </div>
 
             {/* Divider */}
-            <div className="mx-4 mt-2 mb-0 h-px" style={{background:'linear-gradient(to right, rgba(68,170,170,0.3), transparent)'}} />
+            <div className="mx-4 mt-2 mb-0 h-px" style={{background:'linear-gradient(to right, rgba(217,184,106,0.3), transparent)'}} />
 
             {/* Content */}
             <div className="px-5 pt-3 pb-4">
@@ -90,7 +90,7 @@ export const InnerThoughtRenderer: React.FC<{ text: string; speaker?: string }> 
             </div>
 
             {/* Bottom shimmer */}
-            <div className="absolute bottom-0 left-0 right-0 h-[1px]" style={{background:'linear-gradient(to right, transparent, rgba(68,170,170,0.15), transparent)'}} />
+            <div className="absolute bottom-0 left-0 right-0 h-[1px]" style={{background:'linear-gradient(to right, transparent, rgba(217,184,106,0.15), transparent)'}} />
         </div>
     </div>
 );
@@ -130,12 +130,12 @@ export const SystemRenderer: React.FC<{ text: string }> = ({ text }) => (
 // --- 1e. Scenery Renderer ---
 export const SceneryRenderer: React.FC<{ text: string }> = ({ text }) => (
     <div className="w-full my-6 max-w-4xl mx-auto px-2">
-        <div className="relative rounded-lg px-6 py-4 border-l-2 border-wuxia-cyan/25 overflow-hidden" style={{background:'linear-gradient(to right, rgba(5,8,12,0.7), rgba(10,14,18,0.4), transparent)'}}>
+        <div className="relative rounded-lg px-6 py-4 border-l-2 border-wuxia-gold/25 overflow-hidden" style={{background:'linear-gradient(to right, rgba(5,8,12,0.7), rgba(10,14,18,0.4), transparent)'}}>
             {/* Mountain watermark */}
             <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-[0.07]">
-                <IconGlyph name="mountain" className="w-10 h-10 text-wuxia-cyan" strokeWidth={1} />
+                <IconGlyph name="mountain" className="w-10 h-10 text-wuxia-gold" strokeWidth={1} />
             </div>
-            <div className="absolute top-0 left-0 bottom-0 w-[2px]" style={{background:'linear-gradient(to bottom, transparent, rgba(68,170,170,0.5), transparent)'}} />
+            <div className="absolute top-0 left-0 bottom-0 w-[2px]" style={{background:'linear-gradient(to bottom, transparent, rgba(217,184,106,0.5), transparent)'}} />
             <p className="text-paper-white/60 text-[15px] leading-loose tracking-wider pr-8">
                 {highlightText(text)}
             </p>
@@ -246,7 +246,7 @@ export const CharacterRenderer: React.FC<{
                             </span>
                         )}
                         {relationStatus && (
-                            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded border border-cyan-900/30 bg-cyan-950/20 text-cyan-400 font-mono text-[10px] shadow-sm backdrop-blur-sm">
+                            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded border border-wuxia-gold/30 bg-wuxia-gold/10 text-wuxia-gold font-mono text-[10px] shadow-sm backdrop-blur-sm">
                                 <span className="uppercase tracking-tighter opacity-80">{tValue(relationStatus)}</span>
                                 <span className="opacity-50">({favorability})</span>
                             </div>

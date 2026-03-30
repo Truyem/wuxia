@@ -188,7 +188,7 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                                                     <h4 className="text-wuxia-gold font-serif text-xl lg:text-3xl font-bold tracking-wide">{evt.title}</h4>
                                                                     <span className="px-2 py-0.5 lg:px-3 lg:py-1 rounded-lg bg-wuxia-gold/10 text-wuxia-gold text-[8px] lg:text-[10px] font-bold border border-wuxia-gold/20 uppercase tracking-wider">{evt.type}</span>
                                                                 </div>
-                                                                <div className="flex items-center gap-2 text-wuxia-cyan/70 text-[9px] lg:text-[11px] font-mono tracking-widest uppercase">
+                                                                <div className="flex items-center gap-2 text-wuxia-gold/70 text-[9px] lg:text-[11px] font-mono tracking-widest uppercase">
                                                                     <svg className="w-3 h-3 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                                                     {evt.location}
                                                                 </div>
@@ -255,7 +255,7 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                                                 <h4 className="text-gray-100 font-serif text-base lg:text-xl font-bold tracking-wide group-hover/npc:text-wuxia-gold truncate">{npc.name || npc['Full Name']}</h4>
                                                                 <div className="text-wuxia-gold/70 text-[8px] lg:text-[10px] font-bold uppercase tracking-widest mt-0.5 truncate">{npc.title}</div>
                                                             </div>
-                                                            <div className="px-2 py-0.5 rounded-xl border border-wuxia-cyan/30 text-wuxia-cyan text-[8px] lg:text-[10px] font-bold bg-wuxia-cyan/10 shrink-0">
+                                                            <div className="px-2 py-0.5 rounded-xl border border-wuxia-gold/30 text-wuxia-gold text-[8px] lg:text-[10px] font-bold bg-wuxia-gold/10 shrink-0">
                                                                 {npc['Realm']}
                                                             </div>
                                                         </div>

@@ -158,7 +158,7 @@ const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, raw
         delete: 'DEL'
     };
     const commandStyleMapping: Record<'set' | 'add' | 'push' | 'delete', string> = {
-        set: 'border-wuxia-cyan/30 text-wuxia-cyan bg-wuxia-cyan/10',
+        set: 'border-wuxia-gold/30 text-wuxia-gold bg-wuxia-gold/10',
         add: 'border-emerald-500/30 text-emerald-300 bg-emerald-500/10',
         push: 'border-violet-500/30 text-violet-300 bg-violet-500/10',
         delete: 'border-wuxia-red/30 text-wuxia-red bg-wuxia-red/10'
@@ -234,7 +234,7 @@ const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, raw
             <div className="w-full /80 border border-wuxia-gold p-4 my-4 relative z-50">
                 <h4 className="text-wuxia-gold mb-2 font-mono text-xs">/// GỠ LỖI: CHỈNH SỬA VĂN BẢN THÔ PHẢN HỒI ///</h4>
                 <textarea
-                    className="w-full h-96 bg-ink-black text-wuxia-cyan font-mono text-xs p-4 outline-none border border-ink-gray resize-y"
+                    className="w-full h-96 bg-ink-black text-wuxia-gold font-mono text-xs p-4 outline-none border border-ink-gray resize-y"
                     value={editValue}
                     onChange={(e) => setEditValue(e.target.value)}
                 />
@@ -261,7 +261,7 @@ const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, raw
                 {thinkingBlocks.length > 0 && (
                     <button
                         onClick={() => setShowThinking(!showThinking)}
-                        className={`p-1.5 rounded-full border transition-all ${showThinking ? 'bg-wuxia-cyan/20 border-wuxia-cyan text-wuxia-cyan' : 'border-gray-700 text-gray-500 hover:text-wuxia-cyan hover:border-wuxia-cyan'}`}
+                        className={`p-1.5 rounded-full border transition-all ${showThinking ? 'bg-wuxia-gold/20 border-wuxia-gold text-wuxia-gold' : 'border-gray-700 text-gray-500 hover:text-wuxia-gold hover:border-wuxia-gold'}`}
                         title="Xem suy nghĩ AI"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
@@ -309,10 +309,10 @@ const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, raw
 
                     <button
                         onClick={handleDebugRepair}
-                        className="p-1.5 rounded-full border border-gray-700 text-gray-500 hover:text-wuxia-cyan hover:border-wuxia-cyan transition-all"
+                        className="p-1.5 rounded-full border border-gray-700 text-gray-500 hover:text-wuxia-gold hover:border-wuxia-gold transition-all"
                         title="Tự động sửa lỗi JSON (Debug)"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-wuxia-cyan/70">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-wuxia-gold/70">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.83-5.83m0 0a2.978 2.978 0 01-3.07-3.07m7.388-3.17a3.921 3.921 0 00-5.417 5.417L17.5 5.5l-3.352 3.352m0 0A4.409 4.409 0 0115.5 10.5l-3.958 3.958" />
                         </svg>
                     </button>
@@ -334,13 +334,13 @@ const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, raw
 
             {/* Thinking Process (Pre) - Collapsible */}
             {showThinking && preThinkingBlocks.length > 0 && (
-                <div className="mb-6 mx-4 p-4 bg-gray-900/80 border-t border-b border-wuxia-cyan/30 text-xs text-gray-300 font-mono leading-relaxed whitespace-pre-wrap shadow-inner relative">
-                    <div className="absolute top-0 left-0 w-1 h-full bg-wuxia-cyan/50"></div>
-                    <span className="text-wuxia-cyan/70 block mb-2 font-bold text-[10px] tracking-widest">【AI Lý luận trước】</span>
+                <div className="mb-6 mx-4 p-4 bg-gray-900/80 border-t border-b border-wuxia-gold/30 text-xs text-gray-300 font-mono leading-relaxed whitespace-pre-wrap shadow-inner relative">
+                    <div className="absolute top-0 left-0 w-1 h-full bg-wuxia-gold/50"></div>
+                    <span className="text-wuxia-gold/70 block mb-2 font-bold text-[10px] tracking-widest">【AI Lý luận trước】</span>
                     <div className="space-y-4">
                         {preThinkingBlocks.map(block => (
                             <div key={block.key}>
-                                <span className="text-wuxia-cyan/80 block mb-1">{`· ${block.label}`}</span>
+                                <span className="text-wuxia-gold/80 block mb-1">{`· ${block.label}`}</span>
                                 <div>{block.value}</div>
                             </div>
                         ))}
@@ -413,12 +413,12 @@ const TurnItem: React.FC<Props> = ({ response, turnNumber, isLatest = false, raw
 
             {/* Thinking Process (Post) */}
             {showThinking && postThinkingBlocks.length > 0 && (
-                <div className="mt-4 p-3 bg-gray-900/50 border-l border-wuxia-cyan/30 text-xs text-gray-400 font-mono leading-relaxed whitespace-pre-wrap">
-                    <span className="text-wuxia-cyan/70 block mb-2">{'【AI Lý luận xem xét】'}</span>
+                <div className="mt-4 p-3 bg-gray-900/50 border-l border-wuxia-gold/30 text-xs text-gray-400 font-mono leading-relaxed whitespace-pre-wrap">
+                    <span className="text-wuxia-gold/70 block mb-2">{'【AI Lý luận xem xét】'}</span>
                     <div className="space-y-4">
                         {postThinkingBlocks.map(block => (
                             <div key={block.key}>
-                                <span className="text-wuxia-cyan/80 block mb-1">{`· ${block.label}`}</span>
+                                <span className="text-wuxia-gold/80 block mb-1">{`· ${block.label}`}</span>
                                 <div>{block.value}</div>
                             </div>
                         ))}

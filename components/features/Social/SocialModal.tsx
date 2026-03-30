@@ -127,7 +127,7 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
         </div>
     );
 
-    const RelationTag: React.FC<{ label: string; value?: string; accent?: string }> = ({ label, value, accent = "text-wuxia-cyan" }) => (
+    const RelationTag: React.FC<{ label: string; value?: string; accent?: string }> = ({ label, value, accent = "text-wuxia-gold" }) => (
         <div className="bg-black/60 border border-white/5 rounded-none p-4 h-full shadow-inner group">
             <div className="text-[9px] text-paper-white/40 uppercase tracking-[0.2em] mb-2 font-bold">{label}</div>
             <div className={`text-sm font-serif leading-relaxed font-bold ${accent}`}>{value?.trim() || "Không có ghi chép"}</div>
@@ -194,7 +194,7 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
                                                 : ''
                                             }`}
                                     >
-                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-serif font-black text-xl border overflow-hidden relative ${npc.gender === 'Female' || npc.gender === 'Nữ' ? 'border-pink-500/30 bg-pink-500/10 text-pink-400' : 'border-wuxia-cyan/30 bg-wuxia-cyan/10 text-wuxia-cyan'} ${isSelected ? 'shadow-lg' : ''}`}>
+                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-serif font-black text-xl border overflow-hidden relative ${npc.gender === 'Female' || npc.gender === 'Nữ' ? 'border-pink-500/30 bg-pink-500/10 text-pink-400' : 'border-wuxia-gold/30 bg-wuxia-gold/10 text-wuxia-gold'} ${isSelected ? 'shadow-lg' : ''}`}>
                                             {resolveAvatar(npc) ? (
                                                 <img src={resolveAvatar(npc)} alt={npc.name} className="w-full h-full object-cover object-top" />
                                             ) : (
@@ -335,7 +335,7 @@ const SocialModal: React.FC<Props> = ({ socialList, onClose, playerName = "Sơ n
 
                                     {/* Quick Stats Grid */}
                                     <div className="space-y-4">
-                                        <RelationTag label={t('social.sections.corePersonality') || "Cốt Cách Tâm Tính"} value={currentNPC.corePersonalityTraits} accent="text-wuxia-cyan" />
+                                        <RelationTag label={t('social.sections.corePersonality') || "Cốt Cách Tâm Tính"} value={currentNPC.corePersonalityTraits} accent="text-wuxia-gold" />
                                         <RelationTag label={t('social.sections.affinityBreakthrough') || "Đột Phá Thiện Cảm"} value={currentNPC.favorabilityBreakthroughCondition} accent="text-emerald-400" />
                                         <RelationTag label={t('social.sections.relationBreakthrough') || "Đột Phá Quan Hệ"} value={currentNPC.relationBreakthroughCondition} accent="text-amber-400" />
                                     </div>

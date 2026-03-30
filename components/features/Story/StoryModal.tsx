@@ -133,7 +133,7 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
                                     }`}
                                 >
                                     <div className="w-14 shrink-0">
-                                        <span className="text-[14px] font-bold text-wuxia-cyan/80 font-serif tracking-widest uppercase">Hồi {arc.index}</span>
+                                        <span className="text-[14px] font-bold text-wuxia-gold/80 font-serif tracking-widest uppercase">Hồi {arc.index}</span>
                                     </div>
                                     <div className="min-w-0 flex-1">
                                         <p className="text-[11px] text-gray-300 font-serif italic truncate opacity-80">{arc.summary || arc.title}</p>
@@ -177,7 +177,7 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
                         
                         {/* Horizontal Navigation Bar */}
                         <div className="h-16 shrink-0 border-b border-white/5 bg-black/40 backdrop-blur-2xl flex items-center justify-between px-10 relative z-50">
-                            <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-wuxia-cyan/20 to-transparent"></div>
+                            <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-wuxia-gold/20 to-transparent"></div>
                             <div className="flex items-center">
                                 {canGoPrev ? (
                                     <button
@@ -195,7 +195,7 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
                             </div>
 
                             <div className="flex items-center gap-6">
-                                <span className="text-xs font-bold text-wuxia-cyan tracking-[0.3em] font-serif uppercase">
+                                <span className="text-xs font-bold text-wuxia-gold tracking-[0.3em] font-serif uppercase">
                                     CHƯƠNG {displayChapter.index}
                                 </span>
                                 {viewMode === 'current' && (
@@ -287,17 +287,17 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
                                             )}
 
                                             {story.currentChapter.foreshadowingList.length > 0 && (
-                                                <div className="bg-[#0a1214]/40 border border-wuxia-cyan/20 p-8 relative overflow-hidden group shadow-2xl">
+                                                <div className="bg-[#0a1214]/40 border border-wuxia-gold/20 p-8 relative overflow-hidden group shadow-2xl">
                                                     <div className="flex items-center gap-2 mb-6">
-                                                        <div className="w-2 h-2 bg-wuxia-cyan"></div>
-                                                        <h4 className="text-wuxia-cyan font-bold text-xs uppercase tracking-[0.3em] font-serif">
+                                                        <div className="w-2 h-2 bg-wuxia-gold"></div>
+                                                        <h4 className="text-wuxia-gold font-bold text-xs uppercase tracking-[0.3em] font-serif">
                                                             Phục bút ẩn tàng
                                                         </h4>
                                                     </div>
                                                     <ul className="space-y-4">
                                                         {story.currentChapter.foreshadowingList.map((hint, i) => (
                                                             <li key={i} className="text-[15px] text-gray-400 flex items-start gap-3 italic group">
-                                                                <span className="text-wuxia-cyan/40 mt-1 font-serif text-lg">◇</span>
+                                                                <span className="text-wuxia-gold/40 mt-1 font-serif text-lg">◇</span>
                                                                 <span className="leading-relaxed">{hint}</span>
                                                             </li>
                                                         ))}
@@ -381,16 +381,16 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
 
                                         <div className="bg-[#0f141a]/40 border border-gray-800/40 p-8 group shadow-xl">
                                             <div className="flex items-center gap-2 mb-6">
-                                                <div className="w-1.5 h-1.5 bg-wuxia-cyan/60"></div>
-                                                <h4 className="text-wuxia-cyan font-bold text-xs uppercase tracking-[0.3em] font-serif">
+                                                <div className="w-1.5 h-1.5 bg-wuxia-gold/60"></div>
+                                                <h4 className="text-wuxia-gold font-bold text-xs uppercase tracking-[0.3em] font-serif">
                                                     Sự kiện tiềm tàng
                                                 </h4>
                                             </div>
                                             {pendingEventList.length > 0 ? (
                                                 <div className="space-y-4">
                                                     {pendingEventList.map((event, idx) => (
-                                                        <div key={`${event.name}-${idx}`} className="bg-white/5 border border-gray-800/40 p-5 hover:bg-wuxia-cyan/5 group">
-                                                            <div className="text-lg font-serif font-bold text-gray-200 group-hover:text-wuxia-cyan">{event.name || `Sự kiện ${idx + 1}`}</div>
+                                                        <div key={`${event.name}-${idx}`} className="bg-white/5 border border-gray-800/40 p-5 hover:bg-wuxia-gold/5 group">
+                                                            <div className="text-lg font-serif font-bold text-gray-200 group-hover:text-wuxia-gold">{event.name || `Sự kiện ${idx + 1}`}</div>
                                                             <div className="text-sm text-gray-500 leading-relaxed mt-3 font-serif italic">{event.description || 'Chưa có thông tin'}</div>
                                                             <div className="flex flex-col gap-2 mt-5 pt-5 border-t border-gray-800/50">
                                                                 <span className="text-[11px] text-gray-600 font-serif">

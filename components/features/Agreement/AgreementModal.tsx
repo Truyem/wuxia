@@ -19,8 +19,8 @@ const AgreementModal: React.FC<Props> = ({ agreements = [], onClose }) => {
             case 'Báo thù': return 'text-red-500 border-red-500/30 bg-red-900/10';
             case 'Giao dịch': return 'text-wuxia-gold border-wuxia-gold/30 bg-wuxia-gold/10';
             case 'Cá cược': return 'text-purple-400 border-purple-400/30 bg-purple-900/10';
-            case 'Cam kết': return 'text-wuxia-cyan border-wuxia-cyan/30 bg-wuxia-cyan/10';
-            default: return 'text-wuxia-cyan border-wuxia-cyan/30 bg-wuxia-cyan/10';
+            case 'Cam kết': return 'text-wuxia-gold border-wuxia-gold/30 bg-wuxia-gold/10';
+            default: return 'text-wuxia-gold border-wuxia-gold/30 bg-wuxia-gold/10';
         }
     };
 

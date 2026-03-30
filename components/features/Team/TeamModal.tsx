@@ -130,7 +130,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
 
                                         {/* NPC Top Info Card */}
                                         <div className="flex items-center gap-6 mb-8 relative z-10">
-                                            <div className={`w-20 h-20 rounded-2xl border-2 flex items-center justify-center font-serif font-black text-3xl shadow-2xl transition-all duration-700 group-hover:scale-105 ${gender === 'Female' ? 'border-pink-500/30 bg-pink-500/5 text-pink-400' : 'border-wuxia-cyan/30 bg-wuxia-cyan/5 text-wuxia-cyan'}`}>
+                                            <div className={`w-20 h-20 rounded-2xl border-2 flex items-center justify-center font-serif font-black text-3xl shadow-2xl transition-all duration-700 group-hover:scale-105 ${gender === 'Female' ? 'border-pink-500/30 bg-pink-500/5 text-pink-400' : 'border-wuxia-gold/30 bg-wuxia-gold/5 text-wuxia-gold'}`}>
                                                 {name[0]}
                                             </div>
                                             <div className="flex-1 min-w-0">
@@ -138,7 +138,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                                                 <div className="flex items-center gap-2 mt-2">
                                                     <span className="text-[10px] text-paper-white/40 font-bold uppercase tracking-widest">{getIdentity(npc)}</span>
                                                     <span className="w-1 h-1 rounded-full bg-white/20"></span>
-                                                    <span className="text-[10px] text-wuxia-cyan font-black uppercase tracking-widest">{getRealm(npc)}</span>
+                                                    <span className="text-[10px] text-wuxia-gold font-black uppercase tracking-widest">{getRealm(npc)}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -161,12 +161,12 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                                             {/* Energy Bar */}
                                             <div className="space-y-1.5">
                                                 <div className="flex justify-between items-end px-1">
-                                                    <span className="text-[8px] font-black uppercase tracking-widest text-wuxia-cyan/60">Nội Lực</span>
+                                                    <span className="text-[8px] font-black uppercase tracking-widest text-wuxia-gold/60">Nội Lực</span>
                                                     <span className="text-[9px] font-mono text-paper-white/40">{Math.round(spCur)} <span className="opacity-30">/</span> {spMax}</span>
                                                 </div>
                                                 <div className="h-1.5 w-full bg-black/60 rounded-full overflow-hidden border border-white/5">
                                                     <div 
-                                                        className="h-full bg-gradient-to-r from-wuxia-cyan/50 to-wuxia-cyan shadow-[0_0_8px_rgba(68,170,170,0.4)] transition-all duration-1000"
+                                                        className="h-full bg-gradient-to-r from-wuxia-gold/50 to-wuxia-gold shadow-[0_0_8px_rgba(217,184,106,0.4)] transition-all duration-1000"
                                                         style={{ width: `${spPct}%` }}
                                                     ></div>
                                                 </div>
@@ -176,7 +176,7 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
                                         {/* Combat Stats Grid */}
                                         <div className="flex gap-4 mb-8 relative z-10">
                                             <StatBox label="Công" value={npc['Công kích'] || 0} color="wuxia-red" icon={<IconGlyph name="sword" className="w-2.5 h-2.5" />} />
-                                            <StatBox label="Thủ" value={npc['Phòng ngự'] || 0} color="wuxia-cyan" icon={<IconGlyph name="shield" className="w-2.5 h-2.5" />} />
+                                            <StatBox label="Thủ" value={npc['Phòng ngự'] || 0} color="wuxia-gold" icon={<IconGlyph name="shield" className="w-2.5 h-2.5" />} />
                                         </div>
 
                                         {/* Equipment Section */}
@@ -238,5 +238,4 @@ const TeamModal: React.FC<Props> = ({ character, teammates, onClose }) => {
 };
 
 export default TeamModal;
-
 

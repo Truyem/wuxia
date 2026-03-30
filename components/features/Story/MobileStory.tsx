@@ -83,7 +83,7 @@ const MobileStory: React.FC<Props> = ({ story, onClose }) => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <span className="text-[11px] font-bold text-wuxia-cyan tracking-[0.2em] font-serif uppercase">
+                        <span className="text-[11px] font-bold text-wuxia-gold tracking-[0.2em] font-serif uppercase">
                             CHƯƠNG {currentDisplayChapter.index}
                         </span>
                         <div className="flex items-center gap-4 text-gray-500 border-l border-gray-800/50 pl-4 ml-1">
@@ -161,15 +161,15 @@ const MobileStory: React.FC<Props> = ({ story, onClose }) => {
                                         <p className="text-sm text-gray-300 leading-relaxed italic">{story.currentChapter.mainConflict}</p>
                                     </div>
 
-                                    <div className="bg-[#0a1214]/40 border border-wuxia-cyan/20 p-5">
+                                    <div className="bg-[#0a1214]/40 border border-wuxia-gold/20 p-5">
                                         <div className="flex items-center gap-2 mb-4">
-                                            <div className="w-1.5 h-1.5 bg-wuxia-cyan"></div>
-                                            <span className="text-[11px] text-wuxia-cyan font-bold tracking-[0.2em] uppercase">Phục bút ẩn tàng</span>
+                                            <div className="w-1.5 h-1.5 bg-wuxia-gold"></div>
+                                            <span className="text-[11px] text-wuxia-gold font-bold tracking-[0.2em] uppercase">Phục bút ẩn tàng</span>
                                         </div>
                                         <ul className="space-y-3">
                                             {story.currentChapter.foreshadowingList.map((hint, i) => (
                                                 <li key={i} className="flex gap-3 text-[13px] text-gray-400 leading-relaxed italic group">
-                                                    <span className="text-wuxia-cyan/40 mt-1">◇</span>
+                                                    <span className="text-wuxia-gold/40 mt-1">◇</span>
                                                     <span>{hint}</span>
                                                 </li>
                                             ))}
@@ -248,7 +248,7 @@ const MobileStory: React.FC<Props> = ({ story, onClose }) => {
                                         className={`w-full flex items-center gap-5 px-6 py-4 border-b border-gray-800/30 ${viewMode === 'archive' && selectedArchiveIndex === idx ? 'bg-wuxia-gold/5' : 'hover:bg-white/5'}`}
                                     >
                                         <div className="w-12 shrink-0">
-                                            <span className="text-[13px] font-bold text-wuxia-cyan/70 font-serif">Ch. {arc.index}</span>
+                                            <span className="text-[13px] font-bold text-wuxia-gold/70 font-serif">Ch. {arc.index}</span>
                                         </div>
                                         <div className="min-w-0 flex-1">
                                             <p className="text-[12px] text-gray-400 font-serif italic truncate">{arc.summary || arc.title}</p>
@@ -267,7 +267,7 @@ const MobileStory: React.FC<Props> = ({ story, onClose }) => {
                                     className={`w-full flex items-center gap-5 px-6 py-5 border-b border-gray-800/50 ${viewMode === 'current' ? 'bg-wuxia-gold/5' : 'hover:bg-white/5'}`}
                                 >
                                     <div className="w-12 shrink-0">
-                                        <span className="text-[13px] font-bold text-wuxia-cyan font-serif">Ch. {story.currentChapter.index}</span>
+                                        <span className="text-[13px] font-bold text-wuxia-gold font-serif">Ch. {story.currentChapter.index}</span>
                                     </div>
                                     <div className="min-w-0 flex-1">
                                         <p className="text-[12px] text-gray-200 font-serif italic truncate">{story.currentChapter.summary || story.currentChapter.title}</p>

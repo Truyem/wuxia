@@ -39,7 +39,7 @@ const MobileTask: React.FC<Props> = ({ tasks, onClose, onDeleteTask }) => {
     const getTypeLabelColor = (type: string) => {
         switch (type) {
             case 'Chính tuyến': return 'bg-wuxia-red/20 text-wuxia-red border-wuxia-red/50';
-            case 'Nhánh': return 'bg-wuxia-cyan/20 text-wuxia-cyan border-wuxia-cyan/50';
+            case 'Nhánh': return 'bg-wuxia-gold/20 text-wuxia-gold border-wuxia-gold/50';
             case 'Môn phái': return 'bg-green-900/20 text-green-300 border-green-900/50';
             case 'Kỳ ngộ': return 'bg-purple-900/20 text-purple-300 border-purple-900/50';
             case 'Treo thưởng': return 'bg-orange-900/20 text-orange-300 border-orange-900/50';
@@ -96,7 +96,7 @@ const MobileTask: React.FC<Props> = ({ tasks, onClose, onDeleteTask }) => {
                                 <div className={`text-[11px] ${getStatusColor(getField(currentTask, 'currentStatus', 'Current status'))}`}>{getField(currentTask, 'currentStatus', 'Current status')}</div>
                             </div>
                             <div className="text-[10px] text-gray-500">
-                                Cảnh giới: <span className="text-wuxia-cyan">{getField(currentTask, 'recommendedRealm', 'Recommended realm')}</span>
+                                Cảnh giới: <span className="text-wuxia-gold">{getField(currentTask, 'recommendedRealm', 'Recommended realm')}</span>
                             </div>
                             <p className="text-sm text-gray-300 font-serif leading-relaxed">"{getField(currentTask, 'description', 'Description')}"</p>
                             <div className="flex gap-2 flex-wrap items-center justify-between">

@@ -104,7 +104,7 @@ const MobileQuickMenu: React.FC<Props> = ({ activeWindow, onMenuClick, character
                     <div className="rounded-2xl border border-white/10 bg-[rgb(var(--c-ink-black))]/55 shadow-[0_8px_20px_rgba(0,0,0,0.35)] overflow-hidden">
                         <div className="px-3 py-2 border-b border-white/10 flex items-center justify-between">
                             <span className="text-[10px] tracking-[0.18em] text-paper-white/55">Toàn bộ chức năng</span>
-                            <span className="text-[10px] text-wuxia-cyan/80">{allMenus.length} mục</span>
+                            <span className="text-[10px] text-wuxia-gold/80">{allMenus.length} mục</span>
                         </div>
                         <div className="max-h-44 overflow-y-auto no-scrollbar p-2">
                             <div className="grid grid-cols-4 gap-2">
@@ -173,7 +173,7 @@ const MenuTile = ({
         onClick={onClick}
         className={`h-16 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-colors ${active
             ? 'border-wuxia-gold/80 bg-wuxia-gold/10 text-wuxia-gold'
-            : 'border-white/10 text-paper-white/75 hover:border-wuxia-cyan/60 hover:text-paper-white'
+            : 'border-white/10 text-paper-white/75 hover:border-wuxia-gold/60 hover:text-paper-white'
             }`}
     >
         <span className={`h-8 w-8 flex items-center justify-center translate-y-0.5 transition-all ${active ? 'scale-110 drop-shadow-[0_0_8px_rgba(230,200,110,0.45)]' : ''

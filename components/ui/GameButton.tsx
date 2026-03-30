@@ -25,10 +25,10 @@ const GameButton: React.FC<Props> = ({ children, variant = 'primary', active = f
             break;
         case 'secondary':
             variantClasses = active
-                ? "bg-wuxia-cyan/30 text-wuxia-cyan border border-wuxia-cyan shadow-[0_0_20px_rgba(122,236,255,0.4)]"
-                : "bg-[rgb(var(--c-ink-black))]/55 text-wuxia-cyan/75 border border-wuxia-cyan/30 hover:border-wuxia-cyan hover:bg-wuxia-cyan/10 hover:text-wuxia-cyan";
-            glowClasses = "bg-wuxia-cyan/5";
-            decoColor = "bg-wuxia-cyan";
+                ? "bg-wuxia-gold/30 text-wuxia-gold border border-wuxia-gold shadow-[0_0_20px_rgba(217,184,106,0.4)]"
+                : "bg-[rgb(var(--c-ink-black))]/55 text-wuxia-gold/75 border border-wuxia-gold/30 hover:border-wuxia-gold hover:bg-wuxia-gold/10 hover:text-wuxia-gold";
+            glowClasses = "bg-wuxia-gold/5";
+            decoColor = "bg-wuxia-gold";
             break;
         case 'danger':
             variantClasses = "bg-black/80 text-wuxia-red border border-wuxia-red/40 hover:border-wuxia-red hover:bg-wuxia-red/10 hover:text-white shadow-[0_0_15px_rgba(163,24,24,0.2)]";

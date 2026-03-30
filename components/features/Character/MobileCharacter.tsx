@@ -173,9 +173,9 @@ const MobileCharacter: React.FC<Props> = ({ character, onClose, allAvatars }) =>
 
                     <div className="bg-ink-gray/40 border border-ink-gray rounded-xl p-4 space-y-3">
                         <div className="text-[10px] text-wuxia-gold/70 tracking-[0.3em]">Trạng thái</div>
-                        <VitalBar label="Năng lượng" current={character.currentEnergy} max={character.maxEnergy} color="bg-wuxia-cyan" />
+                        <VitalBar label="Năng lượng" current={character.currentEnergy} max={character.maxEnergy} color="bg-wuxia-gold" />
                         <VitalBar label="No bụng" current={character.currentFullness} max={character.maxFullness} color="bg-wuxia-gold" />
-                        <VitalBar label="Nước" current={character.currentThirst} max={character.maxThirst} color="bg-wuxia-cyan" />
+                        <VitalBar label="Nước" current={character.currentThirst} max={character.maxThirst} color="bg-wuxia-gold" />
                     </div>
 
                     <div className="bg-ink-gray/40 border border-ink-gray rounded-xl p-4 space-y-2">
@@ -190,7 +190,7 @@ const MobileCharacter: React.FC<Props> = ({ character, onClose, allAvatars }) =>
                             <div className="text-[10px] text-wuxia-gold/70 tracking-[0.3em] mb-2">Trạng thái buff</div>
                             <div className="flex flex-wrap gap-2">
                                 {character.playerBuffs.map((buff, i) => (
-                                    <span key={i} className="text-[10px] px-2 py-1 border border-wuxia-cyan/30 text-wuxia-cyan bg-wuxia-cyan/5 rounded">
+                                    <span key={i} className="text-[10px] px-2 py-1 border border-wuxia-gold/30 text-wuxia-gold bg-wuxia-gold/5 rounded">
                                         {typeof buff === 'object' ? (buff as any).name || (buff as any).text : buff}
                                     </span>
                                 ))}

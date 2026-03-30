@@ -129,7 +129,7 @@ const BattleOverlay: React.FC<Props> = ({ state, onAction, onClose }) => {
                             </div>
                             <div className="h-3 bg-black/60 rounded-full border border-blue-500/20 p-[2px] overflow-hidden">
                                 <div 
-                                    className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full transition-all duration-500 ease-out shadow-[0_0_10px_rgba(37,99,235,0.5)]"
+                                    className="h-full bg-gradient-to-r from-blue-600 to-wuxia-gold rounded-full transition-all duration-500 ease-out shadow-[0_0_10px_rgba(37,99,235,0.5)]"
                                     style={{ width: `${playerHpPercent}%` }}
                                 />
                             </div>

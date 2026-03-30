@@ -81,7 +81,7 @@ const SectModal: React.FC<Props> = ({ sectData, currentTime, onClose, onAcceptTa
                             </h3>
                             <div className="flex flex-wrap gap-2 md:gap-4 text-[10px] md:text-[12px] text-gray-400 font-mono mt-2 uppercase tracking-wider md:tracking-widest font-bold">
                                 <span>Ngân quỹ: <span className="text-wuxia-gold">{getSafeVal(sectData, ['sectFunds', 'Funds'])}</span></span>
-                                <span>Tài nguyên: <span className="text-wuxia-cyan">{getSafeVal(sectData, ['sectMaterials', 'Materials'])}</span></span>
+                                <span>Tài nguyên: <span className="text-wuxia-gold">{getSafeVal(sectData, ['sectMaterials', 'Materials'])}</span></span>
                                 <span>Cấp độ: <span className="text-gray-300">{getSafeVal(sectData, ['constructionProgress', 'Progress'])}%</span></span>
                             </div>
                         </div>
@@ -90,7 +90,7 @@ const SectModal: React.FC<Props> = ({ sectData, currentTime, onClose, onAcceptTa
                     <div className="flex items-center justify-between md:justify-end gap-4 md:gap-8 w-full md:w-auto border-t border-white/5 md:border-t-0 pt-3 md:pt-0">
                         <div className="text-left md:text-right">
                             <div className="text-[10px] text-gray-500 uppercase tracking-[0.2em] font-bold">Chức Vị</div>
-                            <div className="text-wuxia-cyan font-bold font-serif text-sm md:text-lg tracking-wide uppercase">{getSafeVal(sectData, ['playerPosition', 'Position'])}</div>
+                            <div className="text-wuxia-gold font-bold font-serif text-sm md:text-lg tracking-wide uppercase">{getSafeVal(sectData, ['playerPosition', 'Position'])}</div>
                         </div>
                         <div className="text-right border-l border-white/10 pl-4 md:pl-8">
                             <div className="text-[10px] text-gray-500 uppercase tracking-[0.2em] font-bold">Cống Hiến</div>
@@ -210,7 +210,7 @@ const SectModal: React.FC<Props> = ({ sectData, currentTime, onClose, onAcceptTa
                                             </div>
                                         </GlassCard>
                                         <GlassCard className="p-6 flex items-center gap-5 rounded-2xl">
-                                            <div className="w-14 h-14 rounded-2xl bg-wuxia-cyan/10 border border-wuxia-cyan/20 flex items-center justify-center text-wuxia-cyan">
+                                            <div className="w-14 h-14 rounded-2xl bg-wuxia-gold/10 border border-wuxia-gold/20 flex items-center justify-center text-wuxia-gold">
                                                 <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                                 </svg>
@@ -325,7 +325,7 @@ const SectModal: React.FC<Props> = ({ sectData, currentTime, onClose, onAcceptTa
                                 {sectData.exchangeList.map(good => (
                                     <GlassCard key={good.id} className="p-6 md:p-10 flex flex-col h-full rounded-[2rem]">
                                         <div className="flex justify-between items-start mb-6 md:mb-8">
-                                            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-wuxia-cyan/20 to-transparent border border-wuxia-cyan/30 flex items-center justify-center text-wuxia-cyan shadow-lg shadow-wuxia-cyan/5 shrink-0">
+                                            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-wuxia-gold/20 to-transparent border border-wuxia-gold/30 flex items-center justify-center text-wuxia-gold shadow-lg shadow-wuxia-gold/5 shrink-0">
                                                 <svg className="w-8 h-8 md:w-10 md:h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                                                 </svg>
@@ -337,7 +337,7 @@ const SectModal: React.FC<Props> = ({ sectData, currentTime, onClose, onAcceptTa
 
                                         <h4 className="text-gray-100 font-bold text-xl md:text-2xl mb-3 md:mb-4 tracking-wide font-serif truncate">{good.itemName}</h4>
                                         <div className="text-[11px] md:text-[13px] text-gray-400 flex items-center gap-3 uppercase tracking-widest font-bold">
-                                            Yêu cầu: <span className="text-wuxia-cyan truncate">{good.requiredPosition}</span>
+                                            Yêu cầu: <span className="text-wuxia-gold truncate">{good.requiredPosition}</span>
                                         </div>
 
                                         <div className="mt-auto pt-8 md:pt-10 border-t border-white/5 flex flex-col gap-6 md:gap-8">
@@ -355,7 +355,7 @@ const SectModal: React.FC<Props> = ({ sectData, currentTime, onClose, onAcceptTa
                                             {onExchange && (
                                                 <button
                                                     onClick={() => onExchange(good.id)}
-                                                    className="w-full py-4 md:py-5 bg-wuxia-cyan/10 hover:bg-wuxia-cyan text-wuxia-cyan hover:text-black border border-wuxia-cyan/50 rounded-2xl text-[12px] md:text-sm font-bold uppercase tracking-[0.3em] transition-all duration-300 shadow-xl shadow-black/40 active:scale-95"
+                                                    className="w-full py-4 md:py-5 bg-wuxia-gold/10 hover:bg-wuxia-gold text-wuxia-gold hover:text-black border border-wuxia-gold/50 rounded-2xl text-[12px] md:text-sm font-bold uppercase tracking-[0.3em] transition-all duration-300 shadow-xl shadow-black/40 active:scale-95"
                                                 >
                                                     Tiến hành Trao đổi
                                                 </button>
@@ -375,7 +375,7 @@ const SectModal: React.FC<Props> = ({ sectData, currentTime, onClose, onAcceptTa
                                             <div className={`shrink-0 w-20 h-20 md:w-28 md:h-28 rounded-2xl border flex items-center justify-center text-3xl md:text-5xl font-black font-serif shadow-2xl transition-all duration-500 group-hover:scale-105 ${
                                                 mem.gender === 'Nữ' 
                                                     ? 'border-pink-500/30 bg-pink-500/10 text-pink-500 shadow-pink-500/5' 
-                                                    : 'border-wuxia-cyan/30 bg-wuxia-cyan/10 text-wuxia-cyan shadow-wuxia-cyan/5'
+                                                    : 'border-wuxia-gold/30 bg-wuxia-gold/10 text-wuxia-gold shadow-wuxia-gold/5'
                                             }`}>
                                                 {mem.name[0]}
                                             </div>
@@ -389,7 +389,7 @@ const SectModal: React.FC<Props> = ({ sectData, currentTime, onClose, onAcceptTa
                                                 <div className="flex flex-wrap gap-4 md:gap-6 text-[10px] md:text-[12px] text-gray-500 font-mono font-bold uppercase tracking-wider md:tracking-widest">
                                                     <span className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-current opacity-30" />{mem.gender}</span>
                                                     <span className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-current opacity-30" />{mem.age} Tuổi</span>
-                                                    <span className="text-wuxia-cyan font-black border-b border-wuxia-cyan/20 pb-0.5">{mem.realm}</span>
+                                                    <span className="text-wuxia-gold font-black border-b border-wuxia-gold/20 pb-0.5">{mem.realm}</span>
                                                 </div>
                                                 <p className="text-xs md:text-base text-gray-400 font-serif italic border-t border-white/5 pt-4 md:pt-6 leading-relaxed line-clamp-3 md:line-clamp-none opacity-80 group-hover:opacity-100 transition-opacity">
                                                     “{mem.brief}”

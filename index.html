@@ -15,13 +15,12 @@
       :root {
         /* RGB Values for opacity support */
         /* Space-separated values power Tailwind opacity helper; comma-separated for rgba() usage */
-        --c-ink-black: 8 12 22;
-        --c-ink-black-rgb: 8, 12, 22;
-        --c-ink-gray: 20 28 44;
+        --c-ink-black: 10 10 10;
+        --c-ink-black-rgb: 10, 10, 10;
+        --c-ink-gray: 28 24 20;
         --c-wuxia-gold: 217 184 106;
         --c-wuxia-gold-rgb: 217, 184, 106;
         --c-wuxia-gold-dark: 138 106 47;
-        --c-wuxia-cyan: 122 236 255;
         --c-wuxia-red: 222 94 94;
         --c-paper-white: 242 248 255;
         --c-jade-base: 25 50 68;
@@ -55,7 +54,6 @@
               'ink-gray': withOpacity('--c-ink-gray'),
               'wuxia-gold': withOpacity('--c-wuxia-gold'),
               'wuxia-gold-dark': withOpacity('--c-wuxia-gold-dark'),
-              'wuxia-cyan': withOpacity('--c-wuxia-cyan'),
               'wuxia-red': withOpacity('--c-wuxia-red'),
               'paper-white': withOpacity('--c-paper-white'),
             },
@@ -123,8 +121,8 @@
                 '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
               },
               glowPulse: {
-                '0%, 100%': { boxShadow: '0 0 8px rgba(68,170,170,0.12), 0 0 0px rgba(68,170,170,0)' },
-                '50%': { boxShadow: '0 0 18px rgba(68,170,170,0.28), 0 0 6px rgba(68,170,170,0.1)' },
+                '0%, 100%': { boxShadow: '0 0 8px rgba(217,184,106,0.12), 0 0 0px rgba(217,184,106,0)' },
+                '50%': { boxShadow: '0 0 18px rgba(217,184,106,0.28), 0 0 6px rgba(217,184,106,0.1)' },
               },
               pulseSubtle: {
                 '0%, 100%': { opacity: '1' },
@@ -238,7 +236,7 @@
         border: 1px solid rgba(255, 255, 255, 0.14);
         box-shadow: 
           0 24px 44px rgba(0,0,0,0.66),
-          inset 0 0 36px rgba(122,236,255,0.04);
+          inset 0 0 36px rgba(217,184,106,0.04);
       }
 
       .glass-card {
@@ -302,10 +300,6 @@
 
       .text-glow-gold {
         text-shadow: 0 0 12px rgb(var(--c-wuxia-gold) / 0.5), 0 0 24px rgb(var(--c-wuxia-gold) / 0.2);
-      }
-      
-      .text-glow-cyan {
-        text-shadow: 0 0 12px rgb(var(--c-wuxia-cyan) / 0.5), 0 0 24px rgb(var(--c-wuxia-cyan) / 0.2);
       }
       
       /* P5 Style Clip Paths */

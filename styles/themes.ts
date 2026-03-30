@@ -32,15 +32,12 @@ function generateThemeVars(colors: string[]): Record<string, string> {
     const bg1 = colors[0] || '#050505';
     const bg2 = colors[1] || '#1A1A1A';
     const accent1 = colors[2] || '#E6C86E';
-    // Use the same warm accent for both slots to eliminate cyan across themes
-    const accent2 = accent1;
     const isLightBg = getLuminance(bg1) > 0.5;
     return {
         '--c-ink-black': hexToRgbStr(bg1),
         '--c-ink-gray': hexToRgbStr(bg2),
         '--c-wuxia-gold': hexToRgbStr(accent1),
         '--c-wuxia-gold-dark': darkenRgbStr(accent1),
-        '--c-wuxia-cyan': hexToRgbStr(accent2),
         '--c-wuxia-red': isLightBg ? '163 24 24' : '200 60 60',
         '--c-paper-white': isLightBg ? '30 30 40' : '230 230 230',
     };
@@ -52,7 +49,6 @@ const STATIC_THEMES: Partial<Record<ThemePreset, Record<string, string>>> = {
         '--c-ink-gray': '26 26 26',
         '--c-wuxia-gold': '230 200 110', // Classic Gold
         '--c-wuxia-gold-dark': '138 114 54',
-        '--c-wuxia-cyan': '230 200 110',
         '--c-wuxia-red': '163 24 24',
         '--c-paper-white': '230 230 230',
     },
@@ -61,7 +57,6 @@ const STATIC_THEMES: Partial<Record<ThemePreset, Record<string, string>>> = {
         '--c-ink-gray': '12 38 28',
         '--c-wuxia-gold': '60 235 150',
         '--c-wuxia-gold-dark': '30 110 60',
-        '--c-wuxia-cyan': '60 235 150',
         '--c-wuxia-red': '163 24 24',
         '--c-paper-white': '225 255 242',
     },
@@ -70,7 +65,6 @@ const STATIC_THEMES: Partial<Record<ThemePreset, Record<string, string>>> = {
         '--c-ink-gray': '45 15 15',
         '--c-wuxia-gold': '255 80 80',
         '--c-wuxia-gold-dark': '150 30 30',
-        '--c-wuxia-cyan': '255 80 80',
         '--c-wuxia-red': '255 50 50',
         '--c-paper-white': '255 240 240',
     },
@@ -79,7 +73,6 @@ const STATIC_THEMES: Partial<Record<ThemePreset, Record<string, string>>> = {
         '--c-ink-gray': '28 15 45',
         '--c-wuxia-gold': '180 120 255',
         '--c-wuxia-gold-dark': '100 60 180',
-        '--c-wuxia-cyan': '180 120 255',
         '--c-wuxia-red': '255 50 150',
         '--c-paper-white': '245 240 255',
     },
@@ -88,7 +81,6 @@ const STATIC_THEMES: Partial<Record<ThemePreset, Record<string, string>>> = {
         '--c-ink-gray': '15 40 30',
         '--c-wuxia-gold': '120 255 180',
         '--c-wuxia-gold-dark': '60 150 100',
-        '--c-wuxia-cyan': '120 255 180',
         '--c-wuxia-red': '255 100 100',
         '--c-paper-white': '240 255 245',
     },
@@ -97,7 +89,6 @@ const STATIC_THEMES: Partial<Record<ThemePreset, Record<string, string>>> = {
         '--c-ink-gray': '15 30 50',
         '--c-wuxia-gold': '150 220 255',
         '--c-wuxia-gold-dark': '80 140 180',
-        '--c-wuxia-cyan': '150 220 255',
         '--c-wuxia-red': '255 120 150',
         '--c-paper-white': '245 250 255',
     },
@@ -106,7 +97,6 @@ const STATIC_THEMES: Partial<Record<ThemePreset, Record<string, string>>> = {
         '--c-ink-gray': '50 15 15',
         '--c-wuxia-gold': '255 100 80',
         '--c-wuxia-gold-dark': '180 50 40',
-        '--c-wuxia-cyan': '255 100 80',
         '--c-wuxia-red': '255 60 60',
         '--c-paper-white': '255 240 235',
     },
@@ -115,7 +105,6 @@ const STATIC_THEMES: Partial<Record<ThemePreset, Record<string, string>>> = {
         '--c-ink-gray': '45 40 25',
         '--c-wuxia-gold': '255 220 150',
         '--c-wuxia-gold-dark': '180 150 80',
-        '--c-wuxia-cyan': '255 220 150',
         '--c-wuxia-red': '255 120 80',
         '--c-paper-white': '255 250 240',
     }
