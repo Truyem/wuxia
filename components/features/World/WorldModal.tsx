@@ -21,6 +21,8 @@ const GlassCard: React.FC<{ children: React.ReactNode; className?: string }> = (
 const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
     const [activeTab, setActiveTab] = useState<TabType>('events');
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 1024 : false);
+    const themeAccentColor = 'rgb(var(--c-wuxia-cyan))';
+    const themeAccentGlow = 'rgba(var(--c-wuxia-cyan), 0.45)';
 
     React.useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 1024);
@@ -201,23 +203,34 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                                             </div>
                                                         </div>
                                                         
-                                                        <div className="bg-black/40 border-l-2 lg:border-l-4 border-wuxia-gold/60 p-4 lg:p-6 rounded-2xl relative overflow-hidden">
-                                                            <p className="relative z-10 text-gray-300 text-sm lg:text-base leading-relaxed font-serif italic">
-                                                                "{evt.content || evt.description || evt.summary || 'Hành trình vạn dặm, khởi đầu từ đây...'}"
-                                                            </p>
-                                                        </div>
+                                                    <div className="bg-black/40 border-l-2 lg:border-l-4 border-wuxia-gold/60 p-4 lg:p-6 rounded-2xl relative overflow-hidden">
+                                                        <p className="relative z-10 text-gray-300 text-sm lg:text-base leading-relaxed font-serif italic">
+                                                            "{evt.content || evt.description || evt.summary || 'Hành trình vạn dặm, khởi đầu từ đây...'}"
+                                                        </p>
+                                                    </div>
 
-                                                        <div className="mt-4 flex items-center justify-between">
-                                                            <div className="flex items-center gap-2">
-                                                                <span className="relative flex h-2 w-2">
-                                                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                                                </span>
-                                                                <span className="text-[10px] text-green-500 font-bold uppercase tracking-[0.2em]">{evt.currentStatus}</span>
-                                                            </div>
+                                                    <div className="mt-4 flex items-center justify-between">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="relative flex h-2 w-2">
+                                                              <span
+                                                                className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                                                                style={{ backgroundColor: themeAccentColor }}
+                                                              ></span>
+                                                              <span
+                                                                className="relative inline-flex rounded-full h-2 w-2"
+                                                                style={{ backgroundColor: themeAccentColor, boxShadow: `0 0 6px ${themeAccentGlow}` }}
+                                                              ></span>
+                                                            </span>
+                                                            <span
+                                                                className="text-[10px] font-bold uppercase tracking-[0.2em]"
+                                                                style={{ color: themeAccentColor, textShadow: `0 0 8px ${themeAccentGlow}` }}
+                                                            >
+                                                                {evt.currentStatus}
+                                                            </span>
                                                         </div>
-                                                    </GlassCard>
-                                                </div>
+                                                    </div>
+                                                </GlassCard>
+                                            </div>
                                             ))}
                                         </div>
                                     ) : (
