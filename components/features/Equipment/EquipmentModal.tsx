@@ -142,9 +142,9 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
             {/* Central Silhouette */}
             <div className={`relative w-full ${isMobile ? 'aspect-[1/1.5] max-h-[300px]' : 'aspect-[1/3] max-h-[400px]'} flex items-center justify-center`}>
                 {/* Silhouette Glow */}
-                <div className="absolute w-32 h-64 bg-wuxia-cyan/5 blur-[40px]"></div>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-80 bg-wuxia-cyan/[0.02] border border-wuxia-cyan/5 rotate-12"></div>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-80 bg-wuxia-cyan/[0.02] border border-wuxia-cyan/5 -rotate-12"></div>
+                <div className="absolute w-32 h-64 bg-wuxia-gold/6 blur-[40px]"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-80 bg-wuxia-gold/[0.02] border border-wuxia-gold/8 rotate-12"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-80 bg-wuxia-gold/[0.02] border border-wuxia-gold/8 -rotate-12"></div>
                 
                 {/* Scanline for silhouette only */}
                 <div className="absolute inset-0 pointer-events-none opacity-[0.1] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] bg-[size:100%_4px]"></div>
@@ -163,8 +163,8 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                             身法如風
                         </div>
                         {/* Circuit-like decorations */}
-                        <div className="absolute bottom-4 left-0 w-full h-px bg-wuxia-cyan/20"></div>
-                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-px h-8 bg-wuxia-cyan/20"></div>
+                        <div className="absolute bottom-4 left-0 w-full h-px bg-wuxia-gold/20"></div>
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-px h-8 bg-wuxia-gold/20"></div>
                     </div>
 
                     {/* Legs - Dual Bars */}

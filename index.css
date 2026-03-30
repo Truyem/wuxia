@@ -14,7 +14,7 @@
   --c-jade-base: 25 50 68;
   --c-jade-border: 100 200 160;
   --bg-wuxia-gradient-layer-1: radial-gradient(130% 90% at 8% 8%, rgba(var(--c-wuxia-gold-dark), 0.16) 0%, rgba(0,0,0,0) 48%);
-  --bg-wuxia-gradient-layer-2: radial-gradient(120% 100% at 90% 6%, rgba(var(--c-wuxia-cyan), 0.11) 0%, rgba(0,0,0,0) 54%);
+  --bg-wuxia-gradient-layer-2: radial-gradient(120% 100% at 90% 6%, rgba(var(--c-wuxia-gold-dark), 0.12) 0%, rgba(0,0,0,0) 54%);
   --bg-wuxia-gradient-layer-3: linear-gradient(160deg, rgb(var(--c-ink-black)) 0%, rgb(var(--c-ink-gray)) 55%, rgb(var(--c-ink-black)) 100%);
   --bg-wuxia-gradient: var(--bg-wuxia-gradient-layer-1), var(--bg-wuxia-gradient-layer-2), var(--bg-wuxia-gradient-layer-3);
 

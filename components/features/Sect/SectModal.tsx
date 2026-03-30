@@ -64,7 +64,7 @@ const SectModal: React.FC<Props> = ({ sectData, currentTime, onClose, onAcceptTa
                 {/* Decorative Background */}
                 <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-10">
                     <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-wuxia-gold/20 blur-[150px] rounded-full -translate-y-1/2 translate-x-1/2" />
-                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-wuxia-cyan/15 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/3" />
+                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-wuxia-gold/12 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/3" />
                 </div>
 
                 {/* Header */}
