@@ -65,13 +65,8 @@ const structuralAwareRepair = (input: string): string => {
         if (inString) {
             if (escaped) { escaped = false; result += ch; }
             else if (ch === '\\') { escaped = true; result += ch; }
-            else if (ch === '"') {
-                const remaining = input.slice(i + 1);
-                const nextIdx = remaining.search(/\S/);
-                const nextChar = nextIdx >= 0 ? remaining[nextIdx] : '';
-                if (nextChar && '[:,}]'.includes(nextChar)) { inString = false; result += ch; }
-                else result += '\\"';
-            } else {
+            else if (ch === '"') { inString = false; result += ch; }
+            else {
                 if (ch === '}') {
                     const remaining = input.slice(i);
                     if (remaining.match(/^\}\s*,?\s*\{/)) { result += '"'; inString = false; }
