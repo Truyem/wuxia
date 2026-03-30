@@ -40,7 +40,7 @@ const TaskModal: React.FC<Props> = ({ tasks, onClose, onDeleteTask }) => {
     const getTypeLabelColor = (type: string) => {
         switch (type) {
             case 'Chính tuyến': return 'bg-wuxia-red/20 text-wuxia-red border-wuxia-red/50';
-            case 'Nhánh': return 'bg-wuxia-cyan/20 text-wuxia-cyan border-wuxia-cyan/50';
+            case 'Nhánh': return 'bg-wuxia-gold/20 text-wuxia-gold border-wuxia-gold/50';
             case 'Môn phái': return 'bg-green-900/20 text-green-300 border-green-900/50';
             case 'Kỳ ngộ': return 'bg-purple-900/20 text-purple-300 border-purple-900/50';
             case 'Treo thưởng': return 'bg-orange-900/20 text-orange-300 border-orange-900/50';
@@ -167,7 +167,7 @@ const TaskModal: React.FC<Props> = ({ tasks, onClose, onDeleteTask }) => {
                                             <div className="flex gap-4 text-xs text-gray-400">
                                                 <span>Người giao: <span className="text-gray-300">{getField(currentTask, 'issuer', 'publisher', 'Publisher', 'issuer')}</span></span>
                                                 <span>Địa điểm: <span className="text-gray-300">{getField(currentTask, 'location', 'publishLocation', 'Publish location', 'mediumLocation', 'majorLocation', 'specificLocation')}</span></span>
-                                                <span>Cảnh giới: <span className="text-wuxia-cyan">{getField(currentTask, 'recommendedRealm', 'Recommended realm', 'realm')}</span></span>
+                                                <span>Cảnh giới: <span className="text-wuxia-gold">{getField(currentTask, 'recommendedRealm', 'Recommended realm', 'realm')}</span></span>
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-end gap-2">

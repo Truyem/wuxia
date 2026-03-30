@@ -61,7 +61,7 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
     const currentData = getTabContent();
 
     const tabAccentClass: Record<TabType, string> = {
-        context: 'bg-wuxia-cyan/50 group-hover:bg-wuxia-cyan',
+        context: 'bg-wuxia-gold/50 group-hover:bg-wuxia-gold',
         short: 'bg-wuxia-gold/40 group-hover:bg-wuxia-gold/70',
         medium: 'bg-purple-500/40 group-hover:bg-purple-400/70',
         long: 'bg-blue-500/30 group-hover:bg-blue-400/60',
@@ -91,7 +91,7 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
                     </div>
                     <div className="flex items-center gap-2">
                         <div className="hidden sm:flex items-center gap-1.5 bg-ink-black/60 border border-gray-800 px-3 py-1 rounded-full text-[9px] font-mono">
-                            <span className="w-1.5 h-1.5 rounded-full bg-wuxia-cyan animate-pulse" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-wuxia-gold animate-pulse" />
                             <span className="text-gray-400">{currentData.length} ghi chép</span>
                         </div>
                         <button
@@ -147,7 +147,7 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
                                         <span className="text-[9px] text-gray-700 font-mono">#{String(idx + 1).padStart(3, '0')}</span>
                                         {activeTab === 'context' && (mem as any).rawDate && (
                                             <div className="flex items-center gap-1.5">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-wuxia-cyan/70 animate-pulse flex-shrink-0" />
+                                                <span className="w-1.5 h-1.5 rounded-full bg-wuxia-gold/70 animate-pulse flex-shrink-0" />
                                                 <span className="text-[10px] text-gray-500 font-mono bg-ink-black/60 px-2 py-0.5 rounded border border-gray-800/80">
                                                     {(mem as any).rawDate}
                                                 </span>
@@ -162,12 +162,12 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
 
                                     {/* Synced short-term section */}
                                     {activeTab === 'context' && (mem as any).syncedShort && (
-                                        <div className="mt-3 pt-3 border-t border-wuxia-cyan/10">
+                                        <div className="mt-3 pt-3 border-t border-wuxia-gold/10">
                                             <div className="flex items-center gap-2 mb-1.5">
-                                                <span className="text-[9px] text-wuxia-cyan/60 font-mono uppercase tracking-widest">Đồng bộ ngắn hạn</span>
-                                                <div className="flex-1 h-px bg-gradient-to-r from-wuxia-cyan/15 to-transparent" />
+                                                <span className="text-[9px] text-wuxia-gold/60 font-mono uppercase tracking-widest">Đồng bộ ngắn hạn</span>
+                                                <div className="flex-1 h-px bg-gradient-to-r from-wuxia-gold/15 to-transparent" />
                                             </div>
-                                            <p className="text-xs text-gray-400/80 italic font-serif leading-relaxed whitespace-pre-wrap bg-wuxia-cyan/[0.04] px-3 py-2 rounded-lg border border-wuxia-cyan/10">
+                                            <p className="text-xs text-gray-400/80 italic font-serif leading-relaxed whitespace-pre-wrap bg-wuxia-gold/[0.04] px-3 py-2 rounded-lg border border-wuxia-gold/10">
                                                 {(mem as any).syncedShort}
                                             </p>
                                         </div>

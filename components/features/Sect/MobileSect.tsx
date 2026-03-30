@@ -200,7 +200,7 @@ const MobileSect: React.FC<Props> = ({ sectData, currentTime, onClose }) => {
                         <div className="space-y-3">
                             {sectData.importantMembers.map(mem => (
                                 <div key={mem.id} className="bg-ink-black/40 border border-gray-800 rounded-xl p-4 flex items-start gap-3">
-                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-base border shrink-0 ${mem.gender === 'Nữ' ? 'border-pink-900 bg-pink-900/10 text-pink-500' : 'border-wuxia-cyan/30 bg-wuxia-cyan/10 text-wuxia-cyan'
+                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-base border shrink-0 ${mem.gender === 'Nữ' ? 'border-pink-900 bg-pink-900/10 text-pink-500' : 'border-wuxia-gold/30 bg-wuxia-gold/10 text-wuxia-gold'
                                         }`}>
                                         {mem.name[0]}
                                     </div>

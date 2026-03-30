@@ -333,7 +333,7 @@ const StorageManager: React.FC<Props> = ({ requestConfirm }) => {
                 <div className="grid grid-cols-1 gap-3">
                     <button
                         type="button"
-                        className="w-full py-3 border border-wuxia-cyan/30 hover:border-wuxia-cyan/50 bg-wuxia-cyan/5 hover:bg-wuxia-cyan/10 text-wuxia-cyan text-xs tracking-[0.1em] font-serif transition-all disabled:opacity-30 flex items-center justify-center gap-2"
+                        className="w-full py-3 border border-wuxia-gold/30 hover:border-wuxia-gold/50 bg-wuxia-gold/5 hover:bg-wuxia-gold/10 text-wuxia-gold text-xs tracking-[0.1em] font-serif transition-all disabled:opacity-30 flex items-center justify-center gap-2"
                         onClick={handleRepairHistory}
                         disabled={Boolean(runningAction)}
                     >

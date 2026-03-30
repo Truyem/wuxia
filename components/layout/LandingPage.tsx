@@ -45,9 +45,9 @@ const LandingPage: React.FC<Props> = ({ onStart, onLoad, onSettings, hasSave }) 
                 {/* Top themed accent haze */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full blur-[120px]"
                     style={{ background: 'rgb(var(--c-wuxia-gold) / 0.07)' }}></div>
-                {/* Secondary cyan accent */}
+                {/* Secondary accent */}
                 <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[200px] rounded-full blur-[150px]"
-                    style={{ background: 'rgb(var(--c-wuxia-cyan) / 0.04)' }}></div>
+                    style={{ background: 'rgb(var(--c-wuxia-gold) / 0.04)' }}></div>
                 {/* Bottom cool fade */}
                 <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-black/60 to-transparent"></div>
                 {/* Subtle vertical scan lines */}
@@ -55,7 +55,7 @@ const LandingPage: React.FC<Props> = ({ onStart, onLoad, onSettings, hasSave }) 
                     style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.08) 3px, rgba(255,255,255,0.08) 4px)' }}></div>
                 {/* Neon border top glow */}
                 <div className="absolute top-0 left-0 w-full h-px"
-                    style={{ background: 'linear-gradient(90deg, transparent, rgb(var(--c-wuxia-gold) / 0.4), rgb(var(--c-wuxia-cyan) / 0.3), transparent)' }}></div>
+                    style={{ background: 'linear-gradient(90deg, transparent, rgb(var(--c-wuxia-gold) / 0.4), rgb(var(--c-wuxia-gold) / 0.3), transparent)' }}></div>
             </div>
 
             {/* ── Fullscreen toggle ── */}

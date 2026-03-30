@@ -75,7 +75,7 @@ const GenerationStatusBar: React.FC<Props> = ({ loading, modelName = 'AI Master'
                         {tokens && (
                             <div className="flex flex-col items-center sm:items-end border-l border-white/10 pl-8 min-w-[80px]">
                                 <span className="text-[8px] uppercase tracking-widest text-paper-white/40 font-bold mb-0.5">Linh Thạch</span>
-                                <span className="text-[11px] text-wuxia-cyan font-mono font-bold tracking-tighter">
+                                <span className="text-[11px] text-wuxia-gold font-mono font-bold tracking-tighter">
                                     {tokens.input} <span className="text-paper-white/20 mx-0.5">|</span> {tokens.output}
                                 </span>
                             </div>

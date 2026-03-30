@@ -110,7 +110,7 @@ const MobileMemory: React.FC<Props> = ({ history, memorySystem, onClose, current
                             </p>
                             {activeTab === 'context' && (mem as any).syncedShort && (
                                 <div className="mt-2 border-t border-gray-800/70 pt-2">
-                                    <div className="text-[10px] text-wuxia-cyan/80 mb-1">Short-term summary（Pending transfer）</div>
+                                    <div className="text-[10px] text-wuxia-gold/80 mb-1">Short-term summary（Pending transfer）</div>
                                     <p className="text-[11px] text-gray-400 leading-relaxed whitespace-pre-wrap">
                                         {(mem as any).syncedShort}
                                     </p>

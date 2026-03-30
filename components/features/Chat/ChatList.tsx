@@ -155,19 +155,19 @@ const ChatList: React.FC<Props> = ({
                     return (
                         <div key={absoluteIdx} className="flex w-full justify-center animate-slide-in mb-6">
                             <div className="w-full max-w-3xl px-1 md:px-4">
-                                <div className="relative mx-auto max-w-[94%] md:max-w-[88%] rounded-2xl border border-wuxia-cyan/35 bg-gradient-to-b from-[rgb(var(--c-ink-gray))]/65 via-[rgb(var(--c-ink-black))]/75 to-[rgb(var(--c-ink-black))]/85 px-4 py-3 shadow-[0_8px_28px_rgba(0,0,0,0.45)] backdrop-blur-lg">
-                                    <span className="block text-[10px] tracking-[0.2em] text-wuxia-cyan/90 font-mono mb-2">
+                                <div className="relative mx-auto max-w-[94%] md:max-w-[88%] rounded-2xl border border-wuxia-gold/35 bg-gradient-to-b from-[rgb(var(--c-ink-gray))]/65 via-[rgb(var(--c-ink-black))]/75 to-[rgb(var(--c-ink-black))]/85 px-4 py-3 shadow-[0_8px_28px_rgba(0,0,0,0.45)] backdrop-blur-lg">
+                                    <span className="block text-[10px] tracking-[0.2em] text-wuxia-gold/90 font-mono mb-2">
                                         Đang xử lý
                                     </span>
                                     <p className="whitespace-pre-wrap leading-relaxed font-serif text-gray-100">
                                         {msg.content || '...'}
                                     </p>
                                     <div className="mt-2 flex items-center justify-between">
-                                        <span className="text-[9px] text-wuxia-cyan/75 font-mono tracking-[0.12em]">ĐANG PHÁT</span>
-                                        <span className="inline-flex items-center gap-1 text-wuxia-cyan/70">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-wuxia-cyan/70 animate-pulse"></span>
-                                            <span className="w-1.5 h-1.5 rounded-full bg-wuxia-cyan/55 animate-pulse [animation-delay:120ms]"></span>
-                                            <span className="w-1.5 h-1.5 rounded-full bg-wuxia-cyan/40 animate-pulse [animation-delay:240ms]"></span>
+                                        <span className="text-[9px] text-wuxia-gold/75 font-mono tracking-[0.12em]">ĐANG PHÁT</span>
+                                        <span className="inline-flex items-center gap-1 text-wuxia-gold/70">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-wuxia-gold/70 animate-pulse"></span>
+                                            <span className="w-1.5 h-1.5 rounded-full bg-wuxia-gold/55 animate-pulse [animation-delay:120ms]"></span>
+                                            <span className="w-1.5 h-1.5 rounded-full bg-wuxia-gold/40 animate-pulse [animation-delay:240ms]"></span>
                                         </span>
                                     </div>
                                 </div>

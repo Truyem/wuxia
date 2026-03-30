@@ -255,7 +255,7 @@ const SaveLoadModal: React.FC<Props> = ({ onClose, onLoadGame, onSaveGame, mode,
                                 >
                                     <div className="flex justify-between items-start">
                                         <div className="flex items-center gap-2">
-                                            <span className={`text-[10px] px-1.5 rounded-none border ${save.type === 'auto' ? 'border-wuxia-cyan/40 text-wuxia-cyan' : 'border-wuxia-gold text-wuxia-gold'}`}>
+                                            <span className={`text-[10px] px-1.5 rounded-none border ${save.type === 'auto' ? 'border-wuxia-gold/40 text-wuxia-gold' : 'border-wuxia-gold text-wuxia-gold'}`}>
                                                 {save.type === 'auto' ? 'TỰ ĐỘNG' : 'THỦ CÔNG'}
                                             </span>
                                             <span className="font-bold text-gray-200 text-sm">{buildingArchiveTitle(save)}</span>

@@ -35,7 +35,7 @@ const StatRow: React.FC<{ label: string; count?: number }> = ({ label, count }) 
     </div>
 );
 
-const RelationTag: React.FC<{ label: string; value?: string; accent?: string }> = ({ label, value, accent = 'text-wuxia-cyan' }) => {
+const RelationTag: React.FC<{ label: string; value?: string; accent?: string }> = ({ label, value, accent = 'text-wuxia-gold' }) => {
     const { t } = useTranslation();
     return (
         <div className="bg-ink-black/35 border border-gray-800 rounded-none p-3">
@@ -177,7 +177,7 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName, onTogg
                     <div className="bg-ink-black/40 border border-wuxia-gold/10 rounded-none p-3">
                         <div className="flex items-center justify-between mb-2">
                             <span className="text-[10px] text-gray-500 tracking-[0.3em]">{t('social.directory')}</span>
-                            <span className="text-[10px] text-wuxia-cyan/80">{socialList.length} {t('social.personCount')}</span>
+                            <span className="text-[10px] text-wuxia-gold/80">{socialList.length} {t('social.personCount')}</span>
                         </div>
                         <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                             {socialList.map(npc => (
@@ -190,7 +190,7 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName, onTogg
                                         }`}
                                 >
                                     <div className="flex items-center gap-2">
-                                        <div className={`w-9 h-9 rounded-none flex items-center justify-center font-serif font-bold text-base border-2 ${npc.gender === 'Female' || npc.gender === 'Nữ' ? 'border-pink-800/60 bg-pink-900/20 text-pink-500' : 'border-wuxia-cyan/30 bg-wuxia-cyan/10 text-wuxia-cyan'
+                                        <div className={`w-9 h-9 rounded-none flex items-center justify-center font-serif font-bold text-base border-2 ${npc.gender === 'Female' || npc.gender === 'Nữ' ? 'border-pink-800/60 bg-pink-900/20 text-pink-500' : 'border-wuxia-gold/30 bg-wuxia-gold/10 text-wuxia-gold'
                                             }`}>
                                             {resolveAvatar(npc) ? (
                                                 <img src={resolveAvatar(npc)} alt={npc.name} className="w-full h-full object-cover" />
@@ -278,16 +278,16 @@ const MobileSocial: React.FC<Props> = ({ socialList, onClose, playerName, onTogg
                             </div>
 
                             {/* Relationship-Driven Panel - VISIBLE FOR ALL */}
-                            <div className="bg-ink-black/30 border border-wuxia-cyan/30 rounded-none p-4 space-y-3">
-                                <div className="flex items-center justify-between border-b border-wuxia-cyan/20 pb-2">
-                                    <div className="text-wuxia-cyan font-serif font-bold text-sm tracking-widest uppercase flex items-center gap-2">
+                            <div className="bg-ink-black/30 border border-wuxia-gold/30 rounded-none p-4 space-y-3">
+                                <div className="flex items-center justify-between border-b border-wuxia-gold/20 pb-2">
+                                    <div className="text-wuxia-gold font-serif font-bold text-sm tracking-widest uppercase flex items-center gap-2">
                                         <IconGlyph name="book" className="w-3.5 h-3.5" />
                                         {t('social.sections.fateInteraction')}
                                     </div>
-                                    <span className="text-[10px] text-wuxia-cyan/80 tracking-[0.2em]">{t('social.sections.dynamicStatus')}</span>
+                                    <span className="text-[10px] text-wuxia-gold/80 tracking-[0.2em]">{t('social.sections.dynamicStatus')}</span>
                                 </div>
                                 <div className="grid grid-cols-1 gap-2">
-                                    <RelationTag label={t('social.sections.corePersonality')} value={currentNPC.corePersonalityTraits} accent="text-wuxia-cyan" />
+                                    <RelationTag label={t('social.sections.corePersonality')} value={currentNPC.corePersonalityTraits} accent="text-wuxia-gold" />
                                     <RelationTag label={t('social.sections.affinityBreakthrough')} value={currentNPC.favorabilityBreakthroughCondition} accent="text-emerald-200" />
                                     <RelationTag label={t('social.sections.relationBreakthrough')} value={currentNPC.relationBreakthroughCondition} accent="text-amber-200" />
                                 </div>

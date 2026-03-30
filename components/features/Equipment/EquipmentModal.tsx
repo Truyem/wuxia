@@ -43,7 +43,7 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
     const getQualityColor = (quality: string) => {
         switch (quality) {
             case 'Phàm phẩm': return { text: 'text-gray-400', border: 'border-gray-600/40', bg: 'bg-gray-600/10', glow: '' };
-            case 'Lương phẩm': return { text: 'text-wuxia-cyan', border: 'border-wuxia-cyan/40', bg: 'bg-wuxia-cyan/10', glow: 'shadow-[0_0_8px_rgba(68,170,170,0.15)]' };
+            case 'Lương phẩm': return { text: 'text-wuxia-gold', border: 'border-wuxia-gold/40', bg: 'bg-wuxia-gold/10', glow: 'shadow-[0_0_8px_rgba(68,170,170,0.15)]' };
             case 'Thượng phẩm': return { text: 'text-purple-400', border: 'border-purple-500/40', bg: 'bg-purple-600/10', glow: 'shadow-[0_0_8px_rgba(168,85,247,0.15)]' };
             case 'Cực phẩm': return { text: 'text-orange-400', border: 'border-orange-500/40', bg: 'bg-orange-600/10', glow: 'shadow-[0_0_8px_rgba(251,146,60,0.15)]' };
             case 'Tuyệt thế': return { text: 'text-red-500', border: 'border-red-500/40', bg: 'bg-red-600/10', glow: 'shadow-[0_0_12px_rgba(239,68,68,0.2)]' };
