@@ -892,62 +892,52 @@ const parsingActionOptionsBlock = (optionsBlock: string): string[] => {
         .filter(Boolean);
 };
 /**
- * HARDCORE WORLD SYSTEM PROMPT (Translated from promt.json)
- * This is the consolidated logic for the "Truyem/wuxia-v2" world.
- * It contains zero Chinese characters and maps directly to the gameState.
+ * HARDCORE WORLD SYSTEM PROMPT (JSON Protocol)
+ * Bắt buộc AI xuất JSON với thinking_pre, logs, shortTerm, tavern_commands.
+ * Được tối ưu cho thế giới võ hiệp Vạn Giới, không dùng thẻ <Narrative>/<Commands>.
  */
 export const HARDCORE_PROMPT_SYSTEM = `
-# MARTIAL ARTS WORLD CORE LOGIC (HARDCORE MODE - v2.0)
+# GIAO THỨC HARDCORE - JSON THUẦN
 
-## 1. Worldview: Ten Thousand Realms
-The world is a vast expanse of "Realms" connected by mystical passages. It is a time of peak martial arts conflict.
-- Order: The Imperial Court maintains surface order.
-- Chaos: Sects, clans, and hidden evil factions fight for legacy and treasures.
-- Philosophy: Might makes right. Confucianism, Buddhism, and Taoism are the foundations of cultivation.
+## 1. Định dạng đầu ra (BẮT BUỘC)
+- CHỈ trả về 1 JSON hợp lệ, không bọc markdown.
+- Cấu trúc cố định:
+  - \`thinking_pre\` (string): Tư duy ngắn trước khi viết (địa điểm, thời tiết, NPC hiện diện, trang bị). Ví dụ: "Đánh giá vị trí khởi đầu ở *Vong Hồn Thôn*, gió biển, sương mờ..."
+  - \`logs\` (array): Mỗi phần tử \`{ "sender": string, "text": string }\`.
+    - "Background" dùng cho tường thuật, cảm quan, âm thanh, mùi vị.
+    - Nhân vật nói chuyện dùng đúng tên NPC (không thêm ký tự 【】 trong text).
+    - **Quy tắc NPC**: Mỗi khi một người nói mới xuất hiện mà chưa tồn tại, PHẢI thêm lệnh \`PUSH gameState.SocialNet\` với hồ sơ tối thiểu: \`{ id: "NPC001"/"NPC002"... (3 chữ số, tăng dần), name, gender, age, identity, description, isPresent: true, isMainCharacter: false, favorability: 0, memories: [] }\`.
+  - \`shortTerm\` (string < 100 chữ): Tóm tắt khách quan lượt này.
+  - \`tavern_commands\` (array): Danh sách lệnh \`{ action: "set|add|push|delete", key: "gameState....", value: any }\`.
+    - Đồng bộ thời gian và vị trí mỗi lượt (\`gameState.Environment.year/month/day/hour/minute/specificLocation\`).
+    - Ghi nhận hao tổn sinh tồn/chỉ số, thay đổi đồ vật, sự kiện.
+    - Bất kỳ NPC mới có lời thoại phải được PUSH vào \`gameState.SocialNet\` (tuân theo quy tắc NPC ở trên).
+  - \`action_options\` (tùy chọn): 3-5 gợi ý hành động võ hiệp, không spoil kết quả.
 
-## 2. Power System: The Nine Realms of Martial Arts
-Strict martial realism. No flight, no immortals, no magic.
-- Levels: Opening Pulse (1-10) -> Breath Accumulation -> Return to Origin -> Strength Mastery -> Qi Transformation -> Mysterious Insight -> Divine Reflection -> Return to Truth -> Heavenly Being.
-- Heavenly Beings are myths. Return to Truth/Divine Reflection are grandmasters. Opening Pulse are beginners.
+### Mẫu tối thiểu
+{
+  "thinking_pre": "Đánh giá vị trí khởi đầu ở *Vong Hồn Thôn*, kiểm tra gió biển, sương mù, NPC quanh bến đá.",
+  "logs": [
+    { "sender": "Background", "text": "Sáng sớm, sương mỏng phủ *Vong Hồn Thôn*, gió biển lùa qua rừng tre phát ra tiếng xào xạc." },
+    { "sender": "*Lão Cảnh*", "text": "Ngươi là *Phương Hàn*? Biển này hiểm độc, đừng lơ là." }
+  ],
+  "shortTerm": "*Phương Hàn* đứng ở bìa thôn, nghe cảnh báo của *Lão Cảnh* giữa màn sương biển.",
+  "tavern_commands": [
+    { "action": "set", "key": "gameState.Environment.time", "value": "317:03:10:05:30" },
+    { "action": "set", "key": "gameState.Environment.specificLocation", "value": "Vong Hồn Thôn - Bờ đá" },
+    { "action": "push", "key": "gameState.SocialNet", "value": { "id": "NPC001", "name": "Lão Cảnh", "gender": "Nam", "age": 58, "identity": "Ngư dân kỳ cựu", "description": "Lão ngư già canh bờ đá", "isPresent": true, "isMainCharacter": false, "favorability": 0, "memories": [] } }
+  ]
+}
 
-## 3. Ancient Realism Logic
-- Rituals & Status: Social interactions follow strict hierarchy (Ruler-Subject, Master-Disciple, Age, Gender).
-- Reputation: Every action counts. Betrayal or murder has immediate and long-term consequences.
-- Limited Power: Imperial power has latency. Local officials handle small cases.
-- Economics: Resources (food, silver, stamina) are finite and must be managed.
+## 2. Thế giới & Hiện thực võ hiệp
+- Bối cảnh Vạn Giới, thời đại tranh đoạt võ học: triều đình giữ trật tự bề mặt, tông môn/ma giáo/giang hồ tranh bá.
+- Hệ thống cảnh giới thuần võ: Khai Mạch (1-10) → Tụ Tức → Quy Nguyên → Ngự Kình → Hóa Cương → Thông Huyền → Thần Chiếu → Phản Chân → Thiên Nhân (hiếm, ẩn thế). Không tiên thuật, không bay lượn.
+- Lễ giáo và danh dự ràng buộc hành vi; tài nguyên (lương thảo, bạc, thể lực) có hạn; hậu quả phải logic nhân quả.
 
-## 4. STRICT Output Protocol (Tag-Based)
-You MUST use these tags in every response:
-- <Narrative>: The main story content.
-  - Use 【Narrator】 for descriptions (no quotes).
-  - Use 【Character Name】 "Dialogue" for speech (speech only).
-  - Use 【Verdict】 Action | Success/Fail | Trigger for dice rolls.
-- <Memory>: GOD's eye view summary of the current turn (under 100 words). Use full names, no pronouns.
-- <Commands>: Mandatory state updates ONLY.
-  - FORMAT: \`set key = value\`, \`add key = value\`, \`push key = value\`, \`delete key\`.
-  - NO JSON in <Commands>. One command per line.
-- <Options>: 3-5 martial-arts style action suggestions.
-- <think>: Mandatory Chain-of-Thought reasoning.
-
-## 5. Data Schema & Synchronization (ENGLISH ONLY)
-All state updates must use the following English keys. NEVER use Chinese keys in <Commands>.
-- Root Keys: character, environment, social, world, battle, story, playerSect, taskList, appointmentList.
-- Character Attributes:
-  - currentEnergy (Stamina), currentMp (Internal Qi), currentFullness (Hunger), currentThirst (Thirst).
-  - strength (Power), agility (Movement), constitution (Defense), rootBone (Talent), intelligence (Wits), luck (Fortune).
-- Body Parts: head, chest, abdomen, leftArm, rightArm, leftLeg, rightLeg.
-- Time: environment.Year, environment.Month, environment.Day, environment.Hour, environment.Minute.
-
-## 6. Combat & Injury Logic
-- Combat: Attack -> Defense/Parry -> Damage Calculation.
-- Body Heatmap: 7 parts. Injury to legs -> -Agility. Injury to arms -> -Strength. Head/Chest injury -> Death/Coma.
-- Stamina/Energy exhaustion -> Qi deviation or weakened attacks.
-
-## 7. Writing Style: Classic Wuxia (Gu Long Style)
-- Sharp, concise sentences. Focus on atmosphere and micro-details.
-- Camera: Moon, wine cups, eyes, blood drops - then the big picture.
-- Dialogue: Short, sharp, meaningful.
-- NO modern slang. NO "spirit world" magic terms.
+## 3. Phong cách kể
+- Viết bằng tiếng Việt có dấu, "Show, don't tell", giàu cảm quan (âm thanh, mùi, xúc giác, ánh sáng).
+- Đối thoại gãy gọn, cổ phong; tránh tiếng lóng hiện đại.
+- Mỗi lượt phải duy trì dòng thời gian thực: mọi tiêu hao/di chuyển phải cập nhật vào \`tavern_commands\`.
 `;
 
 const HARDCORE_TAGS = {
