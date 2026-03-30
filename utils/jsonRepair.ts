@@ -81,6 +81,48 @@ const structuralAwareRepair = (input: string): string => {
     return result;
 };
 
+const removeDanglingQuoteTokens = (input: string): string => {
+    let result = '', inString = false, escaped = false, lastSig = '';
+    const nextNonWsIndex = (from: number): number => {
+        for (let i = from; i < input.length; i++) {
+            if (!/\s/.test(input[i])) return i;
+        }
+        return -1;
+    };
+
+    for (let i = 0; i < input.length; i++) {
+        const ch = input[i];
+        if (inString) {
+            result += ch;
+            if (escaped) escaped = false;
+            else if (ch === '\\') escaped = true;
+            else if (ch === '"') inString = false;
+            continue;
+        }
+
+        if (ch === '"') {
+            const nextIdx = nextNonWsIndex(i + 1);
+            const nextChar = nextIdx >= 0 ? input[nextIdx] : '';
+            if (nextChar && ',}]'.includes(nextChar) && /[}"\]0-9]/.test(lastSig)) {
+                continue;
+            }
+            if (input[i + 1] === '"') {
+                const afterPairIdx = nextNonWsIndex(i + 2);
+                const afterPairChar = afterPairIdx >= 0 ? input[afterPairIdx] : '';
+                if (afterPairChar && ',}]'.includes(afterPairChar) && /[}"\]0-9]/.test(lastSig)) {
+                    i += 1;
+                    continue;
+                }
+            }
+            inString = true;
+        }
+
+        result += ch;
+        if (!/\s/.test(ch)) lastSig = ch;
+    }
+    return result;
+};
+
 const normalizeFullWidthPunctuation = (input: string): string => {
     const map: Record<string, string> = { '“': '"', '”': '"', '‘': "'", '’': "'", '，': ',', '：': ':', '；': ',' };
     let result = '', inString = false, escaped = false;
@@ -162,6 +204,7 @@ const repairJsonText = (input: string): string => {
     text = extractJsonBlock(text);
     text = normalizeFullWidthPunctuation(text);
     text = structuralAwareRepair(text);
+    text = removeDanglingQuoteTokens(text);
     text = insertMissingCommasBetweenPairs(text);
     text = normalizeBracketBalance(text);
     text = escapeRawLineBreaksInStrings(text);
