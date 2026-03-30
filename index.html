@@ -254,7 +254,11 @@
       /* Wuxia Decorative Elements */
       
       .bg-modal-gradient {
-        background: linear-gradient(165deg, rgb(var(--c-ink-black)) 0%, rgb(var(--c-ink-gray)) 100%);
+        background: linear-gradient(
+          165deg,
+          color-mix(in srgb, rgb(var(--c-ink-black)) 96%, transparent) 0%,
+          color-mix(in srgb, rgb(var(--c-ink-gray)) 92%, transparent) 100%
+        );
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
       }
