@@ -159,11 +159,11 @@ h1, h2, h3, h4, .font-wuxia {
 .text-wuxia-cyan { color: rgb(var(--c-wuxia-cyan)); }
 .status-accent-dot {
   background-color: rgb(var(--c-wuxia-gold));
-  box-shadow: 0 0 8px rgba(var(--c-wuxia-gold), 0.5);
+  box-shadow: 0 0 8px rgba(var(--c-wuxia-gold) / 0.5);
 }
 .status-accent-text {
   color: rgb(var(--c-wuxia-gold));
-  text-shadow: 0 0 8px rgba(var(--c-wuxia-gold), 0.5);
+  text-shadow: 0 0 8px rgba(var(--c-wuxia-gold) / 0.5);
 }
 .status-accent-ping {
   background-color: rgb(var(--c-wuxia-gold));
