@@ -109,7 +109,7 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                                     </span>
                                 )}
                                 {item.type === 'Phòng cụ' && (
-                                    <span className="text-[9px] text-wuxia-cyan/80 font-mono flex items-center gap-1">
+                                    <span className="text-[9px] text-wuxia-gold/80 font-mono flex items-center gap-1">
                                         <Shield className="w-2.5 h-2.5" /> {(item as Armor).physicalDefense}
                                     </span>
                                 )}
@@ -207,18 +207,18 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
     const ArmorView = () => (
         <div className="space-y-6">
             <div className="flex items-center gap-4 px-2">
-                <span className="text-[10px] text-wuxia-cyan font-black uppercase tracking-[0.4em]">🛡 PHÒNG CỤ</span>
+                <span className="text-[10px] text-wuxia-gold font-black uppercase tracking-[0.4em]">🛡 PHÒNG CỤ</span>
                 <div className="flex-1 h-[1px] bg-wuxia-gold/20"></div>
             </div>
             
             <div className="grid gap-3">
-                <SlotCard slotKey="head" label="Đầu" Icon={Crown} colorClass="text-wuxia-cyan" />
-                <SlotCard slotKey="chest" label="Thân" Icon={Shirt} colorClass="text-wuxia-cyan" />
-                <SlotCard slotKey="back" label="Lưng" Icon={Backpack} colorClass="text-wuxia-cyan" />
-                <SlotCard slotKey="waist" label="Eo" Icon={LinkIcon} colorClass="text-wuxia-cyan" />
-                <SlotCard slotKey="hands" label="Hộ Thủ" Icon={Hand} colorClass="text-wuxia-cyan" />
-                <SlotCard slotKey="legs" label="Chân" Icon={Layers} colorClass="text-wuxia-cyan" />
-                <SlotCard slotKey="feet" label="Hài" Icon={Footprints} colorClass="text-wuxia-cyan" />
+                <SlotCard slotKey="head" label="Đầu" Icon={Crown} colorClass="text-wuxia-gold" />
+                <SlotCard slotKey="chest" label="Thân" Icon={Shirt} colorClass="text-wuxia-gold" />
+                <SlotCard slotKey="back" label="Lưng" Icon={Backpack} colorClass="text-wuxia-gold" />
+                <SlotCard slotKey="waist" label="Eo" Icon={LinkIcon} colorClass="text-wuxia-gold" />
+                <SlotCard slotKey="hands" label="Hộ Thủ" Icon={Hand} colorClass="text-wuxia-gold" />
+                <SlotCard slotKey="legs" label="Chân" Icon={Layers} colorClass="text-wuxia-gold" />
+                <SlotCard slotKey="feet" label="Hài" Icon={Footprints} colorClass="text-wuxia-gold" />
             </div>
         </div>
     );
