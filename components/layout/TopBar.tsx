@@ -169,7 +169,7 @@ const TopBar: React.FC<Props> = ({ Environment, timeFormat, festivals = [] }) =>
     };
 
     return (
-        <div className="h-12 md:h-[58px] w-full flex items-center justify-center relative overflow-visible z-50 bg-[rgb(var(--c-ink-black))]">
+        <div className="h-12 md:h-[58px] w-full flex items-center justify-center relative overflow-visible z-50 bg-[rgb(var(--c-ink-black))]/65 backdrop-blur-xl rounded-xl border border-white/10">
             {/* Top accent line */}
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-wuxia-gold/35 to-transparent"></div>
             
@@ -200,7 +200,7 @@ const TopBar: React.FC<Props> = ({ Environment, timeFormat, festivals = [] }) =>
                             e.stopPropagation();
                             toggleFullScreen();
                         }}
-                        className="mt-2.5 md:mt-4 bg-[#111] border-2 border-double border-wuxia-gold/50 px-4 md:px-10 py-1.5 md:py-3 rounded-lg shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative flex flex-col items-center min-w-[150px] md:min-w-[220px] hover:border-wuxia-gold/60 transition-all duration-200 cursor-pointer"
+                        className="mt-2.5 md:mt-4 bg-[rgb(var(--c-ink-black))]/78 border border-wuxia-gold/45 px-4 md:px-10 py-1.5 md:py-3 rounded-xl shadow-[0_10px_20px_rgba(0,0,0,0.55)] relative flex flex-col items-center min-w-[150px] md:min-w-[220px] hover:border-wuxia-gold/65 transition-all duration-200 cursor-pointer backdrop-blur-lg"
                     >
                         {/* Corner marks */}
                         <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-wuxia-gold/40"></div>
@@ -219,7 +219,7 @@ const TopBar: React.FC<Props> = ({ Environment, timeFormat, festivals = [] }) =>
                         </div>
 
                         {/* Location badge */}
-                        <div className="absolute -bottom-2.5 md:-bottom-3 bg-wuxia-red text-[8px] md:text-[10px] px-2 md:px-3 py-px rounded border border-wuxia-gold/30 shadow-md flex items-center gap-1 z-30 tracking-wide max-w-[200px] md:max-w-[420px]" style={{ color: 'white' }}>
+                        <div className="absolute -bottom-2.5 md:-bottom-3 bg-[rgb(var(--c-wuxia-red))]/90 text-[8px] md:text-[10px] px-2 md:px-3 py-px rounded border border-wuxia-gold/40 shadow-md flex items-center gap-1 z-30 tracking-wide max-w-[200px] md:max-w-[420px]" style={{ color: 'white' }}>
                             <span className="md:hidden opacity-90 truncate" title={mobileLocationBadge}>{mobileLocationBadge}</span>
                             <span className="hidden md:inline opacity-90 truncate" title={locationBadge}>{locationBadge}</span>
                         </div>
@@ -264,4 +264,3 @@ const TopBar: React.FC<Props> = ({ Environment, timeFormat, festivals = [] }) =>
 };
 
 export default TopBar;
-

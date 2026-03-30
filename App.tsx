@@ -427,7 +427,7 @@ const App: React.FC = () => {
 
 
     return (
-        <div className="h-screen w-screen overflow-hidden bg-black relative flex flex-col p-3 transition-colors duration-500">
+        <div className="h-screen w-screen overflow-hidden bg-transparent relative flex flex-col p-3 transition-colors duration-500">
 
             {/* View Switching */}
             {state.view === 'home' && (
@@ -459,7 +459,7 @@ const App: React.FC = () => {
 
             {state.view === 'game' && (
                 /* Main Game Frame Container */
-                <div className="relative flex-1 flex flex-col w-full h-full rounded-none overflow-hidden bg-black shadow-2xl">
+                <div className="relative flex-1 flex flex-col w-full h-full rounded-2xl overflow-hidden bg-[rgb(var(--c-ink-black))]/80 border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.55)] backdrop-blur-xl">
 
                     {/* Custom Background Layer */}
                     {state.visualConfig.backgroundImage && (
@@ -473,7 +473,7 @@ const App: React.FC = () => {
                     <div className="absolute inset-0 bg-noise opacity-50 pointer-events-none z-[5]"></div>
 
                     {/* Top Navigation Bar */}
-                    <div className="shrink-0 z-40 bg-ink-black/90 border-b border-wuxia-gold/20 shadow-[0_10px_30px_rgba(0,0,0,0.8)] relative rounded-none overflow-visible mx-1 mt-1">
+                    <div className="shrink-0 z-40 bg-transparent border-b border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.45)] relative overflow-visible mx-2 mt-2 rounded-xl">
                         <TopBar
                             Environment={state.environment}
                             timeFormat={state.visualConfig.timeDisplayFormat}
@@ -482,10 +482,10 @@ const App: React.FC = () => {
                     </div>
 
                     {/* Main interaction area in the middle */}
-                    <div className="flex-1 flex overflow-hidden relative z-10 mx-1 mb-1">
+                    <div className="flex-1 flex overflow-hidden relative z-10 mx-2 mb-2 gap-2">
 
                         {/* Left sidebar */}
-                        <div className="hidden md:block w-[14.285714%] h-full relative z-20 bg-ink-black/95 border-r border-wuxia-gold/20 flex flex-col shadow-[10px_0_20px_rgba(0,0,0,0.5)]">
+                        <div className="hidden md:block w-[14.285714%] h-full relative z-20 bg-transparent border border-white/10 rounded-xl flex flex-col shadow-[10px_0_20px_rgba(0,0,0,0.35)] overflow-hidden">
                             <LeftPanel 
                                 Role={state.character} 
                                 Social={state.social}
@@ -504,7 +504,7 @@ const App: React.FC = () => {
                         </div>
 
                         {/* Middle sidebar - Chat Area */}
-                        <div className="flex-1 flex flex-col relative z-0 min-w-0 transition-colors duration-500">
+                        <div className="flex-1 flex flex-col relative z-0 min-w-0 transition-colors duration-500 rounded-xl border border-white/10 bg-[rgb(var(--c-ink-black))]/40 overflow-hidden">
                              <ChatList
                                 history={state.history}
                                 loading={state.loading}
@@ -547,7 +547,7 @@ const App: React.FC = () => {
                         </div>
 
                         {/* Right sidebar */}
-                        <div className="hidden md:block w-[14.285714%] h-full relative z-20 bg-ink-black/95 border-l border-wuxia-gold/20 flex flex-col shadow-[-10px_0_20px_rgba(0,0,0,0.5)]">
+                        <div className="hidden md:block w-[14.285714%] h-full relative z-20 bg-transparent border border-white/10 rounded-xl flex flex-col shadow-[-10px_0_20px_rgba(0,0,0,0.35)] overflow-hidden">
                             <RightPanel
                                 onOpenSettings={() => setters.setShowSettings(true)}
                                 onOpenInventory={() => setters.setShowInventory(true)}
@@ -579,7 +579,7 @@ const App: React.FC = () => {
                     />
 
                     {/* Bottom world events bar for mobile devices. */}
-                    <div className="md:hidden shrink-0 h-[32px] bg-ink-black/90 border-t border-wuxia-gold/20 flex items-center text-[10px] font-mono text-wuxia-gold-dark relative mx-1 mb-1 overflow-hidden pb-[env(safe-area-inset-bottom)]">
+                    <div className="md:hidden shrink-0 h-[32px] bg-[rgb(var(--c-ink-black))]/70 border border-white/10 rounded-xl flex items-center text-[10px] font-mono text-wuxia-gold-dark relative mx-2 mb-2 overflow-hidden pb-[env(safe-area-inset-bottom)]">
                         <div className="shrink-0 h-full px-2 flex items-center border-r border-gray-800 text-wuxia-gold/90 tracking-wider">
                             World major events
                         </div>
@@ -609,7 +609,7 @@ const App: React.FC = () => {
                     </div>
 
                     {/* Bottom Status Bar */}
-                    <div className="hidden md:flex shrink-0 h-[37px] bg-ink-black/90 border-t border-wuxia-gold/20 justify-between px-4 items-center text-xs font-mono text-wuxia-gold-dark z-50 shadow-[0_-5px_15px_rgba(0,0,0,0.8)] relative rounded-b-xl mx-1 mb-1 overflow-hidden">
+                    <div className="hidden md:flex shrink-0 h-[37px] bg-[rgb(var(--c-ink-black))]/70 border border-white/10 justify-between px-4 items-center text-xs font-mono text-wuxia-gold-dark z-50 shadow-[0_-5px_15px_rgba(0,0,0,0.45)] relative rounded-xl mx-2 mb-2 overflow-hidden">
 
                         {/* Left Label: World Events */}
                         <div className="shrink-0 text-wuxia-gold font-bold mr-2 z-20 bg-ink-black/90 px-2 flex items-center h-full border-r border-gray-800">

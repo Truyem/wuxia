@@ -155,7 +155,7 @@ const ChatList: React.FC<Props> = ({
                     return (
                         <div key={absoluteIdx} className="flex w-full justify-center animate-slide-in mb-6">
                             <div className="w-full max-w-3xl px-1 md:px-4">
-                                <div className="relative mx-auto max-w-[94%] md:max-w-[88%] rounded-2xl border border-wuxia-cyan/40 bg-gradient-to-b from-wuxia-cyan/10 via-black/55 to-black/65 px-4 py-3 shadow-[0_8px_28px_rgba(0,0,0,0.45)]">
+                                <div className="relative mx-auto max-w-[94%] md:max-w-[88%] rounded-2xl border border-wuxia-cyan/35 bg-gradient-to-b from-[rgb(var(--c-ink-gray))]/65 via-[rgb(var(--c-ink-black))]/75 to-[rgb(var(--c-ink-black))]/85 px-4 py-3 shadow-[0_8px_28px_rgba(0,0,0,0.45)] backdrop-blur-lg">
                                     <span className="block text-[10px] tracking-[0.2em] text-wuxia-cyan/90 font-mono mb-2">
                                         Đang xử lý
                                     </span>

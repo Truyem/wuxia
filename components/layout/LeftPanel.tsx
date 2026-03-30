@@ -634,15 +634,15 @@ const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visual
 
     if (isProfile) {
         return (
-            <div className="h-full flex flex-col p-6 relative bg-transparent glass-panel">
+            <div className="h-full flex flex-col p-6 relative bg-[rgb(var(--c-ink-black))]/45 glass-panel">
                 {innerContent}
             </div>
         );
     }
 
     return (
-        <OrnateBorder className="h-full bg-ink-black/95 !rounded-none !p-0">
-            <div className="h-full flex flex-col p-6 relative bg-transparent">
+        <OrnateBorder className="h-full bg-[rgb(var(--c-ink-black))]/70 !rounded-none !p-0">
+            <div className="h-full flex flex-col p-6 relative bg-[rgb(var(--c-ink-black))]/35">
                 {innerContent}
             </div>
         </OrnateBorder>
@@ -650,4 +650,3 @@ const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visual
 };
 
 export default LeftPanel;
-

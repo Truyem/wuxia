@@ -52,7 +52,7 @@ const RightPanel: React.FC<Props> = ({
     ];
 
     return (
-        <div className="h-full flex flex-col p-4 relative bg-transparent glass-panel">
+        <div className="h-full flex flex-col p-4 relative bg-[rgb(var(--c-ink-black))]/45 glass-panel">
             {/* Background Texture Overlay */}
             <div className="absolute inset-0 bg-ink-wash opacity-5 pointer-events-none"></div>
 

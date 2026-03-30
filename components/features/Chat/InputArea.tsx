@@ -288,11 +288,11 @@ const InputArea: React.FC<Props> = ({
     };
 
     return (
-        <div className="shrink-0 relative z-20 bg-gradient-to-t from-ink-black via-ink-black/95 to-transparent pb-4 px-4 flex flex-col gap-2">
+        <div className="shrink-0 relative z-20 bg-gradient-to-t from-[rgb(var(--c-ink-black))]/78 via-[rgb(var(--c-ink-black))]/64 to-transparent pb-4 px-4 flex flex-col gap-2 border-t border-white/10">
 
             {/* AI Streaming Draft Status Area */}
             {(busy || recallProgress || attachedRecallPreview) && (
-                <div className="relative overflow-hidden rounded-xl border border-wuxia-gold/20 bg-gradient-to-br from-gray-900/90 via-ink-black/95 to-gray-900/90 shadow-2xl backdrop-blur-md transition-all duration-500">
+                <div className="relative overflow-hidden rounded-xl border border-wuxia-gold/25 bg-gradient-to-br from-[rgb(var(--c-ink-gray))]/70 via-[rgb(var(--c-ink-black))]/70 to-[rgb(var(--c-ink-black))]/82 shadow-2xl backdrop-blur-xl transition-all duration-500">
                     {/* Pulsing Background Gradient */}
                     <div className="absolute inset-0 bg-gradient-to-r from-wuxia-gold/5 via-transparent to-wuxia-gold/5 animate-pulse opacity-30"></div>
                     
@@ -418,27 +418,27 @@ const InputArea: React.FC<Props> = ({
                 <div className="rounded-lg border border-teal-400/30 /70 p-2 space-y-2">
                     <div className="text-xs text-teal-300 font-bold tracking-wider">Tùy chọn khởi động lại nhanh</div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                        <button
-                            type="button"
-                            onClick={() => { void handleQuickRestartSelect('world_only'); }}
-                            disabled={busy}
-                            className="text-xs px-3 py-2 rounded border border-gray-700 text-gray-200 hover:border-teal-300 hover:text-teal-200 disabled:opacity-40"
+                            <button
+                                type="button"
+                                onClick={() => { void handleQuickRestartSelect('world_only'); }}
+                                disabled={busy}
+                                className="text-xs px-3 py-2 rounded border border-white/10 text-paper-white/80 hover:border-teal-300/70 hover:text-teal-200 disabled:opacity-40"
                         >
                             Chỉ tạo lại thế giới quan
                         </button>
-                        <button
-                            type="button"
-                            onClick={() => { void handleQuickRestartSelect('opening_only'); }}
-                            disabled={busy}
-                            className="text-xs px-3 py-2 rounded border border-gray-700 text-gray-200 hover:border-teal-300 hover:text-teal-200 disabled:opacity-40"
+                            <button
+                                type="button"
+                                onClick={() => { void handleQuickRestartSelect('opening_only'); }}
+                                disabled={busy}
+                                className="text-xs px-3 py-2 rounded border border-white/10 text-paper-white/80 hover:border-teal-300/70 hover:text-teal-200 disabled:opacity-40"
                         >
                             Chỉ tạo lại cốt truyện mở đầu
                         </button>
-                        <button
-                            type="button"
-                            onClick={() => { void handleQuickRestartSelect('all'); }}
-                            disabled={busy}
-                            className="text-xs px-3 py-2 rounded border border-gray-700 text-gray-200 hover:border-teal-300 hover:text-teal-200 disabled:opacity-40"
+                            <button
+                                type="button"
+                                onClick={() => { void handleQuickRestartSelect('all'); }}
+                                disabled={busy}
+                                className="text-xs px-3 py-2 rounded border border-white/10 text-paper-white/80 hover:border-teal-300/70 hover:text-teal-200 disabled:opacity-40"
                         >
                             Thế giới quan + Cốt truyện mở đầu
                         </button>
@@ -447,7 +447,7 @@ const InputArea: React.FC<Props> = ({
                         <button
                             type="button"
                             onClick={() => setShowQuickRestartMenu(false)}
-                            className="text-[11px] px-2 py-1 rounded border border-gray-700 text-gray-400 hover:text-gray-200"
+                            className="text-[11px] px-2 py-1 rounded border border-white/10 text-paper-white/50 hover:text-paper-white"
                         >
                             Thu gọn
                         </button>
@@ -459,7 +459,7 @@ const InputArea: React.FC<Props> = ({
             <div className="flex items-center gap-2">
 
                 {/* Left Controls Group */}
-                <div className="flex items-center gap-1 /40 border border-gray-700/50 rounded-xl p-1 h-12">
+                <div className="flex items-center gap-1 bg-[rgb(var(--c-ink-black))]/45 border border-white/10 rounded-xl p-1 h-12 backdrop-blur-lg">
                     {/* Stream Toggle */}
                     <button
                         onClick={() => setIsStreaming(!isStreaming)}
@@ -472,7 +472,7 @@ const InputArea: React.FC<Props> = ({
                         </svg>
                     </button>
 
-                    <div className="w-px h-6 bg-gray-800"></div>
+                    <div className="w-px h-6 bg-white/10"></div>
 
                     {/* Quick Restart */}
                     {canQuickRestart && (
@@ -487,7 +487,7 @@ const InputArea: React.FC<Props> = ({
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z" />
                                 </svg>
                             </button>
-                            <div className="w-px h-6 bg-gray-800"></div>
+                            <div className="w-px h-6 bg-white/10"></div>
                         </>
                     )}
 
@@ -505,10 +505,10 @@ const InputArea: React.FC<Props> = ({
                 </div>
 
                 {/* Input Field */}
-                <div className={`flex-1 /40 border border-gray-700/50 rounded-xl h-12 flex items-center px-4 transition-all shadow-inner ${busy ? 'opacity-50 cursor-not-allowed' : 'focus-within:border-wuxia-gold/50 focus-within:/60'}`}>
+                <div className={`flex-1 bg-[rgb(var(--c-ink-black))]/45 border border-white/10 rounded-xl h-12 flex items-center px-4 transition-all shadow-inner backdrop-blur-lg ${busy ? 'opacity-50 cursor-not-allowed' : 'focus-within:border-wuxia-gold/50'}`}>
                     <input
                         type="text"
-                        className="w-full bg-transparent text-paper-white font-serif placeholder-gray-600 focus:outline-none"
+                        className="w-full bg-transparent text-paper-white font-serif placeholder-paper-white/35 focus:outline-none"
                         placeholder={busy ? "Đang xử lý......" : "Nhập hành động của bạn..."}
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
