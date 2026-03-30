@@ -672,10 +672,10 @@ export const applyStateCommand = (
             const subPath = key.replace(/^gameState\.(Environment\.|)Map\.?/i, "");
             path = subPath || "mediumLocation";
         }
-    } else if (lowerKey.startsWith("gamestate.social")) {
+    } else if (lowerKey.startsWith("gamestate.social") || lowerKey.startsWith("gamestate.socialnet")) {
         // Handle bracketed keys by converting them to root merge/push
         // Correctly handles: gameState.Social[npc_id], gameState.Social.NPC_LIST[npc_id], etc.
-        const bracketMatch = key.match(/^gameState\.Social\.?(?:NPC_LIST\.?)?\[(.+?)\](?:\.(.+))?/i);
+        const bracketMatch = key.match(/^gameState\.Social(?:Net)?\.?(?:NPC_LIST\.?)?\[(.+?)\](?:\.(.+))?/i);
         if (bracketMatch) {
             const bracketValue = bracketMatch[1].trim().replace(/^['"]|['"]$/g, '');
             const subProp = bracketMatch[2] || "";
@@ -732,7 +732,7 @@ export const applyStateCommand = (
             return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
         }
 
-        const isRootSocial = lowerKey === "gamestate.social" || lowerKey === "gamestate.social.npc_list";
+        const isRootSocial = lowerKey === "gamestate.social" || lowerKey === "gamestate.social.npc_list" || lowerKey === "gamestate.socialnet" || lowerKey === "gamestate.socialnet.npc_list";
         if (isRootSocial) {
             const translatedValue = translateObjectKeys(value);
             if (normalizedAction === 'set') {
@@ -748,10 +748,10 @@ export const applyStateCommand = (
             }
         }
         targetObj = { Social: newSocial };
-        path = key.replace(/^gameState\.Social\.?(NPC_LIST\.?)?/i, "Social");
+        path = key.replace(/^gameState\.Social(Net)?\.?(NPC_LIST\.?)?/i, "Social");
         // Maintain legacy path adjustment for nested generic objects if needed
-        if (path === "Social" && key.toLowerCase().includes("social.") && !key.toLowerCase().includes("social.npc_list")) {
-             path = "Social." + key.substring(key.toLowerCase().indexOf("social.") + 7);
+        if (path === "Social" && lowerKey.includes("social.") && !lowerKey.includes("social.npc_list") && !lowerKey.startsWith("gamestate.socialnet")) {
+             path = "Social." + key.substring(lowerKey.indexOf("social.") + 7);
          }
     } else if (lowerKey.startsWith("gamestate.world")) {
         targetObj = newWorld;
