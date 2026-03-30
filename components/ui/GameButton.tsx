@@ -8,7 +8,7 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const GameButton: React.FC<Props> = ({ children, variant = 'primary', active = false, skewed = false, className = '', ...props }) => {
     // Base styles
-    const baseStyle = `group relative px-6 py-2.5 font-serif font-bold uppercase transition-all duration-500 transform cursor-pointer outline-none overflow-hidden flex items-center justify-center gap-2 ${
+    const baseStyle = `group relative px-6 py-2.5 font-serif font-bold uppercase transition-all duration-500 transform cursor-pointer outline-none overflow-hidden flex items-center justify-center gap-2 backdrop-blur-lg ${
         skewed ? '-skew-x-[12deg]' : 'rounded-xl'
     }`;
 
@@ -19,14 +19,14 @@ const GameButton: React.FC<Props> = ({ children, variant = 'primary', active = f
     switch (variant) {
         case 'primary':
             variantClasses = active
-                ? "bg-wuxia-gold text-black border border-wuxia-gold shadow-[0_0_25px_rgba(230,200,110,0.5)]"
-                : "bg-ink-black/80 text-wuxia-gold border border-wuxia-gold/40 hover:border-wuxia-gold hover:bg-black hover:text-white hover:shadow-[0_0_20px_rgba(230,200,110,0.3)]";
+                ? "bg-wuxia-gold text-black border border-wuxia-gold shadow-[0_0_25px_rgba(217,184,106,0.5)]"
+                : "bg-[rgb(var(--c-ink-black))]/55 text-wuxia-gold border border-wuxia-gold/40 hover:border-wuxia-gold hover:bg-[rgb(var(--c-ink-black))]/75 hover:text-white hover:shadow-[0_0_20px_rgba(217,184,106,0.3)]";
             glowClasses = "bg-wuxia-gold/10";
             break;
         case 'secondary':
             variantClasses = active
-                ? "bg-wuxia-cyan/30 text-wuxia-cyan border border-wuxia-cyan shadow-[0_0_20px_rgba(68,170,170,0.4)]"
-                : "bg-black/60 text-wuxia-cyan/70 border border-wuxia-cyan/30 hover:border-wuxia-cyan hover:bg-wuxia-cyan/10 hover:text-wuxia-cyan";
+                ? "bg-wuxia-cyan/30 text-wuxia-cyan border border-wuxia-cyan shadow-[0_0_20px_rgba(122,236,255,0.4)]"
+                : "bg-[rgb(var(--c-ink-black))]/55 text-wuxia-cyan/75 border border-wuxia-cyan/30 hover:border-wuxia-cyan hover:bg-wuxia-cyan/10 hover:text-wuxia-cyan";
             glowClasses = "bg-wuxia-cyan/5";
             decoColor = "bg-wuxia-cyan";
             break;
@@ -41,11 +41,11 @@ const GameButton: React.FC<Props> = ({ children, variant = 'primary', active = f
             decoColor = "bg-paper-white";
             break;
         case 'glass':
-            variantClasses = "bg-white/5 backdrop-blur-xl text-paper-white border border-white/10 hover:border-wuxia-gold/50 hover:bg-white/10 shadow-2xl";
+            variantClasses = "bg-white/7 text-paper-white border border-white/12 hover:border-wuxia-gold/50 hover:bg-white/12 shadow-2xl";
             glowClasses = "bg-gradient-to-tr from-white/10 to-transparent";
             break;
         case 'ink':
-            variantClasses = "bg-black/90 text-paper-white border border-white/5 hover:border-wuxia-gold/30 hover:bg-ink-black shadow-inner";
+            variantClasses = "bg-[rgb(var(--c-ink-black))]/82 text-paper-white border border-white/10 hover:border-wuxia-gold/30 hover:bg-[rgb(var(--c-ink-black))]/92 shadow-inner";
             glowClasses = "bg-ink-wash/20";
             break;
     }

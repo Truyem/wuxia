@@ -2,13 +2,19 @@
 
 :root {
   /* Wuxia Chronicle Master Palette */
-  --c-ink-black: #050505;
-  --c-ink-gray: #1A1A1A;
-  --c-wuxia-gold: #E6C86E;
-  --c-wuxia-gold-dark: #8A7236;
-  --c-wuxia-red: #A31818;
-  --c-wuxia-cyan: #44AAAA;
-  --c-paper-white: #E6E6E6;
+  --c-ink-black: 8 12 22;
+  --c-ink-gray: 20 28 44;
+  --c-wuxia-gold: 217 184 106;
+  --c-wuxia-gold-dark: 138 106 47;
+  --c-wuxia-red: 222 94 94;
+  --c-wuxia-cyan: 122 236 255;
+  --c-paper-white: 242 248 255;
+  --c-jade-base: 25 50 68;
+  --c-jade-border: 100 200 160;
+  --bg-wuxia-gradient-layer-1: radial-gradient(130% 90% at 8% 8%, rgba(var(--c-wuxia-gold-dark), 0.16) 0%, rgba(0,0,0,0) 48%);
+  --bg-wuxia-gradient-layer-2: radial-gradient(120% 100% at 90% 6%, rgba(var(--c-wuxia-cyan), 0.11) 0%, rgba(0,0,0,0) 54%);
+  --bg-wuxia-gradient-layer-3: linear-gradient(160deg, rgb(var(--c-ink-black)) 0%, rgb(var(--c-ink-gray)) 55%, rgb(var(--c-ink-black)) 100%);
+  --bg-wuxia-gradient: var(--bg-wuxia-gradient-layer-1), var(--bg-wuxia-gradient-layer-2), var(--bg-wuxia-gradient-layer-3);
 
   /* Typography */
   --font-serif: "Noto Serif TC", "Noto Serif SC", serif;
@@ -25,6 +31,13 @@
 body {
   margin: 0;
   overflow-x: hidden;
+  color: rgb(var(--c-paper-white));
+}
+
+html, body, #root {
+  min-height: 100%;
+  background: var(--bg-wuxia-gradient);
+  background-color: rgb(var(--c-ink-black));
 }
 
 h1, h2, h3, h4, .font-wuxia {
@@ -34,11 +47,11 @@ h1, h2, h3, h4, .font-wuxia {
 
 /* Wuxia Buttons */
 .btn-wuxia {
-  background: transparent;
-  border: 1px solid var(--c-wuxia-gold);
-  color: var(--c-wuxia-gold);
+  background: linear-gradient(135deg, rgba(217, 184, 106, 0.15) 0%, rgba(138, 106, 47, 0.15) 100%);
+  border: 1px solid rgba(217, 184, 106, 0.52);
+  color: rgb(var(--c-paper-white));
   padding: var(--space-sm) var(--space-lg);
-  border-radius: 12px;
+  border-radius: 14px;
   font-family: var(--font-serif);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
@@ -50,8 +63,8 @@ h1, h2, h3, h4, .font-wuxia {
 }
 
 .btn-wuxia:hover {
-  background: rgba(230, 200, 110, 0.1);
-  box-shadow: 0 0 15px rgba(230, 200, 110, 0.2);
+  background: linear-gradient(135deg, rgba(217, 184, 106, 0.26) 0%, rgba(138, 106, 47, 0.26) 100%);
+  box-shadow: 0 0 18px rgba(217, 184, 106, 0.36);
   transform: translateY(-1px);
 }
 
@@ -61,28 +74,29 @@ h1, h2, h3, h4, .font-wuxia {
 
 /* Glassmorphism Panels */
 .glass-ink {
-  background: rgba(10, 10, 15, 0.85);
-  backdrop-filter: blur(25px) brightness(80%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+  background: rgba(8, 12, 24, 0.85);
+  backdrop-filter: blur(26px) brightness(85%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 44px rgba(0, 0, 0, 0.66);
 }
 
 .glass-jade {
-  background: rgba(40, 70, 60, 0.6);
-  backdrop-filter: blur(20px) contrast(110%);
-  border: 1px solid rgba(100, 200, 160, 0.2);
+  background: rgba(var(--c-jade-base), 0.66);
+  backdrop-filter: blur(22px) contrast(110%);
+  border: 1px solid rgba(var(--c-jade-border), 0.24);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   transition: all 0.3s ease;
+  border-radius: 14px;
 }
 
 .glass-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(230, 200, 110, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(217, 184, 106, 0.45);
 }
 
 /* 2D Map Interactivity */
@@ -91,7 +105,7 @@ h1, h2, h3, h4, .font-wuxia {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--c-ink-black);
+  background: rgb(var(--c-ink-black));
   cursor: grab;
 }
 
@@ -101,7 +115,7 @@ h1, h2, h3, h4, .font-wuxia {
   backdrop-filter: blur(8px);
   border: 1px solid rgba(230, 200, 110, 0.3);
   border-radius: 12px;
-  color: var(--c-paper-white);
+  color: rgb(var(--c-paper-white));
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -112,7 +126,7 @@ h1, h2, h3, h4, .font-wuxia {
 }
 
 .map-marker:hover .marker-label {
-  border-color: var(--c-wuxia-gold);
+  border-color: rgb(var(--c-wuxia-gold));
   background: rgba(230, 200, 110, 0.1);
   transform: translateY(-5px);
 }
@@ -120,10 +134,10 @@ h1, h2, h3, h4, .font-wuxia {
 .marker-dot {
   width: 10px;
   height: 10px;
-  background: var(--c-wuxia-gold);
+  background: rgb(var(--c-wuxia-gold));
   border-radius: 50%;
   margin: 8px auto 0;
-  box-shadow: 0 0 10px var(--c-wuxia-gold);
+  box-shadow: 0 0 10px rgb(var(--c-wuxia-gold));
   animation: pulse 2s infinite;
 }
 
@@ -140,43 +154,43 @@ h1, h2, h3, h4, .font-wuxia {
   letter-spacing: 0.2em;
 }
 
-.text-wuxia-gold { color: var(--c-wuxia-gold); }
-.text-wuxia-red { color: var(--c-wuxia-red); }
-.text-wuxia-cyan { color: var(--c-wuxia-cyan); }
+.text-wuxia-gold { color: rgb(var(--c-wuxia-gold)); }
+.text-wuxia-red { color: rgb(var(--c-wuxia-red)); }
+.text-wuxia-cyan { color: rgb(var(--c-wuxia-cyan)); }
 
-.bg-ink-black { background-color: var(--c-ink-black); }
-.bg-ink-gray { background-color: var(--c-ink-gray); }
+.bg-ink-black { background-color: rgb(var(--c-ink-black)); }
+.bg-ink-gray { background-color: rgb(var(--c-ink-gray)); }
 
 /* Custom Scrollbar Utility */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
+  width: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(10, 18, 34, 0.4);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--c-wuxia-gold);
-  border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  background: linear-gradient(180deg, rgb(var(--c-wuxia-gold-dark)) 0%, rgb(var(--c-wuxia-gold)) 100%);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #f0d58e; /* Lighter gold for interaction */
+  filter: brightness(1.1);
 }
 
 /* For Firefox */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: var(--c-wuxia-gold) transparent;
+  scrollbar-color: rgb(var(--c-wuxia-gold)) rgba(10, 18, 34, 0.4);
 }
 
 /* Wuxia Rounded List Items with Gradient */
 .wuxia-list-item {
   border-radius: 1rem; /* rounded-2xl */
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -186,23 +200,23 @@ h1, h2, h3, h4, .font-wuxia {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, var(--c-wuxia-gold), transparent);
+  background: linear-gradient(90deg, rgb(var(--c-wuxia-gold)), transparent);
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
 }
 
 .wuxia-list-item:hover {
-  background: linear-gradient(90deg, rgba(230, 200, 110, 0.08) 0%, rgba(230, 200, 110, 0.01) 100%);
-  border-color: rgba(230, 200, 110, 0.25);
+  background: linear-gradient(90deg, rgba(217, 184, 106, 0.18) 0%, rgba(217, 184, 106, 0.03) 100%);
+  border-color: rgba(217, 184, 106, 0.36);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   transform: translateX(4px);
 }
 
 .wuxia-list-item.active {
-  background: linear-gradient(90deg, rgba(230, 200, 110, 0.12) 0%, rgba(230, 200, 110, 0.02) 100%);
-  border-color: rgba(230, 200, 110, 0.4);
-  box-shadow: inset 0 0 15px rgba(230, 200, 110, 0.05);
+  background: linear-gradient(90deg, rgba(217, 184, 106, 0.24) 0%, rgba(217, 184, 106, 0.05) 100%);
+  border-color: rgba(217, 184, 106, 0.5);
+  box-shadow: inset 0 0 15px rgba(217, 184, 106, 0.1);
 }
 
 .wuxia-list-item.active::before {
