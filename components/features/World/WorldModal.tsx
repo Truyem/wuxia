@@ -10,8 +10,6 @@ interface Props {
 }
 
 type TabType = 'overview' | 'events' | 'npcs';
-const THEME_STATUS_COLOR = 'rgba(var(--c-wuxia-cyan), 1)';
-const THEME_STATUS_GLOW = 'rgba(var(--c-wuxia-cyan), 0.45)';
 
 // Premium Glass Card Component - Refactored for Square Glassmorphism
 const GlassCard: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = "" }) => (
@@ -212,19 +210,10 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                                         <div className="mt-4 flex items-center justify-between">
                                                         <div className="flex items-center gap-2">
                                                             <span className="relative flex h-2 w-2">
-                                                              <span
-                                                                className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-                                                                style={{ backgroundColor: THEME_STATUS_COLOR }}
-                                                              ></span>
-                                                              <span
-                                                                className="relative inline-flex rounded-full h-2 w-2"
-                                                                style={{ backgroundColor: THEME_STATUS_COLOR, boxShadow: `0 0 6px ${THEME_STATUS_GLOW}` }}
-                                                              ></span>
+                                                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 status-accent-ping"></span>
+                                                              <span className="relative inline-flex rounded-full h-2 w-2 status-accent-dot"></span>
                                                             </span>
-                                                            <span
-                                                                className="text-[10px] font-bold uppercase tracking-[0.2em]"
-                                                                style={{ color: THEME_STATUS_COLOR, textShadow: `0 0 8px ${THEME_STATUS_GLOW}` }}
-                                                            >
+                                                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] status-accent-text">
                                                                 {evt.currentStatus}
                                                             </span>
                                                         </div>

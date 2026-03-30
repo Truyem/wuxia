@@ -12,8 +12,6 @@ interface Props {
 
 type TabType = 'context' | 'short' | 'medium' | 'long';
 const INSTANT_SHORT_TERM_SEPARATOR = '\n<<SHORT_TERM_SYNC>>\n';
-const THEME_CYAN = 'rgba(var(--c-wuxia-cyan), 1)';
-const THEME_CYAN_GLOW = 'rgba(var(--c-wuxia-cyan), 0.5)';
 
 const parseRealTimeMemory = (raw: string) => {
     const text = (raw || '').trim();
@@ -192,14 +190,8 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
                         <span className="text-wuxia-gold font-black">{currentData.length} MỤC KÝ ỨC</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <span
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: THEME_CYAN, boxShadow: `0 0 8px ${THEME_CYAN_GLOW}` }}
-                        />
-                        <span
-                            className="font-bold"
-                            style={{ color: THEME_CYAN, textShadow: `0 0 8px ${THEME_CYAN_GLOW}` }}
-                        >
+                        <span className="w-2 h-2 rounded-full status-accent-dot" />
+                        <span className="font-bold status-accent-text">
                             LIÊN KẾT ỔN ĐỊNH
                         </span>
                     </div>
