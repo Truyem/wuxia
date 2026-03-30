@@ -14,18 +14,18 @@
     <style>
       :root {
         /* RGB Values for opacity support */
-        --c-ink-black: 5 5 5;
-        --c-ink-gray: 26 26 26;
-        --c-wuxia-gold: 230 200 110;
-        --c-wuxia-gold-dark: 138 114 54;
-        --c-wuxia-cyan: 68 170 170;
-        --c-wuxia-red: 163 24 24;
-        --c-paper-white: 230 230 230;
+        --c-ink-black: 8 12 22;
+        --c-ink-gray: 20 28 44;
+        --c-wuxia-gold: 116 180 255;
+        --c-wuxia-gold-dark: 64 110 178;
+        --c-wuxia-cyan: 122 236 255;
+        --c-wuxia-red: 222 94 94;
+        --c-paper-white: 242 248 255;
         
         /* Glassmorphism Presets */
-        --glass-bg: rgba(15, 15, 15, 0.7);
-        --glass-border: rgba(230, 200, 110, 0.2);
-        --glass-blur: 15px;
+        --glass-bg: rgba(12, 18, 30, 0.68);
+        --glass-border: rgba(122, 236, 255, 0.22);
+        --glass-blur: 18px;
       }
     </style>
     <script>
@@ -148,19 +148,19 @@
     <style>
       /* Global Scrollbar Refinement */
       ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
+        width: 8px;
+        height: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: rgba(0,0,0,0.2);
+        background: rgba(10, 18, 34, 0.4);
       }
       ::-webkit-scrollbar-thumb {
-        background: rgb(var(--c-wuxia-gold));
-        border-radius: 10px;
-        border: 1px solid rgba(0, 0, 0, 0.4);
+        background: linear-gradient(180deg, rgb(var(--c-wuxia-cyan)) 0%, rgb(var(--c-wuxia-gold)) 100%);
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #f0d58e;
+        filter: brightness(1.1);
       }
 
       /* Custom Scrollbar Utility - High Visibility Golden Bar */
@@ -175,20 +175,20 @@
         margin: 2px !important;
       }
       .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #E6C86E !important; /* Solid gold */
-        border-radius: 4px !important;
-        border: 2px solid rgba(0, 0, 0, 0.6) !important;
-        box-shadow: 0 0 10px rgba(230, 200, 110, 0.4) !important;
+        background: linear-gradient(180deg, rgb(var(--c-wuxia-cyan)) 0%, rgb(var(--c-wuxia-gold)) 100%) !important;
+        border-radius: 999px !important;
+        border: 1px solid rgba(255, 255, 255, 0.18) !important;
+        box-shadow: 0 0 10px rgba(122, 236, 255, 0.3) !important;
       }
       .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #FFD700 !important; /* Brighter gold on hover */
-        box-shadow: 0 0 15px rgba(230, 200, 110, 0.6) !important;
+        filter: brightness(1.12) !important;
+        box-shadow: 0 0 15px rgba(122, 236, 255, 0.5) !important;
       }
 
       /* Firefox Support */
       .custom-scrollbar {
         scrollbar-width: thin !important;
-        scrollbar-color: #E6C86E rgba(0, 0, 0, 0.4) !important;
+        scrollbar-color: rgb(var(--c-wuxia-gold)) rgba(0, 0, 0, 0.4) !important;
       }
 
       .no-scrollbar::-webkit-scrollbar {
@@ -206,46 +206,49 @@
         -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
         border: 1px solid var(--glass-border);
         box-shadow: 
-          0 8px 32px 0 rgba(0, 0, 0, 0.4),
-          inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+          0 14px 36px rgba(0, 0, 0, 0.45),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+          inset 0 12px 30px rgba(122, 236, 255, 0.04);
+        border-radius: 16px;
       }
 
       .glass-jade {
-        background: rgba(40, 70, 60, 0.6);
-        backdrop-filter: blur(20px) contrast(110%) saturate(120%);
-        -webkit-backdrop-filter: blur(20px) contrast(110%) saturate(120%);
-        border: 1px solid rgba(100, 200, 160, 0.2);
+        background: rgba(25, 50, 68, 0.66);
+        backdrop-filter: blur(22px) contrast(110%) saturate(120%);
+        -webkit-backdrop-filter: blur(22px) contrast(110%) saturate(120%);
+        border: 1px solid rgba(122, 236, 255, 0.24);
         box-shadow: 
           0 15px 35px rgba(0,0,0,0.5),
-          inset 0 0 20px rgba(100, 255, 180, 0.05);
+          inset 0 0 20px rgba(122, 236, 255, 0.08);
       }
 
       .glass-ink {
-        background: rgba(10, 10, 15, 0.85);
-        backdrop-filter: blur(25px) brightness(80%);
-        -webkit-backdrop-filter: blur(25px) brightness(80%);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(8, 12, 24, 0.85);
+        backdrop-filter: blur(26px) brightness(85%);
+        -webkit-backdrop-filter: blur(26px) brightness(85%);
+        border: 1px solid rgba(255, 255, 255, 0.14);
         box-shadow: 
-          0 20px 40px rgba(0,0,0,0.7),
-          inset 0 0 40px rgba(255,255,255,0.02);
+          0 24px 44px rgba(0,0,0,0.66),
+          inset 0 0 36px rgba(122,236,255,0.04);
       }
 
       .glass-card {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.04);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
         transition: all 0.3s ease;
+        border-radius: 14px;
       }
       .glass-card:hover {
-        background: rgba(255, 255, 255, 0.06);
-        border-color: rgba(230, 200, 110, 0.3);
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(122, 236, 255, 0.45);
       }
 
       /* Wuxia Decorative Elements */
       
       .bg-modal-gradient {
-        background: linear-gradient(165deg, rgba(15, 15, 15, 0.95) 0%, rgba(30, 30, 35, 0.9) 100%);
+        background: linear-gradient(165deg, rgba(8, 14, 26, 0.96) 0%, rgba(20, 30, 48, 0.92) 100%);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
       }
@@ -253,7 +256,7 @@
       .wuxia-scroll-shadow {
         box-shadow: 
           0 10px 30px -10px rgba(0,0,0,0.9),
-          0 0 20px rgba(var(--c-wuxia-gold), 0.1);
+          0 0 24px rgba(var(--c-wuxia-cyan), 0.16);
       }
 
       /* Ink Wash Effects */
@@ -273,7 +276,7 @@
       }
       .hover-gold:hover {
         color: rgb(var(--c-wuxia-gold));
-        text-shadow: 0 0 10px rgb(var(--c-wuxia-gold) / 0.5);
+        text-shadow: 0 0 12px rgb(var(--c-wuxia-cyan) / 0.52);
         transform: translateY(-1px);
       }
 
@@ -329,8 +332,8 @@
       .wuxia-corner::before, .wuxia-corner::after {
         content: '';
         position: absolute;
-        background: rgb(var(--c-wuxia-gold) / 0.6);
-        box-shadow: 0 0 8px rgb(var(--c-wuxia-gold) / 0.3);
+        background: rgb(var(--c-wuxia-cyan) / 0.7);
+        box-shadow: 0 0 10px rgb(var(--c-wuxia-cyan) / 0.35);
       }
       .wuxia-corner-tl { top: 0; left: 0; }
       .wuxia-corner-tl::before { top: 0; left: 0; width: 100%; height: 2px; }
@@ -350,19 +353,37 @@
 
       /* Pure Glass Refinement */
       .glass-panel-square {
-        background: rgba(10, 10, 15, 0.4);
-        backdrop-filter: blur(20px) saturate(150%);
-        -webkit-backdrop-filter: blur(20px) saturate(150%);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        background: rgba(8, 14, 26, 0.5);
+        backdrop-filter: blur(22px) saturate(150%);
+        -webkit-backdrop-filter: blur(22px) saturate(150%);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        box-shadow: 0 8px 34px rgba(0, 0, 0, 0.52);
+        border-radius: 16px;
       }
 
       /* Custom Font Pairings */
       body {
         font-family: 'Inter', 'Noto Sans TC', sans-serif;
+        background:
+          radial-gradient(130% 90% at 8% 8%, rgba(var(--c-wuxia-cyan), 0.14) 0%, rgba(0,0,0,0) 48%),
+          radial-gradient(120% 100% at 90% 6%, rgba(var(--c-wuxia-gold), 0.12) 0%, rgba(0,0,0,0) 54%),
+          linear-gradient(160deg, rgb(var(--c-ink-black)) 0%, rgb(var(--c-ink-gray)) 55%, rgb(var(--c-ink-black)) 100%);
       }
       h1, h2, h3, .heading-font {
         font-family: 'Playfair Display', 'Noto Serif TC', serif;
+      }
+      button,
+      input,
+      textarea,
+      select {
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+      }
+      input:focus-visible,
+      textarea:focus-visible,
+      select:focus-visible {
+        outline: none;
+        border-color: rgb(var(--c-wuxia-cyan) / 0.5);
+        box-shadow: 0 0 0 3px rgb(var(--c-wuxia-cyan) / 0.18);
       }
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after {
