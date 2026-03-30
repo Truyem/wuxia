@@ -190,8 +190,10 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
                         <span className="text-wuxia-gold font-black">{currentData.length} MỤC KÝ ỨC</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
-                        <span className="text-green-500/80 font-bold">LIÊN KẾT ỔN ĐỊNH</span>
+                        <span className="w-2 h-2 rounded-full status-accent-dot" />
+                        <span className="font-bold status-accent-text">
+                            LIÊN KẾT ỔN ĐỊNH
+                        </span>
                     </div>
                 </div>
             </div>

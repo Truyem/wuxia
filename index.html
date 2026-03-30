@@ -14,9 +14,12 @@
     <style>
       :root {
         /* RGB Values for opacity support */
+        /* Space-separated values power Tailwind opacity helper; comma-separated for rgba() usage */
         --c-ink-black: 8 12 22;
+        --c-ink-black-rgb: 8, 12, 22;
         --c-ink-gray: 20 28 44;
         --c-wuxia-gold: 217 184 106;
+        --c-wuxia-gold-rgb: 217, 184, 106;
         --c-wuxia-gold-dark: 138 106 47;
         --c-wuxia-cyan: 122 236 255;
         --c-wuxia-red: 222 94 94;
@@ -24,12 +27,12 @@
         --c-jade-base: 25 50 68;
         --c-jade-border: 100 200 160;
         --bg-wuxia-gradient-layer-1: radial-gradient(130% 90% at 8% 8%, rgba(var(--c-wuxia-gold-dark), 0.16) 0%, rgba(0,0,0,0) 48%);
-        --bg-wuxia-gradient-layer-2: radial-gradient(120% 100% at 90% 6%, rgba(var(--c-wuxia-cyan), 0.11) 0%, rgba(0,0,0,0) 54%);
+        --bg-wuxia-gradient-layer-2: radial-gradient(120% 100% at 90% 6%, rgba(var(--c-wuxia-gold-dark), 0.12) 0%, rgba(0,0,0,0) 54%);
         --bg-wuxia-gradient-layer-3: linear-gradient(160deg, rgb(var(--c-ink-black)) 0%, rgb(var(--c-ink-gray)) 55%, rgb(var(--c-ink-black)) 100%);
         --bg-wuxia-gradient: var(--bg-wuxia-gradient-layer-1), var(--bg-wuxia-gradient-layer-2), var(--bg-wuxia-gradient-layer-3);
         
         /* Glassmorphism Presets */
-        --glass-bg: rgba(12, 18, 30, 0.68);
+        --glass-bg: rgba(var(--c-ink-black-rgb), 0.68);
         --glass-border: rgba(217, 184, 106, 0.26);
         --glass-blur: 18px;
       }

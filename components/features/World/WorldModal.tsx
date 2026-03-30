@@ -54,7 +54,7 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
             {/* Background Ink Wash Effect */}
             <div className="absolute inset-0 opacity-30 pointer-events-none overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-10"></div>
-                <div className="absolute -top-1/4 -left-1/4 w-full h-1/2 bg-wuxia-cyan/5 blur-[160px]"></div>
+                <div className="absolute -top-1/4 -left-1/4 w-full h-1/2 bg-wuxia-gold/8 blur-[160px]"></div>
                 <div className="absolute -bottom-1/4 -right-1/4 w-full h-1/2 bg-wuxia-gold/5 blur-[160px]"></div>
             </div>
 
@@ -201,23 +201,25 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                                             </div>
                                                         </div>
                                                         
-                                                        <div className="bg-black/40 border-l-2 lg:border-l-4 border-wuxia-gold/60 p-4 lg:p-6 rounded-2xl relative overflow-hidden">
-                                                            <p className="relative z-10 text-gray-300 text-sm lg:text-base leading-relaxed font-serif italic">
-                                                                "{evt.content || evt.description || evt.summary || 'Hành trình vạn dặm, khởi đầu từ đây...'}"
-                                                            </p>
-                                                        </div>
+                                                    <div className="bg-black/40 border-l-2 lg:border-l-4 border-wuxia-gold/60 p-4 lg:p-6 rounded-2xl relative overflow-hidden">
+                                                        <p className="relative z-10 text-gray-300 text-sm lg:text-base leading-relaxed font-serif italic">
+                                                            "{evt.content || evt.description || evt.summary || 'Hành trình vạn dặm, khởi đầu từ đây...'}"
+                                                        </p>
+                                                    </div>
 
                                                         <div className="mt-4 flex items-center justify-between">
-                                                            <div className="flex items-center gap-2">
-                                                                <span className="relative flex h-2 w-2">
-                                                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                                                </span>
-                                                                <span className="text-[10px] text-green-500 font-bold uppercase tracking-[0.2em]">{evt.currentStatus}</span>
-                                                            </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="relative flex h-2 w-2">
+                                                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 status-accent-ping"></span>
+                                                              <span className="relative inline-flex rounded-full h-2 w-2 status-accent-dot"></span>
+                                                            </span>
+                                                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] status-accent-text">
+                                                                {evt.currentStatus}
+                                                            </span>
                                                         </div>
-                                                    </GlassCard>
-                                                </div>
+                                                    </div>
+                                                </GlassCard>
+                                            </div>
                                             ))}
                                         </div>
                                     ) : (

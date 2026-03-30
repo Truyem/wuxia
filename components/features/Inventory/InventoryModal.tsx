@@ -216,7 +216,7 @@ const InventoryModal: React.FC<Props> = ({ character, onClose, onDeleteItem }) =
             {/* Animated Background Elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
                 <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-wuxia-gold/20 blur-[120px] rounded-full animate-pulse"></div>
-                <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-wuxia-cyan/20 blur-[120px] rounded-full animate-pulse capitalize" style={{ animationDelay: '2s' }}></div>
+                <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-wuxia-gold/15 blur-[120px] rounded-full animate-pulse capitalize" style={{ animationDelay: '2s' }}></div>
             </div>
 
             <div className={`relative w-full ${isMobile ? 'h-full' : 'max-w-6xl h-[85vh]'} glass-panel flex flex-col shadow-[0_0_150px_rgba(0,0,0,0.95)] overflow-hidden rounded-[3rem] border border-wuxia-gold/25`}>

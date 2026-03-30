@@ -2,9 +2,12 @@
 
 :root {
   /* Wuxia Chronicle Master Palette */
+  /* Space-separated values power Tailwind opacity helper; comma-separated for rgba() usage */
   --c-ink-black: 8 12 22;
+  --c-ink-black-rgb: 8, 12, 22;
   --c-ink-gray: 20 28 44;
   --c-wuxia-gold: 217 184 106;
+  --c-wuxia-gold-rgb: 217, 184, 106;
   --c-wuxia-gold-dark: 138 106 47;
   --c-wuxia-red: 222 94 94;
   --c-wuxia-cyan: 122 236 255;
@@ -12,7 +15,7 @@
   --c-jade-base: 25 50 68;
   --c-jade-border: 100 200 160;
   --bg-wuxia-gradient-layer-1: radial-gradient(130% 90% at 8% 8%, rgba(var(--c-wuxia-gold-dark), 0.16) 0%, rgba(0,0,0,0) 48%);
-  --bg-wuxia-gradient-layer-2: radial-gradient(120% 100% at 90% 6%, rgba(var(--c-wuxia-cyan), 0.11) 0%, rgba(0,0,0,0) 54%);
+  --bg-wuxia-gradient-layer-2: radial-gradient(120% 100% at 90% 6%, rgba(var(--c-wuxia-gold-dark), 0.12) 0%, rgba(0,0,0,0) 54%);
   --bg-wuxia-gradient-layer-3: linear-gradient(160deg, rgb(var(--c-ink-black)) 0%, rgb(var(--c-ink-gray)) 55%, rgb(var(--c-ink-black)) 100%);
   --bg-wuxia-gradient: var(--bg-wuxia-gradient-layer-1), var(--bg-wuxia-gradient-layer-2), var(--bg-wuxia-gradient-layer-3);
 
@@ -26,6 +29,10 @@
   --space-md: 1rem;
   --space-lg: 1.5rem;
   --space-xl: 2rem;
+
+  /* Accents */
+  --status-glow-blur: 8px;
+  --status-glow-opacity: 0.5;
 }
 
 body {
@@ -157,6 +164,17 @@ h1, h2, h3, h4, .font-wuxia {
 .text-wuxia-gold { color: rgb(var(--c-wuxia-gold)); }
 .text-wuxia-red { color: rgb(var(--c-wuxia-red)); }
 .text-wuxia-cyan { color: rgb(var(--c-wuxia-cyan)); }
+.status-accent-dot {
+  background-color: rgb(var(--c-wuxia-gold));
+  box-shadow: 0 0 var(--status-glow-blur) rgba(var(--c-wuxia-gold-rgb), var(--status-glow-opacity));
+}
+.status-accent-text {
+  color: rgb(var(--c-wuxia-gold));
+  text-shadow: 0 0 var(--status-glow-blur) rgba(var(--c-wuxia-gold-rgb), var(--status-glow-opacity));
+}
+.status-accent-ping {
+  background-color: rgb(var(--c-wuxia-gold));
+}
 
 .bg-ink-black { background-color: rgb(var(--c-ink-black)); }
 .bg-ink-gray { background-color: rgb(var(--c-ink-gray)); }

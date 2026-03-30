@@ -109,7 +109,7 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                                     </span>
                                 )}
                                 {item.type === 'Phòng cụ' && (
-                                    <span className="text-[9px] text-wuxia-cyan/80 font-mono flex items-center gap-1">
+                                    <span className="text-[9px] text-wuxia-gold/80 font-mono flex items-center gap-1">
                                         <Shield className="w-2.5 h-2.5" /> {(item as Armor).physicalDefense}
                                     </span>
                                 )}
@@ -142,38 +142,38 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
             {/* Central Silhouette */}
             <div className={`relative w-full ${isMobile ? 'aspect-[1/1.5] max-h-[300px]' : 'aspect-[1/3] max-h-[400px]'} flex items-center justify-center`}>
                 {/* Silhouette Glow */}
-                <div className="absolute w-32 h-64 bg-wuxia-cyan/5 blur-[40px]"></div>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-80 bg-wuxia-cyan/[0.02] border border-wuxia-cyan/5 rotate-12"></div>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-80 bg-wuxia-cyan/[0.02] border border-wuxia-cyan/5 -rotate-12"></div>
+                <div className="absolute w-32 h-64 bg-wuxia-gold/6 blur-[40px]"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-80 bg-wuxia-gold/[0.02] border border-wuxia-gold/8 rotate-12"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-80 bg-wuxia-gold/[0.02] border border-wuxia-gold/8 -rotate-12"></div>
                 
                 {/* Scanline for silhouette only */}
                 <div className="absolute inset-0 pointer-events-none opacity-[0.1] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] bg-[size:100%_4px]"></div>
 
                 <div className="relative flex flex-col items-center gap-2 z-10">
                     {/* Head Circle */}
-                    <div className="w-16 h-16 md:w-20 md:h-20 border-2 border-wuxia-cyan/30 bg-black/50 flex items-center justify-center shadow-[0_0_25px_rgba(68,170,170,0.2)] relative overflow-hidden group rounded-full">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-wuxia-cyan/20 to-transparent"></div>
-                        <User className="w-8 h-8 md:w-10 md:h-10 text-wuxia-cyan/60" strokeWidth={1} />
+                    <div className="w-16 h-16 md:w-20 md:h-20 border-2 border-wuxia-gold/30 bg-black/50 flex items-center justify-center shadow-[0_0_25px_rgba(217,184,106,0.18)] relative overflow-hidden group rounded-full">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-wuxia-gold/20 to-transparent"></div>
+                        <User className="w-8 h-8 md:w-10 md:h-10 text-wuxia-gold/70" strokeWidth={1} />
                     </div>
                     
                     {/* Body Bar */}
-                    <div className="w-20 h-56 border border-wuxia-cyan/20 bg-gradient-to-b from-wuxia-cyan/[0.08] to-transparent relative flex flex-col items-center justify-center overflow-hidden rounded-[2rem]">
-                        <div className="absolute top-0 w-full h-1/2 bg-gradient-to-b from-wuxia-cyan/10 to-transparent"></div>
-                        <div className="text-[10px] text-wuxia-cyan/40 text-center leading-relaxed font-serif tracking-[0.5em] vertical-text select-none">
+                    <div className="w-20 h-56 border border-wuxia-gold/20 bg-gradient-to-b from-wuxia-gold/[0.08] to-transparent relative flex flex-col items-center justify-center overflow-hidden rounded-[2rem]">
+                        <div className="absolute top-0 w-full h-1/2 bg-gradient-to-b from-wuxia-gold/12 to-transparent"></div>
+                        <div className="text-[10px] text-wuxia-gold/50 text-center leading-relaxed font-serif tracking-[0.5em] vertical-text select-none">
                             身法如風
                         </div>
                         {/* Circuit-like decorations */}
-                        <div className="absolute bottom-4 left-0 w-full h-px bg-wuxia-cyan/20"></div>
-                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-px h-8 bg-wuxia-cyan/20"></div>
+                        <div className="absolute bottom-4 left-0 w-full h-px bg-wuxia-gold/20"></div>
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-px h-8 bg-wuxia-gold/20"></div>
                     </div>
 
                     {/* Legs - Dual Bars */}
                     <div className="flex gap-3">
-                        <div className="w-6 h-20 border border-wuxia-cyan/10 bg-gradient-to-b from-black/40 to-black/20 relative overflow-hidden rounded-lg">
-                            <div className="absolute top-0 inset-x-0 h-4 bg-wuxia-cyan/5"></div>
+                        <div className="w-6 h-20 border border-wuxia-gold/12 bg-gradient-to-b from-black/40 to-black/20 relative overflow-hidden rounded-lg">
+                            <div className="absolute top-0 inset-x-0 h-4 bg-wuxia-gold/8"></div>
                         </div>
-                        <div className="w-6 h-20 border border-wuxia-cyan/10 bg-gradient-to-b from-black/40 to-black/20 relative overflow-hidden rounded-lg">
-                            <div className="absolute top-0 inset-x-0 h-4 bg-wuxia-cyan/5"></div>
+                        <div className="w-6 h-20 border border-wuxia-gold/12 bg-gradient-to-b from-black/40 to-black/20 relative overflow-hidden rounded-lg">
+                            <div className="absolute top-0 inset-x-0 h-4 bg-wuxia-gold/8"></div>
                         </div>
                     </div>
                 </div>
@@ -183,17 +183,17 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
             <div className="mt-8 md:mt-12 w-full max-w-sm px-4">
                 <div className="flex justify-between items-center mb-2 px-1">
                     <div className="flex items-center gap-1.5">
-                        <Zap className="w-2.5 h-2.5 text-wuxia-cyan opacity-60" />
+                        <Zap className="w-2.5 h-2.5 text-wuxia-gold opacity-70" />
                         <span className="text-[9px] text-gray-600 font-bold uppercase tracking-widest">Tải trọng</span>
                     </div>
-                    <span className={`text-[10px] font-mono font-bold ${character.currentWeight > character.maxWeight ? 'text-wuxia-red' : 'text-wuxia-cyan'}`}>
+                    <span className={`text-[10px] font-mono font-bold ${character.currentWeight > character.maxWeight ? 'text-wuxia-red' : 'text-wuxia-gold'}`}>
                         {character.currentWeight} / {character.maxWeight}
                     </span>
                 </div>
                 <div className="h-1.5 bg-white/[0.03] overflow-hidden border border-white/5 p-[1px] relative shadow-inner rounded-full">
                     <div
-                        className={`h-full shadow-[0_0_100px_rgba(68,170,170,0.3)] rounded-full ${
-                            character.currentWeight > character.maxWeight ? 'bg-wuxia-red' : 'bg-wuxia-cyan/60'
+                        className={`h-full shadow-[0_0_100px_rgba(217,184,106,0.28)] rounded-full ${
+                            character.currentWeight > character.maxWeight ? 'bg-wuxia-red' : 'bg-wuxia-gold/60'
                         }`}
                         style={{ width: `${Math.min(((character.currentWeight || 0) / (character.maxWeight || 1)) * 100, 100)}%` }}
                     />
@@ -207,18 +207,18 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
     const ArmorView = () => (
         <div className="space-y-6">
             <div className="flex items-center gap-4 px-2">
-                <span className="text-[10px] text-wuxia-cyan font-black uppercase tracking-[0.4em]">🛡 PHÒNG CỤ</span>
-                <div className="flex-1 h-[1px] bg-wuxia-cyan/20"></div>
+                <span className="text-[10px] text-wuxia-gold font-black uppercase tracking-[0.4em]">🛡 PHÒNG CỤ</span>
+                <div className="flex-1 h-[1px] bg-wuxia-gold/20"></div>
             </div>
             
             <div className="grid gap-3">
-                <SlotCard slotKey="head" label="Đầu" Icon={Crown} colorClass="text-wuxia-cyan" />
-                <SlotCard slotKey="chest" label="Thân" Icon={Shirt} colorClass="text-wuxia-cyan" />
-                <SlotCard slotKey="back" label="Lưng" Icon={Backpack} colorClass="text-wuxia-cyan" />
-                <SlotCard slotKey="waist" label="Eo" Icon={LinkIcon} colorClass="text-wuxia-cyan" />
-                <SlotCard slotKey="hands" label="Hộ Thủ" Icon={Hand} colorClass="text-wuxia-cyan" />
-                <SlotCard slotKey="legs" label="Chân" Icon={Layers} colorClass="text-wuxia-cyan" />
-                <SlotCard slotKey="feet" label="Hài" Icon={Footprints} colorClass="text-wuxia-cyan" />
+                <SlotCard slotKey="head" label="Đầu" Icon={Crown} colorClass="text-wuxia-gold" />
+                <SlotCard slotKey="chest" label="Thân" Icon={Shirt} colorClass="text-wuxia-gold" />
+                <SlotCard slotKey="back" label="Lưng" Icon={Backpack} colorClass="text-wuxia-gold" />
+                <SlotCard slotKey="waist" label="Eo" Icon={LinkIcon} colorClass="text-wuxia-gold" />
+                <SlotCard slotKey="hands" label="Hộ Thủ" Icon={Hand} colorClass="text-wuxia-gold" />
+                <SlotCard slotKey="legs" label="Chân" Icon={Layers} colorClass="text-wuxia-gold" />
+                <SlotCard slotKey="feet" label="Hài" Icon={Footprints} colorClass="text-wuxia-gold" />
             </div>
         </div>
     );
@@ -285,7 +285,7 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                             <h3 className="text-wuxia-gold font-serif font-bold text-lg md:text-2xl tracking-[0.2em] uppercase">Trang Bị</h3>
                             <div className="hidden md:flex items-center gap-3 mt-1.5">
                                 <div className="flex items-center gap-2 bg-white/[0.05] px-3 py-1 border border-white/10 rounded-full">
-                                    <div className="w-2 h-2 bg-wuxia-cyan shadow-[0_0_10px_#44aaaa] rounded-full animate-pulse"></div>
+                                    <div className="w-2 h-2 bg-wuxia-gold shadow-[0_0_10px_rgba(217,184,106,0.5)] rounded-full animate-pulse"></div>
                                     <span className="text-[10px] md:text-[11px] text-gray-400 font-black uppercase tracking-[0.2em]">TRẠNG THÁI HIỆN TẠI</span>
                                 </div>
                             </div>
@@ -312,7 +312,7 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                         </button>
                         <button 
                             onClick={() => setActiveTab('armor')}
-                            className={`py-3 text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === 'armor' ? 'text-wuxia-cyan bg-wuxia-cyan/10' : 'text-gray-500 hover:text-gray-300'}`}
+                            className={`py-3 text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === 'armor' ? 'text-wuxia-gold bg-wuxia-gold/10' : 'text-gray-500 hover:text-gray-300'}`}
                         >
                             Phòng Cụ
                         </button>
