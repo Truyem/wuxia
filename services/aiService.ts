@@ -906,7 +906,7 @@ export const HARDCORE_PROMPT_SYSTEM = `
   - \`logs\` (array): Mỗi phần tử \`{ "sender": string, "text": string }\`.
     - "Background" dùng cho tường thuật, cảm quan, âm thanh, mùi vị.
     - Nhân vật nói chuyện dùng đúng tên NPC (không thêm ký tự 【】 trong text).
-    - **Quy tắc NPC**: Mỗi khi một người nói mới xuất hiện mà chưa tồn tại, PHẢI thêm lệnh \`PUSH gameState.SocialNet\` với hồ sơ tối thiểu: \`{ id: "NPC00x", name, gender, age, identity, description, isPresent: true, isMainCharacter: false, favorability: 0, memories: [] }\`.
+    - **Quy tắc NPC**: Mỗi khi một người nói mới xuất hiện mà chưa tồn tại, PHẢI thêm lệnh \`PUSH gameState.SocialNet\` với hồ sơ tối thiểu: \`{ id: "NPC001"/"NPC002"... (3 chữ số, tăng dần), name, gender, age, identity, description, isPresent: true, isMainCharacter: false, favorability: 0, memories: [] }\`.
   - \`shortTerm\` (string < 100 chữ): Tóm tắt khách quan lượt này.
   - \`tavern_commands\` (array): Danh sách lệnh \`{ action: "set|add|push|delete", key: "gameState....", value: any }\`.
     - Đồng bộ thời gian và vị trí mỗi lượt (\`gameState.Environment.year/month/day/hour/minute/specificLocation\`).
