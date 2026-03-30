@@ -64,7 +64,7 @@ const MemoryModal: React.FC<Props> = ({ isOpen, onClose, history, memorySystem, 
         context: 'bg-wuxia-cyan/50 group-hover:bg-wuxia-cyan',
         short: 'bg-wuxia-gold/40 group-hover:bg-wuxia-gold/70',
         medium: 'bg-purple-500/40 group-hover:bg-purple-400/70',
-        long: 'bg-blue-500/30 group-hover:bg-blue-400/60',
+        long: 'bg-wuxia-cyan/30 group-hover:bg-wuxia-cyan/60',
     };
 
     return (

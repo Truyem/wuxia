@@ -163,10 +163,10 @@ const STAT_COLORS: Record<string, string> = {
     strength: '#ef4444',      // Red
     agility: '#22c55e',       // Green
     constitution: '#eab308',  // Yellow/Gold
-    rootBone: '#3b82f6',      // Blue
+    rootBone: 'rgb(var(--c-wuxia-cyan))',
     intelligence: '#a855f7',  // Purple
     luck: '#f97316',          // Orange
-    tamTinh: '#06b6d4',       // Cyan
+    tamTinh: 'rgb(var(--c-wuxia-cyan))',
 };
 
 const STAT_ICONS: Record<string, React.ReactNode> = {
@@ -222,7 +222,7 @@ const BASE_TALENT_POINTS = 4;
 const RANK_COLORS: Record<TalentRank, { border: string; bg: string; text: string; badge: string; glow: string }> = {
     'Huyền thoại': { border: 'border-yellow-400', bg: 'bg-yellow-400/10', text: 'text-yellow-400', badge: 'bg-yellow-400/20 text-yellow-300 border-yellow-400/50', glow: 'shadow-yellow-400/20' },
     'Sử Thi': { border: 'border-purple-400', bg: 'bg-purple-400/10', text: 'text-purple-400', badge: 'bg-purple-400/20 text-purple-300 border-purple-400/50', glow: 'shadow-purple-400/20' },
-    'Hiếm': { border: 'border-blue-400', bg: 'bg-blue-400/10', text: 'text-blue-400', badge: 'bg-blue-400/20 text-blue-300 border-blue-400/50', glow: 'shadow-blue-400/20' },
+    'Hiếm': { border: 'border-wuxia-cyan', bg: 'bg-wuxia-cyan/10', text: 'text-wuxia-cyan', badge: 'bg-wuxia-cyan/20 text-wuxia-cyan/80 border-wuxia-cyan/50', glow: 'shadow-[0_0_20px_rgba(var(--c-wuxia-cyan),0.3)]' },
     'Thường': { border: 'border-green-400', bg: 'bg-green-400/10', text: 'text-green-400', badge: 'bg-green-400/20 text-green-300 border-green-400/50', glow: 'shadow-green-400/20' },
     'Cực Hạn': { border: 'border-red-600', bg: 'bg-red-600/10', text: 'text-red-400', badge: 'bg-red-600/20 text-red-300 border-red-600/50', glow: 'shadow-red-600/20' },
     'Khắc nghiệt': { border: 'border-orange-500', bg: 'bg-orange-500/10', text: 'text-orange-400', badge: 'bg-orange-500/20 text-orange-300 border-orange-500/50', glow: 'shadow-orange-500/20' },
@@ -1282,9 +1282,9 @@ const MobileNewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, r
                                         <div className="text-lg font-bold text-wuxia-gold font-mono">{totalTalentPoints}</div>
                                     </div>
                                     <div className="text-wuxia-gold/30">-</div>
-                                    <div className="bg-blue-400/5 px-3 py-1 rounded-lg border border-blue-500/20">
-                                        <div className="text-[9px] text-blue-400/70 uppercase">Đã dùng</div>
-                                        <div className="text-lg font-bold text-blue-400 font-mono">{spentTalentPoints}</div>
+                                    <div className="bg-wuxia-cyan/5 px-3 py-1 rounded-lg border border-wuxia-cyan/20">
+                                        <div className="text-[9px] text-wuxia-cyan/70 uppercase">Đã dùng</div>
+                                        <div className="text-lg font-bold text-wuxia-cyan font-mono">{spentTalentPoints}</div>
                                     </div>
                                     <div className="text-wuxia-gold/30">=</div>
                                     <div className="bg-emerald-400/5 px-3 py-1 rounded-lg border border-emerald-500/20">
@@ -1370,7 +1370,7 @@ const MobileNewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, r
                                                         </span>
                                                         <div className="flex items-center gap-1 shrink-0">
                                                             <span className={`text-[8px] px-1 py-0.5 rounded border font-mono ${rc.badge}`}>{t.rank}</span>
-                                                            <span className={`text-[10px] font-mono font-bold ${isSelected ? 'text-wuxia-gold' : 'text-blue-400'}`}>-{t.cost}đ</span>
+                                                            <span className={`text-[10px] font-mono font-bold ${isSelected ? 'text-wuxia-gold' : 'text-wuxia-cyan'}`}>-{t.cost}đ</span>
                                                         </div>
                                                     </div>
                                                     <div className="text-[10px] text-gray-500 mt-1 line-clamp-1 italic">{t.description}</div>
@@ -1511,5 +1511,3 @@ const MobileNewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, r
 };
 
 export default MobileNewGameWizard;
-
-

@@ -83,11 +83,11 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                 };
             case 'Thượng phẩm': 
                 return {
-                    text: 'text-blue-400',
-                    border: 'border-blue-900/30',
-                    bg: 'bg-blue-950/20',
-                    accent: 'bg-blue-500',
-                    glow: 'shadow-blue-500/10'
+                    text: 'text-wuxia-cyan',
+                    border: 'border-wuxia-cyan/30',
+                    bg: 'bg-wuxia-cyan/10',
+                    accent: 'bg-wuxia-cyan',
+                    glow: 'shadow-[0_0_15px_rgba(var(--c-wuxia-cyan),0.25)]'
                 };
             case 'Cực phẩm': 
                 return {
@@ -354,7 +354,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                             <StatItem icon={Flame} label="Sát Thương Cơ Bản" value={currentSkill['Base damage'] || 0} colorClass="text-amber-400" />
                                             <StatItem icon={Dna} label="Hệ Số Cộng Thêm" value={`x${currentSkill['Bonus coefficient'] || 0}`} colorClass="text-stone-100" />
-                                            <StatItem icon={Clock} label="Vận Công" value={`${currentSkill['Casting time'] || 0}s`} colorClass="text-blue-400" />
+                                            <StatItem icon={Clock} label="Vận Công" value={`${currentSkill['Casting time'] || 0}s`} colorClass="text-wuxia-cyan" />
                                             <StatItem icon={Clock} label="Hồi Chiêu" value={`${currentSkill['Cooldown time'] || 0}s`} colorClass="text-rose-400" />
                                         </div>
 
@@ -373,7 +373,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                             </div>
                                             <div className="bg-stone-900/40 border border-stone-800 p-4 rounded-xl flex justify-between items-center group hover:bg-stone-900/60 transition-all">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-500">
+                                                    <div className="w-10 h-10 rounded-xl bg-wuxia-cyan/10 border border-wuxia-cyan/30 flex items-center justify-center text-wuxia-cyan">
                                                         <Target className="w-5 h-5" />
                                                     </div>
                                                     <div>
@@ -471,7 +471,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                     {Array.isArray(currentSkill['Passive correction']) && currentSkill['Passive correction'].length > 0 && (
                                         <section className="space-y-4">
                                             <h4 className="text-[10px] text-stone-500 font-black uppercase tracking-[0.3em] flex items-center gap-4">
-                                                <Dna className="w-3 h-3 text-blue-500" />
+                                                <Dna className="w-3 h-3 text-wuxia-cyan" />
                                                 <span>Thuộc Tính Cộng Thêm</span>
                                                 <div className="h-[1px] flex-1 bg-stone-800" />
                                             </h4>
@@ -483,7 +483,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                                         </span>
                                                         <div className="flex items-center gap-2">
                                                             <div className="h-[1px] w-8 bg-stone-800" />
-                                                            <span className="text-blue-400 font-mono font-bold text-sm">
+                                                            <span className="text-wuxia-cyan font-mono font-bold text-sm">
                                                                 {mod['Giá trị'] || mod['value'] > 0 ? '+' : ''}{mod['Giá trị'] || mod['value']}{mod['Loại'] === 'Phần trăm' || mod['type'] === 'Phần trăm' ? '%' : ''}
                                                             </span>
                                                         </div>
@@ -571,7 +571,7 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                             <>
                                 <div className="h-3 w-[1px] bg-stone-800" />
                                 <div className="flex items-center gap-2">
-                                    <Activity className="w-3 h-3 text-blue-500" />
+                                    <Activity className="w-3 h-3 text-wuxia-cyan" />
                                     <span>Chân khí bình thường</span>
                                 </div>
                             </>

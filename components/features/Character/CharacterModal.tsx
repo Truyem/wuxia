@@ -14,10 +14,10 @@ const STAT_COLORS: Record<string, string> = {
     strength: '#ef4444',
     agility: '#22c55e',
     constitution: '#eab308',
-    rootBone: '#3b82f6',
+    rootBone: 'rgb(var(--c-wuxia-cyan))',
     intelligence: '#a855f7',
     luck: '#f97316',
-    tamTinh: '#06b6d4',
+    tamTinh: 'rgb(var(--c-wuxia-cyan))',
 };
 
 const STAT_LABELS: Record<string, string> = {
@@ -173,7 +173,7 @@ const CharacterModal: React.FC<Props> = ({ character, onClose }) => {
                                 </h4>
                                 <PremiumBar label="Tinh lực" current={character.currentEnergy} max={character.maxEnergy} colorClass="bg-white/40" gradient="linear-gradient(90deg, #374151 0%, #9ca3af 100%)" icon={{name: 'bolt'}} />
                                 <PremiumBar label="No bụng" current={character.currentFullness} max={character.maxFullness} colorClass="bg-white/40" gradient="linear-gradient(90deg, #92400e 0%, #f59e0b 100%)" icon={{name: 'food'}} />
-                                <PremiumBar label="Khát nước" current={character.currentThirst} max={character.maxThirst} colorClass="bg-white/40" gradient="linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%)" icon={{name: 'drop'}} />
+                                <PremiumBar label="Khát nước" current={character.currentThirst} max={character.maxThirst} colorClass="bg-white/40" gradient="linear-gradient(90deg, rgba(var(--c-wuxia-cyan),0.25) 0%, rgb(var(--c-wuxia-cyan)) 100%)" icon={{name: 'drop'}} />
                                 <PremiumBar label="Kinh nghiệm" current={character.currentExp} max={character.levelUpExp} colorClass="bg-white/40" gradient="linear-gradient(90deg, #4d1d95 0%, #a855f7 100%)" icon={{name: 'sparkle'}} />
                             </div>
                         </div>

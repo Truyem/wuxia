@@ -157,7 +157,7 @@ const InventoryModal: React.FC<Props> = ({ character, onClose, onDeleteItem }) =
         switch (quality) {
             case 'Phàm phẩm': return 'text-slate-400';
             case 'Lương phẩm': return 'text-emerald-500';
-            case 'Thượng phẩm': return 'text-sky-400';
+            case 'Thượng phẩm': return 'text-wuxia-cyan';
             case 'Cực phẩm': return 'text-purple-400';
             case 'Tuyệt thế': return 'text-orange-500';
             case 'Truyền thuyết': return 'text-wuxia-gold';

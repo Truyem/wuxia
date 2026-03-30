@@ -49,14 +49,14 @@ export const InnerThoughtRenderer: React.FC<{ text: string; speaker?: string }> 
             className="relative rounded-xl overflow-hidden"
             style={{
                 background: 'linear-gradient(135deg, rgba(15,20,30,0.75) 0%, rgba(10,35,40,0.65) 50%, rgba(15,20,30,0.75) 100%)',
-                border: '1px dashed rgba(68,170,170,0.45)',
+                border: '1px dashed rgba(var(--c-wuxia-cyan),0.45)',
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(68,170,170,0.1)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(var(--c-wuxia-cyan),0.1)',
             }}
         >
             {/* Top shimmer line */}
-            <div className="absolute top-0 left-0 right-0 h-[1px]" style={{background:'linear-gradient(to right, transparent, rgba(68,170,170,0.5), transparent)'}} />
+            <div className="absolute top-0 left-0 right-0 h-[1px]" style={{background:'linear-gradient(to right, transparent, rgba(var(--c-wuxia-cyan),0.5), transparent)'}} />
 
             {/* Watermark 心 */}
             <div className="absolute -right-2 -bottom-4 text-[90px] font-serif text-wuxia-cyan select-none pointer-events-none" style={{opacity:0.04, lineHeight:1}}>心</div>
@@ -80,7 +80,7 @@ export const InnerThoughtRenderer: React.FC<{ text: string; speaker?: string }> 
             </div>
 
             {/* Divider */}
-            <div className="mx-4 mt-2 mb-0 h-px" style={{background:'linear-gradient(to right, rgba(68,170,170,0.3), transparent)'}} />
+            <div className="mx-4 mt-2 mb-0 h-px" style={{background:'linear-gradient(to right, rgba(var(--c-wuxia-cyan),0.3), transparent)'}} />
 
             {/* Content */}
             <div className="px-5 pt-3 pb-4">
@@ -90,7 +90,7 @@ export const InnerThoughtRenderer: React.FC<{ text: string; speaker?: string }> 
             </div>
 
             {/* Bottom shimmer */}
-            <div className="absolute bottom-0 left-0 right-0 h-[1px]" style={{background:'linear-gradient(to right, transparent, rgba(68,170,170,0.15), transparent)'}} />
+            <div className="absolute bottom-0 left-0 right-0 h-[1px]" style={{background:'linear-gradient(to right, transparent, rgba(var(--c-wuxia-cyan),0.15), transparent)'}} />
         </div>
     </div>
 );
@@ -135,7 +135,7 @@ export const SceneryRenderer: React.FC<{ text: string }> = ({ text }) => (
             <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-[0.07]">
                 <IconGlyph name="mountain" className="w-10 h-10 text-wuxia-cyan" strokeWidth={1} />
             </div>
-            <div className="absolute top-0 left-0 bottom-0 w-[2px]" style={{background:'linear-gradient(to bottom, transparent, rgba(68,170,170,0.5), transparent)'}} />
+            <div className="absolute top-0 left-0 bottom-0 w-[2px]" style={{background:'linear-gradient(to bottom, transparent, rgba(var(--c-wuxia-cyan),0.5), transparent)'}} />
             <p className="text-paper-white/60 text-[15px] leading-loose tracking-wider pr-8">
                 {highlightText(text)}
             </p>
@@ -246,7 +246,7 @@ export const CharacterRenderer: React.FC<{
                             </span>
                         )}
                         {relationStatus && (
-                            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded border border-cyan-900/30 bg-cyan-950/20 text-cyan-400 font-mono text-[10px] shadow-sm backdrop-blur-sm">
+                            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded border border-wuxia-cyan/25 bg-wuxia-cyan/10 text-wuxia-cyan font-mono text-[10px] shadow-sm backdrop-blur-sm">
                                 <span className="uppercase tracking-tighter opacity-80">{tValue(relationStatus)}</span>
                                 <span className="opacity-50">({favorability})</span>
                             </div>

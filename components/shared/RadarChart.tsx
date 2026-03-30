@@ -17,10 +17,10 @@ interface RadarChartProps {
 const ATTRIBUTE_COLORS: Record<string, string> = {
     'Sức mạnh': '#ef4444',
     'Thân pháp': '#22c55e',
-    'Thể chất': '#3b82f6',
+    'Thể chất': 'rgb(var(--c-wuxia-cyan))',
     'Căn cốt': '#a855f7',
     'Ngộ tính': '#f59e0b',
-    'Phúc duyên': '#06b6d4',
+    'Phúc duyên': 'rgb(var(--c-wuxia-cyan))',
     'Tâm tính': '#eab308',
 };
 
@@ -206,4 +206,3 @@ export const RadarChart: React.FC<RadarChartProps> = ({
         </div>
     );
 };
-

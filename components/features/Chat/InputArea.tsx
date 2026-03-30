@@ -415,14 +415,14 @@ const InputArea: React.FC<Props> = ({
             )}
 
             {showQuickRestartMenu && canQuickRestart && (
-                <div className="rounded-lg border border-teal-400/30 /70 p-2 space-y-2">
-                    <div className="text-xs text-teal-300 font-bold tracking-wider">Tùy chọn khởi động lại nhanh</div>
+                <div className="rounded-lg border border-wuxia-cyan/30 p-2 space-y-2">
+                    <div className="text-xs text-wuxia-cyan font-bold tracking-wider">Tùy chọn khởi động lại nhanh</div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                             <button
                                 type="button"
                                 onClick={() => { void handleQuickRestartSelect('world_only'); }}
                                 disabled={busy}
-                                className="text-xs px-3 py-2 rounded border border-white/10 text-paper-white/80 hover:border-teal-300/70 hover:text-teal-200 disabled:opacity-40"
+                                className="text-xs px-3 py-2 rounded border border-white/10 text-paper-white/80 hover:border-wuxia-cyan/70 hover:text-wuxia-cyan disabled:opacity-40"
                         >
                             Chỉ tạo lại thế giới quan
                         </button>
@@ -430,7 +430,7 @@ const InputArea: React.FC<Props> = ({
                                 type="button"
                                 onClick={() => { void handleQuickRestartSelect('opening_only'); }}
                                 disabled={busy}
-                                className="text-xs px-3 py-2 rounded border border-white/10 text-paper-white/80 hover:border-teal-300/70 hover:text-teal-200 disabled:opacity-40"
+                                className="text-xs px-3 py-2 rounded border border-white/10 text-paper-white/80 hover:border-wuxia-cyan/70 hover:text-wuxia-cyan disabled:opacity-40"
                         >
                             Chỉ tạo lại cốt truyện mở đầu
                         </button>
@@ -438,7 +438,7 @@ const InputArea: React.FC<Props> = ({
                                 type="button"
                                 onClick={() => { void handleQuickRestartSelect('all'); }}
                                 disabled={busy}
-                                className="text-xs px-3 py-2 rounded border border-white/10 text-paper-white/80 hover:border-teal-300/70 hover:text-teal-200 disabled:opacity-40"
+                                className="text-xs px-3 py-2 rounded border border-white/10 text-paper-white/80 hover:border-wuxia-cyan/70 hover:text-wuxia-cyan disabled:opacity-40"
                         >
                             Thế giới quan + Cốt truyện mở đầu
                         </button>
@@ -480,7 +480,7 @@ const InputArea: React.FC<Props> = ({
                             <button
                                 onClick={() => setShowQuickRestartMenu(prev => !prev)}
                                 disabled={busy}
-                                className="w-10 h-full rounded-lg flex items-center justify-center text-teal-300 hover:text-teal-100 hover:bg-teal-900/20 transition-all disabled:opacity-30"
+                                className="w-10 h-full rounded-lg flex items-center justify-center text-wuxia-cyan hover:text-wuxia-gold hover:bg-wuxia-cyan/10 transition-all disabled:opacity-30"
                                 title="Khởi động lại nhanh"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">

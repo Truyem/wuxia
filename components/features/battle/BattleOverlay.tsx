@@ -67,19 +67,19 @@ const BattleOverlay: React.FC<Props> = ({ state, onAction, onClose }) => {
             
             {/* Cyberpunk HUD Background */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
-                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.2)_0%,transparent_70%)]" />
+                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(var(--c-wuxia-cyan),0.2)_0%,transparent_70%)]" />
                 <div className="absolute bottom-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_100%,rgba(220,38,38,0.2)_0%,transparent_70%)]" />
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.2)_50%)] bg-[length:100%_4px]" />
-                <div className="absolute top-1/2 left-0 w-full h-[1px] bg-blue-500/30 shadow-[0_0_20px_rgba(37,99,235,0.5)]" />
+                <div className="absolute top-1/2 left-0 w-full h-[1px] bg-wuxia-cyan/30 shadow-[0_0_20px_rgba(var(--c-wuxia-cyan),0.5)]" />
             </div>
 
             {/* Header / Environment Info */}
             <div className="w-full max-w-6xl mb-6 flex justify-between items-center z-10">
                 <div className="flex items-center gap-4 bg-stone-900/80 border border-stone-800 px-4 py-2 rounded-lg backdrop-blur-md">
-                    <MapPin className="w-4 h-4 text-blue-400" />
+                    <MapPin className="w-4 h-4 text-wuxia-cyan" />
                     <span className="text-xs font-bold uppercase tracking-widest text-stone-300">{environment.currentRegionId || 'Sơn Ngoại Sơn'}</span>
                     <div className="w-[1px] h-4 bg-stone-800" />
-                    {environment.hour >= 6 && environment.hour <= 18 ? <Sun className="w-4 h-4 text-yellow-500" /> : <Moon className="w-4 h-4 text-blue-300" />}
+                    {environment.hour >= 6 && environment.hour <= 18 ? <Sun className="w-4 h-4 text-yellow-500" /> : <Moon className="w-4 h-4 text-wuxia-cyan/80" />}
                     <span className="text-xs font-mono text-stone-400">{environment.hour}:00</span>
                 </div>
                 
@@ -95,16 +95,16 @@ const BattleOverlay: React.FC<Props> = ({ state, onAction, onClose }) => {
                 
                 {/* Player Character Panel */}
                 <div className="lg:col-span-4 flex flex-col gap-4">
-                    <div className="bg-stone-950/60 border border-blue-500/30 rounded-3xl p-6 relative overflow-hidden group">
+                    <div className="bg-stone-950/60 border border-wuxia-cyan/30 rounded-3xl p-6 relative overflow-hidden group">
                         {/* Avatar Wrapper */}
-                        <div className="relative mb-4 aspect-square max-w-[200px] mx-auto overflow-hidden rounded-2xl border-2 border-blue-500/20 shadow-[0_0_30px_rgba(37,99,235,0.1)] bg-stone-900 group">
+                        <div className="relative mb-4 aspect-square max-w-[200px] mx-auto overflow-hidden rounded-2xl border-2 border-wuxia-cyan/20 shadow-[0_0_30px_rgba(var(--c-wuxia-cyan),0.12)] bg-stone-900 group">
                             {character.avatar ? (
                                 <img src={character.avatar} alt={character.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[3000ms] ease-out" />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-stone-900 to-black relative">
                                     <div className="absolute inset-0 bg-ink-wash opacity-20 pointer-events-none"></div>
-                                    <div className="w-20 h-20 rounded-full border border-blue-500/30 flex items-center justify-center bg-blue-500/5 backdrop-blur-md shadow-[0_0_20px_rgba(37,99,235,0.2)]">
-                                        <span className="text-5xl font-serif font-black text-blue-400 leading-none drop-shadow-[0_2px_10px_rgba(37,99,235,0.5)]">
+                                    <div className="w-20 h-20 rounded-full border border-wuxia-cyan/30 flex items-center justify-center bg-wuxia-cyan/5 backdrop-blur-md shadow-[0_0_20px_rgba(var(--c-wuxia-cyan),0.2)]">
+                                        <span className="text-5xl font-serif font-black text-wuxia-cyan leading-none drop-shadow-[0_2px_10px_rgba(var(--c-wuxia-cyan),0.5)]">
                                             {character.name ? character.name.charAt(0) : '?'}
                                         </span>
                                     </div>
@@ -117,19 +117,19 @@ const BattleOverlay: React.FC<Props> = ({ state, onAction, onClose }) => {
                         </div>
 
                         <div className="text-center mb-6">
-                            <h3 className="text-2xl font-black uppercase tracking-tighter text-blue-400 drop-shadow-[0_0_10px_rgba(37,99,235,0.5)]">{character.name}</h3>
+                            <h3 className="text-2xl font-black uppercase tracking-tighter text-wuxia-cyan drop-shadow-[0_0_10px_rgba(var(--c-wuxia-cyan),0.5)]">{character.name}</h3>
                             <p className="text-[10px] text-stone-500 uppercase font-bold tracking-[0.2em] mt-1">Đang vào vị thế</p>
                         </div>
 
                         {/* HP Bar */}
                         <div className="space-y-2">
                             <div className="flex justify-between items-end px-1">
-                                <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">Khí Huyết (HP)</span>
+                                <span className="text-[10px] font-black text-wuxia-cyan uppercase tracking-widest">Khí Huyết (HP)</span>
                                 <span className="text-xs font-mono font-bold text-stone-300">{character.chestCurrentHp} / {character.chestMaxHp}</span>
                             </div>
-                            <div className="h-3 bg-black/60 rounded-full border border-blue-500/20 p-[2px] overflow-hidden">
+                            <div className="h-3 bg-black/60 rounded-full border border-wuxia-cyan/20 p-[2px] overflow-hidden">
                                 <div 
-                                    className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full transition-all duration-500 ease-out shadow-[0_0_10px_rgba(37,99,235,0.5)]"
+                                    className="h-full bg-gradient-to-r from-wuxia-cyan/80 to-wuxia-cyan rounded-full transition-all duration-500 ease-out shadow-[0_0_10px_rgba(var(--c-wuxia-cyan),0.5)]"
                                     style={{ width: `${playerHpPercent}%` }}
                                 />
                             </div>
@@ -151,10 +151,10 @@ const BattleOverlay: React.FC<Props> = ({ state, onAction, onClose }) => {
 
                         {/* Decorative HUD Elements */}
                         <div className="absolute top-0 right-0 p-2 opacity-30">
-                            <div className="border-t-2 border-r-2 border-blue-500 w-4 h-4" />
+                            <div className="border-t-2 border-r-2 border-wuxia-cyan w-4 h-4" />
                         </div>
                         <div className="absolute bottom-0 left-0 p-2 opacity-30">
-                            <div className="border-b-2 border-l-2 border-blue-500 w-4 h-4" />
+                            <div className="border-b-2 border-l-2 border-wuxia-cyan w-4 h-4" />
                         </div>
                     </div>
                 </div>
@@ -168,7 +168,7 @@ const BattleOverlay: React.FC<Props> = ({ state, onAction, onClose }) => {
                                 <Activity className="w-3 h-3" />
                                 Nhật Ký Chiến Đấu
                             </span>
-                            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                            <div className="w-2 h-2 rounded-full bg-wuxia-cyan animate-pulse" />
                         </div>
                         
                         <div 
@@ -181,7 +181,7 @@ const BattleOverlay: React.FC<Props> = ({ state, onAction, onClose }) => {
                                     return (
                                         <div 
                                             key={idx} 
-                                            className={`p-2 rounded border-l-2 animate-in slide-in-from-bottom-2 duration-300 ${isJudgement ? 'bg-amber-500/5 border-l-amber-500 text-amber-200/80' : 'bg-blue-500/5 border-l-blue-500 text-blue-200/80'}`}
+                                            className={`p-2 rounded border-l-2 animate-in slide-in-from-bottom-2 duration-300 ${isJudgement ? 'bg-amber-500/5 border-l-amber-500 text-amber-200/80' : 'bg-wuxia-cyan/5 border-l-wuxia-cyan text-wuxia-cyan/80'}`}
                                             dangerouslySetInnerHTML={{ __html: log.replace(/\n/g, '<br/>') }}
                                         />
                                     );
@@ -202,9 +202,9 @@ const BattleOverlay: React.FC<Props> = ({ state, onAction, onClose }) => {
                                     <button 
                                         key={idx}
                                         onClick={() => onAction(`Sử dụng ${skill.Name}`)}
-                                        className="bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/20 hover:border-blue-500/40 p-2 rounded text-left transition-all group"
+                                        className="bg-wuxia-cyan/10 border border-wuxia-cyan/20 hover:bg-wuxia-cyan/20 hover:border-wuxia-cyan/40 p-2 rounded text-left transition-all group"
                                     >
-                                        <div className="text-[10px] font-black text-blue-400 truncate uppercase tracking-tighter">{skill.Name}</div>
+                                        <div className="text-[10px] font-black text-wuxia-cyan truncate uppercase tracking-tighter">{skill.Name}</div>
                                         <div className="text-[8px] text-stone-500 flex items-center gap-1">
                                             <Zap className="w-2 h-2" />
                                             {skill['Consumption value']} MP
@@ -287,7 +287,7 @@ const BattleOverlay: React.FC<Props> = ({ state, onAction, onClose }) => {
             {/* Footer / HUD Info */}
             <div className="w-full max-w-6xl mt-6 flex justify-between items-center z-10 opacity-50">
                 <div className="text-[9px] font-mono text-stone-600 flex items-center gap-2">
-                    <span className="text-blue-500/50 font-black">BATTLE_OS_V4.0</span>
+                    <span className="text-wuxia-cyan/50 font-black">BATTLE_OS_V4.0</span>
                     <span>|</span>
                     <span>SYNC_ACTIVE</span>
                 </div>

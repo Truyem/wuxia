@@ -57,10 +57,10 @@ const STAT_COLORS: Record<string, string> = {
     strength: '#ef4444',      // Red
     agility: '#22c55e',       // Green
     constitution: '#eab308',  // Yellow/Gold
-    rootBone: '#3b82f6',      // Blue
+    rootBone: 'rgb(var(--c-wuxia-cyan))',
     intelligence: '#a855f7',  // Purple
     luck: '#f97316',          // Orange
-    tamTinh: '#06b6d4',       // Cyan
+    tamTinh: 'rgb(var(--c-wuxia-cyan))',
 };
 
 const STAT_LABELS: Record<string, string> = {
