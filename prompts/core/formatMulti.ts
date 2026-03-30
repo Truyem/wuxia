@@ -69,6 +69,9 @@ export const Core_OutputFormat_MultiThought: PromptStructure = {
 ## 1) Logs Rules
 - Senders: Background, InnerThought, Flashback, System, Scenery.
 - Use "Background" for narration, "Character Name" for dialogue.
+- Each log item MUST be an object with exactly 2 fields: {"sender": "...", "text": "..."}.
+- sender MUST be plain text only (e.g., "Background", "Lão Giác"), NEVER use wrappers like 【...】.
+- Do NOT embed speaker prefixes (e.g., "【Người dẫn chuyện】", "【Lão Giác】") inside text.
 - Use asterisks \`*\` to wrap proper nouns.
 - Content must be entirely in VIETNAMESE.
 
