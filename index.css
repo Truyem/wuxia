@@ -2,15 +2,19 @@
 
 :root {
   /* Wuxia Chronicle Master Palette */
-  --c-ink-black: #080c16;
-  --c-ink-gray: #141c2c;
-  --c-wuxia-gold: #d9b86a;
-  --c-wuxia-gold-dark: #8a6a2f;
-  --c-wuxia-red: #de5e5e;
-  --c-wuxia-cyan: #7aecff;
-  --c-paper-white: #f2f8ff;
+  --c-ink-black: 8 12 22;
+  --c-ink-gray: 20 28 44;
+  --c-wuxia-gold: 217 184 106;
+  --c-wuxia-gold-dark: 138 106 47;
+  --c-wuxia-red: 222 94 94;
+  --c-wuxia-cyan: 122 236 255;
+  --c-paper-white: 242 248 255;
   --c-jade-base: 25 50 68;
   --c-jade-border: 100 200 160;
+  --bg-wuxia-gradient-layer-1: radial-gradient(130% 90% at 8% 8%, rgba(var(--c-wuxia-gold-dark), 0.16) 0%, rgba(0,0,0,0) 48%);
+  --bg-wuxia-gradient-layer-2: radial-gradient(120% 100% at 90% 6%, rgba(var(--c-wuxia-cyan), 0.11) 0%, rgba(0,0,0,0) 54%);
+  --bg-wuxia-gradient-layer-3: linear-gradient(160deg, rgb(var(--c-ink-black)) 0%, rgb(var(--c-ink-gray)) 55%, rgb(var(--c-ink-black)) 100%);
+  --bg-wuxia-gradient: var(--bg-wuxia-gradient-layer-1), var(--bg-wuxia-gradient-layer-2), var(--bg-wuxia-gradient-layer-3);
 
   /* Typography */
   --font-serif: "Noto Serif TC", "Noto Serif SC", serif;
@@ -27,7 +31,13 @@
 body {
   margin: 0;
   overflow-x: hidden;
-  color: var(--c-paper-white);
+  color: rgb(var(--c-paper-white));
+}
+
+html, body, #root {
+  min-height: 100%;
+  background: var(--bg-wuxia-gradient);
+  background-color: rgb(var(--c-ink-black));
 }
 
 h1, h2, h3, h4, .font-wuxia {
@@ -39,7 +49,7 @@ h1, h2, h3, h4, .font-wuxia {
 .btn-wuxia {
   background: linear-gradient(135deg, rgba(217, 184, 106, 0.15) 0%, rgba(138, 106, 47, 0.15) 100%);
   border: 1px solid rgba(217, 184, 106, 0.52);
-  color: var(--c-paper-white);
+  color: rgb(var(--c-paper-white));
   padding: var(--space-sm) var(--space-lg);
   border-radius: 14px;
   font-family: var(--font-serif);
@@ -95,7 +105,7 @@ h1, h2, h3, h4, .font-wuxia {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--c-ink-black);
+  background: rgb(var(--c-ink-black));
   cursor: grab;
 }
 
@@ -105,7 +115,7 @@ h1, h2, h3, h4, .font-wuxia {
   backdrop-filter: blur(8px);
   border: 1px solid rgba(230, 200, 110, 0.3);
   border-radius: 12px;
-  color: var(--c-paper-white);
+  color: rgb(var(--c-paper-white));
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -116,7 +126,7 @@ h1, h2, h3, h4, .font-wuxia {
 }
 
 .map-marker:hover .marker-label {
-  border-color: var(--c-wuxia-gold);
+  border-color: rgb(var(--c-wuxia-gold));
   background: rgba(230, 200, 110, 0.1);
   transform: translateY(-5px);
 }
@@ -124,10 +134,10 @@ h1, h2, h3, h4, .font-wuxia {
 .marker-dot {
   width: 10px;
   height: 10px;
-  background: var(--c-wuxia-gold);
+  background: rgb(var(--c-wuxia-gold));
   border-radius: 50%;
   margin: 8px auto 0;
-  box-shadow: 0 0 10px var(--c-wuxia-gold);
+  box-shadow: 0 0 10px rgb(var(--c-wuxia-gold));
   animation: pulse 2s infinite;
 }
 
@@ -144,12 +154,12 @@ h1, h2, h3, h4, .font-wuxia {
   letter-spacing: 0.2em;
 }
 
-.text-wuxia-gold { color: var(--c-wuxia-gold); }
-.text-wuxia-red { color: var(--c-wuxia-red); }
-.text-wuxia-cyan { color: var(--c-wuxia-cyan); }
+.text-wuxia-gold { color: rgb(var(--c-wuxia-gold)); }
+.text-wuxia-red { color: rgb(var(--c-wuxia-red)); }
+.text-wuxia-cyan { color: rgb(var(--c-wuxia-cyan)); }
 
-.bg-ink-black { background-color: var(--c-ink-black); }
-.bg-ink-gray { background-color: var(--c-ink-gray); }
+.bg-ink-black { background-color: rgb(var(--c-ink-black)); }
+.bg-ink-gray { background-color: rgb(var(--c-ink-gray)); }
 
 /* Custom Scrollbar Utility */
 .custom-scrollbar::-webkit-scrollbar {
@@ -161,7 +171,7 @@ h1, h2, h3, h4, .font-wuxia {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--c-wuxia-gold-dark) 0%, var(--c-wuxia-gold) 100%);
+  background: linear-gradient(180deg, rgb(var(--c-wuxia-gold-dark)) 0%, rgb(var(--c-wuxia-gold)) 100%);
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
@@ -173,7 +183,7 @@ h1, h2, h3, h4, .font-wuxia {
 /* For Firefox */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: var(--c-wuxia-gold) rgba(10, 18, 34, 0.4);
+  scrollbar-color: rgb(var(--c-wuxia-gold)) rgba(10, 18, 34, 0.4);
 }
 
 /* Wuxia Rounded List Items with Gradient */
@@ -190,7 +200,7 @@ h1, h2, h3, h4, .font-wuxia {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, var(--c-wuxia-gold), transparent);
+  background: linear-gradient(90deg, rgb(var(--c-wuxia-gold)), transparent);
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
