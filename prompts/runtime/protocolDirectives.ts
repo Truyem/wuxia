@@ -4,7 +4,7 @@ import { Core_OutputFormat_MultiThought } from '../core/formatMulti';
 import { CoreActionOptions } from '../core/actionOptions';
 
 const getPromptContent = (promptPool: PromptStructure[], id: string): string => {
-    const hit = promptPool.find((item) => item.id === id);
+    const hit = promptPool.find((item) => item.id === id && item.enabled !== false);
     return typeof hit?.content === 'string' ? hit.content.trim() : '';
 };
 

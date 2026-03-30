@@ -738,7 +738,11 @@ const extractFirstTagContent = (
 };
 
 const standardizedLogSender = (senderRaw: string): string => {
-    const sender = (senderRaw || '').trim();
+    const sender = (senderRaw || '')
+        .trim()
+        .replace(/^【\s*/, '')
+        .replace(/\s*】$/, '')
+        .trim();
     if (!sender) return 'Narrator';
     return sender;
 };
@@ -1099,12 +1103,24 @@ const normalizationJsonStructureResponse = (raw: any): GameResponse => {
     const logs = rawLogs
         .map((item: any) => {
             if (typeof item === 'string') {
+                const trimmed = item.trim();
+                const prefixed = trimmed.match(/^【\s*([^】]+?)\s*】\s*(.*)$/);
+                if (prefixed) {
+                    return {
+                        sender: standardizedLogSender(prefixed[1]),
+                        text: (prefixed[2] || '').trim()
+                    };
+                }
                 return { sender: 'Narrator', text: item };
             }
             if (item && typeof item === 'object') {
+                const rawText = typeof item.text === 'string' ? item.text : String(item.text ?? '');
+                const prefixed = rawText.trim().match(/^【\s*([^】]+?)\s*】\s*(.*)$/);
                 return {
-                    sender: typeof item.sender === 'string' ? item.sender : 'Narrator',
-                    text: typeof item.text === 'string' ? item.text : String(item.text ?? '')
+                    sender: standardizedLogSender(
+                        prefixed?.[1] || (typeof item.sender === 'string' ? item.sender : 'Narrator')
+                    ),
+                    text: prefixed ? (prefixed[2] || '').trim() : rawText
                 };
             }
             return null;
