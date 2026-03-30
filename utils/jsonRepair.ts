@@ -103,13 +103,13 @@ const removeDanglingQuoteTokens = (input: string): string => {
         if (ch === '"') {
             const nextIdx = nextNonWsIndex(i + 1);
             const nextChar = nextIdx >= 0 ? input[nextIdx] : '';
-            if (nextChar && ',}]'.includes(nextChar) && /[}"\]0-9]/.test(lastSig)) {
+            if (nextChar && ',}]'.includes(nextChar) && /[\]}"0-9]/.test(lastSig)) {
                 continue;
             }
             if (input[i + 1] === '"') {
                 const afterPairIdx = nextNonWsIndex(i + 2);
                 const afterPairChar = afterPairIdx >= 0 ? input[afterPairIdx] : '';
-                if (afterPairChar && ',}]'.includes(afterPairChar) && /[}"\]0-9]/.test(lastSig)) {
+                if (afterPairChar && ',}]'.includes(afterPairChar) && /[\]}"0-9]/.test(lastSig)) {
                     i += 1;
                     continue;
                 }
