@@ -179,6 +179,7 @@ export const useGame = () => {
         taskList, setTaskList,
         appointmentList, setAppointmentList,
         story, setStory,
+        openingConfig, setOpeningConfig,
         history, setHistory,
         memorySystem, setMemorySystem,
         loading, setLoading,
@@ -355,12 +356,25 @@ export const useGame = () => {
     }, [environment.x, environment.y]);
 
     // --- Actions ---
-    const deepCopy = <T,>(data: T): T => {
+    const deepCopy = <T,>(data: T, label = 'data'): T => {
+        if (data === undefined) {
+            console.warn(`[useGame] deepCopy: ${label} is undefined`);
+            return data as any;
+        }
         try {
-            return JSON.parse(JSON.stringify(data));
+            const serialized = JSON.stringify(data);
+            if (typeof serialized !== 'string' || serialized === '') {
+                console.warn(`[useGame] deepCopy: ${label} produced empty serialization`);
+                return data;
+            }
+            return JSON.parse(serialized);
         } catch (e) {
-            console.error('[useGame] deepCopy failed:', e);
-            return data;
+            console.error(`[useGame] deepCopy failed (${label}):`, e);
+            try {
+                return JSON.parse(JSON.stringify(data));
+            } catch {
+                return data;
+            }
         }
     };
 
@@ -2994,7 +3008,8 @@ YÊU CẦU ĐỊNH DẠNG JSON (BẮT BUỘC):
             gameSettings: deepCopy(gameState.gameConfig),
             memoryConfig: deepCopy(gameState.memoryConfig),
             visualConfig: deepCopy(gameState.visualConfig),
-            promptSnapshot: promptsSnapshot
+            promptSnapshot: promptsSnapshot,
+            openingConfig: deepCopy(gameState.openingConfig)
         };
     };
 
@@ -3066,6 +3081,7 @@ YÊU CẦU ĐỊNH DẠNG JSON (BẮT BUỘC):
         if (save.gameSettings) setGameConfig(normalizeGameSettings(save.gameSettings));
         if (save.memoryConfig) setMemoryConfig(standardizeMemoryConfig(save.memoryConfig));
         if (save.visualConfig) setVisualConfig(save.visualConfig);
+        if (save.openingConfig) setOpeningConfig(save.openingConfig);
         if (Array.isArray(save.promptSnapshot)) {
             setPrompts(save.promptSnapshot);
             await dbService.saveSetting('prompts', save.promptSnapshot);
@@ -3104,7 +3120,7 @@ YÊU CẦU ĐỊNH DẠNG JSON (BẮT BUỘC):
             setShowSettings, setShowInventory, setShowEquipment, setShowSocial, setShowTeam, setShowKungfu, setShowWorld, setShowMap, setShowSect, setShowTask, setShowAgreement, setShowStory, setShowMemory, setShowSaveLoad,
             setActiveTab, setCurrentTheme,
             setApiConfig, setVisualConfig, setPrompts,
-            setBattle, setCharacter, setSocial, setWorld, setPlayerSect, setTaskList, setAppointmentList, setStory, setHistory, setEnvironment
+            setBattle, setCharacter, setSocial, setWorld, setPlayerSect, setTaskList, setAppointmentList, setStory, setHistory, setEnvironment, setMemorySystem
         },
         actions: {
             handleSend,

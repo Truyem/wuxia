@@ -302,7 +302,8 @@ const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visual
         if (!idOrName || idOrName === 'None') return 'Chưa trang bị';
         if (!idOrName || idOrName === 'None') return 'Chưa trang bị';
         const item = Role.itemList.find(i => i.id === idOrName || i.name === idOrName);
-        return item ? item.name : idOrName;
+        if (!item) return String(idOrName);
+        return typeof item.name === 'string' ? item.name : JSON.stringify(item.name);
     };
 
 

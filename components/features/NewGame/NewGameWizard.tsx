@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import GameButton from '../../ui/GameButton';
-import { WorldGenConfig, CharacterData, Talent, Background, GameDifficulty, StoryStyleType, TalentRank } from '../../../types';
+import { WorldGenConfig, CharacterData, Talent, Background, GameDifficulty, StoryStyleType, TalentRank, OpeningConfig } from '../../../types';
 import { PresetTalent, PresetBackground } from '../../../data/presets';
 import { OrnateBorder } from '../../ui/decorations/OrnateBorder';
 import InlineSelect from '../../ui/InlineSelect';
@@ -10,20 +10,48 @@ import { generateSafeUUID } from '../../../utils/stateHelpers';
 import { Dices, Save, Download, LogOut, X, Plus, Minus, Users, Swords, Check, Zap } from 'lucide-react';
 import { RadarChart, RadarData } from '../../shared/RadarChart';
 import { StatBar } from '../../shared/StatBar';
+import OpeningConfigSettings from '../Settings/OpeningConfigSettings';
 
 interface Props {
     onComplete: (
         worldConfig: WorldGenConfig,
         charData: CharacterData,
         mode: 'all' | 'step',
-        openingStreaming: boolean
+        openingStreaming: boolean,
+        openingConfig?: OpeningConfig
     ) => void;
     onCancel: () => void;
     loading: boolean;
     requestConfirm?: (options: { title?: string; message: string; confirmText?: string; cancelText?: string; danger?: boolean }) => Promise<boolean>;
 }
 
-const STEPS = ['Thế giới quan', 'Hồ sơ hiệp khách', 'Thuộc tính nhân vật', 'Thân thế xuất thân', 'Bất lợi bẩm sinh', 'Thiên phú linh khiếu', 'Xác nhận tạo'];
+const STEPS = ['Thế giới quan', 'Hồ sơ hiệp khách', 'Thuộc tính nhân vật', 'Thân thế xuất thân', 'Bất lợi bẩm sinh', 'Thiên phú linh khiếu', 'Cấu hình khởi đầu', 'Xác nhận tạo'];
+
+const entryPreferenceLabels: Record<string, string> = {
+    '日常低压': 'Sinh hoạt hàng ngày',
+    '在途起手': 'Khởi đầu trên đường',
+    '家宅起手': 'Khởi đầu từ nhà',
+    '门派起手': 'Khởi đầu từ môn phái',
+    '风波前夜': 'Trước cơn bão'
+};
+
+const relationFocusLabels: Record<string, string> = {
+    '亲情': 'Quan tình',
+    '友情': 'Hữu nghị',
+    '师门': 'Sư môn',
+    '情缘': 'Tình duyên',
+    '利益': 'Lợi ích',
+    '仇怨': 'Thù oán'
+};
+
+const initialRelationLabels: Record<string, string> = {
+    '独行少系': 'Một mình',
+    '家族牵引': 'Gia tộc',
+    '师门牵引': 'Sư môn',
+    '世家官门': 'Quý tộc',
+    '青梅旧识': 'Bạn cũ',
+    '旧仇旧债': 'Thù cũ'
+};
 
 const WORLD_NAMES = ['Thương Khung Giới', 'Huyền Âm Thế Giới', 'Thái Hư Kiếm Vực', 'Trọng Tiêu Thần Giới', 'Vạn Kiếm Thánh Địa', 'Hỗn Độn Thần Vực', 'Tử Tiêu Cửu Thiên', 'Huyết Sát Giang Hồ', 'Phong Lôi Vũ Giới', 'Thiên Long Bát Bộ Giới', 'Cửu Châu Kiếm Giới', 'Mặc Sắc Vô Biên Giới', 'Bách Kiếm Tông Thế Giới', 'Thiên Địa Huyền Hoàng Giới', 'Trường Hà Vạn Cổ Giới', 'Hồng Hoang Thần Giới', 'Kiếm Vũ Thiên Duyên Giới', 'Vô Cực Vạn Giới', 'Tiêu Diêu Vũ Giới', 'Đại Thiên Địa Giới', 'Thanh Hoá', 'Nam Định', 'Bàn Cổ Giới', 'Hỗn Độn Tinh Không', 'Hồng Mông Đại Thế Giới', 'Thần Ma Chiến Trường', 'Cửu U Minh Giới', 'Thiên Đạo Thần Vực', 'Linh Giới', 'Tiên Giới', 'Phàm Nhân Giới', 'Yêu Giới', 'Ma Giới', 'Phật Quốc', 'Tu La Đạo', 'Sâm La Điện', 'Cửu Trùng Thiên', 'Thập Bát Tầng Địa Ngục', 'Vạn Yêu Cốc', 'Bách Thảo Viên', 'Kiếm Trủng', 'Đao Vực', 'Thủy Tinh Cung', 'Hỏa Diệm Sơn', 'Lôi Âm Tự', 'Phong Thần Đài', 'Tru Tiên Trận', 'Vạn Tiên Trận', 'Cửu Khúc Hoàng Hà Trận', 'Thái Cực Đồ', 'Bàn Cổ Phiên', 'Hỗn Độn Chung'];
 const DYNASTY_PRESETS = [
@@ -367,6 +395,10 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
     const [selectedTalents, setSelectedTalents] = useState<Talent[]>([]);
     const [customTalentList, setCustomTalentList] = useState<Talent[]>([]);
     const [customBackgroundList, setCustomBackgroundList] = useState<Background[]>([]);
+
+    // Opening Config
+    const [openingConfigEnabled, setOpeningConfigEnabled] = useState(false);
+    const [openingConfig, setOpeningConfig] = useState<OpeningConfig | undefined>(undefined);
 
     // Gacha animation state
     const [gachaFlash, setGachaFlash] = useState<string | null>(null);
@@ -726,7 +758,7 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
             currentExp: 0, levelUpExp: 100, playerBuffs: []
         };
 
-        onComplete(worldConfig, charData, openingStreaming ? 'all' : 'step', openingStreaming);
+        onComplete(worldConfig, charData, openingStreaming ? 'all' : 'step', openingStreaming, openingConfigEnabled ? openingConfig : undefined);
     };
 
     return (
@@ -1571,8 +1603,21 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
                         );
                     })()}
 
-                    {/* STEP 7: CONFIRMATION */}
+                    {/* STEP 7: OPENING CONFIG */}
                     {step === 6 && (
+                        <div className="space-y-6 animate-fadeIn max-w-4xl mx-auto">
+                            <OpeningConfigSettings 
+                                settings={openingConfig}
+                                onSave={(config) => {
+                                    setOpeningConfig(config);
+                                    setOpeningConfigEnabled(true);
+                                }}
+                            />
+                        </div>
+                    )}
+
+                    {/* STEP 8: CONFIRMATION */}
+                    {step === 7 && (
                         <div className="flex flex-col items-center justify-center space-y-8 animate-slide-in h-full">
                             <h3 className="text-2xl font-serif font-bold text-wuxia-gold tracking-widest text-center">Xác nhận phong vân chi lộ</h3>
 
@@ -1600,6 +1645,25 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
                                             )) : <span className="text-gray-600 italic text-[10px]">Chưa chọn Bất lợi (Gợi ý: chọn để có thêm điểm Thiên phú)</span>}
                                         </div>
                                     </div>
+
+                                    {openingConfigEnabled && openingConfig && (
+                                        <div className="pt-2 border-t border-wuxia-gold/10 space-y-2">
+                                            <p className="text-cyan-400/80">Cấu hình khởi đầu:</p>
+                                            <div className="flex flex-wrap gap-1.5">
+                                                <span className="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px]">
+                                                    Ưu tiên: {entryPreferenceLabels[openingConfig.开局切入偏好] || openingConfig.开局切入偏好}
+                                                </span>
+                                                <span className="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px]">
+                                                    Quan hệ: {openingConfig.关系侧重.map(r => relationFocusLabels[r] || r).join(', ')}
+                                                </span>
+                                                {openingConfig.同人融合?.enabled && (
+                                                    <span className="px-1.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-purple-400 text-[10px]">
+                                                        Fanfic: {openingConfig.同人融合.作品名 || 'Đã bật'}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
 
                                     {(remainingTalentPoints >= 2 || selectedDebuffs.length === 0) && (
                                         <div className="mt-4 p-3 bg-red-950/20 border border-red-500/30 rounded-lg space-y-2">

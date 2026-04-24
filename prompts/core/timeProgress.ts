@@ -16,7 +16,7 @@ export const coreTimeProgression: PromptStructure = {
 - Tu luyện/Nghỉ ngơi: 4-8 giờ.
 
 ## 2. Đồng bộ cưỡng chế
-- Mọi hành động trong \`<正文>\` đều phải tiêu tốn thời gian thực tế.
+- Mọi hành động trong \`<content>\` đều phải tiêu tốn thời gian thực tế.
 - Nếu người chơi do dự hoặc không đưa ra hành động cụ thể, thời gian vẫn trôi qua (Thuế thời gian).
 - Cập nhật biến \`环境.年/月/日/时/分\` ngay khi có sự thay đổi.
 

@@ -22,12 +22,14 @@ import {
     TavernSettingsStructure,
     CoreStats,
     MusicSettings,
-    Song
+    Song,
+    OpeningConfig
 } from '../types';
 import { DefaultPrompts } from '../prompts';
 import { defaultMidToLongMemoryPrompt, defaultShortToMidMemoryPrompt, defaultExtraSystemPrompt } from '../prompts/runtime/defaults';
 import { festivalList } from '../data/world';
 import * as dbService from '../services/dbService';
+import { DEFAULT_OPENING_CONFIG, normalizeOptionalOpeningConfig } from '../utils/openingConfig';
 import { PromptSyncService } from '../services/promptSyncService';
 import { THEMES } from '../styles/themes';
 import { createEmptyApiSettings, normalizeApiSettings, DEFAULT_TEXT_GEN_WORKER_URL, DEFAULT_IMAGE_GEN_WORKER_URL } from '../utils/apiConfig';
@@ -242,6 +244,7 @@ export const useGameState = () => {
     const [appointmentList, setAppointmentList] = useState<AppointmentStructure[]>([]);
     const [story, setStory] = useState<StorySystem>(() => createEmptyStory());
     const [storyId, setStoryId] = useState<string | undefined>(undefined);
+    const [openingConfig, setOpeningConfig] = useState<OpeningConfig | undefined>(() => undefined);
 
     // New Game State for Memory
     const [memorySystem, setMemorySystem] = useState<MemorySystem>({
@@ -555,6 +558,7 @@ export const useGameState = () => {
         taskList, setTaskList,
         appointmentList, setAppointmentList,
         story, setStory,
+        openingConfig, setOpeningConfig,
         history, setHistory,
         memorySystem, setMemorySystem,
         loading, setLoading,

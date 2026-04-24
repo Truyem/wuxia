@@ -12,6 +12,9 @@ import RecallModelSettings from './RecallModelSettings';
 import ArticleOptimizationSettings from './ArticleOptimizationSettings';
 import MusicSettings from './MusicSettings';
 import WorldEvolutionSettings from './WorldEvolutionSettings';
+import NpcManager from './NpcManager';
+import VariableManager from './VariableManager';
+import OpeningConfigSettings from './OpeningConfigSettings';
 
 import IconGlyph, { IconName } from '../../ui/Icon/IconGlyph';
 import { CharacterData } from '../../../types';
@@ -36,8 +39,8 @@ type ContextSnapshot = {
 };
 
 interface Props {
-    activeTab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'music';
-    onTabChange: (tab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'music') => void;
+    activeTab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'music' | 'npc' | 'variable' | 'opening_config';
+    onTabChange: (tab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'music' | 'npc' | 'variable' | 'opening_config') => void;
     onClose: () => void;
 
     // Config Props
@@ -53,30 +56,44 @@ interface Props {
     history: any[];
     memorySystem: MemorySystem;
     contextSnapshot?: any;
+    socialList?: any[];
+    runtimeState?: Record<string, unknown>;
+    openingConfig?: any;
 
     // Actions
     onSaveApi: (config: InterfaceSettingsStructure) => void;
     onSaveVisual: (config: VisualSettingsType) => void;
     onSaveGame: (config: GameSettingsType) => void;
     onSaveMemory: (config: MemoryConfig) => void;
+    onSaveOpeningConfig?: (config: any) => void;
 
     onUpdatePrompts: (prompts: PromptStructure[]) => void;
     onUpdateFestivals: (festivals: FestivalStructure[]) => void;
     onThemeChange: (theme: ThemePreset) => void;
+    
+    onCreateNpc?: (seed?: any) => any;
+    onSaveNpc?: (npcId: string, npc: any) => void;
+    onDeleteNpc?: (npcId: string) => void;
+    onReplaceSection?: (section: string, value: unknown) => void;
+    onApplyCommand?: (command: any) => void;
 
     onReturnToHome?: () => void;
     isHome?: boolean;
     requestConfirm?: (options: { title?: string; message: string; confirmText?: string; cancelText?: string; danger?: boolean }) => Promise<boolean>;
-    currentEnvironment?: any; // Use any for now to avoid complexity of nested types
+    currentEnvironment?: any;
 }
 
 const SettingsModal: React.FC<Props> = ({
     activeTab, onTabChange, onClose,
-    apiConfig, visualConfig, gameConfig, memoryConfig, prompts, festivals, currentTheme, history, memorySystem, contextSnapshot,
+    apiConfig, visualConfig, gameConfig, memoryConfig, prompts, festivals, currentTheme, history, memorySystem, contextSnapshot, socialList, runtimeState,
     onSaveApi, onSaveVisual, onSaveGame, onSaveMemory, onUpdatePrompts, onUpdateFestivals, onThemeChange,
+    onCreateNpc, onSaveNpc, onDeleteNpc, onReplaceSection, onApplyCommand,
     onReturnToHome, isHome, requestConfirm, currentEnvironment
 }) => {
     const tabItems: { id: string; label: string; icon: IconName }[] = [
+        { id: 'opening_config', label: 'Cấu hình khởi đầu', icon: 'plan' },
+        { id: 'npc', label: 'Quản lý NPC', icon: 'social' },
+        { id: 'variable', label: 'Biến lưu trữ', icon: 'plan' },
         { id: 'music', label: 'Âm nhạc & Âm thanh', icon: 'atmosphere' },
         { id: 'article_optimization', label: 'Tối ưu hóa văn bản', icon: 'agreement' },
         { id: 'world_evolution', label: 'Tiến hóa thế giới', icon: 'memory' },
@@ -222,6 +239,28 @@ const SettingsModal: React.FC<Props> = ({
                                     {activeTab === 'article_optimization' && <ArticleOptimizationSettings settings={apiConfig} onSave={onSaveApi} />}
                                     {activeTab === 'world_evolution' && <WorldEvolutionSettings settings={apiConfig} onSave={onSaveApi} />}
                                     {activeTab === 'music' && <MusicSettings />}
+                                    {activeTab === 'npc' && socialList && onCreateNpc && onSaveNpc && onDeleteNpc && (
+                                        <NpcManager 
+                                            socialList={socialList} 
+                                            memoryConfig={memoryConfig}
+                                            onCreateNpc={onCreateNpc}
+                                            onSaveNpc={onSaveNpc}
+                                            onDeleteNpc={onDeleteNpc}
+                                        />
+                                    )}
+                                    {activeTab === 'variable' && runtimeState && onReplaceSection && onApplyCommand && (
+                                        <VariableManager 
+                                            runtimeState={runtimeState as any}
+                                            onReplaceSection={onReplaceSection as any}
+                                            onApplyCommand={onApplyCommand as any}
+                                        />
+                                    )}
+                                    {activeTab === 'opening_config' && onSaveOpeningConfig && (
+                                        <OpeningConfigSettings 
+                                            settings={openingConfig}
+                                            onSave={onSaveOpeningConfig}
+                                        />
+                                    )}
 
                                 </div>
                             </div>
@@ -262,6 +301,28 @@ const SettingsModal: React.FC<Props> = ({
                                         {activeTab === 'article_optimization' && <ArticleOptimizationSettings settings={apiConfig} onSave={onSaveApi} />}
                                         {activeTab === 'world_evolution' && <WorldEvolutionSettings settings={apiConfig} onSave={onSaveApi} />}
                                         {activeTab === 'music' && <MusicSettings />}
+                                        {activeTab === 'npc' && socialList && onCreateNpc && onSaveNpc && onDeleteNpc && (
+                                            <NpcManager 
+                                                socialList={socialList} 
+                                                memoryConfig={memoryConfig}
+                                                onCreateNpc={onCreateNpc}
+                                                onSaveNpc={onSaveNpc}
+                                                onDeleteNpc={onDeleteNpc}
+                                            />
+                                        )}
+                                        {activeTab === 'variable' && runtimeState && onReplaceSection && onApplyCommand && (
+                                            <VariableManager 
+                                                runtimeState={runtimeState as any}
+                                                onReplaceSection={onReplaceSection as any}
+                                                onApplyCommand={onApplyCommand as any}
+                                            />
+                                        )}
+                                        {activeTab === 'opening_config' && onSaveOpeningConfig && (
+                                            <OpeningConfigSettings 
+                                                settings={openingConfig}
+                                                onSave={onSaveOpeningConfig}
+                                            />
+                                        )}
 
                                     </div>
 

@@ -91,7 +91,8 @@ const MobileCharacter: React.FC<Props> = ({ character, onClose, allAvatars }) =>
         const idOrName = character.equipment[key];
         if (idOrName === 'None') return 'None';
         const item = character.itemList.find(i => i.ID === idOrName || i.Name === idOrName);
-        return item ? item.Name : idOrName;
+        if (!item) return String(idOrName);
+        return typeof item.Name === 'string' ? item.Name : JSON.stringify(item.Name);
     };
 
     return (
@@ -142,6 +143,7 @@ const MobileCharacter: React.FC<Props> = ({ character, onClose, allAvatars }) =>
                                     <div className="text-right">
                                         <div className="text-[10px] text-gray-500 uppercase tracking-widest">Cảnh giới</div>
                                         <div className="text-wuxia-red font-bold text-sm drop-shadow-[0_0_8px_rgba(190,18,60,0.5)]">{character.realm}</div>
+                                        <div className="text-[9px] text-gray-500 mt-1">{character.meridianStatus || 'Kinh mạch bình thường'}</div>
                                     </div>
                                 </div>
                                 <div className="mt-3 flex flex-wrap gap-2 text-[9px]">

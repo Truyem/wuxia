@@ -13,11 +13,11 @@ Bắt buộc đầu ra phải chứa các thẻ sau:
 - <Ký ức ngắn hạn>: Tóm tắt ngắn gọn diễn biến lượt này.
 - <Lệnh>: Các lệnh cập nhật trạng thái hệ thống.
 
-## 2. Cấu trúc Chính văn (<Chính văn>)
+## 2. Cấu trúc Nội dung (<content>)
 Sử dụng các tiền tố sau để phân biệt nội dung:
-- 【Người dẫn chuyện】: Dùng cho mô tả bối cảnh, hành động, nội tâm nhân vật.
-- 【Tên Nhân Vật】: Dùng cho lời đối thoại trực tiếp. Lời thoại phải đặt trong dấu ngoặc kép " ".
-- 【Kết quả】: Dùng để thông báo kết quả của một hành động rủi ro (Dice roll).
+- "Background": Dùng cho mô tả bối cảnh, hành động, nội tâm nhân vật.
+- "Tên Nhân Vật": Dùng cho lời đối thoại trực tiếp. Lời thoại phải đặt trong dấu ngoặc kép " ".
+- "[Kết quả]": Dùng để thông báo kết quả của một hành động rủi ro (Dice roll).
 
 ## 3. Quy tắc Mệnh lệnh (<Lệnh>)
 - Mỗi lệnh nằm trên một dòng riêng biệt.

@@ -73,7 +73,8 @@ const CharacterModal: React.FC<Props> = ({ character, onClose }) => {
         const idOrName = (character.equipment as any)[key];
         if (!idOrName || idOrName === 'None') return 'Chưa trang bị';
         const item = character.itemList?.find(i => i.id === idOrName || i.name === idOrName);
-        return item ? item.name : idOrName;
+        if (!item) return String(idOrName);
+        return typeof item.name === 'string' ? item.name : JSON.stringify(item.name);
     };
 
     return (
@@ -133,7 +134,7 @@ const CharacterModal: React.FC<Props> = ({ character, onClose }) => {
                 <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar relative z-10 px-12 py-10 bg-gradient-to-b from-transparent via-black/10 to-transparent">
                     <div className="grid grid-cols-12 gap-10 min-h-full">
                         
-                        {/* COLUMN 1: IDENTITY (3/12) */}
+{/* COLUMN 1: IDENTITY (3/12) */}
                         <div className="col-span-3 space-y-10 animate-in slide-in-from-left-8 duration-700 delay-100">
                             {/* Hero Section */}
                             <div className="relative group">
@@ -151,16 +152,15 @@ const CharacterModal: React.FC<Props> = ({ character, onClose }) => {
                                                 )}
                                             </div>
                                         </div>
-                                        {/* Realm Badge Overlay */}
-                                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-gradient-to-r from-wuxia-red to-wuxia-red/80 border border-wuxia-gold/30 rounded-full shadow-2xl z-20">
-                                            <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">{character.realm}</span>
-                                        </div>
                                     </div>
 
                                     {/* Name & Title */}
                                     <div className="text-center space-y-2">
                                         <h2 className="text-3xl font-serif font-black text-paper-white tracking-widest uppercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">{character.name}</h2>
                                         <p className="text-xs text-wuxia-gold/80 font-serif italic tracking-[0.2em] font-black uppercase">{character.title || 'Giang Hồ Tản Nhân'}</p>
+                                        <p className="text-[10px] text-paper-white/50 font-mono tracking-widest">
+                                            {character.realm} · {character.meridianStatus || 'Bình thường'}
+                                        </p>
                                     </div>
                                 </div>
                             </div>

@@ -22,7 +22,7 @@ export const StatCharacter: PromptStructure = {
 
 ## 3. Quy tắc cập nhật
 - Sử dụng lệnh \`<命令>\` để cập nhật chỉ số.
-- Mọi thay đổi chỉ số phải đi kèm với mô tả logic trong \`<正文>\`.
+- Mọi thay đổi chỉ số phải đi kèm với mô tả logic trong \`<content>\`.
 - Giới hạn chỉ số dựa trên Cảnh giới (Realm) hiện tại.
     `.trim(),
   type: 'num',

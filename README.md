@@ -1,6 +1,6 @@
 # 🗡️ Wuxia AI-RPG Engine
 
-Welcome to the **Wuxia AI-RPG Engine**, a sophisticated, AI-driven storytelling and role-playing web application. This project combines modern web technologies with advanced AI models to create a dynamic, immersive martial arts (Wuxia/Xianxia) universe.
+Dự án **Wuxia AI-RPG Engine** được lấy cảm hứng và phát triển dựa trên [MoRanJiangHu](https://github.com/MikuLXK/MoRanJiangHu) - một dự án mã nguồn mở tuyệt vời về tiểu thuyết võ hiệp, trò chơi văn bản dài và AI workflow. Xin cảm ơn tác giả MikuLXK đã chia sẻ mã nguồn truyền cảm hứng cho cộng đồng!
 
 ---
 
@@ -85,8 +85,15 @@ npm run build
 
 ---
 
+## 🙏 Acknowledgments
+
+- [MoRanJiangHu](https://github.com/MikuLXK/MoRanJiangHu) - Source of inspiration for this project
+
+---
+
 ## 📜 License
 This project is for educational and creative purposes. All AI-generated content follows the terms of the underlying models used.
 
 ---
+
 *May your path through the Jianghu be legendary.* 🗡️✨

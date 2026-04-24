@@ -241,6 +241,42 @@ export interface SaveStructure {
     storyId?: string; // Unique identifier for the playthrough/story part
     // Trạng thái Prompt Snapshot (Quan trọng để bảo tồn world gen)
     promptSnapshot?: any[];
+
+    // Opening Config
+    openingConfig?: OpeningConfig;
+}
+
+// Opening Config Types
+export type InitialRelationTemplateType = '独行少系' | '家族牵引' | '师门牵引' | '世家官门' | '青梅旧识' | '旧仇旧债';
+export type RelationFocusType = '亲情' | '友情' | '师门' | '情缘' | '利益' | '仇怨';
+export type OpeningEntryPreferenceType = '日常低压' | '在途起手' | '家宅起手' | '门派起手' | '风波前夜';
+export type FandomSourceType = '小说' | '动漫' | '游戏' | '影视';
+export type FandomBlendIntensityType = '轻度映射' | '中度混编' | '显性同台';
+
+export interface FandomCharacterReplacementRule {
+    原名称: string;
+    替换为: string;
+}
+
+export interface FandomBlendConfig {
+    enabled: boolean;
+    作品名: string;
+    来源类型: FandomSourceType;
+    融合强度: FandomBlendIntensityType;
+    保留原著角色: boolean;
+    启用角色替换: boolean;
+    替换目标角色名: string;
+    附加替换角色名列表: string[];
+    附加角色替换规则列表: FandomCharacterReplacementRule[];
+    启用附加小说: boolean;
+    附加小说数据集ID: string;
+}
+
+export interface OpeningConfig {
+    初始关系模板: InitialRelationTemplateType;
+    关系侧重: RelationFocusType[];
+    开局切入偏好: OpeningEntryPreferenceType;
+    同人融合: FandomBlendConfig;
 }
 
 export type PromptCategory = string;

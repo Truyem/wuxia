@@ -732,6 +732,24 @@ const App: React.FC = () => {
                         history={state.history}
                         memorySystem={state.memorySystem}
                         contextSnapshot={contextSnapshot}
+                        socialList={state.social || []}
+                        runtimeState={{
+                            character: state.character,
+                            environment: state.environment,
+                            social: state.social,
+                            world: state.world,
+                            battle: state.battle,
+                            story: state.story,
+                            heroinePlan: state.story,
+                            playerSect: state.playerSect,
+                            taskList: state.taskList,
+                            appointmentList: state.appointmentList,
+                            memorySystem: state.memorySystem,
+                        }}
+                        openingConfig={state.openingConfig}
+                        onSaveOpeningConfig={(config) => {
+                            console.log('Save opening config:', config);
+                        }}
                         onSaveApi={actions.saveSettings}
                         onSaveVisual={actions.saveVisualSettings}
                         onSaveGame={actions.saveGameSettings}
@@ -740,11 +758,73 @@ const App: React.FC = () => {
                         onUpdatePrompts={actions.updatePrompts}
                         onUpdateFestivals={actions.updateFestivals}
                         onThemeChange={setters.setCurrentTheme}
+                        onCreateNpc={(seed) => {
+                            const newId = `npc_${Date.now()}`;
+                            const newNpc = {
+                                id: newId,
+                                name: seed?.name || 'NPC mới',
+                                gender: 'Nam' as const,
+                                identity: seed?.identity || 'Cần chỉnh sửa',
+                                description: seed?.description || '',
+                                favorability: 0,
+                                relationStatus: '陌生人',
+                                isMainCharacter: false,
+                                memories: [],
+                                isPresent: true,
+                                isTeammate: false,
+                                age: 20,
+                                realm: 'Trung võ'
+                            };
+                            return newNpc;
+                        }}
+                        onSaveNpc={(npcId, npc) => {
+                            console.log('Save NPC:', npcId, npc);
+                        }}
+                        onDeleteNpc={(npcId) => {
+                            console.log('Delete NPC:', npcId);
+                        }}
+                        onReplaceSection={(section, value) => {
+                            switch (section) {
+                                case 'character':
+                                    if (value && typeof value === 'object') setters.setCharacter(value as any);
+                                    break;
+                                case 'environment':
+                                    if (value && typeof value === 'object') setters.setEnvironment(value as any);
+                                    break;
+                                case 'social':
+                                    if (Array.isArray(value)) setters.setSocial(value as any);
+                                    break;
+                                case 'world':
+                                    if (value && typeof value === 'object') setters.setWorld(value as any);
+                                    break;
+                                case 'battle':
+                                    if (value && typeof value === 'object') setters.setBattle(value as any);
+                                    break;
+                                case 'story':
+                                    if (value && typeof value === 'object') setters.setStory(value as any);
+                                    break;
+                                case 'playerSect':
+                                    if (value && typeof value === 'object') setters.setPlayerSect(value as any);
+                                    break;
+                                case 'taskList':
+                                    if (Array.isArray(value)) setters.setTaskList(value as any);
+                                    break;
+                                case 'appointmentList':
+                                    if (Array.isArray(value)) setters.setAppointmentList(value as any);
+                                    break;
+                                case 'memorySystem':
+                                    if (value && typeof value === 'object') setters.setMemorySystem(value as any);
+                                    break;
+                            }
+                        }}
+                        onApplyCommand={(command) => {
+                            console.log('Apply command:', command);
+                        }}
                         requestConfirm={requestConfirm}
                         onReturnToHome={async () => {
                             const ok = await requestConfirm({
                                 title: 'Return home',
-                                message: 'Are you sure you want to return to home page?？Unsaved progress will be lost.。',
+                                message: 'Are you sure you want to return to home page?',
                                 confirmText: 'Back',
                                 danger: true
                             });

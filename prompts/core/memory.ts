@@ -8,7 +8,7 @@ export const coreMemoryLaws: PromptStructure = {
 # Hệ thống Ghi nhớ của AI
 
 ## 1. Phân loại Ký ức
-- **Ký ức Ngắn hạn (<短期记忆>)**: Tóm tắt diễn biến trong 3-5 lượt chơi gần nhất. Tập trung vào hành động tức thời.
+- **Short-term memory (<shortTermMemory>)**: Tom tat dien bien trong 3-5 luot choi gan nhat. Tap trung vao hanh dong tuc thoi.
 - **Ký ức Trung hạn**: Lưu trữ các sự kiện quan trọng trong chương hiện tại.
 - **Ký ức Dài hạn**: Lưu trữ các cột mốc cuộc đời, ân oán lớn và quan hệ cốt lõi.
 

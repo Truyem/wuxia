@@ -2527,6 +2527,7 @@ export const PresetBackground: Background[] = [
         name: "Vạn Diệp Điện Tư Tế",
         description: "Người canh giữ thư viện lá cây ghi chép bí thuật rừng già.",
         effect: "Trí tuệ +30, Hiểu biết tự nhiên +25",
+        longTerm: "Về lâu dài: Có thể giải mã các bí thuật cổ xưa được ghi trên lá cây",
         rank: "Khó",
         origin: "hu_moc_lam"
     },
@@ -2534,6 +2535,7 @@ export const PresetBackground: Background[] = [
         name: "Thiên Thụ Phủ Thừa Kế",
         description: "Người mang huyết thống của thần thụ cổ đại vệ binh.",
         effect: "Mộc hệ thần thông +50, Phòng ngự tự nhiên +30",
+        longTerm: "Về lâu dài: Có thể triệu hồi 'Thần Thụ Chi Vệ' hộ thân trong chiến đấu",
         rank: "Cực khó",
         origin: "hu_moc_lam"
     },
@@ -2541,6 +2543,7 @@ export const PresetBackground: Background[] = [
         name: "Tà Mộc Thành Vương",
         description: "Vị vua trẻ của thành phố gỗ mục cô độc giữa rừng rậm.",
         effect: "Lãnh đạo +40, Vàng +5000, Toàn thuộc tính +8",
+        longTerm: "Về lâu dài: Có quyền điều động 'Đội Quân Mộc Thể' trong các trận chiến lớn",
         rank: "Cực khó",
         origin: "hu_moc_lam"
     },
@@ -2549,6 +2552,7 @@ export const PresetBackground: Background[] = [
         name: "Vân Long Thôn Nông Phu",
         description: "Canh tác trên vách núi quanh năm mây phủ rồng rít.",
         effect: "Sức mạnh +20, Leo trèo +15",
+        longTerm: "Về lâu dài: Có thể trồng trọt các loại 'Long Huyết Thảo' có giá trị cao",
         rank: "Dễ",
         origin: "tang_long_son"
     },
@@ -2556,6 +2560,7 @@ export const PresetBackground: Background[] = [
         name: "Thạch Long Trấn Thợ Cắt Đá",
         description: "Khai thác đá rồng trân quý từ sườn núi dốc đứng.",
         effect: "Kỹ năng khai khoáng +25, Thể chất +15",
+        longTerm: "Về lâu dài: Có tỷ lệ nhận được 'Long Thạch' khi khai thác đá quý",
         rank: "Bình thường",
         origin: "tang_long_son"
     },
@@ -2563,6 +2568,7 @@ export const PresetBackground: Background[] = [
         name: "Tàng Long Động Tầm Đạo",
         description: "Ẩn tu trong hang rồng, hy vọng một ngày gặp chân long.",
         effect: "Long khí tiềm ẩn +15, Ngộ tính +20",
+        longTerm: "Về lâu dài: Có cơ hội giao hảo với rồng thật, nhận được 'Long Hồn'",
         rank: "Khó",
         origin: "tang_long_son"
     },
@@ -2570,6 +2576,7 @@ export const PresetBackground: Background[] = [
         name: "Long Huyết Cốc Chiến Binh",
         description: "Chiến đấu và tắm mình trong máu rồng loãng nơi thung lũng.",
         effect: "Căn cốt rồng +35, Sức mạnh +25, Sát khí +10",
+        longTerm: "Về lâu dài: Máu rồng trong cơ thể tăng dần theo thời gian, tăng sát thương thiên phục",
         rank: "Khó",
         origin: "tang_long_son"
     },
@@ -2577,6 +2584,7 @@ export const PresetBackground: Background[] = [
         name: "Thiên Long Sơn Đệ Tử",
         description: "Đệ tử nòng cốt của phái chính tông tọa lạc trên đỉnh rồng.",
         effect: "Thiên Long chân khí +50, Danh tiếng +30",
+        longTerm: "Về lâu dài: Được truyền thừa 'Thiên Long Bảo Điển', tăng tốc độ tu luyện",
         rank: "Cực khó",
         origin: "tang_long_son"
     },
@@ -2584,6 +2592,7 @@ export const PresetBackground: Background[] = [
         name: "Long Đế Thành Hoàng Thái Tử",
         description: "Người thừa kế ngai vàng uy nghiêm nhất vùng núi rồng.",
         effect: "Long Uy +60, Vàng +25000, Toàn thuộc tính +10",
+        longTerm: "Về lâu dài: Có quyền thừa kế 'Long Đế Truyền Thừa', triệu hồi rồng chiến đấu",
         rank: "Cực khó",
         origin: "tang_long_son"
     },
@@ -2592,6 +2601,7 @@ export const PresetBackground: Background[] = [
         name: "Vân Hải Thôn Ngư Phu",
         description: "Đánh bắt những loài cá bay trong biển mây xanh thẳm.",
         effect: "Nhanh nhẹn +15, Định vị mây +20",
+        longTerm: "Về lâu dài: Có thể thuần hóa 'Mây Thú' làm phương tiện bay",
         rank: "Dễ",
         origin: "hu_khong_dao"
     },
@@ -2599,6 +2609,7 @@ export const PresetBackground: Background[] = [
         name: "Phù Không Trấn Buôn Chuyến",
         description: "Giao thương hàng hóa giữa các hòn đảo nổi bập bềnh.",
         effect: "Giao tiếp +20, Vàng +6000, Cân bằng +15",
+        longTerm: "Về lâu dài: Giảm 30% chi phí vận chuyển hàng hóa giữa các đảo",
         rank: "Bình thường",
         origin: "hu_khong_dao"
     },
@@ -2606,6 +2617,7 @@ export const PresetBackground: Background[] = [
         name: "Linh Vân Đảo Tu Giả",
         description: "Hấp thụ linh khí tinh khiết từ những đám mây ngũ sắc.",
         effect: "Tốc độ tu luyện +15%, Nội lực thanh khiết +25",
+        longTerm: "Về lâu dài: Cơ thể dần nhẹ như mây, tăng tốc độ di chuyển trên không",
         rank: "Khó",
         origin: "hu_khong_dao"
     },
@@ -2613,6 +2625,7 @@ export const PresetBackground: Background[] = [
         name: "Hư Không Động Thám Hiểm",
         description: "Khám phá những vết nứt không gian đầy hiểm họa.",
         effect: "Kháng không gian +40, Phản ứng nhanh +20",
+        longTerm: "Về lâu dài: Có thể nhìn thấu các khe không gian, dễ dàng tìm lối thoát",
         rank: "Khó",
         origin: "hu_khong_dao"
     },
@@ -2620,6 +2633,7 @@ export const PresetBackground: Background[] = [
         name: "Hư Vô Cung Đệ Tử",
         description: "Người làm chủ các kỹ thuật dịch chuyển và xuyên thấu.",
         effect: "Không Gian Thần Thông +50, Nhanh nhẹn +30",
+        longTerm: "Về lâu dài: Có thể dịch chuyển tức thời trong phạm vi ngắn (blink)",
         rank: "Cực khó",
         origin: "hu_khong_dao"
     },
@@ -2627,6 +2641,7 @@ export const PresetBackground: Background[] = [
         name: "Thiên Hải Thành Chủ",
         description: "Người trị vì thành phố cao nhất, gần với thiên đạo nhất.",
         effect: "Thiên Đạo khí vận +40, Vàng +20000, Quyền lực +30",
+        longTerm: "Về lâu dài: Được thiên đạo ban phước, tăng tỷ lệ rơi đồ hiếm",
         rank: "Cực khó",
         origin: "hu_khong_dao"
     },
@@ -2635,6 +2650,7 @@ export const PresetBackground: Background[] = [
         name: "Hồng Nguyệt Thôn Dân Làng",
         description: "Sống dưới ánh trăng đỏ rực, quen với những đêm mất ngủ.",
         effect: "Kháng ma tính +20, Ý chí +15",
+        longTerm: "Về lâu dài: Mắt thích nghi với bóng tối đỏ, nhìn rõ trong điều kiện thiếu sáng",
         rank: "Dễ",
         origin: "huyet_nguyet_canh"
     },
@@ -2642,6 +2658,7 @@ export const PresetBackground: Background[] = [
         name: "Tà Nguyệt Trấn Thương Nhân",
         description: "Thu mua những vật phẩm chỉ xuất hiện khi trăng máu lên cao.",
         effect: "Giao tiếp +25, Vàng +5000, May mắn +10",
+        longTerm: "Về lâu dài: Có quyền tiếp cận các phiên chợ đêm đặc biệt",
         rank: "Bình thường",
         origin: "huyet_nguyet_canh"
     },
@@ -2649,6 +2666,7 @@ export const PresetBackground: Background[] = [
         name: "Minh Nguyệt Cốc Nhạc Công",
         description: "Gảy đàn dưới ánh trăng để xoa dịu những linh hồn ma mị.",
         effect: "Sức mạnh nghệ thuật +30, Thanh tao +20",
+        longTerm: "Về lâu dài: Âm nhạc có khả năng trấn an quỷ hồn, giảm sát thương từ ma",
         rank: "Khó",
         origin: "huyet_nguyet_canh"
     },
@@ -2656,6 +2674,7 @@ export const PresetBackground: Background[] = [
         name: "Ma Nguyệt Miếu Thủ Hộ Giả",
         description: "Canh giữ ngôi miếu thờ vầng trăng máu đầy bí ẩn.",
         effect: "Phòng ngự tinh thần +35, Sát khí +15",
+        longTerm: "Về lâu dài: Được 'Trăng Máu' ban phước, tăng sức mạnh vào đêm trăng tròn",
         rank: "Khó",
         origin: "huyet_nguyet_canh"
     },
@@ -2663,6 +2682,7 @@ export const PresetBackground: Background[] = [
         name: "Huyết Nguyệt Tông Chấp Sự",
         description: "Thành viên nòng cốt của giáo phái tôn thờ nguyệt ma.",
         effect: "Nguyệt Ma chân khí +50, Tốc độ hồi phục đêm +30%",
+        longTerm: "Về lâu dài: Có thể hấp thụ năng lượng từ trăng máu để tăng cường sức mạnh",
         rank: "Cực khó",
         origin: "huyet_nguyet_canh"
     },
@@ -2670,6 +2690,7 @@ export const PresetBackground: Background[] = [
         name: "Huyết Dạ Thành Vương Tử",
         description: "Vị lãnh chúa trẻ tuổi của kinh đô bóng đêm đỏ thẫm.",
         effect: "Dạ ma uy áp +50, Vàng +12000, Quyến rũ tà mị +20",
+        longTerm: "Về lâu dài: Có quyền thừa kế 'Huyết Dạ Vương Chiến', triệu hồi quân đoàn ma vực",
         rank: "Cực khó",
         origin: "huyet_nguyet_canh"
     },
@@ -2678,6 +2699,7 @@ export const PresetBackground: Background[] = [
         name: "Vãng Sinh Thôn Dân Làng",
         description: "Sống bên dòng sông cát, luôn chuẩn bị cho cái chết thanh thản.",
         effect: "Tâm lý vững vàng +25, Bền bỉ +10",
+        longTerm: "Về lâu dài: Không bao giờ rơi vào trạng thái tuyệt vọng, luôn giữ bình tĩnh",
         rank: "Dễ",
         origin: "luu_sa_ha"
     },
@@ -2685,6 +2707,7 @@ export const PresetBackground: Background[] = [
         name: "Cát Chảy Trấn Thợ Cứu Hộ",
         description: "Chuyên giải cứu người và lạc đà bị lún sâu trong dòng cát chảy.",
         effect: "Sức mạnh +25, Kỹ năng giải cứu +20",
+        longTerm: "Về lâu dài: Có khả năng 'Thảo Cứu' cứu thoát đồng đội khỏi trạng thái khống chế",
         rank: "Bình thường",
         origin: "luu_sa_ha"
     },
@@ -2692,6 +2715,7 @@ export const PresetBackground: Background[] = [
         name: "Kim Sa Động Tầm Bảo",
         description: "Khai thác những hạt vàng rực rỡ ẩn trong dòng sông cát.",
         effect: "Lục soát +30, Vàng +8000, May mắn +5",
+        longTerm: "Về lâu dài: Có mắt nhìn thấu các kho báu ẩn dưới lớp cát",
         rank: "Khó",
         origin: "luu_sa_ha"
     },
@@ -2699,6 +2723,7 @@ export const PresetBackground: Background[] = [
         name: "Lưu Sa Tông Đệ Tử",
         description: "Luyện tập cách di chuyển nhẹ nhàng như gió thổi trên cát.",
         effect: "Khinh công sa mạc +40, Nhanh nhẹn +20",
+        longTerm: "Về lâu dài: Có thể đi trên cát chảy mà không bị lún, di chuyển nhanh hơn trong sa mạc",
         rank: "Khó",
         origin: "luu_sa_ha"
     },
@@ -2706,6 +2731,7 @@ export const PresetBackground: Background[] = [
         name: "Sa Thần Điện Tư Tế",
         description: "Người giao tiếp với vị thần sa mạc hung bạo dưới lòng sông.",
         effect: "Sa Pháp thần thông +50, Toàn thuộc tính đất +30",
+        longTerm: "Về lâu dài: Có thể triệu hồn 'Sa Thần' điều khiển cát bão tấn công",
         rank: "Cực khó",
         origin: "luu_sa_ha"
     },
@@ -2713,6 +2739,7 @@ export const PresetBackground: Background[] = [
         name: "Lưu Sa Thành Đại Công Tước",
         description: "Quý tộc quyền lực nhất cai quản vùng sông cát bao la.",
         effect: "Quyền lực +40, Vàng +40000, Khí vận cực đại +15",
+        longTerm: "Về lâu dài: Có quyền thu thuế và điều động thương nhân trong vùng Lưu Sa",
         rank: "Cực khó",
         origin: "luu_sa_ha"
     },
@@ -2721,6 +2748,7 @@ export const PresetBackground: Background[] = [
         name: "Luyện Ngục Tội Nhân",
         description: "Bị đầy xuống luyện ngục từ nhỏ, đã quen với sự tra tấn của lửa tội.",
         effect: "Kháng hỏa +30, Ý chí +20, Tội lỗi +10",
+        longTerm: "Về lâu dài: Cơ thể thích nghi với lửa, sát thương hỏa không thể giết chết",
         rank: "Dễ",
         origin: "nghiep_hoa_luyen_nguc"
     },
@@ -2728,6 +2756,7 @@ export const PresetBackground: Background[] = [
         name: "Luyện Ngục Trấn Thợ Thủ Công",
         description: "Chế tác xiềng xích và vũ khí từ sắt nóng chảy dưới luyện ngục.",
         effect: "Sức mạnh +20, Kỹ năng rèn +15",
+        longTerm: "Về lâu dài: Vũ khí chế tác có thêm thuộc tính 'Hỏa Nghiệp' gây sát thương thiêu đốt",
         rank: "Bình thường",
         origin: "nghiep_hoa_luyen_nguc"
     },
@@ -2735,6 +2764,7 @@ export const PresetBackground: Background[] = [
         name: "Vô Gián Cốc Chiến Binh",
         description: "Kẻ liều mạng chiến đấu trong thung lũng không lối thoát.",
         effect: "Khả năng sinh tồn +35, Sát thương vật lý +25",
+        longTerm: "Về lâu dài: Chiến đấu càng lâu, sức mạnh càng tăng (berserker)",
         rank: "Khó",
         origin: "nghiep_hoa_luyen_nguc"
     },
@@ -2742,6 +2772,7 @@ export const PresetBackground: Background[] = [
         name: "Hồng Liên Miếu Khổ Tu",
         description: "Ngồi trên đài sen đỏ lơ lửng giữa hồ nham thạch để tịnh tâm.",
         effect: "Nội lực hỏa hệ +40, Tâm tính thanh khiết +15",
+        longTerm: "Về lâu dài: Tâm trí không bị ô nhiễm bởi tà ma, kháng tẩu hỏa nhập ma",
         rank: "Khó",
         origin: "nghiep_hoa_luyen_nguc"
     },
@@ -2749,6 +2780,7 @@ export const PresetBackground: Background[] = [
         name: "Nghiệp Hỏa Cung Hộ Pháp",
         description: "Giữ vị trí cao trong cung điện lửa nghiệp, điều khiển hỏa thuật cực đỉnh.",
         effect: "Nghiệp hỏa thần thông +50, Ma lực +30",
+        longTerm: "Về lâu dài: Có thể thi triển 'Nghiệp Hỏa Trận' bao phủ khu vực rộng",
         rank: "Cực khó",
         origin: "nghiep_hoa_luyen_nguc"
     },
@@ -2756,6 +2788,7 @@ export const PresetBackground: Background[] = [
         name: "Luyện Ngục Vương Chi Hậu Anh",
         description: "Mang dòng máu của vị vua cai trị cõi luyện ngục u tối.",
         effect: "Vương giả khí +50, Sức mạnh +15, Khí vận cực đoan +10",
+        longTerm: "Về lâu dài: Có thể triệu hồi 'Luyện Ngục Quân Đoàn' từ cõi hỏa nghiệp",
         rank: "Cực khó",
         origin: "nghiep_hoa_luyen_nguc"
     },
@@ -2764,6 +2797,7 @@ export const PresetBackground: Background[] = [
         name: "Rừng Già Thôn Thợ Săn",
         description: "Săn bắt các loài rắn độc khổng lồ ẩn nấp trong bụi rậm.",
         effect: "Theo dấu +20, Nhanh nhẹn +15",
+        longTerm: "Về lâu dài: Có thể thuần hóa rắn làm 'Trùm Cuối' trong chiến đấu",
         rank: "Dễ",
         origin: "thi_mang_lam"
     },
@@ -2771,6 +2805,7 @@ export const PresetBackground: Background[] = [
         name: "Thi Độc Trấn Dược Sĩ",
         description: "Nghiên cứu cách hóa giải thi độc cho những người lầm lỡ bước chân vào vùng đất này.",
         effect: "Hiểu biết dược lý +25, Kháng độc +20",
+        longTerm: "Về lâu dài: Có thể chế tạo 'Thiên Hạ Độc' vô hiệu hóa mọi đối thủ",
         rank: "Bình thường",
         origin: "thi_mang_lam"
     },
@@ -2778,6 +2813,7 @@ export const PresetBackground: Background[] = [
         name: "Vạn Xà Cốc Huấn Luyện Viên",
         description: "Có khả năng giao tiếp và điều khiển hàng vạn con rắn độc nhỏ bé.",
         effect: "Kỹ năng điều khiển xà +35, Phản ứng nhanh +15",
+        longTerm: "Về lâu dài: Có thể triệu hồn đàn rắn hỗ trợ trong chiến đấu",
         rank: "Khó",
         origin: "thi_mang_lam"
     },
@@ -2785,6 +2821,7 @@ export const PresetBackground: Background[] = [
         name: "Cự Mãng Động Thám Hiểm",
         description: "Sống sót sau khi lạc vào hang động của tổ tiên loài trăn ma khổng lồ.",
         effect: "Thể chất linh hoạt +30, Kháng kịch độc +40",
+        longTerm: "Về lâu dài: Cơ thể có khả năng tái sinh như rắn, hồi phục nhanh",
         rank: "Khó",
         origin: "thi_mang_lam"
     },
@@ -2792,6 +2829,7 @@ export const PresetBackground: Background[] = [
         name: "Thanh Xà Phủ Thiếu Chủ",
         description: "Mang dòng máu thanh xà tộc, có khả năng hóa hình một phần linh rồng.",
         effect: "Thanh Xà yêu thuật +50, Sắc đẹp +15",
+        longTerm: "Về lâu dài: Có thể biến thành rồng trong thời gian ngắn, tăng sức mạnh gấp bội",
         rank: "Cực khó",
         origin: "thi_mang_lam"
     },
@@ -2799,6 +2837,7 @@ export const PresetBackground: Background[] = [
         name: "Thi Mãng Thành Nữ Vương/Vương",
         description: "Lãnh đạo thành phố rắn, có uy quyền tuyệt đối trước muôn loài bò sát.",
         effect: "Xà vương uy áp +60, Vàng +10000, Quyền lực +30",
+        longTerm: "Về lâu dài: Có thể triệu hồn 'Xà Vực Quân Đoàn' từ vùng đất rắn",
         rank: "Cực khó",
         origin: "thi_mang_lam"
     },
@@ -2807,6 +2846,7 @@ export const PresetBackground: Background[] = [
         name: "Hồ Quang Thôn Ngư Phu",
         description: "Hàng ngày chèo thuyền trên mặt hồ phẳng lặng như gương.",
         effect: "Định lực +20, Linh hoạt +10",
+        longTerm: "Về lâu dài: Có thể đi trên mặt nước như đi trên đất liền",
         rank: "Dễ",
         origin: "kinh_tuong_ho"
     },
@@ -2814,6 +2854,7 @@ export const PresetBackground: Background[] = [
         name: "Minh Hồ Trấn Nghệ Nhân",
         description: "Chế tác các loại gương thần có khả năng lưu giữ hình ảnh.",
         effect: "Kỹ nghệ chế gương +30, Trí tuệ +15",
+        longTerm: "Về lâu dài: Có thể tạo 'Kính Phản Chiếu' phản lại sát thương phép thuật",
         rank: "Bình thường",
         origin: "kinh_tuong_ho"
     },
@@ -2821,6 +2862,7 @@ export const PresetBackground: Background[] = [
         name: "Linh Ba Cốc Tu Sĩ",
         description: "Cảm nhận những gợn sóng linh khí huyền ảo trên mặt hồ.",
         effect: "Ngộ tính +25, Nội lực thủy hệ +20",
+        longTerm: "Về lâu dài: Có thể 'Thẩm Thấu' nhìn thấu ảo cảnh và bẫy rập",
         rank: "Khó",
         origin: "kinh_tuong_ho"
     },
@@ -2828,6 +2870,7 @@ export const PresetBackground: Background[] = [
         name: "Tâm Ảnh Di Tích Kẻ Lạc Lối",
         description: "Người đã nhìn thấy chính mình trong quá khứ và tương lai tại di tích.",
         effect: "Thấu hiểu bản thân +40, Khí vận +10",
+        longTerm: "Về lâu dài: Có thể nhìn thấy tương lai trong giấc mơ (precognition)",
         rank: "Khó",
         origin: "kinh_tuong_ho"
     },
@@ -2835,6 +2878,7 @@ export const PresetBackground: Background[] = [
         name: "Thủy Kính Cung Tiên Tử/Đạo Sĩ",
         description: "Sống trong cung điện pha lê dưới lòng hồ, tu luyện thuật gương chiếu mộng.",
         effect: "Kính tượng thần thông +50, Quyến rũ +20",
+        longTerm: "Về lâu dài: Có thể tạo 'Kính Ảnh Phân Thân' chiến đấu thay mình",
         rank: "Cực khó",
         origin: "kinh_tuong_ho"
     },
@@ -2842,6 +2886,7 @@ export const PresetBackground: Background[] = [
         name: "Kính Tượng Thành Thiếu Gia/Thiếu Nữ",
         description: "Người thừa kế vương quốc mờ ảo nơi mặt hồ thiêng.",
         effect: "Ảnh vương uy khí +40, Vàng +15000, Toàn thuộc tính ảo +20",
+        longTerm: "Về lâu dài: Có thể triệu hồi 'Kính Thành' từ mặt hồ, tạo chiến trường ảo",
         rank: "Cực khó",
         origin: "kinh_tuong_ho"
     },
@@ -2850,6 +2895,7 @@ export const PresetBackground: Background[] = [
         name: "Thạch Nguyên Thôn Dân Làng",
         description: "Vốn là người đá sinh trưởng từ đất mẹ nguyên thủy.",
         effect: "Phòng ngự vật lý +30, Tốc độ -10",
+        longTerm: "Về lâu dài: Cơ thể dần hóa đá, tăng phòng ngự theo thời gian chơi",
         rank: "Dễ",
         origin: "thach_hoa_nguyen"
     },
@@ -2857,6 +2903,7 @@ export const PresetBackground: Background[] = [
         name: "Hóa Thạch Trấn Thợ Khai Thác",
         description: "Khai thác những bộ hài cốt đá hóa mang năng lượng cổ đại.",
         effect: "Sức mạnh +25, Khám phá di vật +20",
+        longTerm: "Về lâu dài: Có thể nhận ra các 'Hóa Thạch Linh' có khả năng hồi sinh",
         rank: "Bình thường",
         origin: "thach_hoa_nguyen"
     },
@@ -2864,6 +2911,7 @@ export const PresetBackground: Background[] = [
         name: "Nham Thạch Cốc Chiến Binh",
         description: "Rèn luyện cơ thể trong những dòng chảy nham thạch nóng bóng.",
         effect: "Thể chất kim cương +40, Kháng hỏa +30",
+        longTerm: "Về lâu dài: Cơ thể miễn nhiễm với nhiệt độ cao, đi trên nham thạch an toàn",
         rank: "Khó",
         origin: "thach_hoa_nguyen"
     },
@@ -2871,6 +2919,7 @@ export const PresetBackground: Background[] = [
         name: "Thiên Thạch Phủ Vệ Binh",
         description: "Bảo vệ kho tàng đá rơi từ trời cao của một đại gia tộc.",
         effect: "Sức chịu đựng +35, Ý chí kiên định +20",
+        longTerm: "Về lâu dài: Được 'Thiên Thạch' ban phước, tăng sức mạnh khi HP thấp",
         rank: "Khó",
         origin: "thach_hoa_nguyen"
     },
@@ -2878,6 +2927,7 @@ export const PresetBackground: Background[] = [
         name: "Thạch Đầu Tông Kiếm Sĩ",
         description: "Một thanh kiếm đá, gánh vác cả giang sơn trầm mặc.",
         effect: "Kiếm pháp trọng thạch +50, Sức mạnh tuyệt đối +30",
+        longTerm: "Về lâu dài: Kiếm và thân hợp nhất, có thể hóa đá kẻ địch trúng chiêu",
         rank: "Cực khó",
         origin: "thach_hoa_nguyen"
     },
@@ -2885,6 +2935,7 @@ export const PresetBackground: Background[] = [
         name: "Thạch Đế Thành Lãnh Chúa",
         description: "Người trị vì thành phố đá bất tử, có khả năng hóa đá kẻ thù.",
         effect: "Thạch hóa uy áp +60, Vàng +10000, Phòng ngự tuyệt vời +50",
+        longTerm: "Về lâu dài: Có thể triệu hồi 'Thành Trì Đá' làm khiên chắn, biến đất thành vũ khí",
         rank: "Cực khó",
         origin: "thach_hoa_nguyen"
     },
@@ -2893,6 +2944,7 @@ export const PresetBackground: Background[] = [
         name: "Hỗn Độn Thôn Mục Đồng",
         description: "Chăn nuôi các loài thú hỗn hợp kỳ lạ giữa vùng không gian vặn vẹo.",
         effect: "Linh hoạt +20, Cảm nhận không gian +15",
+        longTerm: "Về lâu dài: Có thể thuần hóa 'Hỗn Thú' làm thú cưỡi đặc biệt",
         rank: "Dễ",
         origin: "hon_don_di_tich"
     },
@@ -2900,6 +2952,7 @@ export const PresetBackground: Background[] = [
         name: "Vô Định Trấn Lữ Khách",
         description: "Luôn lang thang giữa các mảng không gian không cố định.",
         effect: "Định vị +30, May mắn +15",
+        longTerm: "Về lâu dài: Không bị lạc trong các vùng không gian hỗn độn",
         rank: "Bình thường",
         origin: "hon_don_di_tich"
     },
@@ -2907,6 +2960,7 @@ export const PresetBackground: Background[] = [
         name: "Hoang Cổ Miếu Tu Sĩ",
         description: "Hành trì theo những bí thuật từ thuở khai thiên lập địa.",
         effect: "Nội lực nguyên thủy +40, Trí tuệ cổ xưa +20",
+        longTerm: "Về lâu dài: Có thể giải mã mọi loại bí thuật cổ xưa",
         rank: "Khó",
         origin: "hon_don_di_tich"
     },
@@ -2914,6 +2968,7 @@ export const PresetBackground: Background[] = [
         name: "Thiên Cơ Phủ Mật Thám/Vệ Sĩ",
         description: "Người thuộc tổ chức nắm giữ bí mật lớn nhất vùng hỗn độn.",
         effect: "Bí thuật thiên cơ +35, Ẩn mình +25",
+        longTerm: "Về lâu dài: Được tiếp cận 'Thiên Cơ Đại Quyết' - kế sách chiến thuật tối thượng",
         rank: "Khó",
         origin: "hon_don_di_tich"
     },
@@ -2921,6 +2976,7 @@ export const PresetBackground: Background[] = [
         name: "Hỗn Độn Cung Truyền Nhân",
         description: "Được ban tặng quyền năng điều khiển khí hỗn mang vạn biến.",
         effect: "Hỗn Độn thần thông +60, Khí vận cực đoan +20",
+        longTerm: "Về lâu dài: Có thể tạo 'Hỗn Độn Không Gian' vô hiệu hóa mọi kỹ năng di chuyển",
         rank: "Cực khó",
         origin: "hon_don_di_tich"
     },
@@ -2928,6 +2984,7 @@ export const PresetBackground: Background[] = [
         name: "Hỗn Độn Thành Vương",
         description: "Quân vương trị vì trung tâm của dòng xoáy không gian thần bí.",
         effect: "Không gian uy quyền +50, Vàng +30000, Quyền lực vạn năm +30",
+        longTerm: "Về lâu dài: Có thể điều khiển dòng xoáy không gian, triệu hồi quân đoàn từ các chiều",
         rank: "Cực khó",
         origin: "hon_don_di_tich"
     },
@@ -2936,6 +2993,7 @@ export const PresetBackground: Background[] = [
         name: "Bồ Đề Trấn Dân Thường",
         description: "Sống hiền lành dưới chân núi Phật, hàng ngày ăn chay niệm Phật.",
         effect: "Nhân đức +30, An tĩnh nội tâm +20",
+        longTerm: "Về lâu dài: Tâm trí thanh tịnh, miễn nhiễm với mọi loại tẩu hỏa nhập ma",
         rank: "Dễ",
         origin: "phat_quang_linh"
     },
@@ -2943,6 +3001,7 @@ export const PresetBackground: Background[] = [
         name: "Từ Bi Cốc Y Sĩ",
         description: "Cứu chữa cho muôn loài gặp nạn trong thung lũng từ bi.",
         effect: "Y thuật +35, Danh tiếng +20",
+        longTerm: "Về lâu dài: Y thuật có khả năng hồi sinh người chết (1 lần/ngày)",
         rank: "Bình thường",
         origin: "phat_quang_linh"
     },
@@ -2950,6 +3009,7 @@ export const PresetBackground: Background[] = [
         name: "Linh Sơn Tự Sa Di",
         description: "Tăng nhân trẻ tu tập võ học phật môn chính tông.",
         effect: "Nội công hạo nhiên +40, Căn cốt +15",
+        longTerm: "Về lâu dài: Được truyền thừa 'Phật Tâm Chân Kinh', tăng tốc độ tu luyện nội công",
         rank: "Khó",
         origin: "phat_quang_linh"
     },
@@ -2957,6 +3017,7 @@ export const PresetBackground: Background[] = [
         name: "Phật Quang Điện Thánh Tăng/Hộ Pháp",
         description: "Người có duyên với phật pháp sâu dày, cơ thể tỏa ánh hào quang.",
         effect: "Phật Quang hộ thân +50, Trấn áp ma tính +100",
+        longTerm: "Về lâu dài: 'Phật Quang Hộ Thể' tự động kích hoạt khi bị tấn công bởi ma",
         rank: "Khó",
         origin: "phat_quang_linh"
     },
@@ -2964,6 +3025,7 @@ export const PresetBackground: Background[] = [
         name: "Kim Thân Đệ Tử",
         description: "Đã đạt tới mức độ rèn luyện kim thân không hoại trong truyền thuyết.",
         effect: "Kim Thân Bất Hoại +60, Phòng ngự vật lý tuyệt đối +40",
+        longTerm: "Về lâu dài: Cơ thể bất tử, không bị sát thương vật lý dưới cấp Thánh",
         rank: "Cực khó",
         origin: "phat_quang_linh"
     },
@@ -2971,6 +3033,7 @@ export const PresetBackground: Background[] = [
         name: "Thánh Quang Thành Chủ",
         description: "Vị vua nhân đức trị lãnh địa ánh sáng phương Tây.",
         effect: "Thần thánh uy nghi +50, Khí vận +20, Vàng +10000",
+        longTerm: "Về lâu dài: Được 'Phật Quang' ban phước, dẫn lối cho những người lầm đường",
         rank: "Cực khó",
         origin: "phat_quang_linh"
     },
@@ -2979,6 +3042,7 @@ export const PresetBackground: Background[] = [
         name: "Kiếm Đạo Thôn Thiếu Niên",
         description: "Chào đời trong một gia đình kiếm sĩ bình lôi, khí phách ngạo nghễ.",
         effect: "Kiếm ý tiềm ẩn +20, Nhanh nhẹn +15",
+        longTerm: "Về lâu dài: Có nền tảng kiếm cơ bản vững chắc, dễ dàng học các loại kiếm pháp",
         rank: "Dễ",
         origin: "kiem_y_coc"
     },
@@ -2986,6 +3050,7 @@ export const PresetBackground: Background[] = [
         name: "Linh Kiếm Trấn Thương Nhân",
         description: "Giao dịch linh thạch và phôi kiếm thượng phẩm cho các kiếm tu.",
         effect: "Vàng +8000, Giao tiếp +20, Khéo léo +10",
+        longTerm: "Về lâu dài: Có quyền tiếp cận các 'Linh Kiếm Phôi' hiếm có trên thị trường",
         rank: "Bình thường",
         origin: "kiem_y_coc"
     },
@@ -2993,6 +3058,7 @@ export const PresetBackground: Background[] = [
         name: "Kiếm Khí Di Tích Khổ Tu",
         description: "Để kiếm khí mài giũa cơ thể và ý chí mỗi ngày.",
         effect: "Sức mạnh ý chí +40, Sát thương kiếm +25",
+        longTerm: "Về lâu dài: 'Kiếm Khí Ngưng Hình' có thể hóa thành vũ khí phụ",
         rank: "Khó",
         origin: "kiem_y_coc"
     },
@@ -3000,6 +3066,7 @@ export const PresetBackground: Background[] = [
         name: "Thiên Kiếm Phủ Vệ Binh Chính Tông",
         description: "Thành viên lực lượng bảo an tinh nhuệ của vùng thung lũng kiếm.",
         effect: "Phòng ngự kiếm +30, Sát thương vật lý +20",
+        longTerm: "Về lâu dài: Được 'Kiếm Phủ' ban cho 'Kiếm Hồn Bảo Hộ', tăng phòng ngự",
         rank: "Khó",
         origin: "kiem_y_coc"
     },
@@ -3007,6 +3074,7 @@ export const PresetBackground: Background[] = [
         name: "Kiếm Tâm Cung Đệ Tử Ưu Tú",
         description: "Dòng máu kiếm tu tinh thuần nhất chảy trong huyết quản.",
         effect: "Kiếm Đạo thần thông +60, Toàn thuộc tính kiếm +40",
+        longTerm: "Về lâu dài: Đạt đến 'Kiếm Tâm Hợp Nhất', một kiếm có thể chặt đôi sông núi",
         rank: "Cực khó",
         origin: "kiem_y_coc"
     },
@@ -3014,15 +3082,57 @@ export const PresetBackground: Background[] = [
         name: "Vạn Kiếm Thành Kiếm Đế Hậu Nhân",
         description: "Hậu duệ cao quý nhất của kinh đô vạn kiếm rực rỡ.",
         effect: "Kiếm hoàng uy áp +50, Khí vận cực đại +20, Kiếm thuật tối thượng",
+        longTerm: "Về lâu dài: Có thể triệu hồi 'Vạn Kiếm Luận', tạo ra vô số kiếm ảnh chiến đấu",
         rank: "Cực khó",
         origin: "kiem_y_coc"
     },
     // === LÔI ĐÌNH HẢI (Biome 23) ===
-    {
+{
         name: "Lôi Duyên Thôn Ngư Phu",
         description: "Ra khơi trên vùng biển luôn chực chờ những tia sét chết người.",
         effect: "Kháng lôi +25, Định vị biển +15",
+        longTerm: "Về lâu dài: Có thể cảm nhận bão tố từ xa, tránh các sự kiện thời tiết xấu",
         rank: "Dễ",
+        origin: "loi_dinh_hai"
+    },
+    {
+        name: "Lôi Thần Trấn Thợ Đúc",
+        description: "Đúc các linh khí thu lôi từ kim loại biển sâu.",
+        effect: "Kỹ năng chế tạo +30, Sức mạnh +15",
+        longTerm: "Về lâu dài: Vũ khí chế tác có thêm hiệu ứng 'Lôi Điện Kích' gây damage điện",
+        rank: "Bình thường",
+        origin: "loi_dinh_hai"
+    },
+    {
+        name: "Điện Quang Hải Thám Hiểm",
+        description: "Vượt qua biển sấm sét để tìm kiếm các hòn đảo lôi linh.",
+        effect: "Nhanh nhẹn +35, May mắn không gian +15",
+        longTerm: "Về lâu dài: Có khả năng 'Lôi Độn' - dịch chuyển nhanh trong nước",
+        rank: "Khó",
+        origin: "loi_dinh_hai"
+    },
+    {
+        name: "Thiên Điện Phủ Chấp Sự",
+        description: "Quản lý năng lượng sấm sét phục vụ cho các đại trận bảo vệ đảo.",
+        effect: "Phép thuật lôi hệ +40, Trí tuệ mang điện +20",
+        longTerm: "Về lâu dài: Có thể thi triển 'Lôi Trận' cường hóa đồng đội",
+        rank: "Khó",
+        origin: "loi_dinh_hai"
+    },
+    {
+        name: "Lôi Đình Điện Trưởng Lão Hậu Duệ",
+        description: "Thừa hưởng ma lực lôi đình sục sôi của thế hệ đi trước.",
+        effect: "Lôi Đình thần thông +60, Uy lực tàn phá +40",
+        longTerm: "Về lâu dài: Có thể triệu hồn 'Lôi Đình' từ biển mây đánh xuống",
+        rank: "Cực khó",
+        origin: "loi_dinh_hai"
+    },
+    {
+        name: "Vạn Lôi Thành Chủ",
+        description: "Vị vua của thành phố sấm sét, không bao giờ cúi đầu trước thiên phạt.",
+        effect: "Lôi vương uy quyền +50, Kháng lôi tuyệt đối +100, Vàng +20000",
+        longTerm: "Về lâu dài: Được 'Lôi Đế' ban phước, có thể điều khiển mọi tia sét trong vùng",
+        rank: "Cực khó",
         origin: "loi_dinh_hai"
     },
     {
@@ -3065,6 +3175,7 @@ export const PresetBackground: Background[] = [
         name: "Dao Trì Thôn Trồng Hoa",
         description: "Chăm sóc các loài hoa tiên nở rộ bên hồ Dao Trì.",
         effect: "Quyến rũ +25, Hiểu biết thực vật +20",
+        longTerm: "Về lâu dài: Có thể trồng 'Tiên Hoa' để chế tạo đan dược và thuốc hồi sinh",
         rank: "Dễ",
         origin: "cuu_tieu_phong"
     },
@@ -3072,6 +3183,7 @@ export const PresetBackground: Background[] = [
         name: "Vân Đỉnh Trấn Kẻ Du Ngoạn",
         description: "Khám phá các tầng mây và đỉnh núi cao vút mờ sương.",
         effect: "Leo trèo +30, Thể lực +20",
+        longTerm: "Về lâu dài: Cơ thể thích nghi với độ cao, không bị ảnh hưởng bởi thiếu oxy",
         rank: "Bình thường",
         origin: "cuu_tieu_phong"
     },
@@ -3079,6 +3191,7 @@ export const PresetBackground: Background[] = [
         name: "Cửu Thiên Cốc Tu Hành",
         description: "Tu sĩ tu luyện tại thung lũng chín tầng trời, tiên khí dồi dào.",
         effect: "Tốc độ tu luyện +25%, Nội lực thanh khiết +40",
+        longTerm: "Về lâu dài: 'Cửu Thiên Linh Khí' liên tục bổ sung nội lực mỗi ngày",
         rank: "Khó",
         origin: "cuu_tieu_phong"
     },
@@ -3086,6 +3199,7 @@ export const PresetBackground: Background[] = [
         name: "Tiên Linh Di Tích Thủ Hộ",
         description: "Bảo vệ tàn tích còn sót lại từ thời các vị tiên còn tại thế.",
         effect: "Phòng ngự tiên khí +35, Ý chí kiên định +25",
+        longTerm: "Về lâu dài: Được 'Tiên Linh' ban phước, tăng tỷ lệ rơi 'Tiên Đan'",
         rank: "Khó",
         origin: "cuu_tieu_phong"
     },
@@ -3093,6 +3207,7 @@ export const PresetBackground: Background[] = [
         name: "Tiên Nhân Cung Thiếu Chủ",
         description: "Người mang dòng máu tiên nhân chính tông, cốt cách cao ngạo.",
         effect: "Tiên linh thể +60, Khí vận +15, Sắc đẹp tuyệt trần",
+        longTerm: "Về lâu dài: Có thể 'Phi Tiên' - bay lên trời, di chuyển qua các tầng mây",
         rank: "Cực khó",
         origin: "cuu_tieu_phong"
     },
@@ -3100,6 +3215,7 @@ export const PresetBackground: Background[] = [
         name: "Tiên Đế Thành Thái Tử/Công Chúa",
         description: "Người thừa kế vương triều tiên giới cai trị vùng Cửu Tiêu.",
         effect: "Tiên Uy +50, Vàng +50000, Toàn thuộc tính tiên +30",
+        longTerm: "Về lâu dài: Được thừa kế 'Tiên Đế Truyền Thừa', có thể triệu hồi 'Tiên Quân' trợ chiến",
         rank: "Cực khó",
         origin: "cuu_tieu_phong"
     },

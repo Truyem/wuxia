@@ -66,7 +66,8 @@ const sanitizeImportedSave = (raw: any): Omit<SaveStructure, 'id'> | null => {
         gameSettings: raw.gameSettings && typeof raw.gameSettings === 'object' ? deepCopy(raw.gameSettings) : undefined,
         memoryConfig: raw.memoryConfig && typeof raw.memoryConfig === 'object' ? deepCopy(raw.memoryConfig) : undefined,
         tavernSettings: raw.tavernSettings && typeof raw.tavernSettings === 'object' ? deepCopy(raw.tavernSettings) : undefined,
-        promptSnapshot: promptSnapshot ? deepCopy(promptSnapshot) : undefined
+        promptSnapshot: promptSnapshot ? deepCopy(promptSnapshot) : undefined,
+        openingConfig: raw.openingConfig && typeof raw.openingConfig === 'object' ? deepCopy(raw.openingConfig) : undefined
     };
 
     return normalized;

@@ -50,8 +50,8 @@ export const defaultArticleOptimizationPrompt = `
 4. **Không "Spoil"**: Không tiết lộ suy nghĩ của người chơi hoặc các sự kiện chưa xảy ra.
 
 ## 3. Cấu trúc Nội dung (<body>)
-- **【Tường thuật】**: Mô tả hành động, bối cảnh và diễn biến. Không được lồng ghép lời thoại trực tiếp vào đây.
-- **【Tên nhân vật】**: Chỉ chứa lời thoại trực tiếp của nhân vật đó. Không trộn lẫn hành động hay mô tả môi trường.
+- **"Background"**: Mô tả hành động, bối cảnh và diễn biến. Không được lồng ghép lời thoại trực tiếp vào đây.
+- **"Tên nhân vật"**: Chỉ chứa lời thoại trực tiếp của nhân vật đó. Không trộn lẫn hành động hay mô tả môi trường.
 - *Yêu cầu*: Tách biệt hoàn toàn giữa Tường thuật và Đối thoại. Mỗi loại nội dung phải nằm trên một dòng riêng biệt.
 
 ## 4. Kiểm soát Cảm xúc & Ngôn ngữ

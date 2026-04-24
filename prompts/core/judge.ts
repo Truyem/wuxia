@@ -18,10 +18,10 @@ export const CoreCotJudge: PromptStructure = {
 - **Thất bại (61-95)**: Gặp trở ngại hoặc không đạt được mục đích.
 - **Đại thất bại (96-100)**: Hậu quả nghiêm trọng (Bị thương, Mất vật phẩm, Lộ tung tích).
 
-## 3. Bản tin phán định 【Kết quả】
-- Ngay sau thẻ <judge> trong <Chính văn>, phải in ra dòng:
-  - 【Kết quả】 Tên hành động｜Kết quả｜Đối tượng... 
-- Ví dụ: 【Kết quả】 Đột nhập｜Thành công｜Lao Lý
+## 3. Bản tin phán định [Kết quả]
+- Ngay sau thẻ <judge> trong <content>, phải in ra dòng:
+  - [Kết quả] Tên hành động｜Kết quả｜Đối tượng...
+- Ví dụ: [Kết quả] Đột nhập｜Thành công｜Lao Lý
 
 ## 4. Tác động của Kết quả
 - Kết quả phán định phải ảnh hưởng trực tiếp đến diễn biến tiếp theo của câu chuyện.

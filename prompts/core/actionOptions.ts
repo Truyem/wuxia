@@ -9,7 +9,7 @@ export const CoreActionOptions: PromptStructure = {
 
 ## 1. Số lượng và Định dạng
 - Luôn cung cấp từ 4 đến 6 lựa chọn hành động đa dạng.
-- Sử dụng thẻ \`<行动选项>\` để bao bọc các lựa chọn.
+- Sử dụng thẻ \`<actionOptions>\` để bao bọc các lựa chọn.
 - Mỗi lựa chọn phải là một dòng văn bản thuần túy, mô tả cụ thể ý định.
 
 ## 2. Tính cụ thể (Specificity)
