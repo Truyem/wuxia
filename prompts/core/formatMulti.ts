@@ -76,9 +76,13 @@ export const Core_OutputFormat_MultiThought: PromptStructure = {
 - Content must be entirely in VIETNAMESE.
 
 ## 2) Command Rules
-- Valid paths: gameState.Character, gameState.Inventory, gameState.Skills, gameState.Equipment, gameState.Battle, gameState.Environment, gameState.SocialNet, gameState.Party, gameState.World, gameState.Map, gameState.Plot.
+- Valid paths: gameState.Character, gameState.Inventory, gameState.Kungfu, gameState.Equipment, gameState.Battle, gameState.Environment, gameState.SocialNet, gameState.Party, gameState.World, gameState.Map, gameState.Plot, gameState.PlayerSect, gameState.TaskList.
 - Actions: SET, ADD, PUSH, DEL.
 - Order: SET/ADD/PUSH → DEL.
+- **MÔN PHÁI (RẤT QUAN TRỌNG)**: Khi nhân vật gia nhập môn phái, BẮT BUỘC phải ghi:
+  1. SET key="gameState.Character.sectId" value="tên_môn_phái" (VD: "tuyết_liên_tông")
+  2. SET key="gameState.Character.sectPosition" value="chức_vị" (VD: "Đệ tử ngoại môn")
+  3. SET key="gameState.PlayerSect" value={đối tượng môn phái đầy đủ}
 
 ## 3) Location Sync (Mandatory)
 - Small move: Update \`gameState.Environment.SpecificLocation\`.
