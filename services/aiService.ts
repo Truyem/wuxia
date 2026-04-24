@@ -108,7 +108,7 @@ const DEFAULT_NEMOTRON_WORKER_URL = DEFAULT_TEXT_GEN_WORKER_URLS;
 
 const NSFW_DETECTION_MODEL = '@cf/meta/llama-guard-3-8b';
 const NSFW_STORY_MODEL = '@cf/zai-org/glm-4.7-flash';
-const NORMAL_STORY_MODEL = '@cf/openai/gpt-oss-120b';
+const NORMAL_STORY_MODEL = '@cf/moonshotai/kimi-k2.6';
 const REFINEMENT_MODEL = '@cf/meta/llama-4-scout-17b-16e-instruct';
 
 

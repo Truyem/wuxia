@@ -359,7 +359,12 @@
     {
         "id": "write_emotion_guard",
         "title": "Hạn Chế Cảm Xúc Cực Đoan",
-        "content": "<Kiểm soát cảm xúc NPC>\n# Nguyên tắc:\n- NPC là con người, cấm vô cớ yêu hận tình thù một cách nhảm nhí chỉ trong 1 lượt.\n- L1 (Dao động nhẹ): Cảnh giác, hoài nghi, chần chừ, bối rối.\n- L2 (Sóng ngầm): Tức giận, thất vọng, ái muội.\n- L3 (Bạo tẩu): Hận thấu xương, nhập ma, yêu điên cuồng (Chỉ được kích hoạt khi có chuỗi sự kiện sinh tử, ân oán cực sâu tích lũy qua nhiều lượt).\n- Không có chuyện tặng 1 viên đan dược mà NPC thề sống chết theo hầu. Giang hồ hiểm ác, lòng người khó dò, ai cũng có ranh giới tự tôn riêng.",
+        "content": "<Kiểm soát cảm xúc NPC>\n# Nguyên tắc:\n- NPC là con người, cấm vô cớ yêu hận tình thù một cách nhảm nhí chỉ trong 1 lượt.\n- L1 (Dao động nhẹ): Cảnh giác, hoài nghi, chần chừ, bối rối.\n- L2 (Sóng ngầm): Tức giận, thất vọng, ái muội.\n- L3 (Bạo tẩu): Hận thấu xương, nhập ma, yêu điên cuồng (Chỉ được kích hoạt khi có chuỗi sự kiện sinh tử, ân oán cực sâu tích lũy qua nhiều lượt).\n- Không có chuyện tặng 1 viên đan dược mà NPC thề sống chết theo hầu. Giang hồ hiểm ác, lòng người khó dò, ai cũng có ranh giới tự tôn riêng."
+    },
+    {
+        "id": "write_npc_question_handling",
+        "title": "Xử Lý Câu Hỏi Của Người Chơi",
+        "content": "<Xử lý Câu hỏi và Hành động>\n# Phân biệt ý định người chơi\n\n## 1. NHẬN DẠNG Ý ĐỊNH\n- **Câu hỏi**: Người chơi dùng từ \"hỏi\", \"xin hỏi\", \"muốn biết\", \"kể ta nghe\", \"nói cho ta\", \"thế nào\", \"tại sao\", \"ai\", \"đâu\", \"khi nào\" (dù có hoặc không có dấu ?)\n- **Hành động**: Người chơi dùng động từ hành động như \"đánh\", \"đi\", \"lấy\", \"cho\", \"trao\", \"rút\", \"nấu\", \"uống\"\n\n## 2. XỬ LÝ CÂU HỎI\n- Khi người chơi HỎI → NPC phải TRẢ LỜI, không phải đợi người chơi hành động gì\n- Lời đáp của NPC phải tự nhiên như đang nói chuyện, không cầnng nhân vật người chơi phải làm gì trước\n- Nếu NPC không biết câu trả lời, phải thành thật nói không biết, hoặc đưa ra suy đoán hợp lý\n- Có thể hỏi ngược lại một câu nhỏ để làm rõ, nhưng phải trả lời phần đã biết trước\n\n## 3. XỬ LÝ HÀNH ĐỘNG\n- Khi người chơi HÀNH ĐỘNG → Xử lý hành động đó và phản ứng của thế giới/NPC\n- Đây mới là lúc dừng lại chờ lượt tiếp theo của người chơi\n\n## 4. PHONG CÁCH NPC TRẢ LỜI\n- **Bớt sượng**: Nói chuyện tự nhiên như người thường, không đọc thuộc lòng\n- Trả lời đúng trọng tâm câu hỏi, không lan man\n- Có thể ngắn gọn 1-2 câu, hoặc giải thích chút nếu cần thiết\n- Thái độ phản ánh tính cách NPC (nóng nảy thì đáp ngắn, hiền thì chu đáo)",
         "type": "writing setting",
         "enabled": true
     }
