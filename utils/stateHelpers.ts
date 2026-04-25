@@ -607,11 +607,26 @@ export const applyStateCommand = (
         if (rootSegment === "character" || rootSegment === "role") {
             if (!path && normalizedAction === 'set') {
                 const translatedValue = translateObjectKeys(value);
-                // Robust merging for root-level character updates
                 if (typeof translatedValue === 'object' && !Array.isArray(translatedValue)) {
                     newChar = { ...newChar, ...translatedValue };
                 } else {
                     newChar = translatedValue;
+                }
+                return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
+            }
+            if (path === "sectId" || path === "sectid") {
+                const sectIdValue = String(value);
+                newChar.sectId = sectIdValue;
+                if (newPlayerSect.id === 'none' || !newPlayerSect.id) {
+                    newPlayerSect.id = sectIdValue;
+                }
+                return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
+            }
+            if (path === "sectPosition" || path === "sectposition") {
+                const sectPosValue = String(value);
+                newChar.sectPosition = sectPosValue;
+                if (!newPlayerSect.playerPosition || newPlayerSect.playerPosition === 'None') {
+                    newPlayerSect.playerPosition = sectPosValue;
                 }
                 return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
             }
@@ -853,6 +868,29 @@ export const applyStateCommand = (
         path = key.replace(/^gameState\.PlayerSect\.?/i, "");
         if (!path && normalizedAction === 'set') {
             const translatedValue = translateObjectKeys(value);
+            newPlayerSect = { ...newPlayerSect, ...translatedValue };
+            return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
+        }
+    } else if (lowerKey.startsWith("gamestate.sect")) {
+        const sectSubPath = key.replace(/^gameState\.Sect\.?/i, "");
+        const translatedValue = translateObjectKeys(value);
+        
+        if (sectSubPath === "id" || sectSubPath === "Id") {
+            newPlayerSect.id = String(value);
+            return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
+        } else if (sectSubPath === "name" || sectSubPath === "Name") {
+            newPlayerSect.name = String(value);
+            return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
+        } else if (sectSubPath === "introduction" || sectSubPath === "Introduction") {
+            newPlayerSect.introduction = String(value);
+            return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
+        } else if (sectSubPath === "playerPosition" || sectSubPath === "PlayerPosition") {
+            newPlayerSect.playerPosition = String(value);
+            return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
+        } else if (sectSubPath === "playerContribution" || sectSubPath === "PlayerContribution") {
+            newPlayerSect.playerContribution = typeof value === 'number' ? value : parseInt(value) || 0;
+            return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
+        } else if (!sectSubPath && normalizedAction === 'set') {
             newPlayerSect = { ...newPlayerSect, ...translatedValue };
             return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
         }
