@@ -2121,7 +2121,10 @@ export const useGame = () => {
         const rawResponse = response as any;
         if (rawResponse.character) charBuffer = { ...charBuffer, ...rawResponse.character };
         if (rawResponse.environment) envBuffer = normalizeEnvironment({ ...envBuffer, ...rawResponse.environment });
-        if (rawResponse.social) socialBuffer = standardizeSocialList(mergeSameNamesNPCList([...socialBuffer, ...(Array.isArray(rawResponse.social) ? rawResponse.social : [])]));
+        if (rawResponse.social || rawResponse.SocialNet || rawResponse.socialnet) {
+            const socialData = rawResponse.social || rawResponse.SocialNet || rawResponse.socialnet;
+            socialBuffer = standardizeSocialList(mergeSameNamesNPCList([...socialBuffer, ...(Array.isArray(socialData) ? socialData : [])]));
+        }
         if (rawResponse.world) worldBuffer = normalizeWorldStatus({ ...worldBuffer, ...rawResponse.world });
         if (rawResponse.battle) battleBuffer = normalizeCombatStatus({ ...battleBuffer, ...rawResponse.battle });
         if (rawResponse.story) storyBuffer = normalizeStoryStatus({ ...storyBuffer, ...rawResponse.story }, envBuffer);
