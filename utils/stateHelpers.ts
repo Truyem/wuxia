@@ -747,7 +747,7 @@ export const applyStateCommand = (
             return { char: newChar, env: newEnv, social: newSocial, world: newWorld, battle: newBattle, story: newStory, taskList: newTaskList, appointmentList: newAppointmentList, playerSect: newPlayerSect };
         }
 
-        const isRootSocial = lowerKey === "gamestate.social" || lowerKey === "gamestate.social.npc_list" || lowerKey === "gamestate.socialnet" || lowerKey === "gamestate.socialnet.npc_list";
+        const isRootSocial = lowerKey.startsWith("gamestate.social") || lowerKey.startsWith("gamestate.socialnet");
         if (isRootSocial) {
             const translatedValue = translateObjectKeys(value);
             if (normalizedAction === 'set') {
