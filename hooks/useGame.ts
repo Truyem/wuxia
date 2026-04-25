@@ -815,9 +815,10 @@ export const useGame = () => {
     };
 
 
-    const createStartingBasicStatus = (charData: CharacterData, _worldConfig: WorldGenConfig) => {
+    const createStartingBasicStatus = (charData: CharacterData, _worldConfig: WorldGenConfig, existingPlayerSect?: DetailedSectStructure) => {
         const hasJoinedSect = typeof charData?.sectId === 'string' && charData.sectId !== 'none';
-        const sectState: DetailedSectStructure = createPlaceholderSectStatus(charData);
+        const hasExistingPlayerSect = existingPlayerSect && existingPlayerSect.id && existingPlayerSect.id !== 'none';
+        const sectState: DetailedSectStructure = hasExistingPlayerSect ? existingPlayerSect : createPlaceholderSectStatus(charData);
         const initialTasks: any[] = hasJoinedSect ? [] : [];
         const initialAgreements: any[] = hasJoinedSect ? [] : [];
 
@@ -866,6 +867,23 @@ export const useGame = () => {
         }
         if (gameStateData.playerSect) {
             setPlayerSect(gameStateData.playerSect);
+        } else if (gameStateData.character?.sectId && gameStateData.character.sectId !== 'none') {
+            const fallbackSect: DetailedSectStructure = {
+                id: gameStateData.character.sectId || 'unknown',
+                name: gameStateData.Sect?.name || '',
+                description: gameStateData.Sect?.description || '',
+                introduction: gameStateData.Sect?.introduction || '',
+                sectRules: [],
+                sectFunds: 0,
+                sectResources: 0,
+                constructionLevel: 0,
+                playerPosition: gameStateData.character.sectPosition || 'Member',
+                playerContribution: typeof gameStateData.character.sectContribution === 'number' ? gameStateData.character.sectContribution : 0,
+                taskList: [],
+                exchangeList: [],
+                importantMembers: []
+            };
+            setPlayerSect(fallbackSect);
         }
         if (gameStateData.taskList) {
             setTaskList(gameStateData.taskList);
@@ -886,7 +904,29 @@ export const useGame = () => {
         const worldRaw = normalizeWorldStatus(openingBase.world || openingBase.World);
         setWorld(worldRaw);
         setBattle(normalizeCombatStatus(openingBase.battle || openingBase.Combat));
-        setPlayerSect(openingBase.playerSect || openingBase.PlayerSect);
+
+        if (openingBase.playerSect || openingBase.PlayerSect) {
+            setPlayerSect(openingBase.playerSect || openingBase.PlayerSect);
+        } else if (openingBase.character?.sectId && openingBase.character.sectId !== 'none') {
+            const fallbackSect: DetailedSectStructure = {
+                id: openingBase.character.sectId || 'unknown',
+                name: openingBase.Sect?.name || openingBase.sect?.name || '',
+                description: openingBase.Sect?.description || openingBase.sect?.description || '',
+                introduction: openingBase.Sect?.introduction || openingBase.sect?.introduction || '',
+                sectRules: [],
+                sectFunds: 0,
+                sectResources: 0,
+                constructionLevel: 0,
+                playerPosition: openingBase.character.sectPosition || 'Member',
+                playerContribution: typeof openingBase.character.sectContribution === 'number' ? openingBase.character.sectContribution : 0,
+                taskList: [],
+                exchangeList: [],
+                importantMembers: []
+            };
+            setPlayerSect(fallbackSect);
+        } else {
+            setPlayerSect(createEmptySectStatus());
+        }
         setTaskList(openingBase.taskList || openingBase.TaskList || []);
         setAppointmentList(openingBase.appointmentList || openingBase.AgreementList || []);
         setStory(normalizeStoryStatus(openingBase.story || openingBase.Story));
@@ -1923,7 +1963,31 @@ export const useGame = () => {
                 story: normalizeStoryStatus(contextData.story || story, contextData.environment || environment)
             });
             // Initial phase:Non tavern_commands Writable field(Sect/Task/Promise)Must also be reset at this time,Avoid following old save data.。
-            setPlayerSect(contextData.playerSect || createEmptySectStatus());
+            if (contextData.playerSect || (contextData.character?.sectId && contextData.character.sectId !== 'none')) {
+                const sectFromContext = contextData.playerSect || contextData.PlayerSect;
+                if (sectFromContext && sectFromContext.id && sectFromContext.id !== 'none') {
+                    setPlayerSect(sectFromContext);
+                } else {
+                    const fallbackFromChar: DetailedSectStructure = {
+                        id: contextData.character.sectId || 'unknown',
+                        name: contextData.Sect?.name || '',
+                        description: contextData.Sect?.description || '',
+                        introduction: contextData.Sect?.introduction || '',
+                        sectRules: [],
+                        sectFunds: 0,
+                        sectResources: 0,
+                        constructionLevel: 0,
+                        playerPosition: contextData.character.sectPosition || 'Member',
+                        playerContribution: typeof contextData.character.sectContribution === 'number' ? contextData.character.sectContribution : 0,
+                        taskList: [],
+                        exchangeList: [],
+                        importantMembers: []
+                    };
+                    setPlayerSect(fallbackFromChar);
+                }
+            } else {
+                setPlayerSect(createEmptySectStatus());
+            }
             setTaskList(Array.isArray(contextData.taskList) ? contextData.taskList : []);
             setAppointmentList(Array.isArray(contextData.appointmentList) ? contextData.appointmentList : []);
             setWorldEvents([]);
@@ -3066,7 +3130,29 @@ YÊU CẦU ĐỊNH DẠNG JSON (BẮT BUỘC):
         setSocial(standardizeSocialList(save.social || []));
         setWorld(normalizeWorldStatus(save.world || createOpeningBlankWorld()));
         setBattle(normalizeCombatStatus(save.battle || createOpeningBlankBattle()));
-        setPlayerSect(save.playerSect || createEmptySectStatus());
+
+        if (save.playerSect) {
+            setPlayerSect(save.playerSect);
+        } else if (save.characterData?.sectId && save.characterData.sectId !== 'none') {
+            const fallbackSect: DetailedSectStructure = {
+                id: save.characterData.sectId || 'unknown',
+                name: save.sect?.name || '',
+                description: save.sect?.description || '',
+                introduction: save.sect?.introduction || '',
+                sectRules: [],
+                sectFunds: 0,
+                sectResources: 0,
+                constructionLevel: 0,
+                playerPosition: save.characterData.sectPosition || 'Member',
+                playerContribution: typeof save.characterData.sectContribution === 'number' ? save.characterData.sectContribution : 0,
+                taskList: [],
+                exchangeList: [],
+                importantMembers: []
+            };
+            setPlayerSect(fallbackSect);
+        } else {
+            setPlayerSect(createEmptySectStatus());
+        }
         setTaskList(save.taskList || []);
         setAppointmentList(save.appointmentList || []);
         setStory(normalizeStoryStatus(

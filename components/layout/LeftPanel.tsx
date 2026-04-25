@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useRef, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { CharacterData, NpcStructure, VisualSettings } from '../../types';
+import { Weapon, Armor } from '../../models/item';
 import IconGlyph from '../ui/Icon/IconGlyph';
 import { useTranslation } from 'react-i18next';
 import { RadarChart, RadarData } from '../shared/RadarChart';
@@ -295,16 +296,44 @@ const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visual
         { key: 'feet', label: 'Hài', icon: 'feet' },
         { key: 'mainWeapon', label: 'Chính', icon: 'sword' },
         { key: 'subWeapon', label: 'Phụ', icon: 'dagger' },
+        { key: 'hiddenWeapon', label: 'Ám', icon: 'dagger' },
     ];
 
     const getEquipName = (key: string) => {
         const idOrName = (Role.equipment as any)[key];
         if (!idOrName || idOrName === 'None') return 'Chưa trang bị';
-        if (!idOrName || idOrName === 'None') return 'Chưa trang bị';
         const item = Role.itemList.find(i => i.id === idOrName || i.name === idOrName);
         if (!item) return String(idOrName);
         return typeof item.name === 'string' ? item.name : JSON.stringify(item.name);
     };
+
+    const equipStats = useMemo(() => {
+        const slots = ['head', 'chest', 'back', 'waist', 'hands', 'legs', 'feet', 'mainWeapon', 'subWeapon', 'hiddenWeapon', 'mount'];
+        let totalMinAtk = 0, totalMaxAtk = 0;
+        let totalPhysDef = 0, totalInnerDef = 0;
+        const bonusAttrs: { name: string; value: number }[] = [];
+        const getItemByRef = (ref: string) => {
+            if (!ref || ref === 'None') return null;
+            return Role.itemList.find(i => i.id === ref || i.name === ref) || null;
+        };
+        slots.forEach(slot => {
+            const item = getItemByRef((Role.equipment as any)?.[slot]);
+            if (!item) return;
+            if (item.type === 'Vũ khí') {
+                const w = item as Weapon;
+                totalMinAtk += w.minAttack || 0;
+                totalMaxAtk += w.maxAttack || 0;
+            } else if (item.type === 'Phòng cụ') {
+                const a = item as Armor;
+                totalPhysDef += a.physicalDefense || 0;
+                totalInnerDef += a.innerDefense || 0;
+            }
+            if (item.attributes) {
+                item.attributes.forEach(attr => bonusAttrs.push({ name: attr.name, value: attr.value }));
+            }
+        });
+        return { totalMinAtk, totalMaxAtk, totalPhysDef, totalInnerDef, bonusAttrs };
+    }, [Role.equipment, Role.itemList]);
 
 
     const innerContent = (
@@ -535,6 +564,48 @@ const LeftPanel: React.FC<Props> = ({ Role, Social = [], onOpenCharacter, visual
                                 <MiniBodyPart key={part.name} name={part.name} current={part.current} max={part.max} status={part.status} />
                             ))}
                         </div>
+                    </div>
+                )}
+
+                {/* ── Equipment Stats Summary ── */}
+                {(equipStats.totalMinAtk > 0 || equipStats.totalPhysDef > 0) && (
+                    <div className="px-5 py-4 bg-transparent border border-wuxia-gold/20 rounded-xl relative group/equip">
+                        <div className="absolute top-0 right-0 w-20 h-20 bg-wuxia-gold/5 blur-3xl rounded-full -mr-8 -mt-8 group-hover:bg-wuxia-gold/10 transition-all duration-700"></div>
+                        <h3 className="text-[9px] text-wuxia-gold uppercase tracking-[0.3em] mb-3 font-black flex items-center gap-2">
+                            <IconGlyph name="sparkle" className="h-3 w-3 opacity-50" /> Lực chiến tàng trữ
+                        </h3>
+                        <div className="grid grid-cols-2 gap-2">
+                            <div className="bg-black/40 border border-white/5 rounded-lg p-2.5 space-y-0.5">
+                                <div className="flex items-center gap-1">
+                                    <IconGlyph name="sword" className="h-2.5 w-2.5 text-wuxia-red/60" />
+                                    <span className="text-[8px] text-paper-white/50 uppercase tracking-wider">Tấn công</span>
+                                </div>
+                                <div className="text-base font-mono font-black text-wuxia-red/90 leading-none">
+                                    {equipStats.totalMinAtk}–{equipStats.totalMaxAtk}
+                                </div>
+                            </div>
+                            <div className="bg-black/40 border border-white/5 rounded-lg p-2.5 space-y-0.5">
+                                <div className="flex items-center gap-1">
+                                    <IconGlyph name="shield" className="h-2.5 w-2.5 text-wuxia-gold/60" />
+                                    <span className="text-[8px] text-paper-white/50 uppercase tracking-wider">Phòng thủ</span>
+                                </div>
+                                <div className="text-base font-mono font-black text-wuxia-gold/90 leading-none">
+                                    {equipStats.totalPhysDef} / {equipStats.totalInnerDef}
+                                </div>
+                            </div>
+                        </div>
+                        {equipStats.bonusAttrs.length > 0 && (
+                            <div className="mt-2 flex flex-wrap gap-1">
+                                {equipStats.bonusAttrs.slice(0, 4).map((attr, i) => (
+                                    <span key={i} className="text-[8px] px-1.5 py-0.5 bg-purple-900/20 text-purple-300/70 border border-purple-500/20 rounded font-semibold">
+                                        {attr.name}+{attr.value}
+                                    </span>
+                                ))}
+                                {equipStats.bonusAttrs.length > 4 && (
+                                    <span className="text-[8px] text-paper-white/30 px-1 py-0.5">+{equipStats.bonusAttrs.length - 4}</span>
+                                )}
+                            </div>
+                        )}
                     </div>
                 )}
                 
