@@ -1,30 +1,13 @@
-// prompts/index.ts — Đã tích hợp bộ Hardcore World (Thế giới Hardcore)
+// prompts/index.ts
+// FULL PROMPTS - All enabled
 
 import { PromptStructure } from '../types';
 
 // Core
-import { Core_OutputFormat } from './core/format';
-import { CoreRules } from './core/rules';
-import { coreDataFormat } from './core/world_repository'; // Switch to new file
-import { coreMemoryLaws } from './core/memory';
-import { coreWorldview } from './core/world';
-import { CoreChainOfThought } from './core/cot';
-import { CoreChainOfThoughtMulti } from './core/cotMulti';
-import { CoreAncientRealism } from './core/ancientRealism';
-import { coreStoryProgression } from './core/story';
-import { CoreActionOptions } from './core/actionOptions';
-import { coreTimeProgression } from './core/timeProgress';
-import { Core_OutputFormat_MultiThought } from './core/formatMulti';
-import { coreNpcFate } from './core/npc_fate';
-import { coreUserFate } from './core/user_fate';
-import { coreWorldMechanics } from './core/world_mechanics';
-import { coreRealWorld } from './core/realWorld';
-import { PostCombatRules } from './core/postCombatRules';
-
-// World, Social, Combat Modules
-import { WorldPrompts } from './world';
-import { SocialPrompts } from './social';
-import { CombatPrompts } from './combat';
+import { Core_OutputFormat, CoreRules, coreStoryProgression, coreTimeProgression, 
+    CoreActionOptions, coreMemoryLaws, CoreChainOfThought, CoreChainOfThoughtMulti,
+    coreNpcFate, coreUserFate, coreWorldMechanics, CoreAncientRealism, PostCombatRules,
+    Core_OutputFormat_MultiThought } from './core/index';
 
 // Stats
 import { StatCharacter } from './stats/character';
@@ -40,52 +23,50 @@ import { StatNpcReference } from './stats/npc';
 import { StatResourceDrop } from './stats/drop';
 import { StatRecovery } from './stats/recovery';
 import { StatItemWeight } from './stats/itemWeight';
+import { ItemClassification } from './stats/itemClassification';
+import { GameStructurePrompt } from './stats/gameStructure';
+import { AppointmentSystemPrompt } from './stats/appointment';
+import { ClanLineagePrompt } from './stats/clanLineage';
+import { PastLifeReincarnationPrompt } from './stats/pastLifeReincarnation';
+import { SpeciesSystemPrompt } from './stats/species';
 
 // Difficulty
 import { Difficulty_Game } from './difficulty/game';
 import { Difficulty_Physiology } from './difficulty/physiology';
 
 // Writing
-import { WritingPerspectiveFirst, WritingPerspectiveSecond, WritingPerspectiveThird } from './writing/perspective';
 import { WritingStyle } from './writing/style';
 import { WritingNsfw } from './writing/nsfw';
+import { WritingPerspectiveFirst, WritingPerspectiveSecond, WritingPerspectiveThird } from './writing/perspective';
 
 // Runtime
 import { REFINEMENT_SYSTEM_PROMPT_OBJ, WORLD_REFINEMENT_SYSTEM_PROMPT_OBJ } from './runtime/refinement';
 import { JSON_CONSTRAINTS_PROMPT_OBJ, JSON_SYSTEM_PROMPT_OBJ, CONNECTION_TEST_PROMPT_OBJ } from './runtime/defaults';
 
-// ═══════════════════════════════════════════════════════════════
-// 🆕 HARDCORE WORLD (Thế giới Hardcore) — Tích hợp từ bộ prompt SillyTavern
-// Tất cả disabled theo mặc định — người dùng bật thủ công trong Cài đặt > Prompt
-// ═══════════════════════════════════════════════════════════════
+// Hardcore
 import { HardcoreWorldPrompts } from './hardcore';
 
+// External
+import { ExternalPrompts } from './runtime/externalPrompts';
+
 export const DefaultPrompts: PromptStructure[] = [
-    // ── Core System ──
-    coreWorldview,
-    CoreAncientRealism,
+    // Core - ALL
     Core_OutputFormat,
     Core_OutputFormat_MultiThought,
     CoreRules,
     coreStoryProgression,
     coreTimeProgression,
     CoreActionOptions,
-    coreDataFormat,
     coreMemoryLaws,
     CoreChainOfThought,
     CoreChainOfThoughtMulti,
     coreNpcFate,
     coreUserFate,
     coreWorldMechanics,
-    coreRealWorld,
+    CoreAncientRealism,
     PostCombatRules,
 
-    // ── Modules ──
-    ...WorldPrompts,
-    ...SocialPrompts,
-    ...CombatPrompts,
-
-    // ── Stats ──
+    // Stats - ALL
     StatCharacter,
     StatItem,
     ItemExtractionPrompt,
@@ -101,26 +82,34 @@ export const DefaultPrompts: PromptStructure[] = [
     StatResourceDrop,
     StatRecovery,
     StatItemWeight,
+    ItemClassification,
+    GameStructurePrompt,
+    AppointmentSystemPrompt,
+    ClanLineagePrompt,
+    PastLifeReincarnationPrompt,
+    SpeciesSystemPrompt,
 
-    // ── Difficulty (Arrays) ──
+    // Difficulty - ALL
     ...Difficulty_Game,
     ...Difficulty_Physiology,
 
-    // ── Writing ──
+    // Writing - ALL
     WritingPerspectiveFirst,
     WritingPerspectiveSecond,
     WritingPerspectiveThird,
     WritingStyle,
     WritingNsfw,
 
-    // ── Runtime ──
+    // Runtime - ALL
     JSON_CONSTRAINTS_PROMPT_OBJ,
     JSON_SYSTEM_PROMPT_OBJ,
     CONNECTION_TEST_PROMPT_OBJ,
     REFINEMENT_SYSTEM_PROMPT_OBJ,
     WORLD_REFINEMENT_SYSTEM_PROMPT_OBJ,
 
-    // ── 🆕 Hardcore World (Thế giới Hardcore) — Mặc định TẮT ──
+    // Hardcore - ALL
     ...HardcoreWorldPrompts,
 
+    // External
+    ...ExternalPrompts,
 ].map(p => ({ ...p, isSystem: true }));

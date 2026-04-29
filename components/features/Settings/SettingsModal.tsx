@@ -14,7 +14,6 @@ import MusicSettings from './MusicSettings';
 import WorldEvolutionSettings from './WorldEvolutionSettings';
 import NpcManager from './NpcManager';
 import VariableManager from './VariableManager';
-import OpeningConfigSettings from './OpeningConfigSettings';
 
 import IconGlyph, { IconName } from '../../ui/Icon/IconGlyph';
 import { CharacterData } from '../../../types';
@@ -39,8 +38,8 @@ type ContextSnapshot = {
 };
 
 interface Props {
-    activeTab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'music' | 'npc' | 'variable' | 'opening_config';
-    onTabChange: (tab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'music' | 'npc' | 'variable' | 'opening_config') => void;
+    activeTab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'music' | 'npc' | 'variable';
+    onTabChange: (tab: 'api' | 'recall' | 'prompt' | 'storage' | 'theme' | 'world' | 'game' | 'memory' | 'history' | 'context' | 'article_optimization' | 'world_evolution' | 'music' | 'npc' | 'variable') => void;
     onClose: () => void;
 
     // Config Props
@@ -58,14 +57,12 @@ interface Props {
     contextSnapshot?: any;
     socialList?: any[];
     runtimeState?: Record<string, unknown>;
-    openingConfig?: any;
 
     // Actions
     onSaveApi: (config: InterfaceSettingsStructure) => void;
     onSaveVisual: (config: VisualSettingsType) => void;
     onSaveGame: (config: GameSettingsType) => void;
     onSaveMemory: (config: MemoryConfig) => void;
-    onSaveOpeningConfig?: (config: any) => void;
 
     onUpdatePrompts: (prompts: PromptStructure[]) => void;
     onUpdateFestivals: (festivals: FestivalStructure[]) => void;
@@ -91,7 +88,6 @@ const SettingsModal: React.FC<Props> = ({
     onReturnToHome, isHome, requestConfirm, currentEnvironment
 }) => {
     const tabItems: { id: string; label: string; icon: IconName }[] = [
-        { id: 'opening_config', label: 'Cấu hình khởi đầu', icon: 'plan' },
         { id: 'npc', label: 'Quản lý NPC', icon: 'social' },
         { id: 'variable', label: 'Biến lưu trữ', icon: 'plan' },
         { id: 'music', label: 'Âm nhạc & Âm thanh', icon: 'atmosphere' },
@@ -255,12 +251,6 @@ const SettingsModal: React.FC<Props> = ({
                                             onApplyCommand={onApplyCommand as any}
                                         />
                                     )}
-                                    {activeTab === 'opening_config' && onSaveOpeningConfig && (
-                                        <OpeningConfigSettings 
-                                            settings={openingConfig}
-                                            onSave={onSaveOpeningConfig}
-                                        />
-                                    )}
 
                                 </div>
                             </div>
@@ -315,12 +305,6 @@ const SettingsModal: React.FC<Props> = ({
                                                 runtimeState={runtimeState as any}
                                                 onReplaceSection={onReplaceSection as any}
                                                 onApplyCommand={onApplyCommand as any}
-                                            />
-                                        )}
-                                        {activeTab === 'opening_config' && onSaveOpeningConfig && (
-                                            <OpeningConfigSettings 
-                                                settings={openingConfig}
-                                                onSave={onSaveOpeningConfig}
                                             />
                                         )}
 

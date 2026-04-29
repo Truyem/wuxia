@@ -746,10 +746,6 @@ const App: React.FC = () => {
                             appointmentList: state.appointmentList,
                             memorySystem: state.memorySystem,
                         }}
-                        openingConfig={state.openingConfig}
-                        onSaveOpeningConfig={(config) => {
-                            console.log('Save opening config:', config);
-                        }}
                         onSaveApi={actions.saveSettings}
                         onSaveVisual={actions.saveVisualSettings}
                         onSaveGame={actions.saveGameSettings}

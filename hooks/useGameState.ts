@@ -330,7 +330,7 @@ export const useGameState = () => {
 
         return result;
     };
-    const defaultGameSettings: GameSettings = {
+const defaultGameSettings: GameSettings = {
         narrativePerspective: 'Ngôi thứ hai',
         enableActionOptions: true,
         enablePseudoCotInjection: true,
@@ -356,7 +356,7 @@ export const useGameState = () => {
             if (!trimmed) return defaultExtraSystemPrompt;
             return candidate;
         })()
-    });
+});
     const [gameConfig, setGameConfig] = useState<GameSettings>(defaultGameSettings);
 
     const defaultMemoryConfig: MemoryConfig = {

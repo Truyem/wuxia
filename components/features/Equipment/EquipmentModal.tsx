@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { CharacterData } from '../../../types';
-import { GameItem, Weapon, Armor, ContainerItem } from '../../../models/item';
+import { GameItem, Weapon, Armor } from '../../../models/item';
 import {
     Crown, Shirt, Backpack, Link as LinkIcon, Hand, Layers,
     Footprints, Sword, Crosshair, Wind, X, User, Shield,
-    Zap, ChevronLeft, Sparkles, Gem, Heart, Activity,
-    Skull, Minus
+    Zap, Sparkles, Gem, Heart, Activity
 } from 'lucide-react';
 
 interface Props {
@@ -63,10 +62,9 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
 
     const equippedItems = useMemo(() => {
         const slots = ['head', 'chest', 'back', 'waist', 'hands', 'legs', 'feet', 'mainWeapon', 'subWeapon', 'hiddenWeapon', 'mount'];
-        const items: { slot: string; item: GameItem | null }[] = slots.map(s => ({
+        return slots.map(s => ({
             slot: s, item: getItem((character.equipment as any)?.[s])
         }));
-        return items;
     }, [character.equipment, character.itemList]);
 
     const totalStats = useMemo(() => {
@@ -201,13 +199,10 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                             )}
 
                             <div className="flex items-center gap-1.5 pt-0.5">
-                                <Minus className="w-2 h-2 text-gray-600" />
+                                <div className="w-2 h-2 rounded-full bg-white/10" />
                                 <div className="flex-1 h-1 bg-black/50 rounded-full overflow-hidden border border-white/5">
                                     <div
-                                        className={`h-full rounded-full transition-all duration-500 ${
-                                            (item.currentDurability / item.maxDurability) < 0.3 ? 'bg-wuxia-red' :
-                                            (item.currentDurability / item.maxDurability) < 0.6 ? 'bg-amber-500/60' : 'bg-wuxia-gold/50'
-                                        }`}
+                                        className={`h-full rounded-full transition-all duration-500 bg-wuxia-gold/50`}
                                         style={{ width: `${(item.currentDurability / item.maxDurability) * 100}%` }}
                                     />
                                 </div>
@@ -227,13 +222,12 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
 
     const StatusView = () => (
         <div className="flex flex-col items-center py-4 space-y-6">
-            <div className={`relative ${isMobile ? 'aspect-[1/1.2] max-h-[240px]' : 'aspect-[1/2.8] max-h-[360px]'} flex items-center justify-center`}>
+            <div className="relative aspect-[1/2.8] max-h-[360px] flex items-center justify-center">
                 <div className="absolute w-40 h-72 bg-wuxia-gold/4 blur-[60px]"></div>
-
                 <div className="relative flex flex-col items-center gap-2 z-10">
-                    <div className="w-14 h-14 md:w-18 md:h-18 border-2 border-wuxia-gold/40 bg-black/40 flex items-center justify-center shadow-[0_0_30px_rgba(217,184,106,0.2)] relative overflow-hidden rounded-full">
+                    <div className="w-14 h-14 border-2 border-wuxia-gold/40 bg-black/40 flex items-center justify-center shadow-[0_0_30px_rgba(217,184,106,0.2)] relative overflow-hidden rounded-full">
                         <div className="absolute inset-0 bg-gradient-to-tr from-wuxia-gold/20 to-transparent" />
-                        <User className="w-7 h-7 md:w-9 md:h-9 text-wuxia-gold/80" strokeWidth={1} />
+                        <User className="w-7 h-7 text-wuxia-gold/80" strokeWidth={1} />
                     </div>
                     <div className="w-16 h-48 border border-wuxia-gold/20 bg-gradient-to-b from-wuxia-gold/[0.06] to-transparent relative flex flex-col items-center justify-center overflow-hidden rounded-[1.5rem]">
                         <div className="absolute top-0 w-full h-1/2 bg-gradient-to-b from-wuxia-gold/10 to-transparent" />
@@ -278,7 +272,7 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
                     <span className="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Thể chất</span>
                 </div>
                 <div className="space-y-1.5">
-                    {bodyParts.map(({ key, label, icon: PartIcon }) => {
+                    {bodyParts.map(({ key, label }) => {
                         const hp = character[key as keyof CharacterData] as number;
                         const maxHp = character[(key.replace('Current', 'Max') as keyof CharacterData) as string] as number;
                         const pct = maxHp > 0 ? hp / maxHp : 1;
@@ -409,112 +403,64 @@ const EquipmentModal: React.FC<Props> = ({ character, onClose }) => {
     );
 
     return (
-        <div className="fixed inset-0 bg-black/92 backdrop-blur-3xl z-[220] flex items-center justify-center p-0 md:p-8 font-sans">
-            <div className="relative w-full h-full md:h-auto md:max-w-4xl">
-                {!isMobile && (
-                    <>
-                        <div className="wuxia-corner wuxia-corner-tl"></div>
-                        <div className="wuxia-corner wuxia-corner-tr"></div>
-                        <div className="wuxia-corner wuxia-corner-bl"></div>
-                        <div className="wuxia-corner wuxia-corner-br"></div>
-                    </>
-                )}
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[220] flex items-center justify-center p-4 font-sans">
+            <div className="relative w-full max-w-4xl h-[90vh] glass-panel flex flex-col shadow-[0_0_150px_rgba(0,0,0,0.95)] overflow-hidden rounded-[3rem] border border-wuxia-gold/25">
+                {/* Wuxia corners */}
+                <div className="wuxia-corner wuxia-corner-tl !border-wuxia-gold/60 !w-24 !h-24"></div>
+                <div className="wuxia-corner wuxia-corner-tr !border-wuxia-gold/60 !w-24 !h-24"></div>
+                <div className="wuxia-corner wuxia-corner-bl !border-wuxia-gold/60 !w-24 !h-24"></div>
+                <div className="wuxia-corner wuxia-corner-br !border-wuxia-gold/60 !w-24 !h-24"></div>
 
-                <div className="glass-panel border border-white/10 w-full h-full md:h-auto md:max-h-[90vh] flex flex-col shadow-[0_0_100px_rgba(0,0,0,1)] relative overflow-hidden rounded-[2rem]">
+                {/* Animated Background */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+                    <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-wuxia-gold/20 blur-[120px] rounded-full animate-pulse"></div>
+                    <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-wuxia-red/10 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
+                </div>
 
-                    <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                    <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-                    <div className="h-16 md:h-20 shrink-0 flex items-center justify-between px-4 md:px-8 z-10 border-b border-white/[0.06]">
-                        <div className="flex items-center gap-3">
-                            {isMobile && (
-                                <button onClick={onClose} className="p-2 -ml-2 text-gray-400">
-                                    <ChevronLeft className="w-6 h-6" />
-                                </button>
-                            )}
-                            <div className="w-11 h-11 md:w-12 md:h-12 bg-wuxia-gold/5 border border-wuxia-gold/15 flex items-center justify-center rounded-xl shadow-inner">
-                                <Shield className="w-5 h-5 md:w-6 md:h-6 text-wuxia-gold/70" strokeWidth={1.5} />
-                            </div>
-                            <div>
-                                <h3 className="text-wuxia-gold font-serif font-bold text-lg md:text-2xl tracking-[0.2em] uppercase">Trang Bị</h3>
-                                <div className="hidden md:flex items-center gap-3 mt-1.5">
-                                    <div className="flex items-center gap-2 bg-white/[0.04] px-3 py-1 border border-white/[0.08] rounded-full">
-                                        <div className="w-2 h-2 bg-wuxia-gold shadow-[0_0_10px_rgba(217,184,106,0.5)] rounded-full animate-pulse" />
-                                        <span className="text-[10px] text-gray-400 font-black uppercase tracking-[0.2em]">TRẠNG THÁI NHÂN VẬT</span>
-                                    </div>
-                                </div>
+                {/* Header */}
+                <div className="h-16 shrink-0 flex items-center justify-between px-6 z-10 border-b border-white/5 bg-black/60">
+                    <div className="flex items-center gap-3">
+                        <div className="w-11 h-11 bg-wuxia-gold/5 border border-wuxia-gold/20 flex items-center justify-center rounded-xl shadow-inner">
+                            <Shield className="w-5 h-5 text-wuxia-gold/70" strokeWidth={1.5} />
+                        </div>
+                        <div>
+                            <h3 className="text-wuxia-gold font-serif font-bold text-2xl tracking-[0.2em] uppercase">Trang Bị</h3>
+                            <div className="flex items-center gap-2 mt-1">
+                                <div className="w-2 h-2 bg-wuxia-gold shadow-[0_0_10px_rgba(212,175,55,0.5)] rounded-full animate-pulse" />
+                                <span className="text-[10px] text-white/40 font-black uppercase tracking-[0.2em]">TRẠNG THÁI NHÂN VẬT</span>
                             </div>
                         </div>
-                        {!isMobile && (
-                            <button
-                                onClick={onClose}
-                                className="group w-10 h-10 flex items-center justify-center hover:bg-white/5 border border-white/10 text-gray-500 hover:text-white transition-colors rounded-xl"
-                            >
-                                <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-                            </button>
-                        )}
                     </div>
+                    <button
+                        onClick={onClose}
+                        className="w-10 h-10 flex items-center justify-center transition-all bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-red-500/30 hover:border-red-500/60 rounded-xl shadow-lg"
+                    >
+                        <X className="w-5 h-5" strokeWidth={2.5} />
+                    </button>
+                </div>
 
-                    {isMobile && (
-                        <div className="grid grid-cols-3 border-b border-white/[0.06] bg-black/20">
-                            {[
-                                { key: 'status', label: 'Trạng Thái', color: 'text-wuxia-gold' },
-                                { key: 'armor', label: 'Phòng Cụ', color: 'text-wuxia-gold' },
-                                { key: 'weapons', label: 'Vũ Khí', color: 'text-wuxia-red' },
-                            ].map(({ key, label, color }) => (
-                                <button
-                                    key={key}
-                                    onClick={() => setActiveTab(key as any)}
-                                    className={`py-3 text-[10px] font-bold uppercase tracking-widest transition-all relative ${
-                                        activeTab === key ? `${color} bg-${color.split('-')[0]}/10` : 'text-gray-500 hover:text-gray-300'
-                                    }`}
-                                >
-                                    {activeTab === key && (
-                                        <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-current rounded-full`} />
-                                    )}
-                                    {label}
-                                </button>
-                            ))}
-                        </div>
-                    )}
-
-                    <div className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8 z-10">
-                        <div className={`${isMobile ? 'max-w-md mx-auto' : 'grid grid-cols-[1fr_220px_1fr] gap-6 max-w-5xl mx-auto items-start'}`}>
-                            {isMobile ? (
-                                <>
-                                    {activeTab === 'status' && <StatusView />}
-                                    {activeTab === 'armor' && <ArmorView />}
-                                    {activeTab === 'weapons' && <WeaponsView />}
-                                </>
-                            ) : (
-                                <>
-                                    <div className="space-y-8">
-                                        <ArmorView />
-                                    </div>
-
-                                    <div className="flex flex-col gap-6">
-                                        <StatusView />
-                                        <StatsSummary />
-                                    </div>
-
-                                    <div className="space-y-8">
-                                        <WeaponsView />
-                                    </div>
-                                </>
-                            )}
+                {/* Content */}
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8 z-10">
+                    <div className="grid grid-cols-[1fr_220px_1fr] gap-6 max-w-5xl mx-auto items-start">
+                        <div className="space-y-8">
+                            <ArmorView />
                         </div>
 
-                        {!isMobile && (
-                            <div className="pt-8 flex flex-col items-center opacity-15">
-                                <div className="text-[9px] text-wuxia-gold font-serif tracking-[1em] mb-2 uppercase">Nhân kiếm hợp nhất</div>
-                                <div className="w-12 h-px bg-wuxia-gold/30" />
-                            </div>
-                        )}
-                    </div>
+                        <div className="flex flex-col gap-6">
+                            <StatusView />
+                            <StatsSummary />
+                        </div>
 
-                    <div className="h-12 md:h-14 shrink-0 bg-white/[0.02] border-t border-white/[0.06] flex items-center justify-center px-8 relative overflow-hidden">
-                        <span className="text-[9px] md:text-[10px] text-gray-600 font-mono tracking-[0.6em] uppercase z-10 font-bold">LUYỆN TRONG BÓNG TỐI • RÈN TRONG MÁU LỬA</span>
+                        <div className="space-y-8">
+                            <WeaponsView />
+                        </div>
                     </div>
+                </div>
+
+                {/* Footer */}
+                <div className="h-12 shrink-0 bg-black/60 border-t border-white/5 flex items-center justify-center px-8 relative overflow-hidden">
+                    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-wuxia-gold/20 to-transparent"></div>
+                    <span className="text-[9px] text-white/30 font-serif tracking-[0.6em] uppercase z-10 font-bold">LUYỆN TRONG BÓNG TỐI • RÈN TRONG MÁU LỬA</span>
                 </div>
             </div>
 

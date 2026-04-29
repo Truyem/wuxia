@@ -54,6 +54,21 @@ export interface CharacterData extends CoreStats {
     age: number;
     avatar?: string;
     birthDate: string;
+    
+    // Thông tin xuất thân & chủng tộc (thay thế birthDate)
+    origin?: string;          // Biome xuất thân (huyet_hai, cot_lam...)
+    originDescription?: string; // Mô tả xuất thân
+    birthMethod?: 'SINH' | 'CHUYỂN'; // Sinh ra / Chuyển thế
+    species?: string;       // Chủng tộc (Người, Yêu tộc, Thú tộc...)
+    speciesGroup?: string;   // Nhóm (human, beast, demon, spirit...)
+    
+    // Công pháp có sẵn từ đầu (trong đầu nền, KHÔNG trong túi đồ)
+    inherentKungfu?: string[]; // Tên các công pháp có sẵn
+    
+    // Huyết thống (nếu có)
+    bloodline?: string;
+    bloodlineActive?: boolean;
+    
     appearance: string;
     
     title: string;

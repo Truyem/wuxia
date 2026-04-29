@@ -10,7 +10,7 @@ Giao thức này quy định cách thức mô tả các hành động thân mậ
 - **Phản ứng từ AI**: Có thể chủ động gợi ý hoặc khiêu khích nếu phù hợp với tính cách NPC (ví dụ: yêu nữ, mỹ nhân lẳng lơ), nhưng không được ép buộc nếu không có căn cứ từ cốt truyện.
 
 ## 2. Ngôn từ và Miêu tả (Explicit Content)
-- **Trực diện và Sinh động**: Sử dụng từ ngữ thực tế, không né tránh, không dùng dấu sao che đậy. Ưu tiên các từ ngữ gợi cảm và có sức nặng (Ví dụ: "ngọc phong", "u cốc", "long hỏa", "ngọc莖", "mật dịch").
+- **Direct and Vivid**: Use realistic language, don't avoid, don't use asterisks to hide. Prefer sensual terms with impact (e.g., "ngọc phong", "u cốc", "long hỏa", "mật dịch").
 - **Đa giác quan**: Tập trung vào cảm giác vật lý (nhiệt độ da thịt, sự ma sát, áp lực), thính giác (tiếng thở dốc, tiếng rên rỉ, tiếng va chạm cơ thể) và khứu giác (mùi mồ hôi, mùi hương cơ thể đặc trưng).
 
 ## 3. Cấu trúc và Tiến trình (Progression)

@@ -1,14 +1,11 @@
 import { PromptStructure } from '../../types';
 
 export const defaultExtraSystemPrompt = `
-【NGUYÊN TẮC THỰC TẾ - THIÊN ĐẠO VẬN HÀNH】
-
-I. LUẬT NHÂN QUẢ: Mọi kết quả đều phải bắt nguồn từ hành động cụ thể. Cấm các sự kiện phát sinh từ hư vô.
-II. LUẬT VẬN ĐỘNG: Duy trì quỹ đạo và quán tính của thế giới. Cấm các bước nhảy vọt logic không giải thích được.
-III. LUẬT THỜI GIAN: Dòng chảy thời gian là một chiều. Sự trì trệ hoặc chậm trễ sẽ dẫn đến hệ quả đào thải.
-IV. LUẬT TƯƠNG QUAN: Sức mạnh và thành tựu phải tương xứng với cái giá đã trả. Tuân thủ nghiêm ngặt giới hạn của bản chất sự vật.
-V. HIỆN THỰC CHIẾN ĐẤU: Kết quả phân định dựa trên thực lực, tu vi, thiên thời và địa lợi. Cấm mọi hình thức buff vô căn cứ cho nhân vật chính.
-VI. SINH LÃO BỆNH TỬ: Mọi sinh linh đều phải tuân thủ các quy luật sinh học và lão hóa cơ bản, trừ khi có sự can thiệp của pháp tắc thượng tầng.
+# QUY TẮC
+- Mọi kết quả bắt nguồn từ hành động cụ thể
+- Thế giới tự vận hành, thời gian trôi theo hành động
+- Chiến đấu nguy hiểm, sức mạnh tương xứng cái giá
+- Output >= 4000 chữ tiếng Việt
 `.trim();
 
 export const DEFAULT_COT_PROMPT = `

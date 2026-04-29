@@ -4,53 +4,74 @@ export type QuestStatus = 'Đang thực hiện' | 'Có thể nộp' | 'Đã hoà
 export type QuestType = 'Chính tuyến' | 'Nhánh' | 'Môn phái' | 'Kỳ ngộ' | 'Treo thưởng' | 'Tin đồn';
 
 export interface QuestGoal {
-    description: string;           // Mô tả mục tiêu nhiệm vụ
+    description: string;
     currentProgress: number;
     totalRequired: number;
     isCompleted: boolean;
 }
 
 export interface QuestStructure {
-    title: string;           // Tiêu đề nhiệm vụ
-    description: string;           // Mô tả bối cảnh nhiệm vụ
+    title: string;
+    description: string;
     type: QuestType;
-    issuer: string;         // Tên người giao nhiệm vụ
-    location: string;       // Tên địa điểm
-    recommendedRealm: string;       // Yêu cầu cảnh giới
-    
-    // Giới hạn thời gian (Tùy chọn)
-    deadline?: string;      // YYYY:MM:DD:HH:MM
-    
+    issuer: string;
+    location: string;
+    recommendedRealm: string;
+    deadline?: string;
     currentStatus: QuestStatus;
     goalList: QuestGoal[];
-    
-    // Thưởng (Mang tính mô tả, dùng để hiển thị)
-    rewardDescription: string[];     // Danh sách mô tả phần thưởng
-    
-    // Trường hỗ trợ AI (Ẩn)
-    hiddenStoryLine?: string;      // Giải thích ẩn tuyến cho AI
+    rewardDescription: string[];
+    hiddenStoryLine?: string;
 }
 
-export type AppointmentStatus = 'Đang chờ' | 'Sắp tới' | 'Đã thực hiện' | 'Đã thất bại' | 'Đã hủy';
-export type AppointmentNature = 'Tình cảm' | 'Giao dịch' | 'Cá cược' | 'Báo thù' | 'Cam kết';
+export type AppointmentStatus = 'Sắp diễn ra' | 'Đang chờ' | 'Đang thực hiện' | 'Hoàn thành' | 'Hủy bỏ' | 'Thất bại';
+export type AppointmentNature = 'Tình cảm' | 'Giao dịch' | 'Cá cược' | 'Báo thù' | 'Cam kết' | 'Tự nguyện';
+
+export type TargetType = 'npc' | 'self' | 'family' | 'enemy' | 'past_life' | 'reincarnation' | 'spirit' | 'beast' | 'demon' | 'god';
+export type LifeStatus = 'Alive' | 'Dead' | 'Ascended' | 'Reborn' | 'Missing' | 'Imprisoned' | 'Cultivating';
+export type SpeciesGroup = 'human' | 'beast' | 'demon' | 'spirit' | 'divine' | 'construct' | 'hybrid' | 'undead';
+export type RelationType = 'Cha' | 'Mẹ' | 'Sư phụ' | 'Đệ tử' | 'Tình nhân' | 'Vợ' | 'Chồng' | 'Đệ' | 'Anh' | 'Thù nhân' | 'Tổ tiên' | 'Người lạ';
+
+export interface AppointmentTarget {
+    name: string;
+    shortName?: string;
+    type: TargetType;
+    lifeStatus: LifeStatus;
+    species?: string;
+    speciesGroup?: SpeciesGroup;
+    faction?: string;
+    realm?: string;
+    relationType?: RelationType;
+    isMainCharacter?: boolean;
+    clanName?: string;
+    bloodline?: string;
+    pastLifeId?: string;
+    pastLifeName?: string;
+    reincarnationOf?: string;
+    avatar?: string;
+}
 
 export interface AppointmentStructure {
-    target: string;           // Tên đối tượng
-    titleLabel?: string;          // Danh hiệu hiển thị
+    id?: string;
+    title: string;
+    titleLabel?: string;
+    oathContent: string;
+    
+    target: string | AppointmentTarget;
     nature: AppointmentNature;
     
-    title: string;           // Tiêu đề hẹn ước
-    oathContent: string;       // Nội dung hẹn ước
-    
     location: string;
-    time: string;       // YYYY:MM:DD:HH:MM
-    validDuration: number;       // Phút, ví dụ: đến trong vòng 60 phút là hợp lệ
+    time: string;
+    validDuration?: number;
     
     currentStatus: AppointmentStatus;
+    createdAt?: string;
+    updatedAt?: string;
     
-    // Mô tả hậu quả (Dùng cho giao diện cảnh báo người chơi)
-    fulfillmentConsequence: string;       // "Hảo cảm đối với Lâm Thanh Nguyệt tăng mạnh, nhận được 【Tín vật Kiếm Tông】"
-    failureConsequence: string;       // "Lâm Thanh Nguyệt sẽ coi bạn là kẻ bội tín, quan hệ chuyển thành 【Lạnh nhạt】"
+    fulfillmentConsequence?: string;
+    failureConsequence?: string;
     
-    backgroundStory?: string;      // Ngữ cảnh AI
+    flags?: Record<string, any>;
+    backgroundStory?: string;
+    hiddenConditions?: string;
 }

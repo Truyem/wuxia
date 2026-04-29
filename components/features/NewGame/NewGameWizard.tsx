@@ -371,8 +371,6 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
     const [charAge, setCharAge] = useState(18);
     const [charAppearance, setCharAppearance] = useState('');
     const [charPersonality, setCharPersonality] = useState('');
-    const [birthMonth, setBirthMonth] = useState(1);
-    const [birthDay, setBirthDay] = useState(1);
     const [monthOpen, setMonthOpen] = useState(false);
     const [dayOpen, setDayOpen] = useState(false);
     const monthRef = useRef<HTMLDivElement>(null);
@@ -449,7 +447,7 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
     const saveWizardConfig = async () => {
         const config = {
             step, worldConfig, charName, charGender, charAge, charAppearance, charPersonality,
-            birthMonth, birthDay, stats, selectedBackground, selectedTalents, openingStreaming
+            selectedBackground, selectedTalents, openingStreaming
         };
         try {
             await dbService.saveSetting(WIZARD_SAVE_KEY, config);
@@ -475,8 +473,6 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
             if (typeof saved.charAge === 'number') setCharAge(saved.charAge);
             if (typeof saved.charAppearance === 'string') setCharAppearance(saved.charAppearance);
             if (typeof saved.charPersonality === 'string') setCharPersonality(saved.charPersonality);
-            if (typeof saved.birthMonth === 'number') setBirthMonth(saved.birthMonth);
-            if (typeof saved.birthDay === 'number') setBirthDay(saved.birthDay);
             if (saved.stats) setStats({ ...stats, ...saved.stats });
             if (saved.selectedBackground) setSelectedBackground(saved.selectedBackground);
             if (Array.isArray(saved.selectedTalents)) setSelectedTalents(saved.selectedTalents);
@@ -537,6 +533,7 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
         () => [...PresetBackground, ...customBackgroundList.filter(item => !PresetBackground.some(p => p.name === item.name))],
         [customBackgroundList]
     );
+    const backgrounds = allBackgroundOptions;
 
     const filteredBackgroundOptions = useMemo(() => {
         const diff = worldConfig.difficulty;
@@ -717,9 +714,18 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
 
         // Construct final character data object
         const charData: CharacterData = {
-            // Format birthday string from state
-            birthDate: `${birthMonth}Tháng${birthDay}Ngày`,
+            // Xuất thân & Chủng tộc (thay thế birthDate)
+            origin: selectedBackground.origin || '',
+            originDescription: selectedBackground.description,
+            birthMethod: selectedBackground.birthMethod || 'SINH',
+            species: selectedBackground.species || 'Người',
+            speciesGroup: selectedBackground.speciesGroup || 'human',
+            inherentKungfu: selectedBackground.inherentKungfu || [],
+            bloodline: selectedBackground.bloodline,
+            bloodlineActive: false,
+            
             id: generateSafeUUID(),
+            birthDate: `${selectedBackground.origin || ''} • ${selectedBackground.birthMethod === 'CHUYỂN' ? 'Chuyển thế' : 'Sinh ra'}`,
 
             ...stats, // Strength, agility, constitution, rootBone, intelligence, luck, tamTinh
             name: charName.trim(),
@@ -976,19 +982,36 @@ const NewGameWizard: React.FC<Props> = ({ onComplete, onCancel, loading, request
                                         </div>
 
                                         <div className="space-y-4 mt-8">
-                                            <label className="text-sm text-wuxia-gold/70 font-serif font-bold italic block">Ngày sinh</label>
+                                            <label className="text-sm text-wuxia-gold/70 font-serif font-bold italic block">Xuất thân / Chuyển thế</label>
                                             <div className="grid grid-cols-2 gap-4">
-                                                <div className="relative group">
-                                                    <select value={birthMonth} onChange={e => setBirthMonth(Number(e.target.value))} className="w-full bg-black/40 border border-wuxia-gold/20 p-3 text-wuxia-gold rounded-md outline-none focus:border-wuxia-gold appearance-none font-serif">
-                                                        {Array.from({ length: 12 }, (_, i) => <option key={i + 1} value={i + 1} className="bg-neutral-900">Tháng {i + 1}</option>)}
-                                                    </select>
-                                                </div>
-                                                <div className="relative">
-                                                    <select value={birthDay} onChange={e => setBirthDay(Number(e.target.value))} className="w-full bg-black/40 border border-wuxia-gold/20 p-3 text-wuxia-gold rounded-md outline-none focus:border-wuxia-gold appearance-none font-serif">
-                                                        {Array.from({ length: 31 }, (_, i) => <option key={i + 1} value={i + 1} className="bg-neutral-900">Ngày {i + 1}</option>)}
-                                                    </select>
-                                                </div>
+                                                <button 
+                                                    onClick={() => setSelectedBackground(prev => prev ? { ...prev, birthMethod: 'SINH' } : prev)}
+                                                    className={`py-4 rounded-xl border transition-all flex flex-col items-center gap-2 ${
+                                                        selectedBackground?.birthMethod !== 'CHUYỂN' 
+                                                            ? 'bg-wuxia-gold/20 border-wuxia-gold text-wuxia-gold shadow-[0_0_15px_rgba(230,200,110,0.2)]' 
+                                                            : 'border-wuxia-gold/20 text-wuxia-gold/40 hover:border-wuxia-gold/40'
+                                                    }`}
+                                                >
+                                                    <span className="text-sm font-bold uppercase">Sinh ra</span>
+                                                    <span className="text-[9px] text-white/30">Từ trong bụng mẹ</span>
+                                                </button>
+                                                <button 
+                                                    onClick={() => setSelectedBackground(prev => prev ? { ...prev, birthMethod: 'CHUYỂN' } : prev)}
+                                                    className={`py-4 rounded-xl border transition-all flex flex-col items-center gap-2 ${
+                                                        selectedBackground?.birthMethod === 'CHUYỂN' 
+                                                            ? 'bg-purple-500/20 border-purple-500/50 text-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.2)]' 
+                                                            : 'border-wuxia-gold/20 text-wuxia-gold/40 hover:border-wuxia-gold/40'
+                                                    }`}
+                                                >
+                                                    <span className="text-sm font-bold uppercase">Chuyển thế</span>
+                                                    <span className="text-[9px] text-white/30">Tái sinh từ kiếp trước</span>
+                                                </button>
                                             </div>
+                                            {selectedBackground?.birthMethod === 'CHUYỂN' && (
+                                                <div className="text-xs text-purple-400/70 italic bg-purple-500/10 border border-purple-500/20 p-3 rounded-lg">
+                                                    ⚡ Chuyển thế: Bạn mang theo ký ức và công pháp từ kiếp trước!
+                                                </div>
+                                            )}
                                         </div>
                                     </OrnateBorder>
                                 </div>

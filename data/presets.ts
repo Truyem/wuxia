@@ -2015,7 +2015,9 @@ export const PresetBackground: Background[] = [
         effect: "Kháng ma tính +15, Thể chất +5, Vàng +500",
         longTerm: "Về lâu dài: Có tỷ lệ nhận được vật phẩm hiếm khi đánh quái tại Huyết Hải",
         rank: "Dễ",
-        origin: "huyet_hai"
+        origin: "huyet_hai",
+        species: "Ngư Nhân", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Huyết Hải Ngư Pháp"], bloodline: "Huyết Hải"
     },
     {
         name: "Ma Sát Cung Tạp Dịch",
@@ -2023,7 +2025,9 @@ export const PresetBackground: Background[] = [
         effect: "Sát khí tiềm ẩn +10, Sức mạnh +8, Danh tiếng -5",
         longTerm: "Về lâu dài: Sát khí càng cao, sát thương vật lý tăng thêm (tối đa +15%)",
         rank: "Bình thường",
-        origin: "huyet_hai"
+        origin: "huyet_hai",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Ma Sát Công"], bloodline: "Sát Khí"
     },
     {
         name: "Huyết Liên Tu Sĩ",
@@ -2031,7 +2035,9 @@ export const PresetBackground: Background[] = [
         effect: "Nội lực lôi hệ +20, Tốc độ hồi phục +10%",
         longTerm: "Về lâu dài: Mỗi lần đột phá cảnh giới có tỷ lệ thức tỉnh huyết mạch cổ xưa",
         rank: "Khó",
-        origin: "huyet_hai"
+        origin: "huyet_hai",
+        species: "Huyết Liên", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Huyết Liên Công"], bloodline: "Huyết Liên"
     },
     {
         name: "Oán Hồn Đảo Tầm Bảo Giả",
@@ -2039,7 +2045,9 @@ export const PresetBackground: Background[] = [
         effect: "May mắn +15, Ý chí +12, Vàng +2000",
         longTerm: "Về lâu dài: Giảm tỷ lệ gặp bẫy hoặc sự kiện xấu khi khám phá di tích",
         rank: "Khó",
-        origin: "huyet_hai"
+        origin: "huyet_hai",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Tâm Ma Thuật"], bloodline: "Oán Hồn"
     },
     {
         name: "Minh Hà Phủ Thiếu Chủ",
@@ -2047,7 +2055,9 @@ export const PresetBackground: Background[] = [
         effect: "Danh tiếng +20, Vàng +5000, Khí vận +5",
         longTerm: "Về lâu dài: Dễ dàng nhận được sự trợ giúp từ các thế lực chính nghĩa",
         rank: "Cực khó",
-        origin: "huyet_hai"
+        origin: "huyet_hai",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Minh Hà Kiếm Pháp"], bloodline: "Minh Hà"
     },
     {
         name: "Huyết Hải Ma Nhân",
@@ -2055,7 +2065,9 @@ export const PresetBackground: Background[] = [
         effect: "Huyết khí +50, Kháng độc +30, Nhân cách tà ác +15",
         longTerm: "Về lâu dài: Khi HP dưới 20%, kích hoạt trạng thái 'Ma Hóa' tăng mạnh sức mạnh",
         rank: "Cực khó",
-        origin: "huyet_hai"
+        origin: "huyet_hai",
+        species: "Huyết Ma", speciesGroup: "demon", birthMethod: "CHUYỂN",
+        inherentKungfu: ["Ma Huyết Đại Pháp", "Huyết Lôi Chưởng"], bloodline: "Huyết Ma"
     },
     // === CỐT LÂM (Biome 2) ===
     {
@@ -2064,7 +2076,9 @@ export const PresetBackground: Background[] = [
         effect: "Hiểu biết dược lý +15, Linh hoạt +10",
         longTerm: "Về lâu dài: Có khả năng nhận diện các loại dược thảo quý hiếm từ xa",
         rank: "Dễ",
-        origin: "cot_lam"
+        origin: "cot_lam",
+        species: "Bạch Cốt Tiên", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Cốt Linh Công"], bloodline: "Cốt Tộc"
     },
     {
         name: "Linh Vong Trấn Thương Nhân",
@@ -2072,7 +2086,9 @@ export const PresetBackground: Background[] = [
         effect: "Giao tiếp +20, Vàng +3000, Khéo léo +5",
         longTerm: "Về lâu dài: Giảm giá sâu khi giao dịch với các NPC khu vực Cốt Lâm",
         rank: "Bình thường",
-        origin: "cot_lam"
+        origin: "cot_lam",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Âm Quỷ Thuật"], bloodline: "U Minh"
     },
     {
         name: "U Linh Thụ Thủ Hộ Giả",
@@ -2080,7 +2096,9 @@ export const PresetBackground: Background[] = [
         effect: "Tâm pháp u linh, Sức mạnh tinh thần +25",
         longTerm: "Về lâu dài: Có thể nhìn thấy những vật phẩm bị ẩn giấu bởi u linh khí",
         rank: "Khó",
-        origin: "cot_lam"
+        origin: "cot_lam",
+        species: "U Linh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["U Linh Công"], bloodline: "Thụ Linh"
     },
     {
         name: "Khô Lâu Mộ Tặc",
@@ -2088,7 +2106,9 @@ export const PresetBackground: Background[] = [
         effect: "Phá bẫy +25, Nhanh nhẹn +15, Sát khí +5",
         longTerm: "Về lâu dài: Khả năng mở các loại rương báu bị nguyền rủa mà không mất HP",
         rank: "Khó",
-        origin: "cot_lam"
+        origin: "cot_lam",
+        species: "Cốt Linh", speciesGroup: "undead", birthMethod: "CHUYỂN",
+        inherentKungfu: ["Cốt Khí Quyết", "Xương Trảo"], bloodline: "Cốt Tộc"
     },
     {
         name: "Âm Ti Điện Đệ Tử",
@@ -2096,7 +2116,9 @@ export const PresetBackground: Background[] = [
         effect: "Nội lực âm hệ +30, Kháng tử khí +40",
         longTerm: "Về lâu dài: Tăng hiệu quả của các chiêu thức hệ Âm và Tà",
         rank: "Cực khó",
-        origin: "cot_lam"
+        origin: "cot_lam",
+        species: "Âm Ti", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Âm Ti Công"], bloodline: "Âm Điện"
     },
     {
         name: "Bạch Cốt Thành Quý Tộc",
@@ -2104,7 +2126,9 @@ export const PresetBackground: Background[] = [
         effect: "Quyền lực +30, Vàng +10000, Căn cốt +10",
         longTerm: "Về lâu dài: Có quyền lực điều động lính gác tại các thành phố thuộc Cốt Lâm",
         rank: "Cực khó",
-        origin: "cot_lam"
+        origin: "cot_lam",
+        species: "Bạch Cốt", speciesGroup: "undead", birthMethod: "SINH",
+        inherentKungfu: ["Bạch Cốt Pháp"], bloodline: "Cốt Vương"
     },
     // === U MINH VỰC (Biome 3) ===
     {
@@ -2113,7 +2137,9 @@ export const PresetBackground: Background[] = [
         effect: "Tầm nhìn đêm +50, Thể chất +10",
         longTerm: "Về lâu dài: Cơ thể dần thích nghi, tăng vĩnh viễn Kháng ám tính",
         rank: "Dễ",
-        origin: "u_minh_vuc"
+        origin: "u_minh_vuc",
+        species: "U Hồn", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["U Minh Thuật"], bloodline: "U Minh"
     },
     {
         name: "U Minh Thôn Thợ Rèn",
@@ -2121,7 +2147,9 @@ export const PresetBackground: Background[] = [
         effect: "Kỹ năng rèn +20, Sức mạnh +15",
         longTerm: "Về lâu dài: Vũ khí tự tạo có cơ hội đính kèm hiệu ứng 'U Minh Sát'",
         rank: "Bình thường",
-        origin: "u_minh_vuc"
+        origin: "u_minh_vuc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Hắc Thiết Rèn"], bloodline: "U Minh"
     },
     {
         name: "Ma Quang Cung Thị Vệ",
@@ -2129,7 +2157,9 @@ export const PresetBackground: Background[] = [
         effect: "Phòng ngự +20, Ý chí +10, Danh tiếng +5",
         longTerm: "Về lâu dài: Kích hoạt 'Hào Quang Ma Quang' làm giảm nhuệ khí kẻ địch",
         rank: "Khó",
-        origin: "u_minh_vuc"
+        origin: "u_minh_vuc",
+        species: "Ma Quang", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Ma Quang Pháp"], bloodline: "Ma Quang"
     },
     {
         name: "Vạn Quỷ Đường Chấp Sự",
@@ -2137,7 +2167,9 @@ export const PresetBackground: Background[] = [
         effect: "Trấn áp quỷ hồn +30, Sát thương tâm linh +15",
         longTerm: "Về lâu dài: Có thể triệu hoán 'Oán Linh Quan' hỗ trợ trong chiến đấu",
         rank: "Khó",
-        origin: "u_minh_vuc"
+        origin: "u_minh_vuc",
+        species: "Quỷ Sứ", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Quỷ Thượng Công"], bloodline: "U Minh"
     },
     {
         name: "Vĩnh Dạ Thành Sát Thủ",
@@ -2145,7 +2177,9 @@ export const PresetBackground: Background[] = [
         effect: "Ẩn mình +40, Sát thương chí mạng +25%",
         longTerm: "Về lâu dài: Mỗi lần ám sát thành công, tăng vĩnh viễn 1 điểm Nhanh nhẹn",
         rank: "Cực khó",
-        origin: "u_minh_vuc"
+        origin: "u_minh_vuc",
+        species: "Vĩnh Dạ", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Vĩnh Dạ Kiếm"], bloodline: "Vĩnh Hào"
     },
     {
         name: "U Minh Vực Chi Chủ",
@@ -2153,7 +2187,9 @@ export const PresetBackground: Background[] = [
         effect: "Khí vận đế vương +15, Toàn thuộc tính +5, Vàng +8000",
         longTerm: "Về lâu dài: Có khả năng hiệu triệu các di hồn của vương triều cũ trợ chiến",
         rank: "Cực khó",
-        origin: "u_minh_vuc"
+        origin: "u_minh_vuc",
+        species: "U Minh Chủ", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Vực Chủ Đại Pháp"], bloodline: "U Minh Vương"
     },
     // === PHẦN THIÊN SA MẠC (Biome 4) ===
     {
@@ -2162,7 +2198,9 @@ export const PresetBackground: Background[] = [
         effect: "Kháng hỏa +20, Bền bỉ +15",
         longTerm: "Về lâu dài: Có tỷ lệ thu hoạch thêm 'Hỏa Linh Chi' khi thu thập thảo dược",
         rank: "Dễ",
-        origin: "phan_thien_sa_mac"
+        origin: "phan_thien_sa_mac",
+        species: "Sa Dân", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Hỏa Diệm Công"], bloodline: "Sa Mạc"
     },
     {
         name: "Hỏa Long Động Tầm Đạo Giả",
@@ -2170,7 +2208,9 @@ export const PresetBackground: Background[] = [
         effect: "Ngộ tính hỏa hệ +30, Nội lực +10",
         longTerm: "Về lâu dài: Giảm tiêu hao Nội lực khi thi triển các kỹ năng Lôi và Hỏa",
         rank: "Bình thường",
-        origin: "phan_thien_sa_mac"
+        origin: "phan_thien_sa_mac",
+        species: "Long Đạo", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Hỏa Long Quyết"], bloodline: "Hỏa Long"
     },
     {
         name: "Phần Tâm Cốc Đao Khách",
@@ -2178,7 +2218,9 @@ export const PresetBackground: Background[] = [
         effect: "Sát thương đao +25, Ý chí chiến đấu +20",
         longTerm: "Về lâu dài: Đòn chí mạng có khả năng gây hiệu ứng 'Phần Tâm' thiêu đốt mục tiêu",
         rank: "Khó",
-        origin: "phan_thien_sa_mac"
+        origin: "phan_thien_sa_mac",
+        species: "Đao Giả", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Phần Tâm Đao Pháp"], bloodline: "Sa Mạc"
     },
     {
         name: "Sa Quy Thành Thương Nhân",
@@ -2186,7 +2228,9 @@ export const PresetBackground: Background[] = [
         effect: "Định vị +30, Giao tiếp +25, Vàng +4000",
         longTerm: "Về lâu dài: Không bị lạc hoặc chịu tác động xấu từ bão cát",
         rank: "Khó",
-        origin: "phan_thien_sa_mac"
+        origin: "phan_thien_sa_mac",
+        species: "Thương Nhân", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Sa Quy Khai Lộ"], bloodline: "Sa Thương"
     },
     {
         name: "Ma Diệm Tông Trưởng Lão Hậu Nhân",
@@ -2194,7 +2238,9 @@ export const PresetBackground: Background[] = [
         effect: "Ma Diệm chân hỏa +50, Sức mạnh +20",
         longTerm: "Về lâu dài: Triệu hoán 'Hỏa Ma' hộ thể khi bước vào trạng thái chiến đấu",
         rank: "Cực khó",
-        origin: "phan_thien_sa_mac"
+        origin: "phan_thien_sa_mac",
+        species: "Ma Diệm", speciesGroup: "demon", birthMethod: "SINH",
+        inherentKungfu: ["Ma Diệm Hỏa"], bloodline: "Ma Diệm Tông"
     },
     {
         name: "Thần Sa Công Chúa",
@@ -2202,7 +2248,9 @@ export const PresetBackground: Background[] = [
         effect: "Khí vận +20, Vàng +12000, Quyên rũ +15",
         longTerm: "Về lâu dài: Có thể tìm thấy các di tích ẩn giấu của Vương Quốc Thần Sa",
         rank: "Cực khó",
-        origin: "phan_thien_sa_mac"
+        origin: "phan_thien_sa_mac",
+        species: "Thần Sa Công Chúa", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Thần Sa Vương Giả"], bloodline: "Thần Sa Vương"
     },
     // === LÔI PHẠT NGUYÊN (Biome 5) ===
     {
@@ -2211,7 +2259,9 @@ export const PresetBackground: Background[] = [
         effect: "Kháng lôi +15, Nhanh nhẹn +10",
         longTerm: "Về lâu dài: Có thể cảm nhận được hướng gió và mây bão từ xa",
         rank: "Dễ",
-        origin: "loi_phat_nguyen"
+        origin: "loi_phat_nguyen",
+        species: "Phong Mục", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Phong Lôi Công"], bloodline: "Lôi Phạt"
     },
     {
         name: "Lôi Đình Trấn Thợ Thủ Công",
@@ -2219,7 +2269,9 @@ export const PresetBackground: Background[] = [
         effect: "Kỹ nghệ +20, Khéo léo +15",
         longTerm: "Về lâu dài: Tăng hiệu suất nạp năng lượng cho các linh bảo hệ Lôi",
         rank: "Bình thường",
-        origin: "loi_phat_nguyen"
+        origin: "loi_phat_nguyen",
+        species: "Thợ Rèn", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Lôi Đình Rèn"], bloodline: "Lôi Phạt"
     },
     {
         name: "Thiên Lôi Đỉnh Khổ Tu",
@@ -2227,7 +2279,9 @@ export const PresetBackground: Background[] = [
         effect: "Căn cốt +25, Kháng lôi +40",
         longTerm: "Về lâu dài: Mỗi khi chịu sát thương lôi công, hồi phục một phần HP",
         rank: "Khó",
-        origin: "loi_phat_nguyen"
+        origin: "loi_phat_nguyen",
+        species: "Lôi Tu", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Thiên Lôi Đỉnh"], bloodline: "Lôi Phạt"
     },
     {
         name: "Kim Xà Điện Vệ Binh",
@@ -2235,7 +2289,9 @@ export const PresetBackground: Background[] = [
         effect: "Tốc độ tấn công +20%, Phản xạ +15",
         longTerm: "Về lâu dài: Đòn tấn công mang theo hiệu ứng 'Tê Liệt' nhẹ",
         rank: "Khó",
-        origin: "loi_phat_nguyen"
+        origin: "loi_phat_nguyen",
+        species: "Xà Giả", speciesGroup: "beast", birthMethod: "SINH",
+        inherentKungfu: ["Kim Xà Lôi"], bloodline: "Kim Xà"
     },
     {
         name: "Điện Quang Tông Thiên Kiêu",
@@ -2243,7 +2299,9 @@ export const PresetBackground: Background[] = [
         effect: "Thần thông lôi điện +40, Nhanh nhẹn +25",
         longTerm: "Về lâu dài: Khi di chuyển nhanh, tạo ra 'Phân Thân Lôi Điện' đánh lạc hướng",
         rank: "Cực khó",
-        origin: "loi_phat_nguyen"
+        origin: "loi_phat_nguyen",
+        species: "Điện Quang", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Điện Quang Lôi"], bloodline: "Điện Tông"
     },
     {
         name: "Lôi Đế Hậu Duệ",
@@ -2251,7 +2309,9 @@ export const PresetBackground: Background[] = [
         effect: "Lôi hệ uy áp +50, Toàn thuộc tính +10, Vàng +6000",
         longTerm: "Về lâu dài: Có thể điều khiển sấm sét từ thiên không tấn công cục diện",
         rank: "Cực khó",
-        origin: "loi_phat_nguyen"
+        origin: "loi_phat_nguyen",
+        species: "Lôi Đế", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Lôi Đế Đại Pháp"], bloodline: "Lôi Vương"
     },
     // === ĐỘC CHƯỞNG TRẠCH (Biome 6) ===
     {
@@ -2260,7 +2320,9 @@ export const PresetBackground: Background[] = [
         effect: "Kháng độc +15, Ý chí +10",
         longTerm: "Về lâu dài: Có thể hít thở bình thường trong các khu vực sương độc bệ cấp thấp",
         rank: "Dễ",
-        origin: "doc_chuong_trach"
+        origin: "doc_chuong_trach",
+        species: "Ngư Phu", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Độc Vụ Công"], bloodline: "Độc Trạch"
     },
     {
         name: "Hủ Thực Di Tích Tầm Bảo Giả",
@@ -2268,7 +2330,9 @@ export const PresetBackground: Background[] = [
         effect: "Lục soát +20, May mắn +10, Vàng +2000",
         longTerm: "Về lâu dài: Nhận ra được các món đồ giả hoặc bẫy rập trong các di tích cổ",
         rank: "Bình thường",
-        origin: "doc_chuong_trach"
+        origin: "doc_chuong_trach",
+        species: "Tầm Bảo", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Hủ Thực Thuật"], bloodline: "Di Tích"
     },
     {
         name: "Vạn Độc Cốc Dược Công",
@@ -2276,7 +2340,9 @@ export const PresetBackground: Background[] = [
         effect: "Hòa độc +25, Hiểu biết dược lý +15",
         longTerm: "Về lâu dài: Các loại thuốc độc tự chế tăng 20% thời gian tác dụng",
         rank: "Khó",
-        origin: "doc_chuong_trach"
+        origin: "doc_chuong_trach",
+        species: "Dược Sĩ", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Vạn Độc Quyết"], bloodline: "Độc Cốc"
     },
     {
         name: "Long Độc Động Thám Hiểm Gia",
@@ -2284,7 +2350,9 @@ export const PresetBackground: Background[] = [
         effect: "Hơi thở độc +30, Thể chất xà nhân +20",
         longTerm: "Về lâu dài: Cơ thể tự sản sinh độc tố, gây sát thương cho kẻ địch cận chiến",
         rank: "Khó",
-        origin: "doc_chuong_trach"
+        origin: "doc_chuong_trach",
+        species: "Xà Nhân", speciesGroup: "beast", birthMethod: "SINH",
+        inherentKungfu: ["Long Độc Khí"], bloodline: "Xà Tộc"
     },
     {
         name: "Tà Độc Điện Tư Tế",
@@ -2292,7 +2360,9 @@ export const PresetBackground: Background[] = [
         effect: "Phép thuật độc hệ +40, Sát khí +20",
         longTerm: "Về lâu dài: Có thể nguyền rủa kẻ địch, làm giảm toàn bộ thuộc tính của chúng",
         rank: "Cực khó",
-        origin: "doc_chuong_trach"
+        origin: "doc_chuong_trach",
+        species: "Tà Độc", speciesGroup: "demon", birthMethod: "SINH",
+        inherentKungfu: ["Tà Độc Thuật"], bloodline: "Độc Thần"
     },
     {
         name: "Độc Long Thành Chủ Chi Tử",
@@ -2300,7 +2370,9 @@ export const PresetBackground: Background[] = [
         effect: "Danh tiếng +30, Vàng +15000, Kháng độc tuyệt đối +50",
         longTerm: "Về lâu dài: Miễn nhiễm hoàn toàn với các loại độc dược dưới cấp thần",
         rank: "Cực khó",
-        origin: "doc_chuong_trach"
+        origin: "doc_chuong_trach",
+        species: "Độc Long", speciesGroup: "beast", birthMethod: "SINH",
+        inherentKungfu: ["Long Độc Đại Pháp"], bloodline: "Độc Long"
     },
     // === VẠN TINH CỐC (Biome 7) ===
     {
@@ -2309,7 +2381,9 @@ export const PresetBackground: Background[] = [
         effect: "Thể lực +15, Nhanh nhẹn +10",
         longTerm: "Về lâu dài: Tốc độ di chuyển tăng dần theo thời gian chơi",
         rank: "Dễ",
-        origin: "van_tinh_coc"
+        origin: "van_tinh_coc",
+        species: "Mục Đồng", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Phong Lộc Công"], bloodline: "Vạn Tinh"
     },
     {
         name: "Linh Thảo Viên Dược Đồng",
@@ -2317,7 +2391,9 @@ export const PresetBackground: Background[] = [
         effect: "Kiến thức thảo dược +25, Khéo léo +10",
         longTerm: "Về lâu dài: Có tỷ lệ x2 sản lượng khi thu hoạch thảo dược quý",
         rank: "Bình thường",
-        origin: "van_tinh_coc"
+        origin: "van_tinh_coc",
+        species: "Dược Đồng", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Linh Thảo Thuật"], bloodline: "Tinh Thảo"
     },
     {
         name: "Tinh Thần Đình Chiêm Tinh Giả",
@@ -2325,7 +2401,9 @@ export const PresetBackground: Background[] = [
         effect: "Trí tuệ +25, Dự đoán +15, Khí vận +5",
         longTerm: "Về lâu dài: Có thể biết trước các sự kiện ngẫu nhiên sắp xảy ra trên bản đồ",
         rank: "Khó",
-        origin: "van_tinh_coc"
+        origin: "van_tinh_coc",
+        species: "Chiêm Tinh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Tinh Thần Quyết"], bloodline: "Tinh Giả"
     },
     {
         name: "Vạn Dược Môn Đệ Tử",
@@ -2333,7 +2411,9 @@ export const PresetBackground: Background[] = [
         effect: "Luyện đan +30, Nhân hậu +15, Danh tiếng +10",
         longTerm: "Về lâu dài: Giảm nguyên liệu cần thiết khi luyện chế đan dược cao cấp",
         rank: "Khó",
-        origin: "van_tinh_coc"
+        origin: "van_tinh_coc",
+        species: "Đệ Tử", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Vạn Dược Đan"], bloodline: "Vạn Dược"
     },
     {
         name: "Tinh Không Điện Pháp Sư",
@@ -2341,7 +2421,9 @@ export const PresetBackground: Background[] = [
         effect: "Nội lực tinh thần +45, Ma lực +30",
         longTerm: "Về lâu dài: Có thể hấp thụ năng lượng từ các vì sao để hồi phục nhanh HP/MP vào ban đêm",
         rank: "Cực khó",
-        origin: "van_tinh_coc"
+        origin: "van_tinh_coc",
+        species: "Pháp Sư", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Tinh Không Pháp"], bloodline: "Tinh Không"
     },
     {
         name: "Vạn Tinh Thành Đại Phú Hào",
@@ -2349,7 +2431,9 @@ export const PresetBackground: Background[] = [
         effect: "Vàng +30000, Giao tiếp +40, Quyền lực +20",
         longTerm: "Về lâu dài: Có thể mua những mảnh đất và xây dựng thế lực riêng tại Vạn Tinh Thành",
         rank: "Cực khó",
-        origin: "van_tinh_coc"
+        origin: "van_tinh_coc",
+        species: "Đại Phú", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Tinh Tài Quyết"], bloodline: "Vạn Tinh"
     },
     // === BĂNG PHONG CỰC ĐỊA (Biome 8) ===
     {
@@ -2358,7 +2442,9 @@ export const PresetBackground: Background[] = [
         effect: "Kháng lạnh +30, Chính xác +10",
         longTerm: "Về lâu dài: Tăng mạnh sát thương khi đối đầu với các loài thú hệ Băng",
         rank: "Dễ",
-        origin: "bang_phong_cuc_dia"
+        origin: "bang_phong_cuc_dia",
+        species: "Thợ Săn", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Băng Thư"], bloodline: "Băng Phong"
     },
     {
         name: "Thiên Băng Trấn Thợ Chạm Khắc",
@@ -2366,7 +2452,9 @@ export const PresetBackground: Background[] = [
         effect: "Kiến trúc băng +20, Khéo léo +25",
         longTerm: "Về lâu dài: Có thể chế tác 'Băng Điêu' có khả năng triệu hồi linh thú băng giá",
         rank: "Bình thường",
-        origin: "bang_phong_cuc_dia"
+        origin: "bang_phong_cuc_dia",
+        species: "Thợ Chạm", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Băng Điêu Thuật"], bloodline: "Thiên Băng"
     },
     {
         name: "Hàn Băng Động Khổ Hành Giả",
@@ -2374,7 +2462,9 @@ export const PresetBackground: Background[] = [
         effect: "Ý chí thép +35, Kháng lạnh +50",
         longTerm: "Về lâu dài: Miễn nhiễm hoàn toàn với các hiệu ứng đóng băng từ môi trường",
         rank: "Khó",
-        origin: "bang_phong_cuc_dia"
+        origin: "bang_phong_cuc_dia",
+        species: "Băng Tu", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Hàn Băng Công"], bloodline: "Hàn Băng"
     },
     {
         name: "Băng Long Di Tích Thủ Vệ",
@@ -2382,7 +2472,9 @@ export const PresetBackground: Background[] = [
         effect: "Sức mạnh +25, Phòng ngự băng +15",
         longTerm: "Về lâu dài: Nhận được sự chúc phúc của Băng Long, tăng vĩnh viễn Phòng ngự",
         rank: "Khó",
-        origin: "bang_phong_cuc_dia"
+        origin: "bang_phong_cuc_dia",
+        species: "Vệ Binh", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Băng Long Hộ"], bloodline: "Băng Long"
     },
     {
         name: "Tuyết Liên Tông Thánh Nữ/Thánh Tử",
@@ -2390,7 +2482,9 @@ export const PresetBackground: Background[] = [
         effect: "Hàn Băng linh thể +50, Sắc đẹp +20",
         longTerm: "Về lâu dài: Khi tấn công có tỷ lệ gây hiệu ứng 'Đông Cứng' hoàn toàn mục tiêu",
         rank: "Cực khó",
-        origin: "bang_phong_cuc_dia"
+        origin: "bang_phong_cuc_dia",
+        species: "Tuyết Liên", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Tuyết Liên Pháp"], bloodline: "Tuyết Liên"
     },
     {
         name: "Băng Đế Thành Hoàng Tử/Công Chúa",
@@ -2398,7 +2492,9 @@ export const PresetBackground: Background[] = [
         effect: "Hoàng gia khí chất +40, Vàng +20000, Quyền lực +30",
         longTerm: "Về lâu dài: Có quyền thừa kế vương vị, được tôn sùng tại toàn bộ Phương Bắc",
         rank: "Cực khó",
-        origin: "bang_phong_cuc_dia"
+        origin: "bang_phong_cuc_dia",
+        species: "Hoàng Tử", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Băng Đế Quyết"], bloodline: "Băng Đế"
     },
     // === ẢO CẢNH THẦN LÂU (Biome 9) ===
     {
@@ -2407,7 +2503,9 @@ export const PresetBackground: Background[] = [
         effect: "Ý chí +15, Khám phá +10",
         longTerm: "Về lâu dài: Có tỷ lệ nhìn thấu các ảo cảnh cấp thấp mà không cần tiêu hao tinh thần",
         rank: "Dễ",
-        origin: "ao_canh_than_lau"
+        origin: "ao_canh_than_lau",
+        species: "Dân Làng", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Ảo Giác Cảm"], bloodline: "Ảo Cảnh"
     },
     {
         name: "Vô Thực Trấn Thương Nhân",
@@ -2415,7 +2513,9 @@ export const PresetBackground: Background[] = [
         effect: "Giao tiếp +20, Vàng +5000, Ảo thuật +5",
         longTerm: "Về lâu dài: Có thể chuyển hóa một phần vàng ảo thành vật phẩm thực tế",
         rank: "Bình thường",
-        origin: "ao_canh_than_lau"
+        origin: "ao_canh_than_lau",
+        species: "Thương Nhân", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Vô Thực Thuật"], bloodline: "Vô Thực"
     },
     {
         name: "Tâm Ma Động Tu Sĩ",
@@ -2423,7 +2523,9 @@ export const PresetBackground: Background[] = [
         effect: "Kháng ảo giác +40, Trí tuệ +20",
         longTerm: "Về lâu dài: Tâm trí kiên định, không bao giờ bị rơi vào trạng thái 'Tẩu Hỏa Nhập Ma'",
         rank: "Khó",
-        origin: "ao_canh_than_lau"
+        origin: "ao_canh_than_lau",
+        species: "Tâm Ma", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Tâm Ma Thuật"], bloodline: "Tâm Ma"
     },
     {
         name: "Ảo Ảnh Cung Thị Nữ/Thị Vệ",
@@ -2431,7 +2533,9 @@ export const PresetBackground: Background[] = [
         effect: "Thanh tao +25, Linh hoạt +15, Ẩn mình +10",
         longTerm: "Về lâu dài: Di chuyển tạo ra tàn ảnh, tăng 15% tỷ lệ né tránh",
         rank: "Khó",
-        origin: "ao_canh_than_lau"
+        origin: "ao_canh_than_lau",
+        species: "Ảo Ảnh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Ảo Ảnh Pháp"], bloodline: "Ảo Cung"
     },
     {
         name: "Mộng Diệm Tông Truyền Nhân",
@@ -2439,7 +2543,9 @@ export const PresetBackground: Background[] = [
         effect: "Giấc mộng thao túng +50, Sát thương tinh thần +30",
         longTerm: "Về lâu dài: Có thể gieo rắc nỗi sợ hãi vào tâm trí kẻ địch, khiến chúng tự tàn sát",
         rank: "Cực khó",
-        origin: "ao_canh_than_lau"
+        origin: "ao_canh_than_lau",
+        species: "Mộng Diệm", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Mộng Diệm Thuật"], bloodline: "Mộng Tông"
     },
     {
         name: "Thần Lâu Thành Chủ",
@@ -2447,7 +2553,9 @@ export const PresetBackground: Background[] = [
         effect: "Ảo thuật vương giả +40, Vàng +15000, Khí vận cực đại +15",
         longTerm: "Về lâu dài: Có thể triệu hồi toàn bộ 'Thành Phố Ảo' đè bẹp đối thủ",
         rank: "Cực khó",
-        origin: "ao_canh_than_lau"
+        origin: "ao_canh_than_lau",
+        species: "Thần Lâu", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Thần Lâu Đại Pháp"], bloodline: "Thần Lâu"
     },
     // === VẠN KIẾM TRỦNG (Biome 10) ===
     {
@@ -2455,8 +2563,10 @@ export const PresetBackground: Background[] = [
         description: "Chuẩn bị than lửa và đồng thiếc cho các đại sư tạo kiếm.",
         effect: "Sức mạnh +15, Kỹ năng chế tạo +10",
         longTerm: "Về lâu dài: Tăng độ bền tối đa cho mọi thanh kiếm sử dụng lên 50%",
-        rank: "Dễ",
-        origin: "van_kiem_trung"
+rank: "Dễ",
+        origin: "van_kiem_trung",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Kiếm Diệm Công"], bloodline: "Kiếm Khí"
     },
     {
         name: "Thanh Kiếm Cốc Nhặt Kiếm Giả",
@@ -2464,7 +2574,9 @@ export const PresetBackground: Background[] = [
         effect: "Lục soát +20, Vàng +2000, Căn cốt kiếm +5",
         longTerm: "Về lâu dài: Có tỷ lệ nhặt được 'Tàn Kiếm Linh' có thể nâng cấp vũ khí",
         rank: "Bình thường",
-        origin: "van_kiem_trung"
+        origin: "van_kiem_trung",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Nhặt Kiếm Thuật"], bloodline: "Kiếm Khí"
     },
     {
         name: "Linh Kiếm Động Thụ Huấn",
@@ -2472,15 +2584,19 @@ export const PresetBackground: Background[] = [
         effect: "Sát thương kiếm +30, Nội lực +10",
         longTerm: "Về lâu dài: Kiếm pháp tấn công kèm theo 'Linh Kiếm Khí' xuyên thấu phòng ngự",
         rank: "Khó",
-        origin: "van_kiem_trung"
+        origin: "van_kiem_trung",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Linh Kiếm Quyết"], bloodline: "Kiếm Khí"
     },
     {
         name: "Kiếm Tâm Cung Đệ Tử",
-        description: "Người có lòng với kiếm, tu luyện kiếm tâm thuần khiết.",
+        description: "Người có lòng với kiếm, tu luyện kiếm tâm thần khiết.",
         effect: "Kiếm ý +40, Ý chí +20, Chính trực +10",
         longTerm: "Về lâu dài: Thân tâm hợp nhất với kiếm, đòn đâm (pierce) tăng 30% uy lực",
         rank: "Khó",
-        origin: "van_kiem_trung"
+        origin: "van_kiem_trung",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Kiếm Tâm Kiếm"], bloodline: "Kiếm Tâm"
     },
     {
         name: "Thiên Kiếm Tông Chân Truyền",
@@ -2488,7 +2604,9 @@ export const PresetBackground: Background[] = [
         effect: "Vô Thượng Kiếm Đạo +50, Danh tiếng +40",
         longTerm: "Về lâu dài: Có thể ngự kiếm phi hành, tăng tốc độ di chuyển trên toàn bản đồ",
         rank: "Cực khó",
-        origin: "van_kiem_trung"
+        origin: "van_kiem_trung",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Thiên Kiếm Pháp"], bloodline: "Thiên Kiếm"
     },
     {
         name: "Kiếm Hồn Thành Thiếu Gia",
@@ -2496,40 +2614,50 @@ export const PresetBackground: Background[] = [
         effect: "Kiếm hồn thức tỉnh +60, Vàng +10000, Quyền lực +25",
         longTerm: "Về lâu dài: Kiếm có linh tính, tự động tấn công kẻ địch đe dọa chủ nhân",
         rank: "Cực khó",
-        origin: "van_kiem_trung"
+        origin: "van_kiem_trung",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Kiếm Hồn Quyết"], bloodline: "Kiếm Hồn"
     },
-    // === HỦ MỘC LÂM (Biome 11) ===
+// === HỦ MỘC LÂM (Biome 11) ===
     {
-        name: "Tà Quỷ Thôn Dân Làng",
-        description: "Sống cùng những sinh vật biến dị trong rừng mục.",
-        effect: "Thể chất +20, Kháng tà +10",
-        longTerm: "Về lâu dài: Máu của bạn mang tính ăn mòn cao, gây sát thương cho kẻ định khi bị tấn công",
+        name: "Hoa Vân Thôn Nông Phu",
+        description: "Canh tác trong rừng cổ thụ nơi cây cối có linh tính.",
+        effect: "Trí tuệ +15, Giao tiếp cây cối +20",
+        longTerm: "Về lâu dài: Có thể giao tiếp với thực vật, nhận được hỗ trợ từ rừng",
         rank: "Dễ",
-        origin: "hu_moc_lam"
+        origin: "hu_moc_lam",
+        species: "Mộc Linh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Thiên Thụ"
     },
     {
-        name: "Thanh Đài Trấn Thương Nhân",
-        description: "Mua bán nấm và rêu độc tại thị trấn xanh rì.",
-        effect: "Giao tiếp +20, Vàng +4000, Kháng độc +5",
-        longTerm: "Về lâu dài: Có thể chiết xuất 'Mộc Tinh' từ thực vật mục nát để tăng HP tối đa",
+        name: "Xà Lâm Trấn Thợ Săn",
+        description: "Săn bắt các loài thú hoang dã trong rừng sâu.",
+        effect: "Theo dấu +20, Nhanh nhẹn +15",
+        longTerm: "Về lâu dài: Có thể thuần hóa 'Lâm Thú' làm đồng hành",
         rank: "Bình thường",
-        origin: "hu_moc_lam"
+        origin: "hu_moc_lam",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
-        name: "Mộc Linh Cốc Tu Hành",
-        description: "Hấp thụ linh khí từ những gốc cây mục nát hồi sinh.",
-        effect: "Tốc độ hồi phục nội lực +35%, Sức sống +15",
-        longTerm: "Về lâu dài: Sở hữu 'Mộc Thần Chi Lực', tự động hồi phục HP mỗi giây",
+        name: "Cổ Thụ Động Tu Sĩ",
+        description: "Ẩn tu trong hốc cây cổ thụ hàng nghìn năm tuổi.",
+        effect: "Ngộ tính +25, Nội lực mộc hệ +20",
+        longTerm: "Về lâu dài: Được 'Cổ Thụ' truyền linh khí, tăng tu luyện",
         rank: "Khó",
-        origin: "hu_moc_lam"
+        origin: "hu_moc_lam",
+        species: "Cổ Linh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Cổ Mộc"
     },
     {
-        name: "Vạn Diệp Điện Tư Tế",
-        description: "Người canh giữ thư viện lá cây ghi chép bí thuật rừng già.",
-        effect: "Trí tuệ +30, Hiểu biết tự nhiên +25",
-        longTerm: "Về lâu dài: Có thể giải mã các bí thuật cổ xưa được ghi trên lá cây",
+        name: "Lâm Yến Cốc Thám Hiểm",
+        description: "Khám phá những cánh rừng nguyên thủy chưa ai dặm chân.",
+        effect: "Sinh tồn +30, Lục soát +20",
+        longTerm: "Về lâu dài: Có thể tìm thấy các 'Linh Thảo' hiếm có",
         rank: "Khó",
-        origin: "hu_moc_lam"
+        origin: "hu_moc_lam",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Thiên Thụ Phủ Thừa Kế",
@@ -2537,7 +2665,313 @@ export const PresetBackground: Background[] = [
         effect: "Mộc hệ thần thông +50, Phòng ngự tự nhiên +30",
         longTerm: "Về lâu dài: Có thể triệu hồi 'Thần Thụ Chi Vệ' hộ thân trong chiến đấu",
         rank: "Cực khó",
-        origin: "hu_moc_lam"
+        origin: "hu_moc_lam",
+        species: "Thần Thụ", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Vạn Diệp Thuật"], bloodline: "Thiên Thụ"
+    },
+    {
+        name: "Tà Mộc Thành Vương",
+        description: "Vị vua trẻ của thành phố gỗ mục cô độc giữa rừng rậm.",
+        effect: "Lãnh đạo +40, Vàng +5000, Toàn thuộc tính +8",
+        longTerm: "Về lâu dài: Có quyền điều động 'Đội Quân Mộc Thể' trong các trận chiến lớn",
+        rank: "Cực khó",
+        origin: "hu_moc_lam",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    // === TÀNG LONG SƠN (Biome 12) ===
+    {
+        name: "Vân Long Thôn Nông Phu",
+        description: "Canh tác trên vách núi quanh năm mây phủ rồng rít.",
+        effect: "Sức m���nh +20, Leo trèo +15",
+        longTerm: "Về lâu dài: Có thể trồng trọt các loại 'Long Huyết Thảo' có giá trị cao",
+        rank: "Dễ",
+        origin: "tang_long_son",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Thạch Long Trấn Thợ Cắt Đá",
+        description: "Khai thác đá rồng trân quý từ sườn núi dốc đứng.",
+        effect: "Kỹ năng khai khoáng +25, Thể chất +15",
+        longTerm: "Về lâu dài: Có tỷ lệ nhận được 'Long Thạch' khi khai thác đá quý",
+        rank: "Bình thường",
+        origin: "tang_long_son",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Tàng Long Động Tầm Đạo",
+        description: "Ẩn tu trong hang rồng, hy vọng một ngày gặp chân long.",
+        effect: "Long khí tiềm ẩn +15, Ngộ tính +20",
+        longTerm: "Về lâu dài: Có cơ hội giao hảo với rồng thật, nhận được 'Long Hồn'",
+        rank: "Khó",
+        origin: "tang_long_son",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Long Huyết Cốc Chiến Binh",
+        description: "Chiến đấu và tắm mình trong máu rồng loãng nơi thung lũng.",
+        effect: "Căn cốt rồng +35, Sức mạnh +25, Sát khí +10",
+        longTerm: "Về lâu dài: Máu rồng trong cơ thể tăng dần theo thời gian, tăng sát thương thiên phục",
+        rank: "Khó",
+        origin: "tang_long_son",
+        species: "Long Huyết", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Long Huyết"], bloodline: "Long Huyết"
+    },
+    {
+        name: "Thiên Long Sơn Đệ Tử",
+        description: "Đệ tử nòng cốt của phái chính tông tọa lạc trên đỉnh rồng.",
+        effect: "Thiên Long chân khí +50, Danh tiếng +30",
+        longTerm: "Về lâu dài: Được truyền thừa 'Thiên Long Bảo Điển', tăng tốc độ tu luyện",
+        rank: "Cực khó",
+        origin: "tang_long_son",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Thiên Long"], bloodline: "Long Huyết"
+    },
+    {
+        name: "Long Đế Thành Hoàng Thái Tử",
+        description: "Người thừa kế ngai vàng uy nghiêm nhất vùng núi rồng.",
+        effect: "Long Uy +60, Vàng +25000, Toàn thuộc tính +10",
+        longTerm: "Về lâu dài: Có quyền thừa kế 'Long Đế Truyền Thừa', triệu hồi rồng chiến đấu",
+        rank: "Cực khó",
+        origin: "tang_long_son",
+        species: "Long Tử", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Long Hoàng"], bloodline: "Long Huyết"
+    },
+    // === HƯ KHÔNG ĐẢO (Biome 13) ===
+    {
+        name: "Vân Hải Thôn Ngư Phu",
+        description: "Đánh bắt những loài cá bay trong biển mây xanh thẳm.",
+        effect: "Nhanh nhẹn +15, Định vị mây +20",
+        longTerm: "Về lâu dài: Có thể thuần hóa 'Mây Thú' làm phương tiện bay",
+        rank: "Dễ",
+        origin: "hu_khong_dao",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Phù Không Trấn Buôn Chuyến",
+        description: "Giao thương hàng hóa giữa các hòn đảo nổi bập bềnh.",
+        effect: "Giao tiếp +20, Vàng +6000, Cân bằng +15",
+        longTerm: "Về lâu dài: Giảm 30% chi phí vận chuyển hàng hóa giữa các đảo",
+        rank: "Bình thường",
+        origin: "hu_khong_dao",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Linh Vân Đảo Tu Giả",
+        description: "Hấp thụ linh khí tinh khiết từ những đám mây ngũ sắc.",
+        effect: "Tốc độ tu luyện +15%, Nội lực thanh khiết +25",
+        longTerm: "Về lâu dài: Cơ thể dần nhẹ như mây, tăng tốc độ di chuyển trên không",
+        rank: "Khó",
+        origin: "hu_khong_dao",
+        species: "Vân Linh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Thiên Thụ"
+    },
+    {
+        name: "Hư Không Động Thám Hiểm",
+        description: "Khám phá những vết nứt không gian đầy hiểm họa.",
+        effect: "Kháng không gian +40, Phản ứng nhanh +20",
+        longTerm: "Về lâu dài: Có thể nhìn thấu các khe không gian, dễ dàng tìm lối thoát",
+        rank: "Khó",
+        origin: "hu_khong_dao",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Hư Vô Cung Đệ Tử",
+        description: "Người làm chủ các kỹ thuật dịch chuyển và xuyên thấu.",
+        effect: "Không Gian Thần Thông +50, Nhanh nhẹn +30",
+        longTerm: "Về lâu dài: Có thể dịch chuyển tức thời trong phạm vi ngắn (blink)",
+        rank: "Cực khó",
+        origin: "hu_khong_dao",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Hư Vô"], bloodline: "Bloodline"
+    },
+    {
+        name: "Thiên Hải Thành Chủ",
+        description: "Người trị vì thành phố cao nhất, gần với thiên đạo nhất.",
+        effect: "Thiên Đạo khí vận +40, Vàng +20000, Quyền lực +30",
+        longTerm: "Về lâu dài: Được thiên đạo ban phước, tăng tỷ lệ rơi đồ hiếm",
+        rank: "Cực khó",
+        origin: "hu_khong_dao",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Thanh Đài Trấn Thương Nhân",
+        description: "Mua bán nấm và rêu độc tại thị trấn xanh rì.",
+        effect: "Giao tiếp +20, Vàng +4000, Kháng độc +5",
+        longTerm: "Về lâu dài: Có thể chiết xuất 'Mộc Tinh' từ thực vật mục nát để tăng HP tối đa",
+        rank: "Bình thường",
+        origin: "hu_moc_lam",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Thảo Dược Thuật"], bloodline: "Thảo Đài"
+    },
+    {
+        name: "Mộc Linh Cốc Tu Hành",
+        description: "Hấp thụ linh khí từ những gốc cây mục nát hồi sinh.",
+        effect: "Tốc độ hồi phục nội lực +35%, Sức sống +15",
+        longTerm: "Về lâu dài: Sở hữu 'Mộc Thần Chi Lực', tự động hồi phục HP mỗi giây",
+        rank: "Khó",
+        origin: "hu_moc_lam",
+        species: "Mộc Linh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Mộc Linh Công"], bloodline: "Thụ Linh"
+    },
+    {
+        name: "Vạn Diệp Điện Tư Tế",
+        description: "Người canh giữ thư viện lá cây ghi chép bí thuật rừng già.",
+        effect: "Trí tuệ +30, Hiểu biết tự nhiên +25",
+        longTerm: "Về lâu dài: Có thể giải mã các bí thuật cổ xưa được ghi trên lá cây",
+        rank: "Khó",
+        origin: "hu_moc_lam",
+        species: "Vạn Diệp", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Vạn Diệp Thuật"], bloodline: "Thiên Thụ"
+    },
+{
+        name: "Thiên Thụ Phủ Thừa Kế",
+        description: "Người mang huyết thống của thần thụ cổ đại vệ binh.",
+        effect: "Mộc hệ thần thông +50, Phòng ngự tự nhiên +30",
+        longTerm: "Về lâu dài: Có thể triệu hồi 'Thần Thụ Chi Vệ' hộ thân trong chiến đấu",
+        rank: "Cực khó",
+        origin: "hu_moc_lam",
+        species: "Thần Thụ", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Thiên Thụ"], bloodline: "Thiên Thụ"
+    },
+    {
+        name: "Tà Mộc Thành Vương",
+        description: "Vị vua trẻ của thành phố gỗ mục cô độc giữa rừng rậm.",
+        effect: "Lãnh đạo +40, Vàng +5000, Toàn thuộc tính +8",
+        longTerm: "Về lâu dài: Có quyền điều động 'Đội Quân Mộc Thể' trong các trận chiến lớn",
+        rank: "Cực khó",
+        origin: "hu_moc_lam",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    // === TÀNG LONG SƠN (Biome 12) ===
+    {
+        name: "Vân Long Thôn Nông Phu",
+        description: "Canh tác trên vách núi quanh năm mây phủ rồng rít.",
+        effect: "Sức mạnh +20, Leo trèo +15",
+        longTerm: "Về lâu dài: Có thể trồng trọt các loại 'Long Huyết Thảo' có giá trị cao",
+        rank: "Dễ",
+        origin: "tang_long_son",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Thạch Long Trấn Thợ Cắt Đá",
+        description: "Khai thác đá rồng trân quý từ sườn núi dốc đứng.",
+        effect: "Kỹ năng khai khoáng +25, Thể chất +15",
+        longTerm: "Về lâu dài: Có tỷ lệ nhận được 'Long Thạch' khi khai thác đá quý",
+        rank: "Bình thường",
+        origin: "tang_long_son",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Tàng Long Động Tầm Đạo",
+        description: "Ẩn tu trong hang rồng, hy vọng một ngày gặp chân long.",
+        effect: "Long khí tiềm ẩn +15, Ngộ tính +20",
+        longTerm: "Về lâu dài: Có cơ hội giao hảo với rồng thật, nhận được 'Long Hồn'",
+        rank: "Khó",
+        origin: "tang_long_son",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Long Huyết Cốc Chiến Binh",
+        description: "Chiến đấu và tắm mình trong máu rồng loãng nơi thung lũng.",
+        effect: "Căn cốt rồng +35, Sức mạnh +25, Sát khí +10",
+        longTerm: "Về lâu dài: Máu rồng trong cơ thể tăng dần theo thời gian, tăng sát thương thiên phục",
+        rank: "Khó",
+        origin: "tang_long_son",
+        species: "Long Huyết", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Long Huyết"], bloodline: "Long Huyết"
+    },
+    {
+        name: "Thiên Long Sơn Đệ Tử",
+        description: "Đệ tử nòng cốt của phái chính tông tọa lạc trên đỉnh rồng.",
+        effect: "Thiên Long chân khí +50, Danh tiếng +30",
+        longTerm: "Về lâu dài: Được truyền thừa 'Thiên Long Bảo Điển', tăng tốc độ tu luyện",
+        rank: "Cực khó",
+        origin: "tang_long_son",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Thiên Long"], bloodline: "Long Huyết"
+    },
+    {
+        name: "Long Đế Thành Hoàng Thái Tử",
+        description: "Người thừa kế ngai vàng uy nghiêm nhất vùng núi rồng.",
+        effect: "Long Uy +60, Vàng +25000, Toàn thuộc tính +10",
+        longTerm: "Về lâu dài: Có quyền thừa kế 'Long Đế Truyền Thừa', triệu hồi rồng chiến đấu",
+        rank: "Cực khó",
+        origin: "tang_long_son",
+        species: "Long Tử", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Long Hoàng"], bloodline: "Long Huyết"
+    },
+    // === HƯ KHÔNG ĐẢO (Biome 13) ===
+    {
+        name: "Vân Hải Thôn Ngư Phu",
+        description: "Đánh bắt những loài cá bay trong biển mây xanh thẳm.",
+        effect: "Nhanh nhẹn +15, Định vị mây +20",
+        longTerm: "Về lâu dài: Có thể thuần hóa 'Mây Thú' làm phương tiện bay",
+        rank: "Dễ",
+        origin: "hu_khong_dao",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Phù Không Trấn Buôn Chuyến",
+        description: "Giao thương hàng hóa giữa các hòn đảo nổi bập bềnh.",
+        effect: "Giao tiếp +20, Vàng +6000, Cân bằng +15",
+        longTerm: "Về lâu dài: Giảm 30% chi phí vận chuyển hàng hóa giữa các đảo",
+        rank: "Bình thường",
+        origin: "hu_khong_dao",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Linh Vân Đảo Tu Giả",
+        description: "Hấp thụ linh khí tinh khiết từ những đám mây ngũ sắc.",
+        effect: "Tốc độ tu luyện +15%, Nội lực thanh khiết +25",
+        longTerm: "Về lâu dài: Cơ thể dần nhẹ như mây, tăng tốc độ di chuyển trên không",
+        rank: "Khó",
+        origin: "hu_khong_dao",
+        species: "Vân Linh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Thiên Thụ"
+    },
+    {
+        name: "Hư Không Động Thám Hiểm",
+        description: "Khám phá những vết nứt không gian đầy hiểm họa.",
+        effect: "Kháng không gian +40, Phản ứng nhanh +20",
+        longTerm: "Về lâu dài: Có thể nhìn thấu các khe không gian, dễ dàng tìm lối thoát",
+        rank: "Khó",
+        origin: "hu_khong_dao",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Hư Vô Cung Đệ Tử",
+        description: "Người làm chủ các kỹ thuật dịch chuyển và xuyên thấu.",
+        effect: "Không Gian Thần Thông +50, Nhanh nhẹn +30",
+        longTerm: "Về lâu dài: Có thể dịch chuyển tức thời trong phạm vi ngắn (blink)",
+        rank: "Cực khó",
+        origin: "hu_khong_dao",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Hư Vô"], bloodline: "Bloodline"
+    },
+    {
+        name: "Thiên Hải Thành Chủ",
+        description: "Người trị vì thành phố cao nhất, gần với thiên đạo nhất.",
+        effect: "Thiên Đạo khí vận +40, Vàng +20000, Quyền lực +30",
+        longTerm: "Về lâu dài: Được thiên đạo ban phước, tăng tỷ lệ rơi đồ hiếm",
+        rank: "Cực khó",
+        origin: "hu_khong_dao",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Tà Mộc Thành Vương",
@@ -2652,7 +3086,9 @@ export const PresetBackground: Background[] = [
         effect: "Kháng ma tính +20, Ý chí +15",
         longTerm: "Về lâu dài: Mắt thích nghi với bóng tối đỏ, nhìn rõ trong điều kiện thiếu sáng",
         rank: "Dễ",
-        origin: "huyet_nguyet_canh"
+        origin: "huyet_nguyet_canh",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Tà Nguyệt Trấn Thương Nhân",
@@ -2660,7 +3096,9 @@ export const PresetBackground: Background[] = [
         effect: "Giao tiếp +25, Vàng +5000, May mắn +10",
         longTerm: "Về lâu dài: Có quyền tiếp cận các phiên chợ đêm đặc biệt",
         rank: "Bình thường",
-        origin: "huyet_nguyet_canh"
+        origin: "huyet_nguyet_canh",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Minh Nguyệt Cốc Nhạc Công",
@@ -2668,7 +3106,9 @@ export const PresetBackground: Background[] = [
         effect: "Sức mạnh nghệ thuật +30, Thanh tao +20",
         longTerm: "Về lâu dài: Âm nhạc có khả năng trấn an quỷ hồn, giảm sát thương từ ma",
         rank: "Khó",
-        origin: "huyet_nguyet_canh"
+        origin: "huyet_nguyet_canh",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Ma Nguyệt Miếu Thủ Hộ Giả",
@@ -2676,7 +3116,9 @@ export const PresetBackground: Background[] = [
         effect: "Phòng ngự tinh thần +35, Sát khí +15",
         longTerm: "Về lâu dài: Được 'Trăng Máu' ban phước, tăng sức mạnh vào đêm trăng tròn",
         rank: "Khó",
-        origin: "huyet_nguyet_canh"
+        origin: "huyet_nguyet_canh",
+        species: "Ma Dân", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Ma Huyết"
     },
     {
         name: "Huyết Nguyệt Tông Chấp Sự",
@@ -2684,7 +3126,9 @@ export const PresetBackground: Background[] = [
         effect: "Nguyệt Ma chân khí +50, Tốc độ hồi phục đêm +30%",
         longTerm: "Về lâu dài: Có thể hấp thụ năng lượng từ trăng máu để tăng cường sức mạnh",
         rank: "Cực khó",
-        origin: "huyet_nguyet_canh"
+        origin: "huyet_nguyet_canh",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Nguyệt Ma"], bloodline: "Ma Huyết"
     },
     {
         name: "Huyết Dạ Thành Vương Tử",
@@ -2692,7 +3136,9 @@ export const PresetBackground: Background[] = [
         effect: "Dạ ma uy áp +50, Vàng +12000, Quyến rũ tà mị +20",
         longTerm: "Về lâu dài: Có quyền thừa kế 'Huyết Dạ Vương Chiến', triệu hồi quân đoàn ma vực",
         rank: "Cực khó",
-        origin: "huyet_nguyet_canh"
+        origin: "huyet_nguyet_canh",
+        species: "Ma Vương", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Huyết Dạ"], bloodline: "Ma Huyết"
     },
     // === LƯU SA HÀ (Biome 15) ===
     {
@@ -2701,7 +3147,9 @@ export const PresetBackground: Background[] = [
         effect: "Tâm lý vững vàng +25, Bền bỉ +10",
         longTerm: "Về lâu dài: Không bao giờ rơi vào trạng thái tuyệt vọng, luôn giữ bình tĩnh",
         rank: "Dễ",
-        origin: "luu_sa_ha"
+        origin: "luu_sa_ha",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Cát Chảy Trấn Thợ Cứu Hộ",
@@ -2709,15 +3157,19 @@ export const PresetBackground: Background[] = [
         effect: "Sức mạnh +25, Kỹ năng giải cứu +20",
         longTerm: "Về lâu dài: Có khả năng 'Thảo Cứu' cứu thoát đồng đội khỏi trạng thái khống chế",
         rank: "Bình thường",
-        origin: "luu_sa_ha"
+        origin: "luu_sa_ha",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
-    {
+{
         name: "Kim Sa Động Tầm Bảo",
         description: "Khai thác những hạt vàng rực rỡ ẩn trong dòng sông cát.",
         effect: "Lục soát +30, Vàng +8000, May mắn +5",
         longTerm: "Về lâu dài: Có mắt nhìn thấu các kho báu ẩn dưới lớp cát",
         rank: "Khó",
-        origin: "luu_sa_ha"
+        origin: "luu_sa_ha",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Lưu Sa Tông Đệ Tử",
@@ -2725,7 +3177,9 @@ export const PresetBackground: Background[] = [
         effect: "Khinh công sa mạc +40, Nhanh nhẹn +20",
         longTerm: "Về lâu dài: Có thể đi trên cát chảy mà không bị lún, di chuyển nhanh hơn trong sa mạc",
         rank: "Khó",
-        origin: "luu_sa_ha"
+        origin: "luu_sa_ha",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Sa Thần Điện Tư Tế",
@@ -2733,7 +3187,9 @@ export const PresetBackground: Background[] = [
         effect: "Sa Pháp thần thông +50, Toàn thuộc tính đất +30",
         longTerm: "Về lâu dài: Có thể triệu hồn 'Sa Thần' điều khiển cát bão tấn công",
         rank: "Cực khó",
-        origin: "luu_sa_ha"
+        origin: "luu_sa_ha",
+        species: "Sa Thần", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Thổ Thần"
     },
     {
         name: "Lưu Sa Thành Đại Công Tước",
@@ -2741,7 +3197,9 @@ export const PresetBackground: Background[] = [
         effect: "Quyền lực +40, Vàng +40000, Khí vận cực đại +15",
         longTerm: "Về lâu dài: Có quyền thu thuế và điều động thương nhân trong vùng Lưu Sa",
         rank: "Cực khó",
-        origin: "luu_sa_ha"
+        origin: "luu_sa_ha",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     // === NGHIỆP HỎA LUYỆN NGỤC (Biome 16) ===
     {
@@ -2750,7 +3208,9 @@ export const PresetBackground: Background[] = [
         effect: "Kháng hỏa +30, Ý chí +20, Tội lỗi +10",
         longTerm: "Về lâu dài: Cơ thể thích nghi với lửa, sát thương hỏa không thể giết chết",
         rank: "Dễ",
-        origin: "nghiep_hoa_luyen_nguc"
+        origin: "nghiep_hoa_luyen_nguc",
+        species: "Tội Nhân", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Luyện Ngục Trấn Thợ Thủ Công",
@@ -2758,7 +3218,9 @@ export const PresetBackground: Background[] = [
         effect: "Sức mạnh +20, Kỹ năng rèn +15",
         longTerm: "Về lâu dài: Vũ khí chế tác có thêm thuộc tính 'Hỏa Nghiệp' gây sát thương thiêu đốt",
         rank: "Bình thường",
-        origin: "nghiep_hoa_luyen_nguc"
+        origin: "nghiep_hoa_luyen_nguc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Vô Gián Cốc Chiến Binh",
@@ -2766,7 +3228,9 @@ export const PresetBackground: Background[] = [
         effect: "Khả năng sinh tồn +35, Sát thương vật lý +25",
         longTerm: "Về lâu dài: Chiến đấu càng lâu, sức mạnh càng tăng (berserker)",
         rank: "Khó",
-        origin: "nghiep_hoa_luyen_nguc"
+        origin: "nghiep_hoa_luyen_nguc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Hồng Liên Miếu Khổ Tu",
@@ -2774,7 +3238,9 @@ export const PresetBackground: Background[] = [
         effect: "Nội lực hỏa hệ +40, Tâm tính thanh khiết +15",
         longTerm: "Về lâu dài: Tâm trí không bị ô nhiễm bởi tà ma, kháng tẩu hỏa nhập ma",
         rank: "Khó",
-        origin: "nghiep_hoa_luyen_nguc"
+        origin: "nghiep_hoa_luyen_nguc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Nghiệp Hỏa Cung Hộ Pháp",
@@ -2782,7 +3248,9 @@ export const PresetBackground: Background[] = [
         effect: "Nghiệp hỏa thần thông +50, Ma lực +30",
         longTerm: "Về lâu dài: Có thể thi triển 'Nghiệp Hỏa Trận' bao phủ khu vực rộng",
         rank: "Cực khó",
-        origin: "nghiep_hoa_luyen_nguc"
+        origin: "nghiep_hoa_luyen_nguc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Nghiệp Hỏa"], bloodline: "Bloodline"
     },
     {
         name: "Luyện Ngục Vương Chi Hậu Anh",
@@ -2790,7 +3258,9 @@ export const PresetBackground: Background[] = [
         effect: "Vương giả khí +50, Sức mạnh +15, Khí vận cực đoan +10",
         longTerm: "Về lâu dài: Có thể triệu hồi 'Luyện Ngục Quân Đoàn' từ cõi hỏa nghiệp",
         rank: "Cực khó",
-        origin: "nghiep_hoa_luyen_nguc"
+        origin: "nghiep_hoa_luyen_nguc",
+        species: "Vương Giả", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Nghiệp Hỏa"], bloodline: "Hỏa Ma"
     },
     // === THI MÃNG LÂM (Biome 17) ===
     {
@@ -2799,7 +3269,9 @@ export const PresetBackground: Background[] = [
         effect: "Theo dấu +20, Nhanh nhẹn +15",
         longTerm: "Về lâu dài: Có thể thuần hóa rắn làm 'Trùm Cuối' trong chiến đấu",
         rank: "Dễ",
-        origin: "thi_mang_lam"
+        origin: "thi_mang_lam",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Thi Độc Trấn Dược Sĩ",
@@ -2807,7 +3279,9 @@ export const PresetBackground: Background[] = [
         effect: "Hiểu biết dược lý +25, Kháng độc +20",
         longTerm: "Về lâu dài: Có thể chế tạo 'Thiên Hạ Độc' vô hiệu hóa mọi đối thủ",
         rank: "Bình thường",
-        origin: "thi_mang_lam"
+        origin: "thi_mang_lam",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Vạn Xà Cốc Huấn Luyện Viên",
@@ -2815,7 +3289,9 @@ export const PresetBackground: Background[] = [
         effect: "Kỹ năng điều khiển xà +35, Phản ứng nhanh +15",
         longTerm: "Về lâu dài: Có thể triệu hồn đàn rắn hỗ trợ trong chiến đấu",
         rank: "Khó",
-        origin: "thi_mang_lam"
+        origin: "thi_mang_lam",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Cự Mãng Động Thám Hiểm",
@@ -2823,7 +3299,9 @@ export const PresetBackground: Background[] = [
         effect: "Thể chất linh hoạt +30, Kháng kịch độc +40",
         longTerm: "Về lâu dài: Cơ thể có khả năng tái sinh như rắn, hồi phục nhanh",
         rank: "Khó",
-        origin: "thi_mang_lam"
+        origin: "thi_mang_lam",
+        species: "Xà Nhân", speciesGroup: "beast", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Xà Huyết"
     },
     {
         name: "Thanh Xà Phủ Thiếu Chủ",
@@ -2831,7 +3309,9 @@ export const PresetBackground: Background[] = [
         effect: "Thanh Xà yêu thuật +50, Sắc đẹp +15",
         longTerm: "Về lâu dài: Có thể biến thành rồng trong thời gian ngắn, tăng sức mạnh gấp bội",
         rank: "Cực khó",
-        origin: "thi_mang_lam"
+        origin: "thi_mang_lam",
+        species: "Thanh Xà", speciesGroup: "beast", birthMethod: "SINH",
+        inherentKungfu: ["Thanh Xà"], bloodline: "Xà Huyết"
     },
     {
         name: "Thi Mãng Thành Nữ Vương/Vương",
@@ -2839,16 +3319,344 @@ export const PresetBackground: Background[] = [
         effect: "Xà vương uy áp +60, Vàng +10000, Quyền lực +30",
         longTerm: "Về lâu dài: Có thể triệu hồn 'Xà Vực Quân Đoàn' từ vùng đất rắn",
         rank: "Cực khó",
-        origin: "thi_mang_lam"
+        origin: "thi_mang_lam",
+        species: "Xà Vương", speciesGroup: "beast", birthMethod: "SINH",
+        inherentKungfu: ["Thanh Xà"], bloodline: "Xà Huyết"
     },
-    // === KÍNH TƯỢNG HỒ (Biome 18) ===
+    {
+        name: "Lưu Sa Tông Đệ Tử",
+        description: "Luyện tập cách di chuyển nhẹ nhàng như gió thổi trên cát.",
+        effect: "Khinh công sa mạc +40, Nhanh nhẹn +20",
+        longTerm: "Về lâu dài: Có thể đi trên cát chảy mà không bị lún, di chuyển nhanh hơn trong sa mạc",
+        rank: "Khó",
+        origin: "luu_sa_ha",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Sa Thần Điện Tư Tế",
+        description: "Người giao tiếp với vị thần sa mạc hung bạo dưới lòng sông.",
+        effect: "Sa Pháp thần thông +50, Toàn thuộc tính đất +30",
+        longTerm: "Về lâu dài: Có thể triệu hồn 'Sa Thần' điều khiển cát bão tấn công",
+        rank: "Cực khó",
+        origin: "luu_sa_ha",
+        species: "Sa Thần", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Thổ Thần"
+    },
+    {
+        name: "Lưu Sa Thành Đại Công Tước",
+        description: "Quý tộc quyền lực nhất cai quản vùng sông cát bao la.",
+        effect: "Quyền lực +40, Vàng +40000, Khí vận cực đại +15",
+        longTerm: "Về lâu dài: Có quyền thu thuế và điều động thương nhân trong vùng Lưu Sa",
+        rank: "Cực khó",
+        origin: "luu_sa_ha",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    // === NGHIỆP HỎA LUYỆN NGỤC (Biome 16) ===
+    {
+        name: "Luyện Ngục Tội Nhân",
+        description: "Bị đầy xuống luyện ngục từ nhỏ, đã quen với sự tra tấn của lửa tội.",
+        effect: "Kháng hỏa +30, Ý chí +20, Tội lỗi +10",
+        longTerm: "Về lâu dài: Cơ thể thích nghi với lửa, sát thương hỏa không thể giết chết",
+        rank: "Dễ",
+        origin: "nghiep_hoa_luyen_nguc",
+        species: "Tội Nhân", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Luyện Ngục Trấn Thợ Thủ Công",
+        description: "Chế tác xiềng xích và vũ khí từ sắt nóng chảy dưới luyện ngục.",
+        effect: "Sức mạnh +20, Kỹ năng rèn +15",
+        longTerm: "Về lâu dài: Vũ khí chế tác có thêm thuộc tính 'Hỏa Nghiệp' gây sát thương thiêu đốt",
+        rank: "Bình thường",
+        origin: "nghiep_hoa_luyen_nguc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Vô Gián Cốc Chiến Binh",
+        description: "Kẻ liều mạng chiến đấu trong thung lũng không lối thoát.",
+        effect: "Khả năng sinh tồn +35, Sát thương vật lý +25",
+        longTerm: "Về lâu dài: Chiến đấu càng lâu, sức mạnh càng tăng (berserker)",
+        rank: "Khó",
+        origin: "nghiep_hoa_luyen_nguc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Hồng Liên Miếu Khổ Tu",
+        description: "Ngồi trên đài sen đỏ lơ lửng giữa hồ nham thạch để tịnh tâm.",
+        effect: "Nội lực hỏa hệ +40, Tâm tính thanh khiết +15",
+        longTerm: "Về lâu dài: Tâm trí không bị ô nhiễm bởi tà ma, kháng tẩu hỏa nhập ma",
+        rank: "Khó",
+        origin: "nghiep_hoa_luyen_nguc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Nghiệp Hỏa Cung Hộ Pháp",
+        description: "Giữ vị trí cao trong cung điện lửa nghiệp, điều khiển hỏa thuật cực đỉnh.",
+        effect: "Nghiệp hỏa thần thông +50, Ma lực +30",
+        longTerm: "Về lâu dài: Có thể thi triển 'Nghiệp Hỏa Trận' bao phủ khu vực rộng",
+        rank: "Cực khó",
+        origin: "nghiep_hoa_luyen_nguc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Nghiệp Hỏa"], bloodline: "Bloodline"
+    },
+    {
+        name: "Luyện Ngục Vương Chi Hậu Anh",
+        description: "Mang dòng máu của vị vua cai trị cõi luyện ngục u tối.",
+        effect: "Vương giả khí +50, Sức mạnh +15, Khí vận cực đoan +10",
+        longTerm: "Về lâu dài: Có thể triệu hồi 'Luyện Ngục Quân Đoàn' từ cõi hỏa nghiệp",
+        rank: "Cực khó",
+        origin: "nghiep_hoa_luyen_nguc",
+        species: "Vương Giả", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Nghiệp Hỏa"], bloodline: "Hỏa Ma"
+    },
+    // === THI MÃNG LÂM (Biome 17) ===
+    {
+        name: "Rừng Già Thôn Thợ Săn",
+        description: "Săn bắt các loài rắn độc khổng lồ ẩn nấp trong bụi rậm.",
+        effect: "Theo dấu +20, Nhanh nhẹn +15",
+        longTerm: "Về lâu dài: Có thể thuần hóa rắn làm 'Trùm Cuối' trong chiến đấu",
+        rank: "Dễ",
+        origin: "thi_mang_lam",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Thi Độc Trấn Dược Sĩ",
+        description: "Nghiên cứu cách hóa giải thi độc cho những người lầm lỡ bước chân vào vùng đất này.",
+        effect: "Hiểu biết dược lý +25, Kháng độc +20",
+        longTerm: "Về lâu dài: Có thể chế tạo 'Thiên Hạ Độc' vô hiệu hóa mọi đối thủ",
+        rank: "Bình thường",
+        origin: "thi_mang_lam",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Vạn Xà Cốc Huấn Luyện Viên",
+        description: "Có khả năng giao tiếp và điều khiển hàng vạn con rắn độc nhỏ bé.",
+        effect: "Kỹ năng điều khiển xà +35, Phản ứng nhanh +15",
+        longTerm: "Về lâu dài: Có thể triệu hồn đàn rắn hỗ trợ trong chiến đấu",
+        rank: "Khó",
+        origin: "thi_mang_lam",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Cự Mãng Động Thám Hiểm",
+        description: "Sống sót sau khi lạc vào hang động của tổ tiên loài trăn ma khổng lồ.",
+        effect: "Thể chất linh hoạt +30, Kháng kịch độc +40",
+        longTerm: "Về lâu dài: Cơ thể có khả năng tái sinh như rắn, hồi phục nhanh",
+        rank: "Khó",
+        origin: "thi_mang_lam",
+        species: "Xà Nhân", speciesGroup: "beast", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Xà Huyết"
+    },
+    {
+        name: "Thanh Xà Phủ Thiếu Chủ",
+        description: "Mang dòng máu thanh xà tộc, có khả năng hóa hình một phần linh rồng.",
+        effect: "Thanh Xà yêu thuật +50, Sắc đẹp +15",
+        longTerm: "Về lâu dài: Có thể biến thành rồng trong thời gian ngắn, tăng sức mạnh gấp bội",
+        rank: "Cực khó",
+        origin: "thi_mang_lam",
+        species: "Thanh Xà", speciesGroup: "beast", birthMethod: "SINH",
+        inherentKungfu: ["Thanh Xà"], bloodline: "Xà Huyết"
+    },
+    {
+        name: "Thi Mãng Thành Nữ Vương/Vương",
+        description: "Lãnh đạo thành phố rắn, có uy quyền tuyệt đối trước muôn loài bò sát.",
+        effect: "Xà vương uy áp +60, Vàng +10000, Quyền lực +30",
+        longTerm: "Về lâu dài: Có thể triệu hồn 'Xà Vực Quân Đoàn' từ vùng đất rắn",
+        rank: "Cực khó",
+        origin: "thi_mang_lam",
+        species: "Xà Vương", speciesGroup: "beast", birthMethod: "SINH",
+        inherentKungfu: ["Thanh Xà"], bloodline: "Xà Huyết"
+    },
+// === KÍNH TƯỢNG HỒ (Biome 18) ===
     {
         name: "Hồ Quang Thôn Ngư Phu",
         description: "Hàng ngày chèo thuyền trên mặt hồ phẳng lặng như gương.",
         effect: "Định lực +20, Linh hoạt +10",
         longTerm: "Về lâu dài: Có thể đi trên mặt nước như đi trên đất liền",
         rank: "Dễ",
-        origin: "kinh_tuong_ho"
+        origin: "kinh_tuong_ho",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Minh Hồ Trấn Nghệ Nhân",
+        description: "Chế tác các loại gương thần có khả năng lưu giữ hình ảnh.",
+        effect: "Kỹ nghệ chế gương +30, Trí tuệ +15",
+        longTerm: "Về lâu dài: Có thể tạo 'Kính Phản Chiếu' phản lại sát thương phép thuật",
+        rank: "Bình thường",
+        origin: "kinh_tuong_ho",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Linh Ba Cốc Tu Sĩ",
+        description: "Cảm nhận những gợn sóng linh khí huyền ảo trên mặt hồ.",
+        effect: "Ngộ tính +25, Nội lực thủy hệ +20",
+        longTerm: "Về lâu dài: Có thể 'Thẩm Thấu' nhìn thấu ảo cảnh và bẫy rập",
+        rank: "Khó",
+        origin: "kinh_tuong_ho",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Tâm Ảnh Di Tích Kẻ Lạc Lối",
+        description: "Người đã nhìn thấy chính mình trong quá khứ và tương lai tại di tích.",
+        effect: "Thấu hiểu bản thân +40, Khí vận +10",
+        longTerm: "Về lâu dài: Có thể nhìn thấy tương lai trong giấc mơ (precognition)",
+        rank: "Khó",
+        origin: "kinh_tuong_ho",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Thủy Kính Cung Tiên Tử/Đạo Sĩ",
+        description: "Sống trong cung điện pha lê dưới lòng hồ, tu luyện thuật gương chiếu mộng.",
+        effect: "Kính tượng thần thông +50, Quyến rũ +20",
+        longTerm: "Về lâu dài: Có thể tạo 'Kính Ảnh Phân Thân' chiến đấu thay mình",
+        rank: "Cực khó",
+        origin: "kinh_tuong_ho",
+        species: "Thủy Linh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Thủy Kính"], bloodline: "Bloodline"
+    },
+    {
+        name: "Kính Tượng Thành Thiếu Gia/Thiếu Nữ",
+        description: "Người thừa kế vương quốc mờ ảo nơi mặt hồ thiêng.",
+        effect: "Ảnh vương uy khí +40, Vàng +15000, Toàn thuộc tính ảo +20",
+        longTerm: "Về lâu dài: Có thể triệu hồi 'Kính Thành' từ mặt hồ, tạo chiến trường ảo",
+        rank: "Cực khó",
+        origin: "kinh_tuong_ho",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Kính Tượng"], bloodline: "Bloodline"
+    },
+    // === THẠCH HÓA NGUYÊN (Biome 19) ===
+    {
+        name: "Thạch Nguyên Thôn Dân Làng",
+        description: "Vốn là người đá sinh trưởng từ đất mẹ nguyên thủy.",
+        effect: "Phòng ngự vật lý +30, Tốc độ -10",
+        longTerm: "Về lâu dài: Cơ thể dần hóa đá, tăng phòng ngự theo thời gian chơi",
+        rank: "Dễ",
+        origin: "thach_hoa_nguyen",
+        species: "Thạch Linh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Thạch Huyết"
+    },
+    {
+        name: "Hóa Thạch Trấn Thợ Khai Thác",
+        description: "Khai thác những bộ hài cốt đá hóa mang năng lượng cổ đại.",
+        effect: "Sức mạnh +25, Khám phá di vật +20",
+        longTerm: "Về lâu dài: Có thể nhận ra các 'Hóa Thạch Linh' có khả năng hồi sinh",
+        rank: "Bình thường",
+        origin: "thach_hoa_nguyen",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Nham Thạch Cốc Chiến Binh",
+        description: "Rèn luyện cơ thể trong những dòng chảy nham thạch nóng bóng.",
+        effect: "Thể chất kim cương +40, Kháng hỏa +30",
+        longTerm: "Về lâu dài: Cơ thể miễn nhiễm với nhiệt độ cao, đi trên nham thạch an toàn",
+        rank: "Khó",
+        origin: "thach_hoa_nguyen",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Thiên Thạch Phủ Vệ Binh",
+        description: "Bảo vệ kho tàng đá rơi từ trời cao của một đại gia tộc.",
+        effect: "Sức chịu đựng +35, Ý chí kiên định +20",
+        longTerm: "Về lâu dài: Được 'Thiên Thạch' ban phước, tăng sức mạnh khi HP thấp",
+        rank: "Khó",
+        origin: "thach_hoa_nguyen",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Thạch Đầu Tông Kiếm Sĩ",
+        description: "Một thanh kiếm đá, gánh vác cả giang sơn trầm mặc.",
+        effect: "Kiếm pháp trọng thạch +50, Sức mạnh tuyệt đối +30",
+        longTerm: "Về lâu dài: Kiếm và thân hợp nhất, có thể hóa đá kẻ địch trúng chiêu",
+        rank: "Cực khó",
+        origin: "thach_hoa_nguyen",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Thạch Kiếm"], bloodline: "Bloodline"
+    },
+    {
+        name: "Thạch Đế Thành Lãnh Chúa",
+        description: "Người trị vì thành phố đá bất tử, có khả năng hóa đá kẻ thù.",
+        effect: "Thạch hóa uy áp +60, Vàng +10000, Phòng ngự tuyệt vời +50",
+        longTerm: "Về lâu dài: Có thể triệu hồi 'Thành Trì Đá' làm khiên chắn, biến đất thành vũ khí",
+        rank: "Cực khó",
+        origin: "thach_hoa_nguyen",
+        species: "Thạch Vương", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Thạch Đế"], bloodline: "Thạch Huyết"
+    },
+    // === HỖN ĐỘN DI TÍCH (Biome 20) ===
+    {
+        name: "Hỗn Độn Thôn Mục Đồng",
+        description: "Chăn nuôi các loài thú hỗn hợp kỳ lạ giữa vùng không gian vặn vẹo.",
+        effect: "Linh hoạt +20, Cảm nhận không gian +15",
+        longTerm: "Về lâu dài: Có thể thuần hóa 'Hỗn Thú' làm thú cưỡi đặc biệt",
+        rank: "Dễ",
+        origin: "hon_don_di_tich",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Vô Định Trấn Lữ Khách",
+        description: "Luôn lang thang giữa các mảng không gian không cố định.",
+        effect: "Định vị +30, May mắn +15",
+        longTerm: "Về lâu dài: Không bị lạc trong các vùng không gian hỗn độn",
+        rank: "Bình thường",
+        origin: "hon_don_di_tich",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Hoang Cổ Miếu Tu Sĩ",
+        description: "Hành trì theo những bí thuật từ thuở khai thiên lập địa.",
+        effect: "Nội lực nguyên thủy +40, Trí tuệ cổ xưa +20",
+        longTerm: "Về lâu dài: Có thể giải mã mọi loại bí thuật cổ xưa",
+        rank: "Khó",
+        origin: "hon_don_di_tich",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Thiên Cơ Phủ Mật Thám/Vệ Sĩ",
+        description: "Người thuộc tổ chức nắm giữ bí mật lớn nhất vùng hỗn độn.",
+        effect: "Bí thuật thiên cơ +35, Ẩn mình +25",
+        longTerm: "Về lâu dài: Được tiếp cận 'Thiên Cơ Đại Quyết' - kế sách chiến thuật tối thượng",
+        rank: "Khó",
+        origin: "hon_don_di_tich",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Hỗn Độn Cung Truyền Nhân",
+        description: "Được ban tặng quyền năng điều khiển khí hỗn mang vạn biến.",
+        effect: "Hỗn Độn thần thông +60, Khí vận cực đoan +20",
+        longTerm: "Về lâu dài: Có thể tạo 'Hỗn Độn Không Gian' vô hiệu hóa mọi kỹ năng di chuyển",
+        rank: "Cực khó",
+        origin: "hon_don_di_tich",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Hỗn Độn"], bloodline: "Bloodline"
+    },
+    {
+        name: "Hỗn Độn Thành Vương",
+        description: "Quân vương trị vì trung tâm của dòng xoáy không gian thần bí.",
+        effect: "Không gian uy quyền +50, Vàng +30000, Quyền lực vạn năm +30",
+        longTerm: "Về lâu dài: Có thể điều khiển dòng xoáy không gian, triệu hồi quân đoàn từ các chiều",
+        rank: "Cực khó",
+        origin: "hon_don_di_tich",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Hỗn Độn"], bloodline: "Bloodline"
     },
     {
         name: "Minh Hồ Trấn Nghệ Nhân",
@@ -2988,14 +3796,127 @@ export const PresetBackground: Background[] = [
         rank: "Cực khó",
         origin: "hon_don_di_tich"
     },
-    // === PHẬT QUANG LĨNH (Biome 21) ===
+// === PHẬT QUANG LĨNH (Biome 21) ===
     {
         name: "Bồ Đề Trấn Dân Thường",
         description: "Sống hiền lành dưới chân núi Phật, hàng ngày ăn chay niệm Phật.",
         effect: "Nhân đức +30, An tĩnh nội tâm +20",
         longTerm: "Về lâu dài: Tâm trí thanh tịnh, miễn nhiễm với mọi loại tẩu hỏa nhập ma",
         rank: "Dễ",
-        origin: "phat_quang_linh"
+        origin: "phat_quang_linh",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Từ Bi Cốc Y Sĩ",
+        description: "Cứu chữa cho muôn loài gặp nạn trong thung lũng từ bi.",
+        effect: "Y thuật +35, Danh tiếng +20",
+        longTerm: "Về lâu dài: Y thuật có khả năng hồi sinh người chết (1 lần/ngày)",
+        rank: "Bình thường",
+        origin: "phat_quang_linh",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Linh Sơn Tự Sa Di",
+        description: "Tăng nhân trẻ tu tập võ học phật môn chính tông.",
+        effect: "Nội công hạo nhiên +40, Căn cốt +15",
+        longTerm: "Về lâu dài: Được truyền thừa 'Phật Tâm Chân Kinh', tăng tốc độ tu luyện nội công",
+        rank: "Khó",
+        origin: "phat_quang_linh",
+        species: "Tăng Nhân", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Phật Tâm"], bloodline: "Phật Huyết"
+    },
+    {
+        name: "Phật Quang Điện Thánh Tăng/Hộ Pháp",
+        description: "Người có duyên với phật pháp sâu dày, cơ thể tỏa ánh hào quang.",
+        effect: "Phật Quang hộ thân +50, Trấn áp ma tính +100",
+        longTerm: "Về lâu dài: 'Phật Quang Hộ Thể' tự động kích hoạt khi bị tấn công bởi ma",
+        rank: "Khó",
+        origin: "phat_quang_linh",
+        species: "Tăng Giác", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Phật Quang"], bloodline: "Phật Huyết"
+    },
+    {
+        name: "Kim Thân Đệ Tử",
+        description: "Đã đạt tới mức độ rèn luyện kim thân không hoại trong truyền thuyết.",
+        effect: "Kim Thân Bất Hoại +60, Phòng ngự vật lý tuyệt đối +40",
+        longTerm: "Về lâu dài: Cơ thể bất tử, không bị sát thương vật lý dưới cấp Thánh",
+        rank: "Cực khó",
+        origin: "phat_quang_linh",
+        species: "Kim Thân", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Kim Thân"], bloodline: "Phật Huyết"
+    },
+    {
+        name: "Thánh Quang Thành Chủ",
+        description: "Vị vua nhân đức trị lãnh địa ánh sáng phương Tây.",
+        effect: "Thần thánh uy nghi +50, Khí vận +20, Vàng +10000",
+        longTerm: "Về lâu dài: Được 'Phật Quang' ban phước, dẫn lối cho những người lầm đường",
+        rank: "Cực khó",
+        origin: "phat_quang_linh",
+        species: "Phật Vương", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Phật Quang"], bloodline: "Phật Huyết"
+    },
+    // === KIẾM Ý CỐC (Biome 22) ===
+    {
+        name: "Kiếm Đạo Thôn Thiếu Niên",
+        description: "Chào đời trong một gia đình kiếm sĩ bình lôi, khí phách ngạo nghễ.",
+        effect: "Kiếm ý tiềm ẩn +20, Nhanh nhẹn +15",
+        longTerm: "Về lâu dài: Có nền tảng kiếm cơ bản vững chắc, dễ dàng học các loại kiếm pháp",
+        rank: "Dễ",
+        origin: "kiem_y_coc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Linh Kiếm Trấn Thương Nhân",
+        description: "Giao dịch linh thạch và phôi kiếm thượng phẩm cho các kiếm tu.",
+        effect: "Vàng +8000, Giao tiếp +20, Khéo léo +10",
+        longTerm: "Về lâu dài: Có quyền tiếp cận các 'Linh Kiếm Phôi' hiếm có trên thị trường",
+        rank: "Bình thường",
+        origin: "kiem_y_coc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Kiếm Khí Di Tích Khổ Tu",
+        description: "Để kiếm khí mài giũa cơ thể và ý chí mỗi ngày.",
+        effect: "Sức mạnh ý chí +40, Sát thương kiếm +25",
+        longTerm: "Về lâu dài: 'Kiếm Khí Ngưng Hình' có thể hóa thành vũ khí phụ",
+        rank: "Khó",
+        origin: "kiem_y_coc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Kiếm Khí"], bloodline: "Bloodline"
+    },
+    {
+        name: "Thiên Kiếm Phủ Vệ Binh Chính Tông",
+        description: "Thành viên lực lượng bảo an tinh nhuệ của vùng thung lũng kiếm.",
+        effect: "Phòng ngự kiếm +30, Sát thương vật lý +20",
+        longTerm: "Về lâu dài: Được 'Kiếm Phủ' ban cho 'Kiếm Hồn Bảo Hộ', tăng phòng ngự",
+        rank: "Khó",
+        origin: "kiem_y_coc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Kiếm Pháp"], bloodline: "Bloodline"
+    },
+    {
+        name: "Kiếm Tâm Cung Đệ Tử Ưu Tú",
+        description: "Dòng máu kiếm tu tinh thuần nhất chảy trong huyết quản.",
+        effect: "Kiếm Đạo thần thông +60, Toàn thuộc tính kiếm +40",
+        longTerm: "Về lâu dài: Đạt đến 'Kiếm Tâm Hợp Nhất', một kiếm có thể chặt đôi sông núi",
+        rank: "Cực khó",
+        origin: "kiem_y_coc",
+        species: "Kiếm Linh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Kiếm Tâm"], bloodline: "Kiếm Huyết"
+    },
+    {
+        name: "Vạn Kiếm Thành Kiếm Đế Hậu Nhân",
+        description: "Hậu duệ cao quý nhất của kinh đô vạn kiếm rực rỡ.",
+        effect: "Kiếm hoàng uy áp +50, Khí vận cực đại +20, Kiếm thuật tối thượng",
+        longTerm: "Về lâu dài: Có thể triệu hồi 'Vạn Kiếm Luận', tạo ra vô số kiếm ảnh chiến đấu",
+        rank: "Cực khó",
+        origin: "kiem_y_coc",
+        species: "Kiếm Đế", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Kiếm Hoàng"], bloodline: "Kiếm Huyết"
     },
     {
         name: "Từ Bi Cốc Y Sĩ",
@@ -3086,14 +4007,188 @@ export const PresetBackground: Background[] = [
         rank: "Cực khó",
         origin: "kiem_y_coc"
     },
-    // === LÔI ĐÌNH HẢI (Biome 23) ===
-{
+// === LÔI ĐÌNH HẢI (Biome 23) ===
+    {
         name: "Lôi Duyên Thôn Ngư Phu",
         description: "Ra khơi trên vùng biển luôn chực chờ những tia sét chết người.",
         effect: "Kháng lôi +25, Định vị biển +15",
         longTerm: "Về lâu dài: Có thể cảm nhận bão tố từ xa, tránh các sự kiện thời tiết xấu",
         rank: "Dễ",
-        origin: "loi_dinh_hai"
+        origin: "loi_dinh_hai",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Lôi Thần Trấn Thợ Đúc",
+        description: "Đúc các linh khí thu lôi từ kim loại biển sâu.",
+        effect: "Kỹ năng chế tạo +30, Sức mạnh +15",
+        longTerm: "Về lâu dài: Vũ khí chế tác có thêm hiệu ứng 'Lôi Điện Kích' gây damage điện",
+        rank: "Bình thường",
+        origin: "loi_dinh_hai",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Điện Quang Hải Thám Hiểm",
+        description: "Vượt qua biển sấm sét để tìm kiếm các hòn đảo lôi linh.",
+        effect: "Nhanh nhẹn +35, May mắn không gian +15",
+        longTerm: "Về lâu dài: Có khả năng 'Lôi Độn' - dịch chuyển nhanh trong nước",
+        rank: "Khó",
+        origin: "loi_dinh_hai",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Thiên Điện Phủ Chấp Sự",
+        description: "Quản lý năng lượng sấm sét phục vụ cho các đại trận bảo vệ đảo.",
+        effect: "Phép thuật lôi hệ +40, Trí tuệ mang điện +20",
+        longTerm: "Về lâu dài: Có thể thi triển 'Lôi Trận' cường hóa đồng đội",
+        rank: "Khó",
+        origin: "loi_dinh_hai",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Lôi Đình"], bloodline: "Bloodline"
+    },
+    {
+        name: "Lôi Đình Điện Trưởng Lão Hậu Duệ",
+        description: "Thừa hưởng ma lực lôi đình sục sôi của thế hệ đi trước.",
+        effect: "Lôi Đình thần thông +60, Uy lực tàn phá +40",
+        longTerm: "Về lâu dài: Có thể triệu hồn 'Lôi Đình' từ biển mây đánh xuống",
+        rank: "Cực khó",
+        origin: "loi_dinh_hai",
+        species: "Lôi Tử", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Lôi Đình"], bloodline: "Lôi Huyết"
+    },
+    {
+        name: "Vạn Lôi Thành Chủ",
+        description: "Vị vua của thành phố sấm sét, không bao giờ cúi đầu trước thiên phạt.",
+        effect: "Lôi vương uy quyền +50, Kháng lôi tuyệt đối +100, Vàng +20000",
+        longTerm: "Về lâu dài: Được 'Lôi Đế' ban phước, có thể điều khiển mọi tia sét trong vùng",
+        rank: "Cực khó",
+        origin: "loi_dinh_hai",
+        species: "Lôi Đế", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Lôi Hoàng"], bloodline: "Lôi Huyết"
+    },
+    // === CỬU TIÊU PHONG (Biome 24) ===
+    {
+        name: "Dao Trì Thôn Trồng Hoa",
+        description: "Chăm sóc các loài hoa tiên nở rộ bên hồ Dao Trì.",
+        effect: "Quyến rũ +25, Hiểu biết thực vật +20",
+        longTerm: "Về lâu dài: Có thể trồng 'Tiên Hoa' để chế tạo đan dược và thuốc hồi sinh",
+        rank: "Dễ",
+        origin: "cuu_tieu_phong",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Vân Đỉnh Trấn Kẻ Du Ngoạn",
+        description: "Khám phá các tầng mây và đỉnh núi cao vút mờ sương.",
+        effect: "Leo trèo +30, Thể lực +20",
+        longTerm: "Về lâu dài: Cơ thể thích nghi với độ cao, không bị ảnh hưởng bởi thiếu oxy",
+        rank: "Bình thường",
+        origin: "cuu_tieu_phong",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Cửu Thiên Cốc Tu Hành",
+        description: "Tu sĩ tu luyện tại thung lũng chín tầng trời, tiên khí dồi dào.",
+        effect: "Tốc độ tu luyện +25%, Nội lực thanh khiết +40",
+        longTerm: "Về lâu dài: 'Cửu Thiên Linh Khí' liên tục bổ sung nội lực mỗi ngày",
+        rank: "Khó",
+        origin: "cuu_tieu_phong",
+        species: "Tiên Tu", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Tiên Khí"], bloodline: "Tiên Huyết"
+    },
+    {
+        name: "Tiên Linh Di Tích Thủ Hộ",
+        description: "Bảo vệ tàn tích còn sót lại từ thời các vị tiên còn tại thế.",
+        effect: "Phòng ngự tiên khí +35, Ý chí kiên định +25",
+        longTerm: "Về lâu dài: Được 'Tiên Linh' ban phước, tăng tỷ lệ rơi 'Tiên Đan'",
+        rank: "Khó",
+        origin: "cuu_tieu_phong",
+        species: "Tiên Linh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Tiên Huyết"
+    },
+    {
+        name: "Tiên Nhân Cung Thiếu Chủ",
+        description: "Người mang dòng máu tiên nhân chính tông, cốt cách cao ngạo.",
+        effect: "Tiên linh thể +60, Khí vận +15, Sắc đẹp tuyệt trần",
+        longTerm: "Về lâu dài: Có thể 'Phi Tiên' - bay lên trời, di chuyển qua các tầng mây",
+        rank: "Cực khó",
+        origin: "cuu_tieu_phong",
+        species: "Tiên Nhân", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Phi Tiên"], bloodline: "Tiên Huyết"
+    },
+    {
+        name: "Tiên Đế Thành Thái Tử/Công Chúa",
+        description: "Người thừa kế vương triều tiên giới cai trị vùng Cửu Tiêu.",
+        effect: "Tiên Uy +50, Vàng +50000, Toàn thuộc tính tiên +30",
+        longTerm: "Về lâu dài: Được thừa kế 'Tiên Đế Truyền Thừa', có thể triệu hồi 'Tiên Quân' trợ chiến",
+        rank: "Cực khó",
+        origin: "cuu_tieu_phong",
+        species: "Tiên Đế", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Tiên Hoàng"], bloodline: "Tiên Huyết"
+    },
+    // === VẠN ĐỘC TRẠCH (Biome 25) ===
+    {
+        name: "Độc Long Thôn Dân Chài",
+        description: "Bắt tôm cá chứa đầy chất độc trong đầm lầy vạn năm.",
+        effect: "Kháng độc +30, Thể chất dẻo dai +10",
+        longTerm: "Về lâu dài: Có thể chịu đựng mọi loại độc tố",
+        rank: "Dễ",
+        origin: "van_doc_trach",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Độc Vụ Trấn Thương Nhân",
+        description: "Giao dịch các loài côn trùng độc và thảo dược mục nát.",
+        effect: "Giao tiếp +20, Vàng +10000, Hòa độc +10",
+        longTerm: "Về lâu dài: Có quyền tiếp cận các phiên chợ độc dược",
+        rank: "Bình thường",
+        origin: "van_doc_trach",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Độc Nguyên Cốc Thử Thuốc",
+        description: "Dùng chính thân mình để thử nghiệm hàng vạn loại độc dược.",
+        effect: "Cơ thể vạn độc +50, Ý chí chịu đựng +40",
+        longTerm: "Về lâu dài: Cơ thể miễn nhiễm mọi loại độc",
+        rank: "Khó",
+        origin: "van_doc_trach",
+        species: "Độc Sĩ", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Độc Huyết"
+    },
+    {
+        name: "Vạn Độc Di Tích Thám Hiểm",
+        description: "Truy tìm bí kíp của các độc vương cổ đại trong đầm lầy.",
+        effect: "Lục soát +40, Kiến thức độc +30",
+        longTerm: "Về lâu dài: Có thể nhận ra mọi loại độc",
+        rank: "Khó",
+        origin: "van_doc_trach",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
+    },
+    {
+        name: "Thiên Độc Phủ Sát Thủ",
+        description: "Một khi ra tay, không ai có thể sống sót trước kịch độc.",
+        effect: "Ám sát +60, Khả năng dùng độc +50",
+        longTerm: "Về lâu dài: Có thể sử dụng 'Thiên Độc' trong chiến đấu",
+        rank: "Cực khó",
+        origin: "van_doc_trach",
+        species: "Độc Sư", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Vạn Độc"], bloodline: "Độc Huyết"
+    },
+    {
+        name: "Độc Vương Thành Vương Tử",
+        description: "Hậu duệ trị vì vương quốc độc lớn nhất cõi đầm lầy.",
+        effect: "Độc vương uy áp +50, Kháng độc tuyệt đối +100, Vàng +15000",
+        longTerm: "Về lâu dài: Có thể triệu hồi 'Độc Vực Quân' tấn công",
+        rank: "Cực khó",
+        origin: "van_doc_trach",
+        species: "Độc Vương", speciesGroup: "demon", birthMethod: "SINH",
+        inherentKungfu: ["Độc Hoàng"], bloodline: "Độc Huyết"
     },
     {
         name: "Lôi Thần Trấn Thợ Đúc",
@@ -3268,42 +4363,54 @@ export const PresetBackground: Background[] = [
         description: "Cậu bé lớn lên trong bóng tối vĩnh hằng, đôi mắt rực sáng.",
         effect: "Tầm nhìn đêm +100, Nhanh nhẹn +20",
         rank: "Dễ",
-        origin: "am_nhat_vuc"
+        origin: "am_nhat_vuc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Vĩnh Dạ Trấn Thợ Đèn",
         description: "Chế tạo các loại đèn ma pháp là nguồn sáng duy nhất trong bóng đêm.",
         effect: "Khéo léo +30, Trí tuệ +15",
         rank: "Bình thường",
-        origin: "am_nhat_vuc"
+        origin: "am_nhat_vuc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Ám Ảnh Cốc Thợ Săn",
         description: "Di chuyển như bóng ma để săn lùng những sinh vật hắc ám.",
         effect: "Ẩn mình cực đỉnh +50, Phản xạ +25",
         rank: "Khó",
-        origin: "am_nhat_vuc"
+        origin: "am_nhat_vuc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Thiên Dạ Phủ Chấp Sự",
         description: "Quản lý các nghi thức thờ phụng màn đêm tối thượng.",
         effect: "Hắc ám ma pháp +40, Ý chí hắc hố +25",
         rank: "Khó",
-        origin: "am_nhat_vuc"
+        origin: "am_nhat_vuc",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Ám Pháp"], bloodline: "Bloodline"
     },
     {
         name: "Hắc Nhật Cung Truyền Nhân",
         description: "Sở hữu sức mạnh của mặt trời đen, nuốt chửng mọi ánh sáng.",
         effect: "Ám Nhật ma công +60, Khí vận đen tối +15",
         rank: "Cực khó",
-        origin: "am_nhat_vuc"
+        origin: "am_nhat_vuc",
+        species: "Ám Nhật", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Hắc Nhật"], bloodline: "Ám Huyết"
     },
     {
         name: "Hắc Ma Thành Hoàng Đế",
         description: "Vị vua của bóng đêm, trị vì lãnh địa hắc ám hùng vĩ nhất.",
         effect: "Ám vương uy nghi +50, Vàng +30000, Quyền lực hắc ám +40",
         rank: "Cực khó",
-        origin: "am_nhat_vuc"
+        origin: "am_nhat_vuc",
+        species: "Ám Vương", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Hắc Ma"], bloodline: "Ám Huyết"
     },
     // === PHÙ TANG ĐẢO (Biome 27) ===
     {
@@ -3311,42 +4418,54 @@ export const PresetBackground: Background[] = [
         description: "Ngư dân vùng biển Đông, lớn lên cùng sóng biển và nắng ấm.",
         effect: "Sức mạnh +20, Bơi lội +25",
         rank: "Dễ",
-        origin: "phu_tang_dao"
+        origin: "phu_tang_dao",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Đông Phương Trấn Thương Nhân",
         description: "Buôn bán gỗ Phù Tang và lụa tiên từ hải đảo ra đất liền.",
         effect: "Vàng +10000, Giao tiếp +25, May mắn +5",
-        rank: "Bình thường",
-        origin: "phu_tang_dao"
+        rank: "Bình thư��ng",
+        origin: "phu_tang_dao",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Thần Mộc Động Tu Sĩ",
         description: "Cảm ngộ linh tính từ gốc thần mộc Phù Tang ngàn năm.",
         effect: "Ngộ tính +30, Nội lực mộc hệ +40",
         rank: "Khó",
-        origin: "phu_tang_dao"
+        origin: "phu_tang_dao",
+        species: "Mộc Linh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Thiên Thụ"
     },
     {
         name: "Kim Ô Di Tích Kẻ Kế Thừa",
         description: "Người tìm thấy một chiếc lông vũ rực lửa của thần điểu Kim Ô.",
         effect: "Kim Ô chân hỏa +50, Khí vận hỏa +20",
         rank: "Khó",
-        origin: "phu_tang_dao"
+        origin: "phu_tang_dao",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Kim Ô"], bloodline: "Bloodline"
     },
     {
         name: "Thái Dương Cung Đệ Tử",
         description: "Người làm bạn với ánh nắng, sở hữu sức mạnh ban mai rực rỡ.",
         effect: "Thái Dương thần thông +60, Sắc đẹp tỏa sáng +15",
         rank: "Cực khó",
-        origin: "phu_tang_dao"
+        origin: "phu_tang_dao",
+        species: "Thái Dương", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Thái Dương"], bloodline: "Dương Huyết"
     },
     {
         name: "Phù Tang Thành Vương",
         description: "Lãnh chúa của đảo quốc mặt trời mọc huy hoàng giữa biển khơi.",
         effect: "Hải đảo uy quyền +50, Khí vận vàng +20, Vàng +25000",
         rank: "Cực khó",
-        origin: "phu_tang_dao"
+        origin: "phu_tang_dao",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     // === TUYẾT TAN ĐỊA (Biome 28) ===
     {
@@ -3354,42 +4473,54 @@ export const PresetBackground: Background[] = [
         description: "Gieo trồng vụ mùa ngay khi những dòng suối băng bắt đầu tan chảy.",
         effect: "Bền bỉ +20, Khả năng gieo trồng +25",
         rank: "Dễ",
-        origin: "tuyet_tan_dia"
+        origin: "tuyet_tan_dia",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Tuyết Giải Trấn Thợ Săn",
         description: "Săn lùng các loài linh thú mùa xuân vừa thức tỉnh sau kỳ đông.",
         effect: "Nhanh nhẹn +20, Theo dấu +25",
         rank: "Bình thường",
-        origin: "tuyet_tan_dia"
+        origin: "tuyet_tan_dia",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Sinh Cơ Cốc Tu Hành",
         description: "Tu luyện giữa vùng đất tràn trề nhựa sống hồi sinh.",
         effect: "Tốc độ hồi máu +50%, Sức mạnh sinh mệnh +40",
         rank: "Khó",
-        origin: "tuyet_tan_dia"
+        origin: "tuyet_tan_dia",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Thiên Xuân Phủ Truyền Nhân",
         description: "Người gánh vác sứ mệnh mang mùa xuân vĩnh cửu đến thế gian.",
         effect: "Xuân Ý thần thông +50, Khí vận xanh +15",
         rank: "Khó",
-        origin: "tuyet_tan_dia"
+        origin: "tuyet_tan_dia",
+        species: "Xuân Linh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Xuân Ý"], bloodline: "Bloodline"
     },
     {
         name: "Xuân Lai Cung Đệ Tử",
         description: "Chiêu thức bay bổng như hoa anh đào tung bay trong gió xuân.",
         effect: "Khinh công ảo ảnh +50, Quyến rũ +25",
         rank: "Cực khó",
-        origin: "tuyet_tan_dia"
+        origin: "tuyet_tan_dia",
+        species: "Xuân Tiên", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Xuân Lai"], bloodline: "Bloodline"
     },
     {
         name: "Xuân Hi Thành Thiếu Chủ",
         description: "Người thừa kế thành phố rực rỡ ánh sớm mai mùa xuân.",
         effect: "Dục vương khí +40, Vàng +12000, Toàn thuộc tính sinh mệnh +15",
         rank: "Cực khó",
-        origin: "tuyet_tan_dia"
+        origin: "tuyet_tan_dia",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     // === TINH THẦN HÀ (Biome 29) ===
     {
@@ -3397,42 +4528,54 @@ export const PresetBackground: Background[] = [
         description: "Đánh bắt những con cá tinh thể lấp lánh như lồng đèn.",
         effect: "Linh hoạt +20, Tầm nhìn mờ ảo +20",
         rank: "Dễ",
-        origin: "tinh_than_ha"
+        origin: "tinh_than_ha",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Ngân Hà Trấn Thương Nhân",
         description: "Buôn bán cát tinh tú và đá Ngân Hà rực rỡ.",
         effect: "Vàng +15000, Giao tiếp +25, May mắn sao +5",
         rank: "Bình thường",
-        origin: "tinh_than_ha"
+        origin: "tinh_than_ha",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Tinh Luân Cốc Tu Sĩ",
         description: "Vận hành vòng tuần hoàn của tinh thể trong cơ thể.",
         effect: "Nội lực tinh tú +45, Trí tuệ sáng láng +20",
         rank: "Khó",
-        origin: "tinh_than_ha"
+        origin: "tinh_than_ha",
+        species: "Tinh Linh", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Tinh Khí"], bloodline: "Bloodline"
     },
     {
         name: "Thiên Hà Phủ Hộ Pháp",
         description: "Canh giữ dòng chảy của dòng sông tinh thể chảy về biển sao.",
         effect: "Điều khiển chất lỏng tinh tú +50, Sức mạnh tinh thần +25",
         rank: "Khó",
-        origin: "tinh_than_ha"
+        origin: "tinh_than_ha",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Tinh Hải Cung Đệ Tử",
         description: "Chiến binh mang giáp tinh tú, lấp lánh giữa vạn dải ngân hà.",
         effect: "Tinh Hải quyết +60, Phòng ngự ảo ảnh +30",
         rank: "Cực khó",
-        origin: "tinh_than_ha"
+        origin: "tinh_than_ha",
+        species: "Tinh Chiến", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Tinh Hải"], bloodline: "Bloodline"
     },
     {
         name: "Tinh Thần Thành Vương",
         description: "Vị lãnh chúa kiêu sa trị vì vương quốc đẹp nhất cõi trời.",
         effect: "Tinh thần uy nghi +50, Khí vận lấp lánh +20, Vàng +40000",
         rank: "Cực khó",
-        origin: "tinh_than_ha"
+        origin: "tinh_than_ha",
+        species: "Tinh Vương", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Tinh Thần"], bloodline: "Bloodline"
     },
     // === QUỶ THỊ TRẤN (Biome 30) ===
     {
@@ -3440,41 +4583,54 @@ export const PresetBackground: Background[] = [
         description: "Chào đời trong ngôi làng nơi người và quỷ sống lẫn lộn.",
         effect: "Kháng quỷ +25, Ý chí +15",
         rank: "Dễ",
-        origin: "quy_thi_tran"
+        origin: "quy_thi_tran",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Ma Giao Trấn Thương Đội",
         description: "Giao dịch những món đồ cấm từ sâu trong quỷ thị.",
         effect: "Giao tiếp hắc ám +25, Vàng +12000, Phản ứng nhanh +10",
         rank: "Bình thường",
-        origin: "quy_thi_tran"
+        origin: "quy_thi_tran",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Vong Hồn Cốc Kẻ Săn Ma",
         description: "Bắt giữ những linh hồn lang thang để trao đổi lấy quỷ khí.",
         effect: "Quỷ khí +40, Sức mạnh tinh thần +25",
         rank: "Khó",
-        origin: "quy_thi_tran"
+        origin: "quy_thi_tran",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Ma Ảnh Động Thám Hiểm",
         description: "Tìm kiếm chân lý trong hang động chứa vạn cái bóng ma quái.",
         effect: "Ảo ảnh hắc ám +50, Tầm nhìn +20",
         rank: "Khó",
-        origin: "quy_thi_tran"
+        origin: "quy_thi_tran",
+        species: "Người", speciesGroup: "human", birthMethod: "SINH",
+        inherentKungfu: ["Cơ Bản"], bloodline: "Bloodline"
     },
     {
         name: "Quỷ Thị Cung Đệ Tử",
         description: "Học cách giao dịch linh hồn và làm chủ quỷ đạo thần thông.",
         effect: "Quỷ Đạo thần thông +60, Sát khí +30",
         rank: "Cực khó",
-        origin: "quy_thi_tran"
+        origin: "quy_thi_tran",
+        species: "Quỷ Tu", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Quỷ Đạo"], bloodline: "Quỷ Huyết"
     },
     {
         name: "Quỷ Vương Thành Thái Tử",
         description: "Người thừa kế ngai vàng uy quyền cai trị muôn loài quỷ.",
         effect: "Quỷ vương uy áp +70, Quyền lực hắc ám +50, Vàng +20000",
         rank: "Cực khó",
-        origin: "quy_thi_tran"
+        origin: "quy_thi_tran",
+        species: "Quỷ Vương", speciesGroup: "spirit", birthMethod: "SINH",
+        inherentKungfu: ["Quỷ Hoàng"], bloodline: "Quỷ Huyết"
     },
+    // NOTE: All Background entries now have species fields (biomes 11-30)
 ];

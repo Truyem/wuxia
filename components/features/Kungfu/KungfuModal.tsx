@@ -67,58 +67,58 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
         switch (quality) {
             case 'Phàm phẩm': 
                 return {
-                    text: 'text-stone-400',
-                    border: 'border-stone-700/50',
-                    bg: 'bg-stone-900/40',
-                    accent: 'bg-stone-500',
-                    glow: 'shadow-stone-900/20'
+                    text: 'text-slate-400',
+                    border: 'border-slate-600/40',
+                    bg: 'bg-slate-900/40',
+                    accent: 'bg-slate-500',
+                    glow: 'shadow-slate-900/20'
                 };
             case 'Lương phẩm': 
                 return {
-                    text: 'text-emerald-400',
-                    border: 'border-emerald-900/30',
-                    bg: 'bg-emerald-950/20',
-                    accent: 'bg-emerald-500',
-                    glow: 'shadow-emerald-500/10'
+                    text: 'text-wuxia-gold',
+                    border: 'border-wuxia-gold/30',
+                    bg: 'bg-wuxia-gold/10',
+                    accent: 'bg-wuxia-gold',
+                    glow: 'shadow-wuxia-gold/10'
                 };
             case 'Thượng phẩm': 
                 return {
-                    text: 'text-blue-400',
-                    border: 'border-blue-900/30',
-                    bg: 'bg-blue-950/20',
-                    accent: 'bg-blue-500',
-                    glow: 'shadow-blue-500/10'
+                    text: 'text-sky-400',
+                    border: 'border-sky-500/30',
+                    bg: 'bg-sky-900/10',
+                    accent: 'bg-sky-400',
+                    glow: 'shadow-sky-400/10'
                 };
             case 'Cực phẩm': 
                 return {
                     text: 'text-purple-400',
-                    border: 'border-purple-900/30',
-                    bg: 'bg-purple-950/20',
-                    accent: 'bg-purple-500',
-                    glow: 'shadow-purple-500/10'
+                    border: 'border-purple-500/30',
+                    bg: 'bg-purple-900/10',
+                    accent: 'bg-purple-400',
+                    glow: 'shadow-purple-400/10'
                 };
             case 'Tuyệt thế': 
                 return {
                     text: 'text-orange-400',
-                    border: 'border-orange-900/30',
-                    bg: 'bg-orange-950/20',
-                    accent: 'bg-orange-500',
-                    glow: 'shadow-orange-500/20'
+                    border: 'border-orange-500/30',
+                    bg: 'bg-orange-900/10',
+                    accent: 'bg-orange-400',
+                    glow: 'shadow-orange-400/20'
                 };
             case 'Truyền thuyết': 
                 return {
-                    text: 'text-amber-400',
-                    border: 'border-amber-900/50',
-                    bg: 'bg-amber-950/30',
-                    accent: 'bg-amber-500',
-                    glow: 'shadow-amber-500/30'
+                    text: 'text-amber-300',
+                    border: 'border-amber-400/50',
+                    bg: 'bg-amber-900/20',
+                    accent: 'bg-amber-300',
+                    glow: 'shadow-amber-300/30'
                 };
             default: 
                 return {
-                    text: 'text-stone-500',
-                    border: 'border-stone-800',
-                    bg: 'bg-stone-900/20',
-                    accent: 'bg-stone-700',
+                    text: 'text-white/50',
+                    border: 'border-white/10',
+                    bg: 'bg-white/5',
+                    accent: 'bg-white/30',
                     glow: 'shadow-transparent'
                 };
         }
@@ -147,93 +147,62 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
     );
 
     return (
-        <div className={`fixed inset-0 bg-black/95 backdrop-blur-3xl z-[220] flex items-center justify-center ${isMobile ? 'p-0' : 'p-4 md:p-8'} font-sans`}>
-            {/* Main Modal Container */}
-            <div className={`glass-panel border border-white/10 w-full ${isMobile ? 'h-full' : 'max-w-7xl h-full max-h-[850px]'} flex flex-col shadow-2xl rounded-3xl overflow-hidden relative text-stone-300`}>
-                {/* Wuxia Decorative Corners */}
-                <div className="wuxia-corner wuxia-corner-tl"></div>
-                <div className="wuxia-corner wuxia-corner-tr"></div>
-                <div className="wuxia-corner wuxia-corner-bl"></div>
-                <div className="wuxia-corner wuxia-corner-br"></div>
-                
-                {/* Cyberpunk Decorative Background */}
-                <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30 select-none">
-                    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,#1c1917_0%,#0c0a09_100%)]" />
-                    <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-amber-500/5 to-transparent" />
-                    <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-[radial-gradient(circle_at_0%_100%,rgba(245,158,11,0.05)_0%,transparent_70%)]" />
-                    
-                    {/* Scanlines */}
-                    <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] pointer-events-none" />
-                </div>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[200] flex items-center justify-center font-sans overflow-hidden p-4">
+            {/* Animated Background Elements */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+                <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-wuxia-gold/20 blur-[120px] rounded-full animate-pulse"></div>
+                <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-wuxia-gold/15 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
+            </div>
+
+            <div className="relative w-full max-w-6xl h-[85vh] glass-panel flex flex-col shadow-[0_0_150px_rgba(0,0,0,0.95)] overflow-hidden rounded-[3rem] border border-wuxia-gold/25">
+                {/* Wuxia corners */}
+                <div className="wuxia-corner wuxia-corner-tl !border-wuxia-gold/60 !w-24 !h-24"></div>
+                <div className="wuxia-corner wuxia-corner-tr !border-wuxia-gold/60 !w-24 !h-24"></div>
+                <div className="wuxia-corner wuxia-corner-bl !border-wuxia-gold/60 !w-24 !h-24"></div>
+                <div className="wuxia-corner wuxia-corner-br !border-wuxia-gold/60 !w-24 !h-24"></div>
 
                 {/* Header */}
-                <header className={`${isMobile ? 'h-auto py-4 px-4 flex-col gap-4' : 'h-20 px-8'} shrink-0 border-b border-stone-800 bg-stone-900/50 backdrop-blur-md flex items-center justify-between z-10 relative`}>
-                    <div className={`flex items-center ${isMobile ? 'w-full justify-between' : 'gap-6'}`}>
-                        <div className="flex items-center gap-4">
-                            {!isMobile && (
-                                <div className="relative">
-                                    <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-                                        <Trophy className="w-5 h-5" />
-                                    </div>
-                                </div>
-                            )}
-                            <div>
-                                <h2 className={`${isMobile ? 'text-lg' : 'text-2xl'} font-black uppercase tracking-[0.2em] text-stone-100 bg-gradient-to-r from-stone-100 to-stone-400 bg-clip-text text-transparent`}>
-                                    Võ Học
-                                </h2>
-                                {!isMobile && (
-                                    <div className="flex items-center gap-2 mt-0.5">
-                                        <div className="h-[1px] w-6 bg-amber-500/50" />
-                                        <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-stone-500">Kỹ năng & Tuyệt kỹ</span>
-                                    </div>
-                                )}
-                            </div>
+                <header className="shrink-0 bg-black/60 border-b border-white/5 h-16 px-6 flex items-center justify-between relative z-10">
+                    <div className="flex items-center gap-4">
+                        <div className="bg-wuxia-gold/5 border border-wuxia-gold/20 flex items-center justify-center rounded-xl w-10 h-10">
+                            <Trophy className="w-5 h-5 text-wuxia-gold/80" />
                         </div>
-
-                        {isMobile && viewMode === 'detail' && (
-                            <button 
-                                onClick={() => setViewMode('list')}
-                                className="flex items-center gap-2 text-amber-500 text-[10px] font-black uppercase tracking-widest bg-amber-500/10 px-3 py-1.5 border border-amber-500/20 rounded-xl"
-                            >
-                                <ChevronRight className="w-4 h-4 rotate-180" />
-                                QUAY LẠI
-                            </button>
-                        )}
+                        <h2 className="text-3xl font-serif font-black text-wuxia-gold tracking-[0.3em] uppercase drop-shadow-lg">
+                            Võ Học
+                        </h2>
                     </div>
 
-                    <div className={`flex items-center gap-4 ${isMobile ? 'w-full' : ''}`}>
+                    <div className="flex items-center gap-6">
                         <div className="relative group flex-1">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500 group-focus-within:text-amber-500 transition-colors" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/20" />
                             <input 
                                 type="text"
                                 placeholder="Tìm kiếm công pháp..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className={`bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/20 ${isMobile ? 'w-full' : 'w-64'} transition-all`}
+                                className="bg-white/[0.02] border border-white/10 pl-9 pr-4 py-1.5 text-xs text-white focus:outline-none focus:border-wuxia-gold/20 placeholder:text-white/10 rounded-2xl w-44"
                             />
                         </div>
-                        {!isMobile && (
-                            <button
-                                onClick={onClose}
-                                className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-amber-500/50 text-stone-500 hover:text-amber-500 transition-all duration-300 group"
-                            >
-                                <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-                            </button>
-                        )}
+                        <button
+                            onClick={onClose}
+                            className="w-12 h-12 flex items-center justify-center transition-all bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-red-500/30 hover:border-red-500/60 rounded-2xl shadow-lg"
+                        >
+                            <X className="w-6 h-6" strokeWidth={2.5} />
+                        </button>
                     </div>
                 </header>
 
                 <div className="flex-1 flex overflow-hidden z-10 relative">
                     {/* Left Panel: Skill List */}
                     {(!isMobile || viewMode === 'list') && (
-                        <aside className={`${isMobile ? 'w-full' : 'w-[380px] border-r'} border-stone-800 bg-black/20 flex flex-col`}>
-                            <div className="p-4 border-b border-stone-800/50 bg-stone-900/20">
-                                <h3 className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-500 flex items-center gap-2">
+                        <aside className={`${isMobile ? 'w-full' : 'w-80'} border-r border-white/5 bg-black/40 flex flex-col`}>
+                            <div className="p-4 border-b border-white/10 bg-black/20">
+                                <h3 className="text-[10px] uppercase font-black tracking-[0.2em] text-white/50 flex items-center gap-2">
                                     <Activity className="w-3 h-3" />
-                                    Danh Sách ({filteredSkills.length})
+                                    DANH SÁCH ({filteredSkills.length})
                                 </h3>
                             </div>
-                            <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-3">
                                 {filteredSkills.map(skill => {
                                     const isSelected = selectedId === skill['ID'];
                                     const style = getQualityStyles(skill['Quality'] || 'Phàm phẩm' as KungfuQuality);
@@ -242,58 +211,53 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                                         <button
                                             key={skill['ID']}
                                             onClick={() => handleSelectSkill(skill['ID'])}
-                                            className={`w-full text-left rounded-xl border p-4 transition-all duration-300 relative group overflow-hidden ${
+                                            className={`w-full text-left rounded-2xl border p-4 transition-all duration-300 relative group overflow-hidden ${
                                                 isSelected 
-                                                    ? `${style.border} ${style.bg} shadow-lg ring-1 ring-inset ${style.accent}/20 shadow-[inset_0_0_20px_rgba(245,158,11,0.05)]` 
-                                                    : "border-white/5 bg-white/[0.02] hover:border-white/10 hover:bg-white/[0.05]"
+                                                    ? 'bg-wuxia-gold/10 border-wuxia-gold/30 shadow-[inset_0_0_20px_rgba(212,175,55,0.1)]' 
+                                                    : 'bg-white/[0.02] border-white/5 hover:border-wuxia-gold/20 hover:bg-white/[0.05]'
                                             }`}
                                         >
                                             <div className="flex justify-between items-start mb-2 relative z-10">
-                                                <span className={`font-bold tracking-wide transition-colors ${isSelected ? 'text-stone-100' : 'text-stone-400 group-hover:text-stone-300'}`}>
+                                                <span className={`font-serif font-bold text-sm ${isSelected ? 'text-wuxia-gold' : 'text-white/70'}`}>
                                                     {skill['Name']}
                                                 </span>
-                                                <span className={`text-[9px] px-2 py-0.5 rounded-xl uppercase font-black tracking-tighter border ${style.text} ${style.border}`}>
+                                                <span className={`text-[9px] px-2 py-0.5 rounded-lg font-bold uppercase tracking-tighter ${isSelected ? 'text-wuxia-gold bg-wuxia-gold/10' : 'text-white/30'}`}>
                                                     {skill['Quality']}
                                                 </span>
                                             </div>
 
-                                            <div className="flex items-center gap-4 text-[10px] text-stone-500 font-bold mb-3 relative z-10">
-                                                <div className="flex items-center gap-1.5 text-[8px]">
+                                            <div className="flex items-center gap-4 text-[10px] text-white/40 font-bold mb-3 relative z-10">
+                                                <div className="flex items-center gap-1.5">
                                                     {getTypeIcon(skill['Type'])}
                                                     <span className="uppercase tracking-widest">{skill['Type']}</span>
                                                 </div>
-                                                <div className="flex items-center gap-1.5 font-mono text-[8px]">
-                                                    <ChevronRight className="w-3 h-3 text-amber-500" />
+                                                <div className="flex items-center gap-1.5 font-mono">
+                                                    <ChevronRight className="w-3 h-3 text-wuxia-gold" />
                                                     <span>TẦNG {skill['Current level/tier']}</span>
                                                 </div>
                                             </div>
 
                                             {/* Progress Bar */}
                                             <div className="space-y-1 relative z-10">
-                                                <div className="flex justify-between text-[8px] text-stone-600 font-black uppercase tracking-widest">
+                                                <div className="flex justify-between text-[8px] text-white/30 font-black uppercase tracking-widest">
                                                     <span>TIẾN ĐỘ</span>
                                                     <span>{Math.round((skill['Current proficiency'] / skill['Level-up experience']) * 100)}%</span>
                                                 </div>
-                                                <div className="h-1 bg-black/40 rounded-full overflow-hidden border border-stone-800">
+                                                <div className="h-1 bg-black/40 rounded-full overflow-hidden border border-white/5">
                                                     <div 
-                                                        className={`h-full transition-all duration-700 ease-out ${isSelected ? style.accent : 'bg-stone-700'}`}
+                                                        className={`h-full transition-all duration-700 ease-out ${isSelected ? 'bg-wuxia-gold' : 'bg-white/20'}`}
                                                         style={{ width: `${Math.min((skill['Current proficiency'] / skill['Level-up experience']) * 100, 100)}%` }}
                                                     />
                                                 </div>
                                             </div>
-
-                                            {/* Selected Indicator Glow */}
-                                            {isSelected && (
-                                                <div className={`absolute top-0 right-0 w-24 h-24 blur-3xl opacity-20 pointer-events-none -translate-y-1/2 translate-x-1/2 ${style.accent}`} />
-                                            )}
                                         </button>
                                     );
                                 })}
 
                                 {filteredSkills.length === 0 && (
-                                    <div className="flex flex-col items-center justify-center py-12 text-stone-600 opacity-50">
-                                        <ZapOff className="w-12 h-12 mb-3 stroke-1" />
-                                        <p className="text-xs uppercase tracking-[0.2em] font-bold">Không tìm thấy</p>
+                                    <div className="flex flex-col items-center justify-center py-12 text-center">
+                                        <ZapOff className="w-12 h-12 text-white/20 mb-3" />
+                                        <p className="text-xs text-white/40 uppercase tracking-[0.2em] font-bold">Không tìm thấy</p>
                                     </div>
                                 )}
                             </div>
@@ -302,40 +266,36 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
 
                     {/* Right Panel: Detail View */}
                     {(!isMobile || viewMode === 'detail') && (
-                        <main className="flex-1 flex flex-col bg-stone-950/20 overflow-y-auto custom-scrollbar relative">
+                        <main className="flex-1 flex flex-col bg-black/10 overflow-y-auto custom-scrollbar relative">
                             {currentSkill ? (
-                                <div className={`${isMobile ? 'p-4' : 'p-8'} space-y-8 pb-20`}>
+                                <div className="p-8 space-y-8 pb-20">
                                     {/* Header Section */}
                                     <section className="relative">
                                         <div className="flex justify-between items-start gap-8">
                                             <div className="space-y-4 flex-1">
                                                 <div className="flex flex-col md:flex-row md:items-center gap-3">
-                                                    <h1 className={`${isMobile ? 'text-2xl' : 'text-4xl'} font-black uppercase tracking-tighter text-stone-100`}>
+                                                    <h1 className="text-4xl font-serif font-black uppercase tracking-tighter text-wuxia-gold">
                                                         {currentSkill['Name']}
                                                     </h1>
-                                                    <div className={`w-fit px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).text} ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).border} ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).bg}`}>
+                                                    <div className={`w-fit px-3 py-1 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] border ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).text} ${getQualityStyles(currentSkill['Quality'] as KungfuQuality).border} bg-wuxia-gold/5`}>
                                                         {currentSkill['Quality']}
                                                     </div>
                                                 </div>
 
-                                                <div className="flex flex-wrap gap-2 md:gap-4">
-                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded-xl text-stone-400 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em]">
+                                                <div className="flex flex-wrap gap-2">
+                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-wuxia-gold/10 border border-wuxia-gold/20 rounded-xl text-white/60 text-[10px] font-bold uppercase tracking-[0.2em]">
                                                         {getTypeIcon(currentSkill['Type'])}
                                                         <span>{currentSkill['Type']}</span>
                                                     </div>
-                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded-xl text-stone-100 text-[9px] md:text-[10px] font-mono font-bold tracking-[0.1em]">
-                                                        <span className="text-amber-500 text-[8px]">LV.</span>
+                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-wuxia-gold/10 border border-wuxia-gold/20 rounded-xl text-wuxia-gold text-[10px] font-mono font-bold tracking-[0.1em]">
+                                                        <span className="text-wuxia-gold/60 text-[8px]">LV.</span>
                                                         {currentSkill['Current level/tier']}
-                                                    </div>
-                                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-900/50 border border-stone-800 rounded-lg text-stone-400 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em]">
-                                                        <BookOpen className="w-3 h-3 text-stone-500" />
-                                                        <span>Nguồn: {currentSkill['Source'] || 'Vô Danh'}</span>
                                                     </div>
                                                 </div>
 
                                                 <div className="relative group">
-                                                    <div className="absolute -left-2 md:-left-4 top-0 bottom-0 w-[2px] bg-amber-500/30" />
-                                                    <p className="text-stone-400 text-xs md:text-sm leading-relaxed font-medium italic pl-4 py-2 border-l border-amber-500/10 bg-amber-500/5 rounded-xl">
+                                                    <div className="absolute -left-4 top-0 bottom-0 w-[2px] bg-wuxia-gold/30" />
+                                                    <p className="text-white/60 text-sm leading-relaxed font-serif italic pl-4 py-2 border-l border-wuxia-gold/10 bg-wuxia-gold/5 rounded-xl">
                                                         "{currentSkill['Description']}"
                                                     </p>
                                                 </div>
@@ -560,41 +520,29 @@ const KungfuModal: React.FC<Props> = ({ skills, onClose }) => {
                 </div>
 
                 {/* Footer / HUD Info */}
-                <footer className={`${isMobile ? 'h-auto py-4 flex-col gap-4' : 'h-10 px-8 flex-row'} shrink-0 border-t border-stone-800 bg-stone-900/80 backdrop-blur-sm flex items-center justify-between z-10 relative px-8`}>
-                    <div className="flex items-center gap-6 text-[9px] font-black uppercase tracking-[0.2em] text-stone-500">
-
-                        <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                            <span>Trạng thái: Ổn định</span>
-                        </div>
-                        {!isMobile && (
-                            <>
-                                <div className="h-3 w-[1px] bg-stone-800" />
-                                <div className="flex items-center gap-2">
-                                    <Activity className="w-3 h-3 text-blue-500" />
-                                    <span>Chân khí bình thường</span>
-                                </div>
-                            </>
-                        )}
-                    </div>
+                <footer className="shrink-0 bg-black/60 border-t border-white/5 px-6 py-3 flex items-center justify-between relative z-10 overflow-hidden">
+                    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-wuxia-gold/20 to-transparent"></div>
                     
-                    {!isMobile ? (
-                        <div className="text-[9px] font-mono text-stone-600 flex items-center gap-2">
-                            <span className="text-amber-500/50">WUXIA_OS_V2.0</span>
-                            <span className="opacity-30">|</span>
-                            <span>SESSION_ACTIVE</span>
+                    <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-2">
+                            <Activity className="w-3.5 h-3.5 text-wuxia-gold/60" />
+                            <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Tổng công pháp</span>
+                            <span className="text-[11px] font-mono font-bold text-wuxia-gold/80">{safeSkills.length}</span>
                         </div>
-                    ) : (
-                        <div className="w-full pt-2 border-t border-stone-800">
-                             <button 
-                                onClick={onClose}
-                                className="w-full bg-amber-500/10 hover:bg-amber-500 hover:text-black text-amber-500 py-3 text-xs font-black uppercase tracking-[0.3em] border border-amber-500/20 flex items-center justify-center gap-2 transition-all rounded-xl"
-                            >
-                                <X className="w-4 h-4" />
-                                ĐÓNG VÕ HỌC
-                            </button>
+                        <div className="h-4 w-px bg-white/10"></div>
+                        <div className="flex items-center gap-2">
+                            <BookOpen className="w-3.5 h-3.5 text-white/20" />
+                            <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Trạng thái</span>
+                            <span className="text-[11px] font-mono font-bold text-emerald-400/80">Bình thường</span>
                         </div>
-                    )}
+                    </div>
+
+                    <div className="flex items-center gap-2 opacity-30 group cursor-default">
+                        <Sparkles className="w-3 h-3 text-wuxia-gold group-hover:animate-spin" />
+                        <p className="text-[9px] font-serif italic text-white/40 tracking-[0.3em] uppercase">
+                            Võ Học Tu Luyện • Tâm Thân Song Tu
+                        </p>
+                    </div>
                 </footer>
             </div>
             

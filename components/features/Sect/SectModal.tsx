@@ -55,57 +55,62 @@ const SectModal: React.FC<Props> = ({ sectData, currentTime, onClose, onAcceptTa
     const displayName = hasJoinedSect ? sectData.name : 'Chưa gia nhập môn phái';
 
     return (
-        <div className="fixed inset-0 bg-black/95 backdrop-blur-3xl z-[220] flex items-center justify-center p-2 md:p-8 font-sans overflow-hidden">
-            <div className="w-full max-w-6xl h-[95vh] md:h-[85vh] flex flex-col relative glass-panel border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.8)] rounded-3xl overflow-hidden">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[220] flex items-center justify-center p-2 md:p-8 font-sans overflow-hidden">
+            <div className="w-full max-w-6xl h-[85vh] flex flex-col relative glass-panel border border-wuxia-gold/25 shadow-[0_0_150px_rgba(0,0,0,0.95)] overflow-hidden rounded-[3rem]">
+                {/* Wuxia corners */}
+                <div className="wuxia-corner wuxia-corner-tl !border-wuxia-gold/60 !w-24 !h-24"></div>
+                <div className="wuxia-corner wuxia-corner-tr !border-wuxia-gold/60 !w-24 !h-24"></div>
+                <div className="wuxia-corner wuxia-corner-bl !border-wuxia-gold/60 !w-24 !h-24"></div>
+                <div className="wuxia-corner wuxia-corner-br !border-wuxia-gold/60 !w-24 !h-24"></div>
+
+                {/* Animated Background */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+                    <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-wuxia-gold/20 blur-[120px] rounded-full animate-pulse"></div>
+                    <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-wuxia-gold/15 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
+                </div>
                 {/* Header */}
-                <div className="min-h-20 shrink-0 border-b border-white/10 bg-white/5 backdrop-blur-md flex flex-col md:flex-row items-center justify-between px-4 md:px-8 py-3 md:py-0 z-10 gap-4 md:gap-0">
-                    <div className="flex items-center gap-3 md:gap-5 w-full md:w-auto">
-                        <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-wuxia-gold/20 to-transparent border border-wuxia-gold/30 flex items-center justify-center shadow-lg shadow-wuxia-gold/5 shrink-0">
-                            <span className="text-2xl md:text-3xl font-serif font-bold text-wuxia-gold drop-shadow-md">
-                                {hasJoinedSect ? sectData.name[0] : '?'}
-                            </span>
+                <div className="h-20 shrink-0 border-b border-white/5 bg-black/60 flex items-center justify-between px-6 md:px-8 z-10">
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-wuxia-gold/20 to-transparent border border-wuxia-gold/30 flex items-center justify-center text-2xl font-serif font-bold text-wuxia-gold shadow-lg">
+                            {hasJoinedSect ? sectData.name[0] : '?'}
                         </div>
-                        <div className="min-w-0 flex-1">
-                            <h3 className="text-wuxia-gold font-serif font-bold text-xl md:text-3xl tracking-[0.1em] md:tracking-[0.2em] drop-shadow-lg uppercase leading-tight truncate">
+                        <div>
+                            <h3 className="text-wuxia-gold font-serif font-bold text-2xl tracking-[0.2em] uppercase truncate">
                                 {displayName}
                             </h3>
-                            <div className="flex flex-wrap gap-2 md:gap-4 text-[10px] md:text-[12px] text-gray-400 font-mono mt-2 uppercase tracking-wider md:tracking-widest font-bold">
-                                {hasJoinedSect ? (
+                            <div className="flex items-center gap-3 text-[10px] text-white/40 font-mono mt-1 uppercase tracking-wider font-bold">
+                                {hasJoinedSect && (
                                     <>
                                         <span>Ngân quỹ: <span className="text-wuxia-gold">{getSafeVal(sectData, ['sectFunds', 'Funds'])}</span></span>
                                         <span>Tài nguyên: <span className="text-wuxia-gold">{getSafeVal(sectData, ['sectResources', 'Materials'])}</span></span>
-                                        <span>Cấp độ: <span className="text-gray-300">{getSafeVal(sectData, ['constructionLevel', 'Progress'])}%</span></span>
+                                        <span>Cấp độ: <span className="text-white/60">{getSafeVal(sectData, ['constructionLevel', 'Progress'])}%</span></span>
                                     </>
-                                ) : (
-                                    <span className="text-amber-400">Chưa gia nhập môn phái</span>
                                 )}
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex items-center justify-between md:justify-end gap-4 md:gap-8 w-full md:w-auto border-t border-white/5 md:border-t-0 pt-3 md:pt-0">
-                        <div className="text-left md:text-right">
-                            <div className="text-[10px] text-gray-500 uppercase tracking-[0.2em] font-bold">Chức Vị</div>
-                            <div className="text-wuxia-gold font-bold font-serif text-sm md:text-lg tracking-wide uppercase">{hasJoinedSect ? sectData.playerPosition : 'None'}</div>
+                    <div className="flex items-center gap-6">
+                        <div>
+                            <div className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold">Chức Vị</div>
+                            <div className="text-wuxia-gold font-bold font-serif text-lg tracking-wide uppercase">{hasJoinedSect ? sectData.playerPosition : 'None'}</div>
                         </div>
-                        <div className="text-right border-l border-white/10 pl-4 md:pl-8">
-                            <div className="text-[10px] text-gray-500 uppercase tracking-[0.2em] font-bold">Cống Hiến</div>
-                            <div className="text-wuxia-gold font-bold font-mono text-sm md:text-xl tracking-tighter">{hasJoinedSect ? sectData.playerContribution : 0}</div>
+                        <div className="border-l border-white/10 pl-6">
+                            <div className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold">Cống Hiến</div>
+                            <div className="text-wuxia-gold font-bold font-mono text-xl tracking-tighter">{hasJoinedSect ? sectData.playerContribution : 0}</div>
                         </div>
                         <button
                             onClick={onClose}
-                            className="group relative w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-ink-black border border-white/10 text-gray-400 hover:text-white transition-all duration-300 overflow-hidden shadow-lg shrink-0 ml-auto md:ml-0"
+                            className="w-10 h-10 flex items-center justify-center transition-all bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-red-500/30 hover:border-red-500/60 rounded-xl shadow-lg shrink-0"
                         >
-                            <svg className="w-5 h-5 md:w-6 md:h-6 relative z-10 transform group-hover:rotate-90 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
+                            <X className="w-5 h-5" strokeWidth={2.5} />
                         </button>
                     </div>
                 </div>
 
                 <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
                     {/* Navigation Sidebar */}
-                    <div className="w-full md:w-72 bg-black/20 border-b md:border-b-0 md:border-r border-wuxia-gold/10 flex flex-row md:flex-col py-2 md:py-8 gap-1 md:gap-3 z-10 overflow-x-auto no-scrollbar shrink-0">
+                    <div className="w-72 bg-black/40 border-r border-wuxia-gold/10 flex flex-col py-8 gap-3 z-10 overflow-y-auto custom-scrollbar">
                         {[
                             { id: 'hall', label: 'TỔNG ĐÀN', sub: 'Main Hall' },
                             { id: 'missions', label: 'NHIỆM VỤ', sub: 'Missions' },
@@ -115,15 +120,15 @@ const SectModal: React.FC<Props> = ({ sectData, currentTime, onClose, onAcceptTa
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id as Tab)}
-                                className={`px-4 md:px-8 py-2 md:py-4 text-left transition-all duration-300 relative group flex-shrink-0 md:flex-shrink-1 ${
+                                className={`wuxia-list-item px-6 py-4 text-left transition-all duration-300 relative group ${
                                     activeTab === tab.id
-                                        ? 'bg-wuxia-gold/5 text-wuxia-gold'
-                                        : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.02]'
+                                        ? 'bg-wuxia-gold/10 text-wuxia-gold border-wuxia-gold/30'
+                                        : 'text-white/40 hover:text-white/60 hover:border-white/10'
                                 }`}
                             >
-                                <div className={`absolute left-0 right-0 md:right-auto bottom-0 md:bottom-auto md:top-0 md:w-1 h-0.5 md:h-auto transition-all duration-500 ${activeTab === tab.id ? 'bg-wuxia-gold scale-x-100 md:scale-y-100 shadow-[0_0_10px_rgba(212,175,55,0.5)]' : 'bg-transparent scale-x-0 md:scale-y-0'}`} />
-                                <div className="font-serif font-bold tracking-[0.1em] text-[10px] md:text-sm uppercase whitespace-nowrap">{tab.label}</div>
-                                <div className="hidden md:block text-[10px] opacity-40 font-mono mt-1 tracking-wider">{tab.sub}</div>
+                                <div className={`absolute left-0 top-0 bottom-0 w-1 transition-all duration-500 ${activeTab === tab.id ? 'bg-wuxia-gold' : 'bg-transparent'}`} />
+                                <div className="font-serif font-bold tracking-[0.1em] text-sm uppercase">{tab.label}</div>
+                                <div className="text-[10px] opacity-40 font-mono mt-1 tracking-wider">{tab.sub}</div>
                             </button>
                         ))}
                     </div>
@@ -416,19 +421,18 @@ const SectModal: React.FC<Props> = ({ sectData, currentTime, onClose, onAcceptTa
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="h-12 md:h-14 shrink-0 bg-ink-black/95 border-t border-wuxia-gold/10 px-6 md:px-10 flex items-center justify-between z-10 text-[10px] md:text-[12px] text-gray-400 font-mono tracking-[0.2em] uppercase overflow-hidden">
-                    <div className="flex items-center gap-4 md:gap-6 overflow-hidden w-full">
-                        <div className="flex items-center gap-3 shrink-0">
-                            <span className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-wuxia-gold shadow-[0_0_12px_rgba(212,175,55,1)]" />
-                            <span className="truncate font-bold tracking-widest text-white/80">CẢNH GIỚI VÕ LÂM</span>
+                <div className="h-14 shrink-0 bg-black/60 border-t border-wuxia-gold/10 px-8 flex items-center justify-between z-10 text-[10px] text-white/40 font-mono tracking-[0.2em] uppercase overflow-hidden">
+                    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-wuxia-gold/20 to-transparent"></div>
+                    <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-2.5 h-2.5 rounded-full bg-wuxia-gold shadow-[0_0_12px_rgba(212,175,55,1)]" />
+                            <span className="font-bold tracking-widest text-white/80">CẢNH GIỚI VÕ LÂM</span>
                         </div>
                         <span className="opacity-20 text-lg">|</span>
-                        <span className="truncate opacity-60">UY DANH MÔN PHÁI CHIẾN TÍCH</span>
-                        <div className="ml-auto flex items-center gap-4 text-gray-600">
-                            <span className="hidden md:block">Bản quyền 2026</span>
-                            <span className="w-1 h-1 rounded-full bg-gray-700" />
-                            <span className="text-wuxia-gold/60">TRANG THÁI TRỰC TUYẾN</span>
-                        </div>
+                        <span className="opacity-60">UY DANH MÔN PHÁI CHIẾN TÍCH</span>
+                    </div>
+                    <div className="flex items-center gap-4 text-white/30">
+                        <span className="text-wuxia-gold/60">TRANG THÁI TRỰC TUYẾN</span>
                     </div>
                 </div>
             </div>

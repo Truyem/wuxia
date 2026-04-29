@@ -1,31 +1,31 @@
 import type { OpeningConfig } from '../../types';
 
-export const 构建开局配置提示词 = (openingConfig?: OpeningConfig | null): string => {
+export const buildOpeningConfigPrompt = (openingConfig?: OpeningConfig | null): string => {
     if (!openingConfig) return '';
-    const 关系侧重 = Array.isArray(openingConfig.关系侧重) && openingConfig.关系侧重.length > 0
-        ? openingConfig.关系侧重.join('、')
-        : '无';
+    const relationshipFocus = Array.isArray(openingConfig.relationshipFocus) && openingConfig.relationshipFocus.length > 0
+        ? openingConfig.relationshipFocus.join(', ')
+        : 'None';
     return [
-        '【本次开局配置约束】',
-        `- 关系侧重：${关系侧重}。生成初始社交网时，应优先让人物结构与关系情绪落在这些方向上。`,
-        `- 开局切入偏好：${openingConfig.开局切入偏好}。第一幕镜头与气氛优先贴近该切入方式，不要无痕偏离。`,
-        '- 若开局偏好与建档、世界观存在冲突，以建档硬约束和 world_prompt 为上位，但仍应尽量保留关系侧重与切入偏好的方向。'
+        '【Current Opening Config Constraints】',
+        `- Relationship focus: ${relationshipFocus}. When generating initial social network, prioritize character structures and relationship emotions along these directions.`,
+        `- Opening approach preference: ${openingConfig.openingApproach}. First scene lens and atmosphere should align with this approach, not drift without trace.`,
+        '- If opening preference conflicts with save/hard constraints and world_prompt, save/hard constraints take precedence, but still try to preserve relationship focus and approach direction.'
     ].join('\n');
 };
 
-export const 构建世界观同人融合提示词 = (openingConfig?: OpeningConfig | null): string => {
-    const fandom = openingConfig?.同人融合;
-    const title = typeof fandom?.作品名 === 'string' ? fandom.作品名.trim() : '';
+export const buildWorldFusionPrompt = (openingConfig?: OpeningConfig | null): string => {
+    const fandom = openingConfig?.fandomFusion;
+    const title = typeof fandom?.title === 'string' ? fandom.title.trim() : '';
     if (!fandom?.enabled || !title) return '';
-    const rolePolicy = fandom.保留原著角色
-        ? '允许原著角色、原著势力或其直接变体进入世界母本，但仍要保证本项目武侠成长体系与长期叙事可运行。'
-        : '只吸收原著世界观母题、气质、势力逻辑、地理审美或价值冲突，不直接保留原著角色实体。';
+    const rolePolicy = fandom.keepOriginalCharacters
+        ? 'Allow original characters, original factions or their direct variants into world base, but ensure this project Wuxia growth system and long-term narrative can run.'
+        : 'Only absorb original world themes, temperament, faction logic, geography aesthetics or value conflicts, do not directly keep original character entities.';
     return [
-        '【同人融合世界观要求】',
-        `- 参考来源：${title}（${fandom.来源类型}）。`,
-        `- 融合强度：${fandom.融合强度}。`,
-        `- 角色保留策略：${rolePolicy}`,
-        '- 此要求只作用于 world_prompt 生成，不要在世界观阶段写成粉丝设定清单、角色介绍或剧情提纲。',
-        '- 融合后的结果仍必须是当前存档可长期运行的原创世界母本，并兼容本项目既有成长口径。'
+        '【Fandom Fusion World Requirements】',
+        `- Reference source: ${title} (${fandom.sourceType}).`,
+        `- Fusion strength: ${fandom.fusionStrength}.`,
+        `- Character retention policy: ${rolePolicy}`,
+        '- This requirement only affects world_prompt generation, do not write as fan setting list, character introductions or story outline at world building stage.',
+        '- The fused result must still be an original world base that can run long-term with current save, and compatible with this project existing growth formula.'
     ].join('\n');
 };

@@ -2,32 +2,38 @@ import { PromptStructure } from '../../types';
 
 export const Core_OutputFormat: PromptStructure = {
   id: 'core_format',
-  title: 'Cấu trúc đầu ra và Kịch bản lệnh',
+  title: 'Output Format',
   content: `
-<Cấu trúc đầu ra và Kịch bản lệnh>
-# Quy tắc Định dạng BẮT BUỘC
+<OUTPUT FORMAT>
+# Mandatory Format Rules
 
-## 1. Thẻ gốc (Root Tags)
-Bắt buộc đầu ra phải chứa các thẻ sau:
-- <Chính văn>: Nội dung dẫn truyện và đối thoại.
-- <Ký ức ngắn hạn>: Tóm tắt ngắn gọn diễn biến lượt này.
-- <Lệnh>: Các lệnh cập nhật trạng thái hệ thống.
+## 1. Root Tags (Required)
+Output must contain these tags:
+- <main>: Story narrative and dialogue.
+- <shortTerm>: Brief summary of this turn's events.
+- <commands>: System state update commands.
 
-## 2. Cấu trúc Nội dung (<content>)
-Sử dụng các tiền tố sau để phân biệt nội dung:
-- "Background": Dùng cho mô tả bối cảnh, hành động, nội tâm nhân vật.
-- "Tên Nhân Vật": Dùng cho lời đối thoại trực tiếp. Lời thoại phải đặt trong dấu ngoặc kép " ".
-- "[Kết quả]": Dùng để thông báo kết quả của một hành động rủi ro (Dice roll).
+## 2. Content Structure (<main>)
+Use these prefixes to differentiate content:
+- "Background": For setting descriptions, actions, character inner thoughts.
+- "Character Name": For direct dialogue. Put dialogue in quotes " ".
+- "[Result]": For announcing results of risky actions (dice roll).
 
-## 3. Quy tắc Mệnh lệnh (<Lệnh>)
-- Mỗi lệnh nằm trên một dòng riêng biệt.
-- Sử dụng cú pháp: SET/ADD/PUSH [Đường dẫn biến] [Giá trị].
-- Ví dụ: ADD gameState.Character.currentEnergy -10.
+## 3. Command Rules (<commands>)
+- Each command on its own line.
+- Syntax: SET/ADD/PUSH [variable path] [value].
+- Example: ADD gameState.Character.currentEnergy -10.
 
-## 4. Ký ức ngắn hạn (<Ký ức ngắn hạn>)
-- Viết dưới dạng tóm tắt sự kiện khách quan.
-- Độ dài không quá 100 chữ.
-- Tập trung vào những thay đổi quan trọng nhất vừa xảy ra.
+## 4. Short Term Memory (<shortTerm>)
+- Write as objective event summary.
+- Focus on the most important changes just occurred.
+
+## 5. Length Rules (Distribution)
+- Total output must be at least 4000 Vietnamese characters.
+- Distribution ratio (example: 15 = 7+1+2+3+3+1 = 7000+1000+2000+3000+3000+1000):
+  - Background/Environment: 7 parts (~7000 chars)
+  - Dialogue/Action: 8 parts (~8000 chars, remaining)
+- Fully describe senses, space, inner thoughts, emotions.
     `.trim(),
   type: 'core',
   enabled: true

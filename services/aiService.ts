@@ -906,12 +906,12 @@ export const HARDCORE_PROMPT_SYSTEM = `
   - \`logs\` (array): Mỗi phần tử \`{ "sender": string, "text": string }\`.
     - "Background" dùng cho tường thuật, cảm quan, âm thanh, mùi vị.
     - Nhân vật nói chuyện dùng đúng tên NPC (không thêm ký tự 【】 trong text).
-    - **Quy tắc NPC**: Mỗi khi một người nói mới xuất hiện mà chưa tồn tại, PHẢI thêm lệnh \`PUSH gameState.SocialNet\` với hồ sơ tối thiểu: \`{ id: "NPC001"/"NPC002"... (3 chữ số, tăng dần), name, gender, age, identity, description, isPresent: true, isMainCharacter: false, favorability: 0, memories: [] }\`.
+    - **Quy tắc NPC (BẮT BUỘC)**: Mỗi khi một người nói mới xuất hiện, PHẢI dùng SET hoặc PUSH với key gameState.Social[NPC001], gameState.Social[NPC002]... Giá trị cần: id, name, gender, age, identity, description, isPresent: true, isMainCharacter: false, favorability: 0, memories: []. Ví dụ: { "action": "SET", "key": "gameState.Social[NPC002]", "value": { "id": "NPC002", "name": "Tiểu Nhị", "gender": "Nam", "age": 15, "identity": "Tiểu đồng cảng biển", "description": "Cậu bé phụ việc ở cảng Huyết Hải", "isPresent": true, "isMainCharacter": false, "favorability": 0, "memories": [] } }].
   - \`shortTerm\` (string < 100 chữ): Tóm tắt khách quan lượt này.
   - \`tavern_commands\` (array): Danh sách lệnh \`{ action: "set|add|push|delete", key: "gameState....", value: any }\`.
-    - Đồng bộ thời gian và vị trí mỗi lượt (\`gameState.Environment.year/month/day/hour/minute/specificLocation\`).
+    - Đồng bộ thời gian và vị trí mỗi lượt (gameState.Environment.year/month/day/hour/minute/specificLocation).
     - Ghi nhận hao tổn sinh tồn/chỉ số, thay đổi đồ vật, sự kiện.
-    - Bất kỳ NPC mới có lời thoại phải được PUSH vào \`gameState.SocialNet\` (tuân theo quy tắc NPC ở trên).
+    - NPC mới có lời thoại phải SET/PUSH vào gameState.Social[NPC...] (tuân theo quy tắc NPC ở trên).
   - \`action_options\` (tùy chọn): 3-5 gợi ý hành động võ hiệp, không spoil kết quả.
 
 ### Mẫu tối thiểu
@@ -925,7 +925,7 @@ export const HARDCORE_PROMPT_SYSTEM = `
   "tavern_commands": [
     { "action": "set", "key": "gameState.Environment.time", "value": "317:03:10:05:30" },
     { "action": "set", "key": "gameState.Environment.specificLocation", "value": "Vong Hồn Thôn - Bờ đá" },
-    { "action": "push", "key": "gameState.SocialNet", "value": { "id": "NPC001", "name": "Lão Cảnh", "gender": "Nam", "age": 58, "identity": "Ngư dân kỳ cựu", "description": "Lão ngư già canh bờ đá", "isPresent": true, "isMainCharacter": false, "favorability": 0, "memories": [] } }
+    { "action": "push", "key": "gameState.Social[NPC001]", "value": { "id": "NPC001", "name": "Lão Cảnh", "gender": "Nam", "age": 58, "identity": "Ngư dân kỳ cựu", "description": "Lão ngư già canh bờ đá", "isPresent": true, "isMainCharacter": false, "favorability": 0, "memories": [] } }
   ]
 }
 

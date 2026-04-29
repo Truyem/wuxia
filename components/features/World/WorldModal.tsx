@@ -50,34 +50,33 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
     });
 
     return (
-        <div className="fixed inset-0 bg-ink-black/95 backdrop-blur-xl z-[200] flex items-center justify-center p-0 lg:p-4 font-sans">
-            {/* Background Ink Wash Effect */}
-            <div className="absolute inset-0 opacity-30 pointer-events-none overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-10"></div>
-                <div className="absolute -top-1/4 -left-1/4 w-full h-1/2 bg-wuxia-gold/8 blur-[160px]"></div>
-                <div className="absolute -bottom-1/4 -right-1/4 w-full h-1/2 bg-wuxia-gold/5 blur-[160px]"></div>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[200] flex items-center justify-center p-0 lg:p-4 font-sans">
+            {/* Animated Background */}
+            <div className="absolute inset-0 opacity-20 pointer-events-none overflow-hidden">
+                <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-wuxia-gold/20 blur-[120px] rounded-full animate-pulse"></div>
+                <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-wuxia-gold/15 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
             </div>
 
-            <div className={`glass-panel w-full ${isMobile ? 'h-full' : 'max-w-6xl h-[85vh]'} flex flex-col shadow-[0_0_150px_rgba(0,0,0,1)] relative overflow-hidden rounded-3xl border-x-0 lg:border-x border-wuxia-gold/20`}>
-                {/* Wuxia Decorative Corners - Only on Desktop */}
+            <div className={`w-full ${isMobile ? 'h-full' : 'max-w-6xl h-[85vh]'} flex flex-col shadow-[0_0_150px_rgba(0,0,0,0.95)] relative overflow-hidden rounded-[3rem] border border-wuxia-gold/25 glass-panel`}>
+                {/* Wuxia corners - Only on Desktop */}
                 {!isMobile && (
                     <>
-                        <div className="wuxia-corner wuxia-corner-tl"></div>
-                        <div className="wuxia-corner wuxia-corner-tr"></div>
-                        <div className="wuxia-corner wuxia-corner-bl"></div>
-                        <div className="wuxia-corner wuxia-corner-br"></div>
+                        <div className="wuxia-corner wuxia-corner-tl !border-wuxia-gold/60 !w-24 !h-24"></div>
+                        <div className="wuxia-corner wuxia-corner-tr !border-wuxia-gold/60 !w-24 !h-24"></div>
+                        <div className="wuxia-corner wuxia-corner-bl !border-wuxia-gold/60 !w-24 !h-24"></div>
+                        <div className="wuxia-corner wuxia-corner-br !border-wuxia-gold/60 !w-24 !h-24"></div>
                     </>
                 )}
                 
                 {/* Header */}
-                <div className={`${isMobile ? 'h-auto py-4' : 'h-24'} shrink-0 border-b border-wuxia-gold/20 bg-ink-black/80 flex items-center justify-between px-6 lg:px-10 relative z-50 backdrop-blur-md`}>
+                <div className={`${isMobile ? 'h-auto py-4' : 'h-20'} shrink-0 border-b border-wuxia-gold/20 bg-black/60 flex items-center justify-between px-6 lg:px-10 relative z-50 backdrop-blur-md`}>
                     <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-2xl border border-wuxia-gold/40 flex items-center justify-center bg-gradient-to-b from-wuxia-gold/20 to-transparent shadow-[0_0_20px_rgba(212,175,55,0.2)]">
-                            <span className="text-xl lg:text-2xl font-serif text-wuxia-gold drop-shadow-sm">武</span>
+                        <div className="w-10 h-10 rounded-2xl border border-wuxia-gold/40 flex items-center justify-center bg-gradient-to-b from-wuxia-gold/20 to-transparent shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                            <span className="text-xl font-serif text-wuxia-gold drop-shadow-sm">武</span>
                         </div>
                         <div>
-                            <h3 className="text-wuxia-gold font-serif font-bold text-xl lg:text-3xl tracking-[0.2em] lg:tracking-[0.4em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">TÌNH HÌNH THẾ GIỚI</h3>
-                            <p className="text-gray-400 text-[9px] lg:text-[11px] tracking-[0.1em] lg:tracking-[0.2em] mt-0.5 lg:mt-1 italic opacity-80 uppercase">World Status</p>
+                            <h3 className="text-wuxia-gold font-serif font-bold text-xl lg:text-2xl tracking-[0.2em] lg:tracking-[0.3em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] uppercase">TÌNH HÌNH THẾ GIỚI</h3>
+                            <p className="text-white/40 text-[9px] lg:text-[11px] tracking-[0.1em] lg:tracking-[0.2em] mt-1 italic uppercase">World Status</p>
                         </div>
                     </div>
                     
@@ -92,10 +91,9 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                         </div>
                         <button
                             onClick={onClose}
-                            className="group relative w-10 h-10 flex items-center justify-center rounded-2xl border border-wuxia-gold/20 bg-black/40 overflow-hidden shadow-lg active:scale-95 transition-transform"
+                            className="w-10 h-10 flex items-center justify-center rounded-2xl border border-wuxia-gold/20 bg-black/40 overflow-hidden shadow-lg active:scale-95 transition-transform text-wuxia-gold hover:bg-wuxia-gold/10"
                         >
-                            <div className="absolute inset-0 bg-wuxia-gold/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-wuxia-gold relative z-10 transition-transform group-hover:rotate-90">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
@@ -128,7 +126,7 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                 <div className="flex-1 flex overflow-hidden">
                     {/* Desktop Navigation Sidebar */}
                     {!isMobile && (
-                        <div className="w-80 border-r border-wuxia-gold/10 bg-black/20 flex flex-col py-10 gap-4 relative px-6 backdrop-blur-md">
+                        <div className="w-80 border-r border-wuxia-gold/10 bg-black/40 flex flex-col py-10 gap-4 relative px-6 backdrop-blur-md">
                             {[
                                 { id: 'events', label: 'Bách Hiểu Sinh', sub: 'Thế giới đại sự' },
                                 { id: 'npcs', label: 'Anh Hùng Bảng', sub: 'Nhân sĩ hoạt động' },
@@ -137,10 +135,10 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id as TabType)}
-                                    className={`wuxia-list-item group relative px-6 py-5 mb-2 !rounded-2xl text-left transition-all ${
+                                    className={`wuxia-list-item px-6 py-5 text-left !rounded-2xl transition-all ${
                                         activeTab === tab.id
-                                            ? 'active'
-                                            : ''
+                                            ? 'bg-wuxia-gold/10 text-wuxia-gold border-wuxia-gold/30'
+                                            : 'text-white/40 hover:text-white/60 hover:border-white/10'
                                     }`}
                                 >
                                     {activeTab === tab.id && (
@@ -148,13 +146,13 @@ const WorldModal: React.FC<Props> = ({ world, environment, onClose }) => {
                                     )}
                                     <div className="relative z-10">
                                         <span className={`block font-serif font-bold tracking-[0.15em] text-xl ${
-                                            activeTab === tab.id ? 'text-wuxia-gold' : 'text-gray-400'
+                                            activeTab === tab.id ? 'text-wuxia-gold' : 'text-white/40'
                                         }`}>{tab.label}</span>
-                                        <span className="block text-[10px] tracking-widest text-gray-500 font-sans mt-1 opacity-60 uppercase">{tab.sub}</span>
+                                        <span className="block text-[10px] tracking-widest text-white/30 font-sans mt-1 uppercase">{tab.sub}</span>
                                     </div>
                                 </button>
                             ))}
-                            <div className="mt-auto opacity-5 pointer-events-none select-none p-4">
+                            <div className="mt-auto opacity-10 pointer-events-none select-none p-4">
                                 <div className="text-8xl font-serif leading-none italic text-wuxia-gold">江湖</div>
                             </div>
                         </div>

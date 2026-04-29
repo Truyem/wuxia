@@ -73,7 +73,18 @@ export interface Background {
     effect: string;
     longTerm?: string;
     rank: 'Dễ' | 'Bình thường' | 'Khó' | 'Cực khó';
-    origin?: string; // Links to map node origins
+    origin?: string; // Biome xuất thân
+    
+    // Thông tin chủng tộc (mới)
+    species?: string;         // Tên chủng tộc
+    speciesGroup?: string;     // Nhóm chủng tộc
+    birthMethod?: 'SINH' | 'CHUYỂN'; // Sinh ra hoặc Chuyển thế
+    
+    // Công pháp có sẵn từ đầu (trong đầu nền)
+    inherentKungfu?: string[]; // Mảng tên công pháp
+    
+    // Huyết thống
+    bloodline?: string;
 }
 
 // GameDifficulty settings

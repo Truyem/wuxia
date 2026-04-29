@@ -21,7 +21,7 @@ export const StatCharacter: PromptStructure = {
 - **Máu (HP)**: Phân chia theo 7 bộ phận: Đầu, Ngực, Bụng, Tứ chi. 0 HP bộ phận chính = Chết.
 
 ## 3. Quy tắc cập nhật
-- Sử dụng lệnh \`<命令>\` để cập nhật chỉ số.
+- Use commands in \`<commands>\` to update stats.
 - Mọi thay đổi chỉ số phải đi kèm với mô tả logic trong \`<content>\`.
 - Giới hạn chỉ số dựa trên Cảnh giới (Realm) hiện tại.
     `.trim(),

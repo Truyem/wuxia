@@ -59,15 +59,20 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-2xl hidden md:flex items-center justify-center p-4">
-            {/* Background Atmosphere */}
-            <div className="absolute inset-0 opacity-40 pointer-events-none overflow-hidden">
-                <div className="absolute -top-1/4 -right-1/4 w-1/2 h-1/2 bg-wuxia-gold/10 blur-[160px]"></div>
-                <div className="absolute -bottom-1/4 -left-1/4 w-1/2 h-1/2 bg-wuxia-red/10 blur-[160px]"></div>
+        <div className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 hidden md:flex">
+            {/* Animated Background */}
+            <div className="absolute inset-0 opacity-20 pointer-events-none overflow-hidden">
+                <div className="absolute -top-[10%] -right-[10%] w-[40%] h-[40%] bg-wuxia-gold/20 blur-[120px] rounded-full animate-pulse"></div>
+                <div className="absolute -bottom-[10%] -left-[10%] w-[40%] h-[40%] bg-wuxia-red/10 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
             </div>
 
             {/* Modal Container */}
-            <div className="w-full max-w-6xl h-[850px] flex flex-col shadow-[0_0_150px_rgba(0,0,0,1)] relative overflow-hidden glass-panel border border-white/10">
+            <div className="w-full max-w-6xl h-[850px] flex flex-col shadow-[0_0_150px_rgba(0,0,0,1)] relative overflow-hidden glass-panel border border-wuxia-gold/25 rounded-[3rem]">
+                {/* Wuxia corners */}
+                <div className="wuxia-corner wuxia-corner-tl !border-wuxia-gold/60 !w-24 !h-24"></div>
+                <div className="wuxia-corner wuxia-corner-tr !border-wuxia-gold/60 !w-24 !h-24"></div>
+                <div className="wuxia-corner wuxia-corner-bl !border-wuxia-gold/60 !w-24 !h-24"></div>
+                <div className="wuxia-corner wuxia-corner-br !border-wuxia-gold/60 !w-24 !h-24"></div>
                 
                 {/* Global Texture Overlays */}
                 <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/pinstriped-suit.png')] pointer-events-none z-0"></div>
@@ -83,7 +88,7 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
                         <div>
                             <h3 className="text-wuxia-gold font-serif font-bold text-2xl tracking-[0.3em] drop-shadow-lg uppercase">GIANG HỒ HỒ SƠ</h3>
                             <div className="flex items-center gap-3 text-[10px] font-mono mt-1.5 opacity-60">
-                                <span className="text-gray-400 tracking-widest uppercase">{viewMode === 'current' ? 'Chương hiện tại' : 'Bản thảo cổ'}</span>
+                                <span className="text-white/40 tracking-widest uppercase">{viewMode === 'current' ? 'Chương hiện tại' : 'Bản thảo cổ'}</span>
                                 <span className="w-1 h-1 bg-wuxia-gold/40"></span>
                                 <span className="text-wuxia-gold tracking-tight italic">{displayChapter.title}</span>
                             </div>
@@ -92,9 +97,9 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
 
                     <button
                         onClick={onClose}
-                        className="w-8 h-8 flex items-center justify-center bg-ink-black/50 border border-gray-800 text-gray-400 hover:text-wuxia-red hover:border-wuxia-red ml-4 group"
+                        className="w-8 h-8 flex items-center justify-center bg-black/50 border border-white/10 text-white/40 hover:text-white hover:bg-red-500/30 hover:border-red-500 transition-all rounded-lg"
                     >
-                        <span>×</span>
+                        <span className="text-xl">×</span>
                     </button>
                 </div>
 
@@ -104,7 +109,7 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
                     {/* Left Sidebar: Table of Contents */}
                     <div className="w-80 bg-black/40 border-r border-white/5 flex flex-col relative z-20 backdrop-blur-xl">
                         <div className="absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-wuxia-gold/20 to-transparent"></div>
-                        <div className="p-8 border-b border-white/5 flex justify-between items-center bg-white/5">
+                        <div className="p-6 border-b border-white/5 flex justify-between items-center bg-black/20">
                             <div className="flex items-center gap-4">
                                 <div className="p-2.5 bg-wuxia-gold/15 border border-wuxia-gold/30 shadow-inner">
                                     <svg className="w-6 h-6 text-wuxia-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,7 +117,7 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
                                     </svg>
                                 </div>
                                 <div>
-                                    <h4 className="text-gray-200 font-serif font-bold text-lg tracking-wide uppercase">MỤC LỤC</h4>
+                                    <h4 className="text-white font-serif font-bold text-lg tracking-wide uppercase">MỤC LỤC</h4>
                                     <p className="text-[9px] text-wuxia-gold/50 font-mono tracking-[0.3em] mt-1 uppercase">
                                         {story.historicalArchives.length + 1} Hồi Ức
                                     </p>
@@ -126,7 +131,7 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
                                 <button
                                     key={idx}
                                     onClick={() => handleSelectArchive(idx)}
-                                    className={`w-full flex items-center gap-5 px-6 py-5 mb-1 ${
+                                    className={`w-full flex items-center gap-5 px-5 py-4 mb-1 ${
                                         viewMode === 'archive' && selectedArchiveIndex === idx 
                                         ? 'bg-wuxia-gold/15 border border-wuxia-gold/30 shadow-[inset_0_0_15px_rgba(212,175,55,0.1)]' 
                                         : 'hover:bg-white/5 border border-transparent opacity-60 hover:opacity-100'
@@ -136,10 +141,10 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
                                         <span className="text-[14px] font-bold text-wuxia-gold/80 font-serif tracking-widest uppercase">Hồi {arc.index}</span>
                                     </div>
                                     <div className="min-w-0 flex-1">
-                                        <p className="text-[11px] text-gray-300 font-serif italic truncate opacity-80">{arc.summary || arc.title}</p>
+                                        <p className="text-[11px] text-white/60 font-serif italic truncate">{arc.summary || arc.title}</p>
                                     </div>
                                     <div className="shrink-0">
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-4 h-4 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                         </svg>
                                     </div>
@@ -149,7 +154,7 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
                             {/* Current Chapter */}
                             <button
                                 onClick={handleSelectCurrent}
-                                className={`w-full flex items-center gap-5 px-6 py-6 mt-2 ${
+                                className={`w-full flex items-center gap-5 px-5 py-5 mt-2 ${
                                     viewMode === 'current' 
                                     ? 'bg-wuxia-red/10 border border-wuxia-red/30 shadow-[inset_0_0_20px_rgba(163,24,24,0.1)]' 
                                     : 'hover:bg-white/5 border border-transparent opacity-80'
@@ -159,11 +164,11 @@ const StoryModal: React.FC<Props> = ({ story, onClose, onSaveChapter }) => {
                                     <span className="text-[14px] font-bold text-wuxia-red font-serif tracking-widest uppercase">Hồi {story.currentChapter.index}</span>
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                    <p className="text-[11px] text-gray-100 font-serif italic truncate drop-shadow-sm">{story.currentChapter.summary || story.currentChapter.title}</p>
+                                    <p className="text-[11px] text-white font-serif italic truncate drop-shadow-sm">{story.currentChapter.summary || story.currentChapter.title}</p>
                                 </div>
                                 <div className="shrink-0 flex items-center gap-3">
-                                    <div className="px-2 py-0.5 bg-wuxia-red/20 text-wuxia-red text-[8px] font-black tracking-[0.2em] border border-wuxia-red/40">ĐANG VIẾT</div>
-                                    <svg className={`w-4 h-4 ${viewMode === 'current' ? 'text-wuxia-red' : 'text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div className="px-2 py-0.5 bg-wuxia-red/20 text-wuxia-red text-[8px] font-bold tracking-[0.2em] border border-wuxia-red/40">ĐANG VIẾT</div>
+                                    <svg className={`w-4 h-4 ${viewMode === 'current' ? 'text-wuxia-red' : 'text-white/20'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                     </svg>
                                 </div>
