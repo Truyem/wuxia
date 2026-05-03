@@ -53,13 +53,13 @@ const getChunkedEnvVars = (baseName: string): string[] => {
 // Discovery endpoints for dynamic worker selection
 
 export const DEFAULT_TEXT_GEN_WORKER_URLS = [
-    'https://wuxia-api.vdt99.workers.dev/nemotron'
+    'https://wuxia-api.vudinhtrungv1010.workers.dev/nemotron'
 ];
 
 export const DEFAULT_TEXT_GEN_WORKER_URL = DEFAULT_TEXT_GEN_WORKER_URLS[0];
 
 export const DEFAULT_IMAGE_GEN_WORKER_URLS = [
-    'https://wuxia-api.vdt99.workers.dev/image-gen'
+    'https://wuxia-api.vudinhtrungv1010.workers.dev/image-gen'
 ];
 export const DEFAULT_IMAGE_GEN_WORKER_URL = DEFAULT_IMAGE_GEN_WORKER_URLS[0];
 
